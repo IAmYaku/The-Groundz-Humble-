@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2af1230be89d24b89990a12b7e94279c
+timeCreated: 1533235375
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - ball: {instanceID: 0}
+  - Player1: {fileID: 1314948608716842, guid: 9616207c989e34330adba2310d9931f1, type: 2}
+  - Player2: {fileID: 1624020581814626, guid: 4692e08bce02443bfbfe9c3cf857cdca, type: 2}
+  - Player3: {fileID: 1879772401850846, guid: 315db1b168e7e4603b63557daf4246c5, type: 2}
+  - Player4: {fileID: 1274656097122766, guid: f4ef732745a554443b3aabaddf99f9f4, type: 2}
+  - gameRules: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

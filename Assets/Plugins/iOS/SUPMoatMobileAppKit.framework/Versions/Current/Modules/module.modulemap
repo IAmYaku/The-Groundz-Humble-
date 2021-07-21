@@ -1,0 +1,18 @@
+framework module SUPMoatMobileAppKit {
+    umbrella header "SUPMoatMobileAppKit.h"
+    export *
+    header "SUPMoatAVVideoTracker.h"
+    header "SUPMoatAdEvent.h"
+    header "SUPMoatAdEventType.h"
+    header "SUPMoatAnalytics.h"
+    header "SUPMoatBaseTracker.h"
+    header "SUPMoatBaseVideoTracker.h"
+    header "SUPMoatGMAInterstitialTracker.h"
+    header "SUPMoatMPVideoTracker.h"
+    header "SUPMoatMobileAppKit.h"
+    header "SUPMoatNativeDisplayTracker.h"
+    header "SUPMoatReactiveVideoTracker.h"
+    header "SUPMoatTrackerDelegate.h"
+    header "SUPMoatVideoTracker.h"
+    header "SUPMoatWebTracker.h"
+}

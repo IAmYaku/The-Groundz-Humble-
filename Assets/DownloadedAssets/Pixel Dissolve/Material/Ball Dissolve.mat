@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ball Dissolve
+  m_Shader: {fileID: 4800000, guid: 1a43866e912794f65b1e46cfff2b6c59, type: 3}
+  m_ShaderKeywords: ENABLE_PIXELIZATION ETC1_EXTERNAL_ALPHA
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2600
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _DissolveNoise:
+        m_Texture: {fileID: 2800000, guid: 1d79f2ed386529f4f8aaa1a081cd32c8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 5c551345446fc42099b18e82ffa8163c, type: 3}
+        m_Scale: {x: 5.34, y: 1.82}
+        m_Offset: {x: -0.9, y: -0.35}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: b2f85eb24a86f4cc08138300b9126a01, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _Cull: 0
+    - _DirectionEnum: 1
+    - _DissolveIntensity: 0.41
+    - _DissolvePixelLevel: 1024
+    - _DissolveThickness: 0.577
+    - _DissolveThickness2: 0.441
+    - _DistortionLevel: 0.5
+    - _EffectRadius: 0.855
+    - _EnablePixel: 1
+    - _End: 0.001
+    - _Glossiness: 0.517
+    - _GlowAmount: 0.206
+    - _GlowCutoff: 0.161
+    - _Metallic: 0
+    - _PixelLevel: 512
+    - _Speed: 22.7
+    - _Start: 0.999
+    - _TexCutoff: 0.31
+    - _Wind: -0.24
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Direction: {r: 0, g: 1, b: 0, a: 0}
+    - _DissolveColor: {r: 1, g: 0.13679248, b: 0.9277539, a: 1}
+    - _GlowColor: {r: 0.85, g: 1, b: 0.8634483, a: 1}
+    - _MainColor: {r: 1, g: 1, b: 1, a: 1}
