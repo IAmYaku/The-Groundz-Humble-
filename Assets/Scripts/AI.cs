@@ -627,7 +627,7 @@ public class AI : MonoBehaviour {
 
                         throww = new Vector3(throww.x, 2.5f, throww.z);
 
-                        ball.GetComponent<Ball>().Throw(throww, playerScript.color, false, 0, targetedOpp, renderLength);
+                        ball.GetComponent<Ball>().Throw(throww, playerScript.color, false, 0, targetedOpp, renderLength, 0f);
 
 
                         if (animator)
@@ -1097,7 +1097,7 @@ public class AI : MonoBehaviour {
         Transform targetedOpp = GetTargetedOpp();
         float renderLength = GetRenderLength();
 
-        ball.GetComponent<Ball>().Throw(throww, playerScript.color, true, magnetism,targetedOpp,renderLength);
+        ball.GetComponent<Ball>().Throw(throww, playerScript.color, true, magnetism,targetedOpp,renderLength, 1f);
         levelManager.AddThrow(ball, parent);
         ballGrabbed = false;
         ballCaught = false;

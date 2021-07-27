@@ -28,6 +28,7 @@ public class Ball : MonoBehaviour {
     public PhysicMaterial regular;
 	public PhysicMaterial super;
 
+    public float chargeAlpha;
 	public bool grabbed;
     public bool thrown;
 	public bool thrownBy1;   // change to int thrownByTeam
@@ -335,7 +336,7 @@ public class Ball : MonoBehaviour {
         
     }
 
-    public void Throw(Vector3 throww, Color color, bool hasmag, float mag, Transform targ, float renderLength)  {
+    public void Throw(Vector3 throww, Color color, bool hasmag, float mag, Transform targ, float renderLength, float chargedThrowAlpha)  {
         //print("hasmag = " + hasmag);
         // print("Magnetism = " + mag);
 
@@ -359,6 +360,7 @@ public class Ball : MonoBehaviour {
             grounded = false;
             grabbed = false;
             thrown = true;
+            chargeAlpha = chargedThrowAlpha;
 
         }
         else

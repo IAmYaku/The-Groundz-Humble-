@@ -46,6 +46,7 @@ public class Controller3D : MonoBehaviour {
     public float maxCeleration = 6;
      float acceleration = 1f;
     float accelLogCount = .0001f;
+    public float ChargePowerAlpha => Mathf.Clamp01(throwCharge / gameObject.GetComponentInParent<Player>().maxThrowPower);
 
     private Vector3 velocityDamp;
     public float jumpSpeed = 10.0f;
@@ -1027,9 +1028,9 @@ public class Controller3D : MonoBehaviour {
                 if (ObjectIsInGrabDistance(nearestBall))
                 {
 
-                    ball = nearestBall;                                            
-
-                    if (!ball.GetComponent<Ball>().isSupering)
+                    ball = nearestBall;
+                    var ballComp = ball.GetComponent<Ball>();
+                    if (!ballComp.isSupering)
                     {
 
                         if (mode == "Touch" || (mode == "Virtual Joystick" ))
@@ -1044,9 +1045,9 @@ public class Controller3D : MonoBehaviour {
                         Vector3 velocityCaught = ball.GetComponent<Rigidbody>().velocity;
                         ball.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
 
-                        ballGrabbed = true; 
-                        ball.GetComponent<Ball>().grounded = false;                         //methodize
-                        ball.GetComponent<Ball>().grabbed = true;
+                        ballGrabbed = true;
+                        ballComp.grounded = false;                         //methodize
+                        ballComp.grabbed = true;
                         ball.GetComponent<SpriteRenderer>().enabled = false;
                         ball.transform.GetChild(3).gameObject.SetActive(false);
                         ball.GetComponent<SphereCollider>().enabled = false;
@@ -1055,7 +1056,7 @@ public class Controller3D : MonoBehaviour {
                         ball.transform.GetChild(1).gameObject.SetActive(false);   // most likely pikUp Deactivaate
 
 
-                        ball.GetComponent<Ball>().PickUpDeactivate();
+                        ballComp.PickUpDeactivate();
                       
                         Physics.IgnoreLayerCollision(5, 3, false);              //?
 
@@ -1073,7 +1074,7 @@ public class Controller3D : MonoBehaviour {
                             ballContact = false;
                             ballCaught = true;
 
-                            ball.GetComponent<Ball>().playCatch();
+                            ballComp.playCatch();
 
                             levelManager.ClearContacts(ball);
                             levelManager.OutDisplay(levelManager.throws[ball].transform.GetChild(0).gameObject);
@@ -1082,14 +1083,14 @@ public class Controller3D : MonoBehaviour {
                             levelManager.GetAnotherPlayer(gameObject.GetComponentInParent<Player>().team);
                             levelManager.RemoveHit(ball);
                             levelManager.CatchDisplay(playerConfigObject.transform.position, (Vector3.Magnitude(rigidbody.velocity) + Vector3.Magnitude(velocityCaught)));
-                            ball.GetComponent<Ball>().DeactivateThrow();
+                            ballComp.DeactivateThrow();
 
                          
 
                             float hitPauseDuration = velocityCaught.magnitude / 100f;
                             float hitPausePreDelay = .25f;
 
-                            DelayPause(hitPauseDuration, hitPausePreDelay);
+                            HitFX(ballComp, hitPauseDuration, hitPausePreDelay);
 
                             print("~!Caught!~");
                         }
@@ -1456,8 +1457,14 @@ public class Controller3D : MonoBehaviour {
         
     }
 
-    private void DelayPause(float hitPauseDuration, float hitPausePreDelay)
+    private void HitFX(Ball ball, float hitPauseDuration, float hitPausePreDelay)
     {
+        GameObject hitFX = levelManager.HitSmall;
+        if (ball.chargeAlpha > .25f) hitFX = levelManager.HitMed;
+        if (ball.chargeAlpha == 1f) hitFX = levelManager.HitMax;
+        GameObject hfx = Instantiate(hitFX, ball.transform.position, Quaternion.identity);
+        levelManager.CamShake(1f, transform);
+
         levelManager.SetHitPauseDuration(hitPauseDuration);
         Invoke("DoHitPause", hitPausePreDelay);
          
@@ -1784,7 +1791,7 @@ public class Controller3D : MonoBehaviour {
           //  print("targetedOpp = " + targetedOpp);
          //   print("hasThrowMag = " + hasThrowMag);
             // print("throw Magnetism = "+throwMagnetism);
-             ball.GetComponent<Ball>().Throw(throww, playerScript.color, hasSeekVec, throwMagnetism, targetedOpp, renderLength);
+             ball.GetComponent<Ball>().Throw(throww, playerScript.color, hasSeekVec, throwMagnetism, targetedOpp, renderLength, ChargePowerAlpha);
 
             playerScript.playThrowSound();
             playerScript.playThrowSound();
@@ -1882,7 +1889,7 @@ public class Controller3D : MonoBehaviour {
         Transform targetedOpp = GetTargetedOpp();
         float renderLength = GetRenderLength();
 
-        ball.GetComponent<Ball>().Throw(throww, playerScript.color, true, magnetism,targetedOpp,renderLength);
+        ball.GetComponent<Ball>().Throw(throww, playerScript.color, true, magnetism,targetedOpp,renderLength, ChargePowerAlpha);
         levelManager.AddThrow(ball, parent);
         ballGrabbed = false;
         ballCaught = false;
@@ -2242,8 +2249,8 @@ public class Controller3D : MonoBehaviour {
 
         if (gameObject.GetComponent<Controller3D>().enabled == true) {
             if (collision.gameObject.tag == "Ball") {
-
-                    if (collision.gameObject.GetComponent<Ball>().CheckPlayerHit(playerScript.team)) {
+                var ball = collision.gameObject.GetComponent<Ball>();
+                    if (ball.CheckPlayerHit(playerScript.team)) {
                         TriggerHeadHit();
                         ballContact = true;
                         t_contact0 = Time.realtimeSinceStartup;
@@ -2255,7 +2262,7 @@ public class Controller3D : MonoBehaviour {
                         ball_hit_ps.GetComponent<Renderer>().sortingOrder = 3;
                         ball_hit_ps.startSize = ballVelocity;
 
-                        if (collision.gameObject.GetComponent<Ball>().isSupering)
+                        if (ball.isSupering)
                         {
                             TriggerKnockBack(collision.gameObject.GetComponent<Rigidbody>().velocity);
                             ParticleSystem.MainModule sup_main_ps = collision.gameObject.GetComponentInChildren<ParticleSystem>().main;
@@ -2276,7 +2283,7 @@ public class Controller3D : MonoBehaviour {
                         float hitPauseDuration = ballVelocity / 25f;                 // * arbitrays nums
                         float hitPausePreDelay = .125f;
 
-                        DelayPause(hitPauseDuration, hitPausePreDelay);
+                        HitFX(ball, hitPauseDuration, hitPausePreDelay);
 
                         levelManager.AddHit(collision.gameObject, parent);
                         levelManager.HitDisplay(gameObject, collision.gameObject);

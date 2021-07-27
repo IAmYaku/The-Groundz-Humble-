@@ -205,6 +205,7 @@ MonoBehaviour:
   adManager: {fileID: 0}
   levelManager: {fileID: 1241191523357146657}
   GMFX: {fileID: 0}
+  playerInputManager: {fileID: 0}
 --- !u!114 &4644502635093582176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +219,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 6773703638570909268}
+  audioSourceGM: {fileID: 0}
+  audioSourceMenu: {fileID: 0}
   playerPrefab: {fileID: 1314948608716842, guid: 11195ed1ea00db740800379dc96b42c5,
     type: 3}
   aiPrefab: {fileID: 1314948608716842, guid: 286d72b06cd9e2e44a12d53b63fff8c8, type: 3}
@@ -315,7 +318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stage: {fileID: 0}
-  cgm: {fileID: 0}
+  cgg: {fileID: 0}
   tm1: {fileID: 0}
   tm2: {fileID: 0}
   balls: []
@@ -327,7 +330,9 @@ MonoBehaviour:
   team1Points: 0
   team2Points: 0
   level: 0
-  hitFX: {fileID: 1446776325589068, guid: 46ef3f27fcfcc463fbed5a07957b0de8, type: 3}
+  HitSmall: {fileID: 868149386091678790, guid: 738d9cd7f685b62459c6b6b071bdb82b, type: 3}
+  HitMed: {fileID: 6914566696033917893, guid: 783a06da503d08f4d9cd4819401be0fd, type: 3}
+  HitMax: {fileID: 3225927819582567654, guid: e57d87f8138d7c44dbffa97f377f76ed, type: 3}
   outFX: {fileID: 1088294977275468, guid: 0c6f14306071349f787773b3c36b1b7b, type: 3}
   outFX2: {fileID: 1097284123813172, guid: 57a5eddfe185e9d4cb1697d13b1a296b, type: 3}
   catchFX: {fileID: 1916310415170292, guid: 27f10276f9c41ea4085eb2f40b8b064a, type: 3}

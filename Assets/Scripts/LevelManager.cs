@@ -83,7 +83,10 @@ public class LevelManager : MonoBehaviour
     public Dictionary<GameObject, GameObject> catches = new Dictionary<GameObject, GameObject>();
     public List<Dictionary<int[], string>> outLog = new List<Dictionary<int[], string>>();
 
-    public GameObject hitFX;
+    public GameObject HitSmall;
+    public GameObject HitMed;
+    public GameObject HitMax;
+
     public GameObject outFX;
     public GameObject outFX2;
     public GameObject catchFX;
@@ -864,7 +867,7 @@ public class LevelManager : MonoBehaviour
 
     public void HitDisplay(GameObject hittee, GameObject ball)
     {
-        if (hitFX != null)
+        if (HitSmall != null)
         {
             GameObject hitter = throws[ball].transform.GetChild(0).gameObject;
             Vector3 terPosition = hitter.transform.position;
@@ -873,7 +876,7 @@ public class LevelManager : MonoBehaviour
             Vector3 teePosition = hittee.transform.position;
             Color teeColor = hittee.GetComponentInParent<Player>().color;
 
-            GameObject hfx = Instantiate(hitFX, teePosition, hitFX.transform.rotation);
+            GameObject hfx = Instantiate(HitSmall, teePosition, Quaternion.identity);
             ParticleSystem ps = hfx.GetComponent<ParticleSystem>();
             ParticleSystem.MainModule psMain = ps.main;
             ParticleSystem.ColorOverLifetimeModule pscol = ps.colorOverLifetime;
