@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
-    public AdManager adManager;
+
 
     GameObject LogFeed;
 

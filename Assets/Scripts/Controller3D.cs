@@ -328,6 +328,8 @@ public class Controller3D : MonoBehaviour {
     private void TriggerHitIndicators()
     {
         // could use work ...
+
+
         ParticleSystem ps = transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
         ParticleSystem.MainModule ring_ps = ps.main;
         ParticleSystem ps_2 = transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystem>();
@@ -2249,11 +2251,17 @@ public class Controller3D : MonoBehaviour {
 
         if (gameObject.GetComponent<Controller3D>().enabled == true) {
             if (collision.gameObject.tag == "Ball") {
+
                 var ball = collision.gameObject.GetComponent<Ball>();
+
                     if (ball.CheckPlayerHit(playerScript.team)) {
+
                         TriggerHeadHit();
+
                         ballContact = true;
+
                         t_contact0 = Time.realtimeSinceStartup;
+
                         ballHit = collision.gameObject;
                         ballHit.GetComponent<Ball>().contact = true;
                         float ballVelocity = Mathf.Clamp(collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude / 9, 3, 6);

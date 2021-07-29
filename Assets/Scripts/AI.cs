@@ -818,12 +818,17 @@ public class AI : MonoBehaviour {
 		    if (collision.gameObject.tag == "Ball") {
 				if (collision.gameObject.GetComponent<Ball> ().CheckPlayerHit(playerScript.team)) {
 
-                        TriggerHeadHit();
-                        ballContact = true;
-                        t_c0 = Time.realtimeSinceStartup;
+                        TriggerHeadHit();        // animation, false naming
 
-                        float ballVelocity = Mathf.Clamp(collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude/9, 3, 10);
+                        ballContact = true;       // Slow Down stuff, but also has VFX 
+
+                        t_c0 = Time.realtimeSinceStartup;    // might be useless
+
+                        float ballVelocity = Mathf.Clamp(collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude/9, 3, 10);    // use vaiables for number finessing
+
                         ballHit = collision.gameObject;
+
+
                         ballHit.GetComponent<Ball>().contact = true;
                         ParticleSystem ball_hit_ps = collision.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
                         ball_hit_ps.GetComponent<Renderer>().sortingOrder = 3;
