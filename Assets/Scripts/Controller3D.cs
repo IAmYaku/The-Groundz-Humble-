@@ -792,36 +792,6 @@ public class Controller3D : MonoBehaviour {
     private void SlowDownByVelocity(float scale)
     {
 
-
-        //float xVelocity = Mathf.Clamp(move.x * Time.deltaTime * xSpeed * Mathf.Abs(rigidbody.velocity.x),-rigidbody.velocity.x, rigidbody.velocity.x);
-        // float zVelocity = Mathf.Clamp(move.z * Time.deltaTime * zSpeed * Mathf.Abs(rigidbody.velocity.z),-rigidbody.velocity.z, rigidbody.velocity.z);
-
-        float xMultiplier = .1f;
-       float zMultiplier = .1f;   //   < -- faulty, but feels good
-
-        float xVelocity = Time.deltaTime * xSpeed * xMultiplier * (rigidbody.velocity.x);
-        float zVelocity = Time.deltaTime * zSpeed * zMultiplier * (rigidbody.velocity.z);
-
-        Vector3 velVec = new Vector3(xVelocity, .25f, zVelocity);
-        // rigidbody.velocity =  new Vector3(xVelocity,rigidbody.velocity.y, zVelocity);
-        // print("xVeclocity = " + xVelocity);
-        // print("zVeclocity = " + zVelocity);
-
-        // rigidbody.AddForce(move.x * xCelerate , 0 , move.z * zCelerate, ForceMode.VelocityChange);
-
-
-
-        //print("XVelocity = " + xVelocity);
-       //  print("ZVelocity = " + zVelocity);
-        //rigidbody.velocity = new Vector3(xVelocity, 0f, zVelocity);
-
-        // rigidbody.velocity =  Vector3.Lerp(velVec, Vector3.zero, .5f);
-
-
-        // float lerpX = LerpFloatDT(rigidbody.velocity.x, 0f, Time.deltaTime, .3f);
-         //float lerpZ = LerpFloatDT(rigidbody.velocity.z, 0f, Time.deltaTime, .3f);
-
-
         if (isCharging)
         {
             rigidbody.velocity = Vector3.Lerp(chargeVel , Vector3.zero, scale);
@@ -2247,7 +2217,7 @@ public class Controller3D : MonoBehaviour {
         return nearestBall;
     }
 
-    void OnCollisionEnter(Collision collision) {           //obsolete
+    void OnCollisionEnter(Collision collision) {           
 
         if (gameObject.GetComponent<Controller3D>().enabled == true) {
             if (collision.gameObject.tag == "Ball") {

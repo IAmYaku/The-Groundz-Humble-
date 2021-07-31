@@ -509,8 +509,8 @@ public class AI : MonoBehaviour {
                                 animator.SetTrigger("Catch");
                             }
 
-                            ballContact = false;
-                            ballCaught = true;
+                            ballContact = false;  // what if therre's multiple balls
+                            ballCaught = true;     // what if therre's multiple balls
 
                             ball.GetComponent<Ball>().playCatch();
                      
@@ -812,101 +812,7 @@ public class AI : MonoBehaviour {
 		return nearestBall;
 	}
 
-	void OnCollisionEnter(Collision collision)               //obsolete
-    {                        
-        if (gameObject.GetComponent<AI>().enabled == true){
-		    if (collision.gameObject.tag == "Ball") {
-				if (collision.gameObject.GetComponent<Ball> ().CheckPlayerHit(playerScript.team)) {
-
-                        TriggerHeadHit();        // animation, false naming
-
-                        ballContact = true;       // Slow Down stuff, but also has VFX 
-
-                        t_c0 = Time.realtimeSinceStartup;    // might be useless
-
-                        float ballVelocity = Mathf.Clamp(collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude/9, 3, 10);    // use vaiables for number finessing
-
-                        ballHit = collision.gameObject;
-
-
-                        ballHit.GetComponent<Ball>().contact = true;
-                        ParticleSystem ball_hit_ps = collision.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
-                        ball_hit_ps.GetComponent<Renderer>().sortingOrder = 3;
-                        ball_hit_ps.startSize = ballVelocity;
-
-                        if (collision.gameObject.GetComponent<Ball>().isSupering)
-                        {
-                            levelManager.CamGlitch(ballVelocity);
-                            TriggerKnockBack(collision.gameObject.GetComponent<Rigidbody>().velocity);
-                            ParticleSystem.MainModule sup_main_ps = collision.gameObject.GetComponentInChildren<ParticleSystem>().main;
-                            sup_main_ps.simulationSpeed = 20f;
-                            sup_main_ps.startSizeX = 10f;
-                            sup_main_ps.startSizeMultiplier = 10f;
-                        }
-
-                            if (!(collision.gameObject.GetComponent<TrailRenderer>().startWidth == 2))
-                            {
-                                if (collision.gameObject.GetComponent<TrailRenderer>().enabled == false)
-                                {
-                                    collision.gameObject.GetComponent<TrailRenderer>().enabled = true;
-                                }
-                                else
-                                {
-                                    collision.gameObject.GetComponent<TrailRenderer>().startWidth = 2f;
-                                }
-                            }
-
-                        float hitPauseDuration = ballVelocity / 25f;
-                        float hitPausePreDelay = .125f;
-
-                        DelayPause(hitPauseDuration, hitPausePreDelay);
-
-                        levelManager.AddHit(collision.gameObject, parent);
-                        levelManager.HitDisplay(gameObject,collision.gameObject);
-                        levelManager.CamShake(collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude,transform);
-                        print("~!CONTACT!~ 2");
-				}
-		}
-
-        
-        if (collision.gameObject.tag == "Playing Level" || collision.gameObject.tag == "Player " +
-                "Sprite")
-            {
-                onGround = true; 
-            }
-
-		// TODO doesnt make smoothe as intended 
-		if (collision.gameObject.tag == "Wall") {
-			wallCollision = true;
-		//	velocity = new Vector3 (0f, 0f, 0f);
-		}
-
-        if (collision.gameObject.tag == "Player Sprite")
-            {
-                rigidbody.velocity = Vector3.zero;
-                navMeshAgent.velocity = Vector3.zero;
-                navMeshAgent.isStopped = true;
-            }
-        else
-            {
-                if (navMeshAgent.isOnNavMesh)
-                {
-                    if (navMeshAgent.isStopped)
-                    {
-                        navMeshAgent.isStopped = false;
-                    }
-                }
-            }
-		}
-	}
-
-    void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.tag == "Playing Level")
-        {
-            onGround = true;
-        }
-    }
+	
 
     void OnGUI()
     {
@@ -946,7 +852,6 @@ public class AI : MonoBehaviour {
         knockedOutTime = 3f;
         t_k0 = Time.realtimeSinceStartup;
         isKnockedOut = true;
-        animator.SetTrigger("Head Hit");
         // animator.SetTrigger("Knock Out");
 
 
@@ -1350,13 +1255,23 @@ public class AI : MonoBehaviour {
         return returnMe;
     }
 
-    internal void TriggerHeadHit()
+    internal void TriggerHeadHitAnimation()
     {
         if (animator)
         {
             animator.SetTrigger("Head Hit");
         }
     }
+
+    internal void TriggerHitAnimation()
+    {
+        if (animator)
+        {
+            animator.SetTrigger("Hit");
+        }
+    }
+
+
     public void DropBall()
     {
         ballGrabbed = false;

@@ -36,10 +36,10 @@ public class PlayerConfiguration : MonoBehaviour
 
     float t_contact0;
 
-    bool ballContact;
+    bool ballContact;     // what if multiple balls
     GameObject ballHit;
 
- //  public bool inBallCollision;
+
 
 
 
@@ -84,9 +84,9 @@ public class PlayerConfiguration : MonoBehaviour
         throw new NotImplementedException(); 
     }
 
-    public void RemoveContat()
+    public void RemoveContact()
     {
-        ballContact = false;
+        ballContact = false;     // what if multiple balls?
         ballHit = null;
 
     }
@@ -99,136 +99,52 @@ public class PlayerConfiguration : MonoBehaviour
         {
             if (collision.gameObject.tag == "Ball")
             {
-             //   inBallCollision = true;
-              //  print("Ball Collision");
-               // print("thrownBy1 = " + collision.gameObject.GetComponent<Ball>().thrownBy1);
-              //  print("grounded = " + collision.gameObject.GetComponent<Ball>().grounded);
+               
 
-                if (gameObject.GetComponentInParent<Player>().team == 1)                                                                           // make more module
+                if (ballHit.GetComponent<Ball>().CheckPlayerHit(player.team))                                                                           // make more module
                 {
-                    if (collision.gameObject.GetComponent<Ball>().thrownBy2 && collision.gameObject.GetComponent<Ball>().grounded == false)
+                    print("~Contact~");
+
+                    ballHit = collision.gameObject;
+                    ballHit.GetComponent<Ball>().contact = true;
+                    float ballHitVelocity = Mathf.Clamp(ballHit.GetComponent<Rigidbody>().velocity.magnitude / 9, 3, 6);  // make numbers variables
+                    bool ballHitISupered = ballHit.GetComponent<Ball>().isSupering;
+
+                    levelManager.AddHit(ballHit, parent);
+
+                    
+                    ballContact = true;         // what if multiple balls
+
+                    TriggerHitAnimation();
+                    // TriggerPlayerIsHitFX  -> FXManager
+
+
+                    if ()
+
                     {
-                        TriggerHeadHit();
-                        ballContact = true;
-                        t_contact0 = Time.realtimeSinceStartup;
-                        ballHit = collision.gameObject;
-
-                        ballHit.GetComponent<Ball>().contact = true;
-                        float ballVelocity = Mathf.Clamp(collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude / 9, 3, 6);
-
-                        ParticleSystem ball_hit_ps = collision.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
-                        ball_hit_ps.GetComponent<Renderer>().sortingOrder = 3;
-                        ball_hit_ps.startSize = ballVelocity;
-
-                        if (collision.gameObject.GetComponent<Ball>().isSupering)
-                        {
-                            TriggerKnockBack(collision.gameObject.GetComponent<Rigidbody>().velocity);
-                            ParticleSystem.MainModule sup_main_ps = collision.gameObject.GetComponentInChildren<ParticleSystem>().main;
-                            sup_main_ps.startSize = 4;
-                            sup_main_ps.simulationSpeed = 20f;
-                            sup_main_ps.startSizeX = 10f;
-                            sup_main_ps.startSizeMultiplier = 10f;
-                        }
-
-                        if (!(collision.gameObject.GetComponent<TrailRenderer>().startWidth == 2f))
-                        {
-                            if (collision.gameObject.GetComponent<TrailRenderer>().enabled == false)
-                            {
-                                collision.gameObject.GetComponent<TrailRenderer>().enabled = true;
-                            }
-                            else
-                            {
-                                collision.gameObject.GetComponent<TrailRenderer>().startWidth = 2f;
-                            }
-                        }
-
-                        float hitPauseDuration = ballVelocity / 25f;                 // * arbitrays nums
-                        float hitPausePreDelay = .125f;
-
-                        DelayPause(hitPauseDuration, hitPausePreDelay);
-
-                        levelManager.AddHit(collision.gameObject, parent);
-
-                        levelManager.HitDisplay(gameObject, collision.gameObject);                                             //grs
-                        float shakeIntensity = collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude;
-                        levelManager.CamShake(shakeIntensity, transform);
-                        print("~!CONTACT!~ 2");
+                        TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity);
+  
                     }
 
-                    else
-                    {
-                        float correctThresh = 1.0f;
-                        float velMag = rigidbody.velocity.magnitude;
-                        if (velMag > correctThresh)
-                        {
-                            rigidbody.velocity = Vector3.zero;
-                            Vector3 diff = (transform.position - collision.transform.position) * pushVal * (velMag / 100f);
-                            Vector3 nuPos = new Vector3(transform.position.x + diff.x, transform.position.y - .025f, transform.position.z + diff.z);
-                            rigidbody.MovePosition(nuPos);              // ?? why not Addforce?
-                        }
-                    }    
+
+
+
+                    levelManager.HitDisplay(gameObject, collision.gameObject);
+
+
+                    float hitPauseDuration = ballHitVelocity / 25f;
+                    float hitPausePreDelay = .125f;
+
+                    DelayPause(hitPauseDuration, hitPausePreDelay);
+
+                    levelManager.CamShake(collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude, transform);
+                    levelManager.PostFX("Player1Hit");
                 }
 
-                if (gameObject.GetComponentInParent<Player>().team == 2)
+                else
                 {
-                    if (collision.gameObject.GetComponent<Ball>().thrownBy1 && collision.gameObject.GetComponent<Ball>().grounded == false)
-                    {
-                        TriggerHeadHit();
-                        ballContact = true;
-                        t_contact0 = Time.realtimeSinceStartup;
-                        ballHit = collision.gameObject;
-                        ballHit.GetComponent<Ball>().contact = true;
-
-                        float ballVelocity = Mathf.Clamp(collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude / 9, 3, 6);
-
-                        ParticleSystem ball_hit_ps = collision.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
-                        ball_hit_ps.GetComponent<Renderer>().sortingOrder = 3;
-                        ball_hit_ps.startSize = ballVelocity;
-                        if (collision.gameObject.GetComponent<Ball>().isSupering)
-                        {
-                            TriggerKnockBack(collision.gameObject.GetComponent<Rigidbody>().velocity);
-                            ParticleSystem.MainModule sup_main_ps = collision.gameObject.GetComponentInChildren<ParticleSystem>().main;
-                            sup_main_ps.startSize = 4;
-                            sup_main_ps.simulationSpeed = 20f;
-                            sup_main_ps.startSizeX = 10f;
-                            sup_main_ps.startSizeMultiplier = 10f;
-                        }
-                        if (!(collision.gameObject.GetComponent<TrailRenderer>().startWidth == 2f))
-                        {
-                            if (collision.gameObject.GetComponent<TrailRenderer>().enabled == false)
-                            {
-                                collision.gameObject.GetComponent<TrailRenderer>().enabled = true;
-                            }
-                            else
-                            {
-                                collision.gameObject.GetComponent<TrailRenderer>().startWidth = 2f;
-
-                            }
-                        }
-
-                        float hitPauseDuration = ballVelocity / 25f;
-                        float hitPausePreDelay = .125f;
-
-                        DelayPause(hitPauseDuration, hitPausePreDelay);
-
-                        levelManager.AddHit(collision.gameObject, parent);
-                        levelManager.HitDisplay(gameObject, collision.gameObject);
-                        levelManager.CamShake(collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude, transform);
-                        levelManager.PostFX("Player1Hit");
-                        print("~!CONTACT!~ 1");
-                    }
-                    else
-                    {
-                        float correctThresh = 1.0f;
-                        float velMag = rigidbody.velocity.magnitude;
-                        if (velMag > correctThresh)
-                        {
-                             Vector3 diff = (transform.position - collision.transform.position) * pushVal * ( velMag/100f);
-                            rigidbody.velocity = Vector3.zero;
-                             Vector3 nuPos = new Vector3(transform.position.x + diff.x, transform.position.y - .025f, transform.position.z + diff.z);
-                            rigidbody.MovePosition(nuPos);              // ?? why not Addforce?
-                        }
-                    }
+                    CorrectPosition(); 
+                 
                 }
             }
 
@@ -276,6 +192,19 @@ public class PlayerConfiguration : MonoBehaviour
         
     }
 
+    private void CorrectPosition()
+    {
+        float correctThresh = 1.0f;
+        float velMag = rigidbody.velocity.magnitude;
+        if (velMag > correctThresh && ballHit)
+        {
+            Vector3 diff = (transform.position - ballHit.transform.position) * pushVal * (velMag / 100f);
+            rigidbody.velocity = Vector3.zero;
+            Vector3 nuPos = new Vector3(transform.position.x + diff.x, transform.position.y - .025f, transform.position.z + diff.z);
+            rigidbody.MovePosition(nuPos);              // ?? why not Addforce?
+        }
+    }
+
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.tag == "Ball")
@@ -289,6 +218,7 @@ public class PlayerConfiguration : MonoBehaviour
 
     }
 
+
     private void TurnInCollisionFalse()
     {
         controller3D.SetAccelerationime(.85f);
@@ -296,11 +226,11 @@ public class PlayerConfiguration : MonoBehaviour
 
     }
 
-    internal void TriggerHeadHit()
+    internal void TriggerHitAnimation()
     {
         if (animator)
         {
-            animator.SetTrigger("Head Hit");
+            animator.SetTrigger("Hit");
         }
     }
 

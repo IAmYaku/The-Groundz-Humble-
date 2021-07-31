@@ -190,7 +190,7 @@ public class Ball : MonoBehaviour {
 
        // if (type == "Normal")
         {
-            if (collision.gameObject.tag == "Player Sprite" && collision.collider.GetType() == typeof(SphereCollider))
+            if (collision.gameObject.tag == "Player Sprite" && collision.collider.GetType() == typeof(SphereCollider))     // move to AI/Controller side
             {
              //   print("Head Collision");
 
@@ -205,7 +205,7 @@ public class Ball : MonoBehaviour {
                         }
                         else
                         {
-                            collision.gameObject.GetComponent<AI>().TriggerHeadHit();
+                        //    collision.gameObject.GetComponent<AI>().TriggerHeadHit();
                         }
                     }
                     BallAudioSource.clip = bounce;

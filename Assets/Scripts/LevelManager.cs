@@ -810,7 +810,7 @@ public class LevelManager : MonoBehaviour
             foreach (GameObject player in hits[ball])
             {
                 PlayerConfiguration pConfig = player.GetComponent<Player>().playerConfigObject.GetComponent<PlayerConfiguration>();
-                pConfig.RemoveContat();
+                pConfig.RemoveContact();
 
                     /*
                     ParticleSystem ps = player.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();                    //gr land ... I dont even think this gets unnormalized
