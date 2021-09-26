@@ -64,7 +64,7 @@ public class PlayerConfiguration : MonoBehaviour
 
         if (!ai)
         {
-            ai = player.controller3DObject.GetComponent<AI>();
+            ai = player.aiObject.GetComponent<AI>();
         }
 
         if (!levelManager)
@@ -99,45 +99,43 @@ public class PlayerConfiguration : MonoBehaviour
         {
             if (collision.gameObject.tag == "Ball")
             {
-               
+                ballHit = collision.gameObject;
 
                 if (ballHit.GetComponent<Ball>().CheckPlayerHit(player.team))                                                                           // make more module
                 {
                     print("~Contact~");
 
-                    ballHit = collision.gameObject;
                     ballHit.GetComponent<Ball>().contact = true;
+
                     float ballHitVelocity = Mathf.Clamp(ballHit.GetComponent<Rigidbody>().velocity.magnitude / 9, 3, 6);  // make numbers variables
+                    print("ballHitVelocity = " + ballHitVelocity);
                     bool ballHitISupered = ballHit.GetComponent<Ball>().isSupering;
-
-                    levelManager.AddHit(ballHit, parent);
-
                     
                     ballContact = true;         // what if multiple balls
-
+                    float stallTime = .2f;
+                    float hitDelay = .0005f;
+                    SlowDownPlayer (hitDelay, stallTime);
                     TriggerHitAnimation();
-                    // TriggerPlayerIsHitFX  -> FXManager
 
-
-                    if ()
+                    if (ballHitISupered)
 
                     {
                         TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity);
   
                     }
 
+                    levelManager.AddHit(ballHit, parent);
+                    levelManager.TriggerHitFX(gameObject, ballHit);
 
 
-
-                    levelManager.HitDisplay(gameObject, collision.gameObject);
-
-
-                    float hitPauseDuration = ballHitVelocity / 25f;
+                    float hitPauseDuration = ballHitVelocity / 20f;
                     float hitPausePreDelay = .125f;
 
                     DelayPause(hitPauseDuration, hitPausePreDelay);
 
-                    levelManager.CamShake(collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude, transform);
+                    levelManager.CamShake(ballHit.GetComponent<Rigidbody>().velocity.magnitude, transform);
+
+                    //if gameMode = local
                     levelManager.PostFX("Player1Hit");
                 }
 
@@ -192,6 +190,18 @@ public class PlayerConfiguration : MonoBehaviour
         
     }
 
+    private void SlowDownPlayer(float delayTime, float stallTime )
+    {
+       if (player.hasAI)
+        {
+            ai.SlowDown(delayTime, stallTime);
+        }
+       else
+        {
+            controller3D.SlowDownByVelocity(delayTime, stallTime);
+        }
+    }
+
     private void CorrectPosition()
     {
         float correctThresh = 1.0f;
@@ -221,7 +231,7 @@ public class PlayerConfiguration : MonoBehaviour
 
     private void TurnInCollisionFalse()
     {
-        controller3D.SetAccelerationime(.85f);
+        controller3D.SetAccelerationRate(.85f);
       //  inBallCollision = false;
 
     }

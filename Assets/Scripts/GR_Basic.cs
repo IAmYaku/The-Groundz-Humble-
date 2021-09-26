@@ -11,10 +11,6 @@ public class GR_Basic : GameRule
     int team1Count;
     int team2Count;
 
-    int ballCount = 5;
-
-    int roundsToWin = 5;
-
     bool hasTimer = false;
 
 
@@ -105,11 +101,12 @@ public class GR_Basic : GameRule
         staminaReadyCost = 25.0f;
 
 
-         throwMag = 2;
-         maxseekVec = 25f;
-         difficultyScaler = 3f;
-         throwDecScalar = 0.25f;
-         grabMag = 10f;
+        throwMag = 2;
+        maxseekVec = 25f;
+        difficultyScaler = 3f;
+        throwDecScalar = 0.25f;
+        grabMag = 10f;
+
     }
 
 
@@ -568,4 +565,5 @@ public class GR_Basic : GameRule
             }
         }
     }
+
 }

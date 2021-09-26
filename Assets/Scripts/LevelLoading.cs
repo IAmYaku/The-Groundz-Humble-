@@ -9,23 +9,24 @@ public class LevelLoading : MonoBehaviour
     public GameObject loadingScreen;
     public Slider slider;
     public Text progressText;
-   public void LoadLevel (int sceneIndex)
+   
+    public void LoadGameLevel(string sceneName)
     {
         DestroyThemeMusic();
-        StartCoroutine(LoadAsynchronously(sceneIndex));
-        
+        StartCoroutine(LoadAsynchronously(sceneName));
     }
 
     private void DestroyThemeMusic()
     {
 
-        //fade first
-        Destroy(GameObject.FindGameObjectWithTag("Theme Music"));
+        GlobalConfiguration.instance.TurnThemeMusic(false);
+
     }
 
-    IEnumerator LoadAsynchronously (int sceneIndex)
+    IEnumerator LoadAsynchronously (string sceneName)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
 
         loadingScreen.SetActive(true);
 

@@ -68,7 +68,8 @@ public class EndGameMenuScript : MonoBehaviour {
 
     public void LoadMenu()
     {
-       // GameManager.playerTypes.Clear();
+        // GameManager.playerTypes.Clear();
+        levelManager.EndGame();
         Time.timeScale = 1f;
         SceneManager.LoadScene("GamemodeMenu");
     }

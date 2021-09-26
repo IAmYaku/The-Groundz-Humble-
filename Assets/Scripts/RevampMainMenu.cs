@@ -21,17 +21,16 @@ public class RevampMainMenu : MonoBehaviour
     public void PlayLocal()
     {
         GlobalConfiguration.instance.SetGameMode("local");
-        SceneManager.LoadScene("TeamSelect");
-        
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("QuickTeamSelect");
+        print("Local");
     }
 
     public void PlayMultiplayer()
 
     {
-        GlobalConfiguration.instance.SetGameMode("local");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-
+        GlobalConfiguration.instance.SetGameMode("multiplayer");
+        SceneManager.LoadScene("TeamSelect");
+        print("Multiplayer");
     }
 
     public void PlayStory()

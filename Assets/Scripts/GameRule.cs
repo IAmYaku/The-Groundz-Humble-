@@ -13,7 +13,7 @@ public abstract class GameRule            // abstract ... Basic
 
     public int ballCount = 1;
 
-    int roundsToWin;
+    public int roundsToWin;
 
     bool hasTimer;
 
@@ -87,6 +87,11 @@ public abstract class GameRule            // abstract ... Basic
         {
             team2Count = count;
         }
+    }
+
+    public void SetRoundsToWin(int x)
+    {
+        roundsToWin = x;
     }
 
 }

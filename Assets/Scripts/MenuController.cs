@@ -27,7 +27,7 @@ public class MenuController : MonoBehaviour {
 		buttons [3] = btnControl;
         buttons[4] = btnKeyboardView;
         buttons[5] = btnEasyAdv;
-        buttons [6] = btnQuit;
+        buttons[6] = btnQuit;
 
 		btnResume.Select ();
 

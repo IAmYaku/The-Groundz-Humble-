@@ -16,10 +16,10 @@ public class Nina : Character
     public static float dodgeSpeed = 1400f;
     public static float jumpSpeed = 10.0f;
 
-    public static float throwPower0 = 200;
-    public static float standingThrowPower = 600;
-    public static float maxThrowPower = 400;
-    public static float maxStandingThrowPower = 2400;
+    public static float throwPower0 = 100f;
+    public static float standingThrowPower = 200;
+    public static float maxThrowPower = 600f;
+    public static float maxStandingThrowPower = 2400f;
 
     public static float superCoolDown = 30.0f;
     public static float grabRadius = 8;

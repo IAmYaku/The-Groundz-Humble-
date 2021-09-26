@@ -20,12 +20,14 @@ public class CamController : MonoBehaviour {
     private float offsetX;
 
 	public float padding=20f;
-    public float zoomWeight = .1f;
-    public float xWeight = .75f;
+    private float zoomWeight = .092f;
+    float maxZoomSize = 25.0f;
+    float smallestZoomSize = 15f;
+    public float xWeight = .5f;
 
     private float xDamp;
     private float zoomDamp;
-	public float cameraSmoothe = .1f;
+	private float cameraSmoothe = 1f;
 
     public float playerWeight = 1.1f;
 
@@ -37,8 +39,12 @@ public class CamController : MonoBehaviour {
     private float shakeIntensity;
     private float shakeTime;
     private float glitchTime;
-    public float shakeAmp = .125f;
-    public float shakeWeight = 1f;
+    //public float shakeAmp = .125f;
+    private float shakeWeight = 2000f;
+    float shakeViolence = 3f;
+    float shakeSpeedMult = 100f;
+    float shakeWeightTime = 300f;
+
     private bool normaled;
 
    //lol
@@ -69,13 +75,15 @@ public class CamController : MonoBehaviour {
             {
                 if (isShaking == false)
                 {
-                    float nuSize = padding + Mathf.Abs(MaxDistance()) * zoomWeight; 
+                    float nuSize = Mathf.Clamp(padding + Mathf.Abs(MaxDistance()) * zoomWeight,smallestZoomSize,maxZoomSize); 
                     float size0 = Camera.main.orthographicSize;
                     Camera.main.orthographicSize = Mathf.SmoothDamp(size0, nuSize, ref zoomDamp, cameraSmoothe);
-                    Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f);                                                               // blows up if there ant any balls or players
-                    float deltaX = (average.x - transform.position.x) * xWeight;
+                
+                    Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f) * xWeight;                                                               // blows up if there ant any balls or players
+                   // float deltaX = (average.x - transform.position.x) * xWeight;
                     float nuX = Mathf.SmoothDamp(transform.position.x, average.x, ref xDamp, cameraSmoothe);
                     gameObject.transform.position = new Vector3(nuX, posY, posZ);
+
                 }
             }
         }
@@ -83,13 +91,12 @@ public class CamController : MonoBehaviour {
         if (isShaking)
         {
             Shake(shakeTime);
-            shakeTime--;
+            shakeTime-= Time.deltaTime;
         }
 
         if (shakeTime <=0 )
         {
             isShaking = false;
-
 
         }
 
@@ -130,25 +137,40 @@ public class CamController : MonoBehaviour {
 
 	public float GetAverage(){
 		float sum = 0.0f;
+        float charWeight;
 		float objectsCount = gameManager.levelManager.balls.Count +  levelManager.GetPlayers().Count;
 		foreach (GameObject ball in gameManager.levelManager.balls) {
             sum += ball.transform.position.x;
 		}
 		foreach (GameObject player in levelManager.GetPlayers()) {
-            sum += player.transform.position.x * playerWeight;
+
+            if (player.GetComponent<Player>().hasAI)
+            {
+                charWeight = playerWeight * 1f;
+            }
+            else
+            {
+                charWeight = playerWeight;
+            }
+            sum += player.transform.position.x * charWeight;
 		}
 		return sum / (objectsCount);
 	}
 
     public void Shake( float time) 
     {
-         float nuX = transform.position.x + shakeIntensity * Mathf.Sin(time);
-         transform.position = new Vector3 (Mathf.Lerp(transform.position.x,nuX,cameraSmoothe), transform.position.y, transform.position.z);
+        float nuX = transform.position.x + shakeIntensity * Mathf.Sin(Time.realtimeSinceStartup * shakeSpeedMult);
+         transform.position = new Vector3 (Mathf.Lerp(transform.position.x,nuX,cameraSmoothe * shakeViolence), transform.position.y, transform.position.z);
            
     }
 
     public void ZoomToSide(int side)
     {
+        if (isShaking)
+        {
+            isShaking = false;
+        }
+
         if (side == 1)
         {
            Quaternion camRot =  gameObject.GetComponent<Camera>().transform.localRotation;
@@ -183,9 +205,9 @@ public class CamController : MonoBehaviour {
     internal void TrigCamShake(float intensity, Transform playerTrans)
     {
         isShaking = true;
-        shakeTime = Mathf.Clamp(intensity/1,0f,8f);
-        shakeIntensity = Mathf.Clamp(intensity/100,0f,3f);
-      //  print("shakeIntensity = " + shakeIntensity);
+        shakeTime = Mathf.Clamp(intensity/ shakeWeightTime, 0f,8f);
+        shakeIntensity = Mathf.Clamp(intensity/shakeWeight,0f,2f);
+        //print("shakeIntensity = " + shakeIntensity);
        // print("shakeTime = " + shakeTime);
 
     }

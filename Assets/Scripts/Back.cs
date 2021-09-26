@@ -19,4 +19,9 @@ public class Back : MonoBehaviour {
         SceneManager.LoadScene("GamemodeMenu");
     }
 
+    public void BackToCharSelect()
+    {
+        SceneManager.LoadScene("TeamSelect");
+    }
+
 }

@@ -147,6 +147,7 @@ public class AI : MonoBehaviour {
     public AIState ready_ = new Ready();             //3
     public AIState panic_ = new Panic();            //4
     public AIState retreat_ = new Retreat();       //5
+    // Retrieve //6
 
     // public AIState shake_ = new Shake();
 
@@ -158,6 +159,8 @@ public class AI : MonoBehaviour {
     Color color;
 
     public bool debugMode;
+
+    public bool addedAtStage;
 
 
     private void Awake()
@@ -187,7 +190,6 @@ public class AI : MonoBehaviour {
 
         team = playerScript.team;
         color = playerScript.color;
-
 
 
         /*
@@ -1333,7 +1335,7 @@ public class AI : MonoBehaviour {
     public void AddNavSpeed(float s)
     {
         navMeshAgent.speed += s * 1.45f;
-        navMeshAgent.acceleration += s*1.45f;
+        navMeshAgent.acceleration += s *1.45f;
     }
 
     public void AddThrowPower(float p)
@@ -1490,5 +1492,54 @@ public class AI : MonoBehaviour {
         }
     }
 
+    public void SlowDown(float delay, float stallTime)
+    {
+        navMeshAgent.speed = navMeshAgent.speed / 2f;
+        rigidbody.velocity = rigidbody.velocity / 2f;
+        Invoke("NormalNavSpeed", stallTime);
+    }
 
+    void NormalNavSpeed()
+    {
+        navMeshAgent.speed = navSpeed;
+    }
+
+    public void Init()
+    {
+        GameObject gameManagerObject = GameObject.Find("GameManager");
+        levelManager = gameManagerObject.GetComponent<LevelManager>();
+
+        playerScript = gameObject.GetComponentInParent<Player>();
+        parent = gameObject.transform.parent.gameObject;
+        transform = gameObject.transform;
+
+        playerConfigObject = playerScript.playerConfigObject;
+        playerConfigObject.transform.position = Vector3.zero;
+        navMeshAgent = playerConfigObject.GetComponent<NavMeshAgent>();
+        animator = playerConfigObject.GetComponent<Animator>();
+        spriteRenderer = playerConfigObject.GetComponent<SpriteRenderer>();
+        rigidbody = playerConfigObject.GetComponent<Rigidbody>();
+        collider = playerConfigObject.GetComponent<Collider>();
+        sizeX = collider.bounds.max.x - collider.bounds.min.x;
+        sizeY = collider.bounds.max.y - collider.bounds.min.y;
+        sizeZ = collider.bounds.max.z - collider.bounds.min.z;
+
+        team = playerScript.team;
+        color = playerScript.color;
+
+        GameManager gameManager = levelManager.gameObject.GetComponent<GameManager>();                        // todo
+        retreatPoint = parent.transform;  // or grab from lm 
+
+        idle_.Start(gameManager, this);     // abstract classes don't inherit monobehaviours start
+        getBall_.Start(gameManager, this);
+        throwBall_.Start(gameManager, this);
+        panic_.Start(gameManager, this);
+        retreat_.Start(gameManager, this);
+        ready_.Start(gameManager, this);
+
+        //   navMeshAgent.enabled = true;
+
+        aiState = idle_;                    //   <-- $ Name me something initty 
+                                            //   aiState = ready_;
+    }
 }

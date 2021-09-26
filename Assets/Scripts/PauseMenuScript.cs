@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 //using TMPro;
 
 public class PauseMenuScript : MonoBehaviour {
@@ -12,7 +13,9 @@ public class PauseMenuScript : MonoBehaviour {
     public bool GameIsPaused = false;
     public GameObject pauseMenuUI;
     public LevelManager levelManager;
+    public GameObject controlScreen;
     public GameObject[] players;
+    bool pauseStateChanged = false;
     // Update is called once per frame
 
     private void Start()
@@ -32,33 +35,49 @@ public class PauseMenuScript : MonoBehaviour {
         void Update ()
     {
 
-		if(Input.GetKeyDown(KeyCode.Escape) ||IsPauseInput())
+		if(IsPauseInput())
         {
-            if(GameIsPaused)
+            if(!pauseStateChanged)
             {
-                Resume();
-            }
+                pauseStateChanged = true;
+                if(GameIsPaused)
+                {
+                    Resume();
+                }
 
-            else
-            {
-                Pause();
+                else
+                {
+                    Pause();
+                }
             }
+        }
+        else
+        {
+            pauseStateChanged = false;
         }
         
 	}
 
     private bool IsPauseInput()
     {
-        foreach (GameObject player in players)
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if (player.GetComponent<Player>().hasJoystick)
-            {
-                if (Input.GetKeyDown(player.GetComponent<Player>().joystick.pauseInput))
-                {
-                    return true;
-                }
-            }
+            return true;
         }
+
+        Gamepad g = Gamepad.current;
+        if(null != g)
+        {
+            float pauseValue = g.startButton.ReadValue();
+            if (pauseValue > 0)
+            {
+                return true;
+
+            }
+
+           
+        }
+
         return false;
     }
 
@@ -77,9 +96,9 @@ public class PauseMenuScript : MonoBehaviour {
 
     }
 
-    public void LoadMenu()
+    public void QuitToMain()
     {
-      //  GameManager.playerTypes.Clear();
+        levelManager.EndGame();
         Time.timeScale = 1f;
         SceneManager.LoadScene("GamemodeMenu");
     }
@@ -104,6 +123,7 @@ public class PauseMenuScript : MonoBehaviour {
        
     }
 
+   
     public void QuitGame()
     {
         Debug.Log("Quitting Game...");

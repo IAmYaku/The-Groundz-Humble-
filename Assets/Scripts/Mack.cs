@@ -18,7 +18,7 @@ public class Mack : Character
     public static float throwPower0 = 100f;
     public static float standingThrowPower = 200;
     public static float maxThrowPower = 600f;
-    public static float maxStandingThrowPower = 1800f;
+    public static float maxStandingThrowPower = 2400f;
     public static float superCoolDown = 30.0f;
     public static float grabRadius = 8f;
     public static Vector3 handSize = new Vector3(3f, 2f, 0f);

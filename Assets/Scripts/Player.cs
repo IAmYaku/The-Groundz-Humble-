@@ -5,16 +5,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 
-public class Player : MonoBehaviour 
+public class Player : MonoBehaviour
 {
 
     LevelManager levelManager;
 
     // transform or spawn point
 
-	public int number;
+    public int number;
 
     int playerIndex;   // < should be alligned w myjoystick
 
@@ -27,7 +28,7 @@ public class Player : MonoBehaviour
     public GameObject aiObject;  // 2
 
     Controller3D controller3D;
-     AI aiScript;
+    AI aiScript;
 
     public Sprite playerIconImage;
     public GameObject staminaBarObject;
@@ -35,16 +36,16 @@ public class Player : MonoBehaviour
 
     public GameObject super;
 
-    public MyJoystick joystick;  
-	public bool hasJoystick;  
+    public MyJoystick joystick;
+    public bool hasJoystick;
 
     public bool hasAI;
 
-	public string type;
+    public string type;
 
     public Color color;    // should always be joystick colorS
-	public int team;
-	public Vector3 childPos0;
+    public int team;
+    public Vector3 childPos0;
     public bool isOut = false;
 
     public King KingScript;
@@ -74,7 +75,7 @@ public class Player : MonoBehaviour
 
     private bool dodgeActivated;
 
-	private float fxSpeed = 1f;
+    private float fxSpeed = 1f;
 
     public AudioSource playerAudioSource;
 
@@ -95,9 +96,9 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         GameObject gameManagerObject = GameObject.Find("GameManager");
-         levelManager = gameManagerObject.GetComponent<LevelManager>();
+        levelManager = gameManagerObject.GetComponent<LevelManager>();
 
-       // print("Player Awake");
+        // print("Player Awake");
         CheckChildStructure();
         //isSet = false;
 
@@ -136,66 +137,68 @@ public class Player : MonoBehaviour
         aiScript = aiObject.GetComponent<AI>();
     }
 
-    void Start () {
+    void Start()
+    {
 
-       // attributes set in GlobalConfig
+        // attributes set in GlobalConfig
 
 
         // grab from level Manager
-/*
-        if (number == 1)       // this should be all in one ui object
-            {
-                staminaBarObject = GameObject.Find("1 Stamina Slider");
-                powerBarObject = GameObject.Find("1 Power Slider");
-            }
-            if (number == 2)
-            {
-                staminaBarObject = GameObject.Find("2 Stamina Slider");
-                powerBarObject = GameObject.Find("2 Power Slider");
-            }
-            if (number == 3)
-            {
-                staminaBarObject = GameObject.Find("3 Stamina Slider");
-                powerBarObject = GameObject.Find("3 Power Slider");
-            }
-            if (number == 4)
-            {
-                staminaBarObject = GameObject.Find("4 Stamina Slider");
-                powerBarObject = GameObject.Find("4 Power Slider");
-            }
+        /*
+                if (number == 1)       // this should be all in one ui object
+                    {
+                        staminaBarObject = GameObject.Find("1 Stamina Slider");
+                        powerBarObject = GameObject.Find("1 Power Slider");
+                    }
+                    if (number == 2)
+                    {
+                        staminaBarObject = GameObject.Find("2 Stamina Slider");
+                        powerBarObject = GameObject.Find("2 Power Slider");
+                    }
+                    if (number == 3)
+                    {
+                        staminaBarObject = GameObject.Find("3 Stamina Slider");
+                        powerBarObject = GameObject.Find("3 Power Slider");
+                    }
+                    if (number == 4)
+                    {
+                        staminaBarObject = GameObject.Find("4 Stamina Slider");
+                        powerBarObject = GameObject.Find("4 Power Slider");
+                    }
 
-            staminaCool = (int)(stamina-controller3D.staminaCool);    // iffy 
-            staminaBarObject.GetComponent<Slider>().value = stamina;
-            powerCool = (int)(stamina- controller3D.superCoolDown);     // iffy
-            powerBarObject.GetComponent<Slider>().value = power;
+                    staminaCool = (int)(stamina-controller3D.staminaCool);    // iffy 
+                    staminaBarObject.GetComponent<Slider>().value = stamina;
+                    powerCool = (int)(stamina- controller3D.superCoolDown);     // iffy
+                    powerBarObject.GetComponent<Slider>().value = power;
 
-        */
+                */
 
         playerAudioSource = playerConfigObject.GetComponent<AudioSource>();
 
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
 
         if (levelManager.isPlaying)
         {
-            
+
             if (hasJoystick)
             {
-                staminaCool = (int)(stamina - controller3D.staminaCool);    
+                staminaCool = (int)(stamina - controller3D.staminaCool);
                 staminaBarObject.GetComponent<Slider>().value = staminaCool;
-                powerCool = (int)(power - controller3D.superCoolDown);    
+                powerCool = (int)(power - controller3D.superCoolDown);
                 powerBarObject.GetComponent<Slider>().value = powerCool;
             }
             if (hasAI)
             {
-                staminaCool = (int)(stamina - aiScript.staminaCool);     
+                staminaCool = (int)(stamina - aiScript.staminaCool);
                 staminaBarObject.GetComponent<Slider>().value = staminaCool;
-                powerCool = (int)(power - aiScript.superCoolDown);    
+                powerCool = (int)(power - aiScript.superCoolDown);
                 powerBarObject.GetComponent<Slider>().value = powerCool;
             }
-            
+
             if (dodgeActivated)
             {
                 /*
@@ -226,13 +229,19 @@ public class Player : MonoBehaviour
         }
 
         if (isDeRendering)
-            {
-                drC_tF = Time.realtimeSinceStartup;
-                float t = drC_tF - drC_t0;
-                DeRender(t);
-            }
-        
-	}
+        {
+            drC_tF = Time.realtimeSinceStartup;
+            float t = drC_tF - drC_t0;
+            DeRender(t);
+        }
+
+    }
+
+    internal void DisablePlayerInput()
+    {
+        Controller3D controller3D = controller3DObject.GetComponent<Controller3D>();
+        controller3D.DisablePlayerInputControls();
+    }
 
     internal void SetisSet(bool v)
     {
@@ -242,15 +251,15 @@ public class Player : MonoBehaviour
     private void DeRender(float v)              // DeRender + + +
     {
         SpriteRenderer sr = playerConfigObject.GetComponent<SpriteRenderer>();
-        if ((dR_Cool -v) <= 0)
+        if ((dR_Cool - v) <= 0)
         {
-           // print("done deRendering");
+            // print("done deRendering");
             isDeRendering = false;
-           // playerConfigObject.GetComponent<PlayerConfiguration>().SetOutAnimation(false);
+            // playerConfigObject.GetComponent<PlayerConfiguration>().SetOutAnimation(false);
             // out_mat.SetFloat("_Start", 0);
             playerConfigObject.GetComponent<SpriteRenderer>().material = default_mat;
             sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
-            playerConfigObject.GetComponent<SpriteRenderer >().enabled = false;
+            playerConfigObject.GetComponent<SpriteRenderer>().enabled = false;
             playerConfigObject.GetComponent<CapsuleCollider>().enabled = false;
             playerConfigObject.GetComponent<SphereCollider>().enabled = false;
             playerConfigObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -261,33 +270,36 @@ public class Player : MonoBehaviour
             playerConfigObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);  // +
 
             playerAura.SetActive(false);
-        } 
+        }
 
         else
         {
             // playerConfigObject.transform.Translate(new Vector3(UnityEngine.Random.Range(-0.25f, 0.25f), -1 * v, 0f));
             sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, (dR_Cool - v));
-       
-          //  float cutThresh = playerConfigObject.GetComponent<SpriteRenderer>().material.GetFloat("_CutThresh");   // ?
-          //   playerConfigObject.GetComponent<SpriteRenderer>().material.SetFloat("_CutThresh", cutThresh + .05f);    //?
+
+            //  float cutThresh = playerConfigObject.GetComponent<SpriteRenderer>().material.GetFloat("_CutThresh");   // ?
+            //   playerConfigObject.GetComponent<SpriteRenderer>().material.SetFloat("_CutThresh", cutThresh + .05f);    //?
 
         }
     }
 
-    public float GetThrowPower0(){
-		return throwPower0;
-	}
-	public float GetMaxThrowPower(){
-		return maxThrowPower;
+    public float GetThrowPower0()
+    {
+        return throwPower0;
+    }
+    public float GetMaxThrowPower()
+    {
+        return maxThrowPower;
 
-	}
+    }
 
-	public void enableAI(){
+    public void enableAI()
+    {
 
-		hasAI = true;
+        hasAI = true;
 
         aiObject.SetActive(true);
-		aiScript.enabled = true;
+        aiScript.enabled = true;
 
         hasJoystick = false;
         controller3DObject.SetActive(false);
@@ -297,46 +309,79 @@ public class Player : MonoBehaviour
 
 
         NavMeshAgent navMeshAgent = playerConfigObject.GetComponent<NavMeshAgent>();
-        navMeshAgent.enabled = true;      
+        navMeshAgent.enabled = true;
 
         playerAura.SetActive(false);
 
-        playerConfigObject.GetComponent<Rigidbody>().isKinematic = true; 
+        playerConfigObject.GetComponent<Rigidbody>().isKinematic = true;
 
     }
 
-
-    internal void enableController(int pIndex, Color col)      // in game swap                       ... * I dont think we need params if we use createJoy beforehand
+    public void ControlSwap(GameObject pSwap)
     {
+        /// Gotta check keyboard 
+        /// 
+        Player pScript = pSwap.GetComponent<Player>();
+        Color pColor = pScript.color;
+        int pIndex = pScript.joystick.number;
+
+        print("pIndex " + pIndex);
+
+        PlayerInput pInput = PlayerInput.all[pIndex];
+
+        print("PlayerInput.all size " + PlayerInput.all.Count);
+        print("playerInput.user.id " + pInput.user.id);
+        print("playerInput.user.index " + pInput.user.index);
+        print("playerInput.user.pairedDevices" + pInput.user.pairedDevices);
+        print(" InputSystem.devices " + pInput.devices);
+
+        disableAI();
+
         hasJoystick = true;
 
-        if (joystick == null)
+        joystick = pScript.joystick;
+        pScript.joystick = null;
+
+        pScript.color = color;
+        color = pColor;
+        SetAuraColor(color);
+
+         enableController();
+
+        PlayerInput myPlayerInput0 = controller3DObject.GetComponent<PlayerInput>();
+        PlayerInput myPlayerInput = PlayerInput.all[myPlayerInput0.playerIndex];
+        InputUser myPlayerInputUser = myPlayerInput.user;
+
+
+        print("myPlayerInput0 " + myPlayerInput0.playerIndex);
+
+        foreach (InputDevice device in pInput.user.pairedDevices)
         {
-            joystick = new MyJoystick(pIndex, col);                      // < this is create joystick
+            InputUser.PerformPairingWithDevice(device, myPlayerInputUser);
         }
 
-         playerIndex = pIndex;
-        color = col;
+        pInput.user.UnpairDevices();
+
+       // myPlayerInputUser.ActivateControlScheme("Gamepad");
+        print(" myPlayerInputUser.valid " + myPlayerInputUser.valid);
+        print(" myPlayerInputUser.id " + myPlayerInputUser.id);
+        print("myPlayerInputUser.pairedDevices " + myPlayerInputUser.pairedDevices);
+        print("myPlayerInput.devices" + myPlayerInput.devices);
+        print("myPlayerInputUser.index " + myPlayerInputUser.index);
 
 
+
+        // PlayerInput.all[]
+    }
+
+    private void enableController()
+    {
         controller3DObject.SetActive(true);
         controller3D.enabled = true;
         PlayerInput playerInput = controller3DObject.GetComponent<PlayerInput>();
         playerInput.enabled = true;   // might be called twice .. (Controller3D.OnEnable())
-     //  playerInput.playerIndex = pIndex;
-
-        SetAuraColor(color);
-
-        playerConfigObject.GetComponent<Rigidbody>().isKinematic = false;  
-
-        hasAI = false;                           // disableAI()
-        aiScript.enabled = false;
-        aiObject.SetActive(false);
-
-        NavMeshAgent navMeshAgent = aiObject.GetComponent<NavMeshAgent>();
-        navMeshAgent.enabled = false;
+        playerConfigObject.GetComponent<Rigidbody>().isKinematic = false;
         
-
     }
 
     internal void SetOnStandby(bool v)
@@ -348,7 +393,15 @@ public class Player : MonoBehaviour
 
         if (hasJoystick)
         {
-             
+            if (v)
+            {
+                controller3D.DisablePlayerInputControls();
+            }
+            else
+            {            
+                controller3D.EnablePlayerInputControls();
+            }
+            
         }
 
 
@@ -356,7 +409,7 @@ public class Player : MonoBehaviour
         if (hasAI)
 
 
-            {
+        {
             if (!v)
             {
                 NavMeshAgent navMeshAgent = playerConfigObject.GetComponent<NavMeshAgent>();
@@ -386,6 +439,7 @@ public class Player : MonoBehaviour
     }
 
     private void SetAuraColor(Color color)
+    
     {
         playerAura.SetActive(true);
 
@@ -399,11 +453,21 @@ public class Player : MonoBehaviour
         {
             GameObject childObject = psRoot.transform.GetChild(i).gameObject;
             ParticleSystem.MainModule childPS = childObject.GetComponent<ParticleSystem>().main;
-          //  childPS.startColor = new ParticleSystem.MinMaxGradient(color);
-            
+
+            if (i == 1 || i == 2)
+            {
+                childPS.startColor = new ParticleSystem.MinMaxGradient(new Color(color.r, color.g, color.b, .1f));
+            }
+            else
+            {
+                childPS.startColor = new ParticleSystem.MinMaxGradient(color);
+            }
+
+
+
 
         }
-           
+
     }
 
     public void enableController(int pIndex)    // init ..
@@ -414,20 +478,18 @@ public class Player : MonoBehaviour
 
         if (joystick == null)                                  // might be obsolete since playerIndex is in PlayerInput
         {
-            joystick = new MyJoystick(pIndex,color);
+            joystick = new MyJoystick(pIndex);
             print("joystick is null");
 
         }
 
-      //  joystick.SetJoystick(playerIndex);
+        //  joystick.SetJoystick(playerIndex);
 
         controller3DObject.SetActive(true);
         controller3D.GetComponent<Controller3D>().enabled = true;
 
         PlayerInput playerInput = controller3DObject.GetComponent<PlayerInput>();    // might be called twice .. (Controller3D.OnEnable())
         playerInput.enabled = true;
-
-        SetAuraColor(joystick.color);
 
         hasAI = false;
         aiScript.enabled = false;
@@ -442,7 +504,7 @@ public class Player : MonoBehaviour
     }
 
     public void enableController(int joystickNumber, string type)    // ++  obsolete
-    {      
+    {
 
         hasAI = false;
         aiScript.enabled = false;
@@ -463,15 +525,66 @@ public class Player : MonoBehaviour
         controller3D.GetComponent<Controller3D>().enabled = true;
     }
 
-    public void ToggleActivateDodge()	{
-		dodgeActivated = !dodgeActivated;
 
-	}
+    public void ToggleActivateDodge()
+    {
+        dodgeActivated = !dodgeActivated;
 
-    internal void PlayWinAnimation()                                        
+    }
+
+    internal void PlayWinAnimation()
     {
         playerConfigObject.GetComponent<PlayerConfiguration>().SwitchToWinAnimation();
- 
+
+
+    }
+
+
+    public void DisablePlayer()
+    {
+        isOut = true;
+       
+        if (hasJoystick)
+        {
+            if (controller3D.ballGrabbed)
+            {
+                controller3D.DropBall();
+            }
+
+            controller3D.SetTouch0FXActivate(false);
+            controller3D.isKnockedOut = false;
+            controller3D.ballContact = false;
+            playerAura.gameObject.SetActive(false);
+
+            /*
+            ParticleSystem ps = player.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule ring_ps = ps.main;
+            ParticleSystem ps_2 = player.transform.GetChild(0).gameObject.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystem>();
+            ParticleSystem.MainModule spikes_ps = ps_2.main;
+            spikes_ps.simulationSpeed = 1;
+            ring_ps.simulationSpeed = 1;
+            */
+        }
+        else
+        {
+            if (aiScript.enabled)
+            {
+                if (aiScript.ballGrabbed)
+                {
+                    aiScript.DropBall();
+                }
+                aiScript.isKnockedOut = false;
+                aiScript.ballContact = false;
+                aiScript.enabled = false;
+
+                NavMeshAgent navMeshAgent = playerConfigObject.GetComponent<NavMeshAgent>();
+                navMeshAgent.enabled = false;
+
+            }
+        }
+
+        PlayOutSound();
+        DeRender();
 
     }
 
@@ -484,23 +597,23 @@ public class Player : MonoBehaviour
         playerConfigObject.GetComponent<CapsuleCollider>().enabled = false;
         playerConfigObject.GetComponent<SphereCollider>().enabled = false;
         playerConfigObject.GetComponent<Rigidbody>().isKinematic = true;
-        playerAura.gameObject.SetActive(false);
         shadow.SetActive(false);
     }
 
     internal void playFootsteps()
     {
-        if (!playerAudioSource.isPlaying){
+        if (!playerAudioSource.isPlaying)
+        {
             playerAudioSource.volume = .85f;
             playerAudioSource.clip = footsteps;
             playerAudioSource.Play();
         }
-       
+
     }
 
     private AudioClip GetThrowSound()
     {
-       
+
         if (throwSounds.Length > 0)
         {
             return throwSounds[0];
@@ -517,7 +630,7 @@ public class Player : MonoBehaviour
 
         playerAudioSource.clip = outSound;
         playerAudioSource.pitch += UnityEngine.Random.Range(-3f, 3f);
-        playerAudioSource.volume= .25f;
+        playerAudioSource.volume = .25f;
         playerAudioSource.Play();
 
         NormalAudioSource();
@@ -561,22 +674,22 @@ public class Player : MonoBehaviour
         return playerIndex;
     }
 
-    internal void CreateJoystick(int pIndex, string type, Color c)
+    internal void CreateJoystick(int pIndex, string type)
     {
         hasJoystick = true;
-        joystick = new MyJoystick(pIndex, type ,c);                      // change to start @ 0.   allign w pi.pi
-        color = c;
+        joystick = new MyJoystick(pIndex, type);                      // change to start @ 0.   allign w pi.p
     }
 
-    internal void CreateJoystick(int pIndex, Color c)
+    internal void CreateJoystick(int pIndex)
     {
         hasJoystick = true;
-        joystick = new MyJoystick(pIndex, c);                      // change to start @ 0.   allign w pi.pi
-        color = c;
+        joystick = new MyJoystick(pIndex);                      // change to start @ 0.   allign w pi.p
     }
+
     public MyJoystick GetJoystick()
     {
-        if (joystick != null){
+        if (joystick != null)
+        {
             return joystick;
         }
         else
@@ -584,6 +697,18 @@ public class Player : MonoBehaviour
             Debug.Log("No Joystick");
             return null;
         }
+    }
+
+    public void SetColor(Color c)
+    
+    {
+        color = c;
+
+        if (hasJoystick)
+        {
+            SetAuraColor(color);
+        }
+
     }
 
 }

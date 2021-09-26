@@ -8,6 +8,8 @@ public class Stage : MonoBehaviour
 {
     GameManager gm;
     LevelManager lm;
+    string name;
+    int index;
 
     GameObject p1Icon;
     GameObject p2Icon;
@@ -15,7 +17,7 @@ public class Stage : MonoBehaviour
     GameObject p4Icon;
 
     List<Vector3> tm1_spawnPoints = new List<Vector3>();
-    List<Vector3> tm2_spawnPoints = new List<Vector3>();
+    public List<Vector3> tm2_spawnPoints = new List<Vector3>();
 
     List<Vector3> ballSpawnPoints = new List<Vector3>();
 
@@ -62,6 +64,40 @@ public class Stage : MonoBehaviour
 
     }
 
+    void Start()
+    {
+        InitBounds();
+        // CreateSpawnLocations();
+        lm.LoadLevel();
+        print("Stage Start");
+
+    }
+
+    private void OnEnable()
+    {
+        /*
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        if (lm.GetSceneVisited(sceneIndex))
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+
+
+            gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+            if (!gm)
+            {
+                // gm = GlobalConfig.instaance.InstantiateGM
+            }
+
+            lm = gm.levelManager;
+            lm.SetStage(this);
+
+            InitBounds();
+            // CreateSpawnLocations();
+            lm.LoadLevel();
+        }
+        */
+    }
 
     public List<Vector3> GetSpawnLocations(int team, int playerCount)
     {
@@ -83,6 +119,12 @@ public class Stage : MonoBehaviour
             if (tm2_spawnPoints.Count == 0)
             {
          
+                CreateSpawnLocations(team, playerCount);
+            }
+
+            else     // play local aka arcade
+            {
+                tm2_spawnPoints.Clear();
                 CreateSpawnLocations(team, playerCount);
             }
 
@@ -122,14 +164,6 @@ public class Stage : MonoBehaviour
     }
 
 
-    void Start()
-    {
-        InitBounds();
-        // CreateSpawnLocations();
-        lm.LoadLevel();
-
-
-    }
 
     internal List<Vector3> GetBallSpawnLocations(int ballCount)
     {
@@ -197,7 +231,18 @@ public class Stage : MonoBehaviour
 
     internal bool IsInGameBounds(Vector3 pos)
     {
-        
+
+        float padding;
+
+       // print("pos = " + pos);
+       // print(" baseLineLeft = " + baseLineLeft);
+      //  print(" baseLineRight = " + baseLineRight);
+      //  print(" farSideLine = " + farSideLine);
+       // print(" nearSideLine = " + nearSideLine);
+     //   print(" floor = " + floor);
+       // print(" roof = " + roof);
+
+
         if (baseLineLeft < pos.x && pos.x < baseLineRight)
         {
             if (nearSideLine < pos.z && pos.z < farSideLine)

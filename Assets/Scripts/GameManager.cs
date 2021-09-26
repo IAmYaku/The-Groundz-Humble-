@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
 
     public PlayerInputManager playerInputManager;
 
+    public GameObject audioManager;
+
 
 
 //    public GameObject camera;

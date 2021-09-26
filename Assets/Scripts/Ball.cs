@@ -307,6 +307,16 @@ public class Ball : MonoBehaviour {
         }
     }
 
+    public void ActivateTrail(Color terColor, Color teeColor)
+    {
+        TrailRenderer tr = gameObject.GetComponent<TrailRenderer>();
+        tr.enabled = true;
+        tr.startColor = terColor;
+        tr.endColor = teeColor;
+
+
+    }
+
     public void DeactivateThrow()
     {
         
@@ -314,6 +324,11 @@ public class Ball : MonoBehaviour {
         {
             levelManager.RemoveThrow(gameObject);
         }
+        if (contact)
+        {
+            DeactivateTrail();
+        }
+
 
         contact = false;
         thrown = false;
@@ -324,16 +339,20 @@ public class Ball : MonoBehaviour {
         ParticleSystem hit_ps = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
         hit_ps.GetComponent<Renderer>().sortingOrder = 1;
         hit_ps.startSize = 0;
+
         gameObject.transform.GetChild(1).gameObject.SetActive(false);
 
+        Physics.IgnoreLayerCollision(5, 3,true);
+        
+    }
+
+    void DeactivateTrail()
+    {
         if (gameObject.GetComponent<TrailRenderer>().enabled == true)
         {
             gameObject.GetComponent<TrailRenderer>().startWidth = 1;
             gameObject.GetComponent<TrailRenderer>().enabled = false;
         }
-
-        Physics.IgnoreLayerCollision(5, 3,true);
-        
     }
 
     public void Throw(Vector3 throww, Color color, bool hasmag, float mag, Transform targ, float renderLength, float chargedThrowAlpha)  {
@@ -473,22 +492,10 @@ public class Ball : MonoBehaviour {
         if  (team == 1)
         {
             thrownBy1 = true;
-            print("thrownby1");
-            if (!gameObject.GetComponent<TrailRenderer>().enabled)
-            {
-                gameObject.GetComponent<TrailRenderer>().startColor = parent.GetComponent<Player>().color;
-               // gameObject.GetComponent<TrailRenderer>().endColor = parent.GetComponent<Player>().color;
-            }
         }
         if (team == 2)
         {
             thrownBy2 = true;
-            print("thrownby2");
-            if (!gameObject.GetComponent<TrailRenderer>().enabled)
-            {
-                gameObject.GetComponent<TrailRenderer>().startColor = parent.GetComponent<Player>().color;
-              //  gameObject.GetComponent<TrailRenderer>().endColor = parent.GetComponent<Player>().color;
-            }
         }
     }
 

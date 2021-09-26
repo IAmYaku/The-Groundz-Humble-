@@ -4,23 +4,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MyJoystick  {
+public class MyJoystick
+{
 
     PlayerInput playerInput;
 
-	public int number =0;   // aka playerInput.playerIndex +1s
+    public int number = 0;   //
 
     string type;
     public Color color;
 
-	public string vertInput;
-	public string horzInput;
-	public string jumpInput;
-	public string action1Input;
-	public string rTriggerInput ;
-	public string superInput;
-	public string blockInput;
-	public string pauseInput;
+    public string vertInput;
+    public string horzInput;
+    public string jumpInput;
+    public string action1Input;
+    public string rTriggerInput;
+    public string superInput;
+    public string blockInput;
+    public string pauseInput;
 
     public string altAction1Input;
     public string altSuper1Input;
@@ -35,13 +36,14 @@ public class MyJoystick  {
     public static string mode = "Basic";
 
 
-    public enum Type { ps, xbox	};
+    public enum Type { ps, xbox };
 
 
 
-	void init () {
+    void init()
+    {
 
-        Debug.Log("number = " + number);
+        Debug.Log("joystick number = " + number);
 
         if (type == "Controller (Xbox One For Windows)")
         {
@@ -51,86 +53,86 @@ public class MyJoystick  {
         {
             InitPlayStation();
         }
-        			
-	}
+
+    }
 
     private void InitXbox()
     {
         Debug.Log("Xbox controller detected @ myJoystick");
 
-        if (number ==0)
-            {
-                vertInput = "Vertical_P1";
-                horzInput = "Horizontal_P1";
-                jumpInput = "Dodge_P1_X4W";
-                action1Input = "joystick 1 button 0";
-                rTriggerInput = "Throw_P1_X4W";
-                superInput = "Super_P1_X4W";
-                blockInput = "Block_P1";
-                pauseInput = "joystick 1 button 7";
+        if (number == 0 || number == -1)
+        {
+            vertInput = "Vertical_P1";
+            horzInput = "Horizontal_P1";
+            jumpInput = "Dodge_P1_X4W";
+            action1Input = "joystick 1 button 0";
+            rTriggerInput = "Throw_P1_X4W";
+            superInput = "Super_P1_X4W";
+            blockInput = "Block_P1";
+            pauseInput = "joystick 1 button 7";
 
-                altAction1Input = "h";
-                altSuper1Input = "j";
-                altDodge1Input = "k";
-            }
-            if (number == 1)
-            {
-                vertInput = "Vertical_P2";
-                horzInput = "Horizontal_P2";
-                jumpInput = "Dodge_P2_X4W";
-                action1Input = "joystick 2 button 0";
-                altAction1Input = "p";
-                rTriggerInput = "Throw_P2_X4W";
-                superInput = "Super_P2_X4W";
-                blockInput = "Block_P2";
-                pauseInput = "joystick 2 button 7";
-
-                altAction1Input = "u";
-                altSuper1Input = "i";
-                altDodge1Input = "o";
-            }
-            if (number == 2)
-            {
-                vertInput = "Vertical_P3";
-                horzInput = "Horizontal_P3";
-                jumpInput = "Dodge_P3_X4W";
-                altAction1Input = "p";
-                action1Input = "joystick 3 button 0";
-                rTriggerInput = "Throw_P3_X4W";
-                superInput = "Super_P3_X4W";
-                blockInput = "Block_P3";
-                pauseInput = "joystick 3 button 7";
-
-                altAction1Input = "b";
-                altSuper1Input = "n";
-                altDodge1Input = "m";
-
-            }
-            if (number == 3)
-            {
-                vertInput = "Vertical_P4";
-                horzInput = "Horizontal_P4";
-                jumpInput = "Dodge_P4_X4W";
-                altAction1Input = "r";
-                action1Input = "joystick 4 button 0";
-                rTriggerInput = "Throw_P4_X4W";
-                superInput = "Super_P4_X4W";
-                blockInput = "Block_P4";
-                pauseInput = "joystick 4 button 7";
-
-                altAction1Input = "1";
-                altSuper1Input = "2";
-                altDodge1Input = "3";
-
-            }
+            altAction1Input = "h";
+            altSuper1Input = "j";
+            altDodge1Input = "k";
         }
+        if (number == 1)
+        {
+            vertInput = "Vertical_P2";
+            horzInput = "Horizontal_P2";
+            jumpInput = "Dodge_P2_X4W";
+            action1Input = "joystick 2 button 0";
+            altAction1Input = "p";
+            rTriggerInput = "Throw_P2_X4W";
+            superInput = "Super_P2_X4W";
+            blockInput = "Block_P2";
+            pauseInput = "joystick 2 button 7";
+
+            altAction1Input = "u";
+            altSuper1Input = "i";
+            altDodge1Input = "o";
+        }
+        if (number == 2)
+        {
+            vertInput = "Vertical_P3";
+            horzInput = "Horizontal_P3";
+            jumpInput = "Dodge_P3_X4W";
+            altAction1Input = "p";
+            action1Input = "joystick 3 button 0";
+            rTriggerInput = "Throw_P3_X4W";
+            superInput = "Super_P3_X4W";
+            blockInput = "Block_P3";
+            pauseInput = "joystick 3 button 7";
+
+            altAction1Input = "b";
+            altSuper1Input = "n";
+            altDodge1Input = "m";
+
+        }
+        if (number == 3)
+        {
+            vertInput = "Vertical_P4";
+            horzInput = "Horizontal_P4";
+            jumpInput = "Dodge_P4_X4W";
+            altAction1Input = "r";
+            action1Input = "joystick 4 button 0";
+            rTriggerInput = "Throw_P4_X4W";
+            superInput = "Super_P4_X4W";
+            blockInput = "Block_P4";
+            pauseInput = "joystick 4 button 7";
+
+            altAction1Input = "1";
+            altSuper1Input = "2";
+            altDodge1Input = "3";
+
+        }
+    }
 
     private void InitPlayStation()                      // * initOther
     {
 
         Debug.Log("Other controller detected @ myJoystick");
 
-        if (number == 0)
+        if (number == 0  || number == -1)
         {
 
             vertInput = "Vertical_P1";
@@ -138,7 +140,7 @@ public class MyJoystick  {
             jumpInput = "Jump_P1";
             action1Input = "joystick 1 button 1";
             rTriggerInput = "Fire_P1";
-           superInput = "Super_P1";
+            superInput = "Super_P1";
             blockInput = "Block_P1";
             pauseInput = "joystick 1 button 9";
 
@@ -162,8 +164,6 @@ public class MyJoystick  {
         }
         if (number == 1)
         {
-
-            Debug.Log("number = 2");
 
             vertInput = "Vertical_P2";
             horzInput = "Horizontal_P2";
@@ -212,18 +212,24 @@ public class MyJoystick  {
         }
     }
 
-    public  MyJoystick(PlayerInput pi, Color x)
+    public MyJoystick(int playerIndex)             // keyboard = -1
     {
-        playerInput = pi; ;
-        number = pi.playerIndex;
-        color = x;
+        number = playerIndex;
         init();
     }
-     
-    public MyJoystick(int playerIndex, string t, Color x)
+
+    public MyJoystick(int playerIndex, string t)
     {
         type = t;
         number = playerIndex;
+        init();
+    }
+
+
+    public MyJoystick(PlayerInput pi, Color x)
+    {
+        playerInput = pi; ;
+        number = pi.playerIndex;
         color = x;
         init();
     }
@@ -245,9 +251,10 @@ public class MyJoystick  {
 
     }
 
-        public void SetJoystick (int nuNumber, string type){    // depreated w new input system
+    public void SetJoystick(int nuNumber, string type)
+    {    // depreated w new input system
 
-           number = nuNumber;
+        number = nuNumber;
 
         Debug.Log("type = " + type);
 
@@ -262,7 +269,7 @@ public class MyJoystick  {
                 trainingWheels = false;
             }
         }
-        
+
         if (type == "Controller (Xbox One For Windows)")
         {
 
@@ -469,7 +476,7 @@ public class MyJoystick  {
 
             }
         }
-	}
+    }
 
     internal void Print()
     {

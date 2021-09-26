@@ -15,9 +15,9 @@ public class TeamSelect : MonoBehaviour
 
     public GameObject controllerPrefab;
 
-    List<GameObject> controllers = new List<GameObject>();
+    List<GameObject> controllers;
 
-    public List<GameObject> modules_temp_objs = new List<GameObject>();
+    public List<GameObject> modules_temp_objs;
 
 
     int team1Count =1;
@@ -40,17 +40,16 @@ public class TeamSelect : MonoBehaviour
         }
     }
 
-    PlayerModule module1 = new PlayerModule(1);
-    PlayerModule module2 = new PlayerModule(2);
-    PlayerModule module3 = new PlayerModule(3);
-    PlayerModule module4 = new PlayerModule(4);
+    List<PlayerModule> modules;
+    PlayerModule module1;
+    PlayerModule module2;
+    PlayerModule module3;
+    PlayerModule module4;
 
-
-    List<PlayerModule> modules = new List<PlayerModule>();
 
     public Animator uiAnimator;
     public static int PlayerNum;
-    private bool ready;
+    protected bool ready;
     private float t0;
     private float tF;
     private float deltaT;
@@ -73,7 +72,7 @@ public class TeamSelect : MonoBehaviour
     int readys;
     int readyCount = 0;
 
-    void Start()
+    public virtual void Start()
     {
         //do checks... references, if doesnt have gm
 
@@ -82,11 +81,21 @@ public class TeamSelect : MonoBehaviour
         GlobalConfiguration.instance.SetTeamSelect(this);
         GlobalConfiguration.instance.SetIsAtTeamSelect(true);
 
+        controllers = new List<GameObject>();
+        //modules_temp_objs = new List<GameObject>();
+
+        modules = new List<PlayerModule>();
+        module1 = new PlayerModule(1);
+        module2 = new PlayerModule(2);
+        module3 = new PlayerModule(3);
+        module4 = new PlayerModule(4);
+
         modules.Add(module1);
         modules.Add(module2);
         modules.Add(module3);
         modules.Add(module4);
 
+       // CheckCharLocks();
 
         readyCount = Mathf.Clamp(GlobalConfiguration.instance.GetDeviceCount(), 0, 4);     //  4 or maxPlayerCount
 
@@ -97,7 +106,7 @@ public class TeamSelect : MonoBehaviour
                 EnableModule(i , true);                                             //ones already enabled btw
             }
         }
-        // check locks @ global config instance
+        
 
     }
 
@@ -121,7 +130,36 @@ public class TeamSelect : MonoBehaviour
         }
     }
 
-    void Update()
+    public void CheckCharLocks()
+    {
+        int i = 0;
+
+        foreach(PlayerModule currentModule in modules)
+        {
+            bool MackIsLocked = GlobalConfiguration.instance.GetCharIsLocked("Mack");
+            bool KingIsLocked = GlobalConfiguration.instance.GetCharIsLocked("King");
+            bool NinaIsLocked = GlobalConfiguration.instance.GetCharIsLocked("Nina");
+
+            if (MackIsLocked)
+            {
+             //   currentModule.DisableChar("Mack");
+            }
+
+            if (KingIsLocked)
+            {
+              //  currentModule.DisableChar("King");
+            }
+
+            if (NinaIsLocked)
+            {
+             //   currentModule.DisableChar("Nina");
+            }
+
+            i++;
+        }
+    }
+
+    public virtual void Update()
     {
         
         if (ready)
@@ -330,7 +368,10 @@ public class TeamSelect : MonoBehaviour
             GlobalConfiguration.instance.SetIsAtTeamSelect(false);       // needed because controllerObject instantiates when p1Object instantiates for what is only keyboard commmand...   and technically we're not tho lol
 
             ModuleDataToPlayers();
-            GlobalConfiguration.instance.PopulateAI();
+
+            int p1team = modules[0].team;
+
+            GlobalConfiguration.instance.PopulateAI(p1team);
             GlobalConfiguration.instance.SetDefaultJoin(false);
             ready = true;
 
@@ -352,14 +393,16 @@ public class TeamSelect : MonoBehaviour
             GlobalConfiguration.instance.SetPlayerType(player1, modules[0].characterName);
 
             Player pScript = player1.GetComponent<Player>();
-           pScript.enableController(0);
+            pScript.enableController(-1);
             pScript.team = modules[0].team;
 
             pScript.SetOnStandby(true);
 
-            player1.name = "Player " + "(" + pScript.type + ") " + pScript.number;
-
             GlobalConfiguration.instance.AddPlayerToTeamManager(player1, pScript.team, true);
+
+            pScript.SetColor(GlobalConfiguration.instance.GetPlayerColor(1,pScript));
+
+            player1.name = "Player " + "(" + pScript.type + ") " + pScript.number;
         }
        
 
@@ -377,9 +420,12 @@ public class TeamSelect : MonoBehaviour
 
             pScript.SetOnStandby(true);
 
+            GlobalConfiguration.instance.AddPlayerToTeamManager(pObject, pScript.team, true);
+
+            pScript.SetColor(GlobalConfiguration.instance.GetPlayerColor(i+1,pScript));
+
             pObject.name = "Player " + "(" + pScript.type + ") " + pScript.number;
 
-            GlobalConfiguration.instance.AddPlayerToTeamManager(pObject, pScript.team, true);
         }
     }
 
