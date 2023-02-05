@@ -35,9 +35,9 @@ public class CharacterSelect : MonoBehaviour                // * TeamSelect
 
     public void Start()
     {
-        readyCount = GlobalConfiguration.instance.GetDeviceCount();
+        readyCount = GlobalConfiguration.Instance.GetDeviceCount();
 
-        selectCount = GlobalConfiguration.instance.GetDeviceCount();     // obsolete
+        selectCount = GlobalConfiguration.Instance.GetDeviceCount();     // obsolete
         // check locks @ global config instance
     }
 

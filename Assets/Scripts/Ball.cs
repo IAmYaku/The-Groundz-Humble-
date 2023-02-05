@@ -70,9 +70,10 @@ public class Ball : MonoBehaviour {
         type = "Normal";
 
         rigidbody = GetComponent<Rigidbody>();
-		GameObject gameManagerObject = GameObject.Find ("GameManager");
 
-		levelManager = gameManagerObject.GetComponent<LevelManager> ();
+        GameObject gameManagerObject = GlobalConfiguration.Instance.gameManager.gameObject;
+
+        levelManager = gameManagerObject.GetComponent<LevelManager> ();
       //  thrownIndicator = Sprite.Create()
 		size = transform.localScale;
 
@@ -111,7 +112,7 @@ public class Ball : MonoBehaviour {
         {
          Check4PlayerProx();
         }
-        if (thrown && hasMag & !contact)
+        if (thrown && hasMag & !contact && levelManager.isPlaying)
         {
           Seek(magnetism, target);     
         }
@@ -166,9 +167,9 @@ public class Ball : MonoBehaviour {
     {
         isInPickUpRange = false;
 
-        foreach (GameObject player in GlobalConfiguration.instance.GetPlayers())
+        foreach (GameObject player in GlobalConfiguration.Instance.GetPlayers())
         {
-            if (!player.GetComponent<Player>().hasAI)   
+            if (player.GetComponent<Player>().hasJoystick && !player.GetComponent<Player>().isOut)   
             {
                 Controller3D playerController = player.transform.GetChild(1).gameObject.GetComponent<Controller3D>();
 
@@ -364,7 +365,7 @@ public class Ball : MonoBehaviour {
             if (hasmag)
             {
 
-                hasMag = hasmag;
+                hasMag = false;
                 magnetism = mag;
                 target = targ;
                 seekWeight = seekweight0;

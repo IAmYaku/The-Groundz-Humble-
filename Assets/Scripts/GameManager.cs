@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,8 +25,6 @@ public class GameManager : MonoBehaviour
     public PlayerInputManager playerInputManager;
 
     public GameObject audioManager;
-
-
 
 //    public GameObject camera;
 /*

@@ -35,8 +35,8 @@ public class Controller3D : MonoBehaviour
 
     public static String mode = "Keyboard";
 
-    private SwipeInput swipeInput = new SwipeInput();
-    private SwipeInput vJSwipeInput = new SwipeInput();
+    private ChargeVelInput chargeVelInput = new ChargeVelInput();
+
     private JoyInput joyInput = new JoyInput(2);
     private Vector3 move;
     private Vector3 move0;
@@ -68,6 +68,7 @@ public class Controller3D : MonoBehaviour
 
     float throwCharge;
     bool isCharging;
+    float chargeTime = 0.0f;
 
     public Vector3 handSize = new Vector3(3f, 3f, 3f);
     public float grabRadius = 5f;
@@ -90,6 +91,7 @@ public class Controller3D : MonoBehaviour
     public static bool hasGrabMag = false;
     public static float grabMag = 10f;
     public static bool hasThrowMag = false;
+    public static bool hasSeekVec = false;
     public static float throwMagnetism = 5.65f;
     public static float maxSeekVec = 100f;
 
@@ -225,7 +227,23 @@ public class Controller3D : MonoBehaviour
     void Start()
     {
 
-        GameObject gameManagerObject = GameObject.Find("GameManager");
+         GameObject gameManagerObject = GameObject.Find("GameManager");
+
+        if (gameManagerObject)
+        {
+            levelManager = gameManagerObject.GetComponent<LevelManager>();
+        }
+
+        else
+        {
+            gameManagerObject = GameObject.Find("GameManager(Clone)");
+
+            if (gameManagerObject)
+            {
+                levelManager = gameManagerObject.GetComponent<LevelManager>();
+            }
+        }
+
 
         levelManager = gameManagerObject.GetComponent<LevelManager>();
 
@@ -270,10 +288,11 @@ public class Controller3D : MonoBehaviour
         superButton = FindObjectOfType<SuperButton>();
         pauseButton = FindObjectOfType<PauseButton>();
 
-        swipeInput.SetMoves(SwipeInput.bufferSize);
-        vJSwipeInput.SetMoves(SwipeInput.bufferSize);
+      //  swipeInput.SetMoves(SwipeInput.bufferSize);
+       // vJSwipeInput.SetMoves(SwipeInput.bufferSize);
 
         //  touchFX = playerScript.playerConfigObject.transform.GetChild(2).gameObject.GetComponent<TouchFX>();
+
 
     }
 
@@ -364,7 +383,7 @@ public class Controller3D : MonoBehaviour
             if (!isCharging)
             {
                 chargeVel = rigidbody.velocity;
-               // print("chargeVel.magnitude/100000f = " + chargeVel.magnitude / 100000f);
+                chargeVelInput.Input(chargeVel.x, chargeVel.z);
                 isCharging = true;
 
                 float glide = .01f - chargeVel.magnitude/100000f;
@@ -578,6 +597,8 @@ public class Controller3D : MonoBehaviour
 
     public void MoveInput(CallbackContext context)
     {
+
+        if (!GlobalConfiguration.isAtRevampTeamSelect && !GlobalConfiguration.isAtQuickCharacterSelect) { 
         if (levelManager.isPlaying && !playerScript.isOut)
         {
             Vector2 ctxValue = context.ReadValue<Vector2>();
@@ -586,7 +607,8 @@ public class Controller3D : MonoBehaviour
 
             playerConfigObject.transform.localEulerAngles = new Vector3(playerConfigObject.transform.localEulerAngles.x, 0f, playerConfigObject.transform.localEulerAngles.z);
 
-            //print("JoyInput = " + ctxValue);
+                //print("JoyInput = " + ctxValue);
+            }
         }
     }
 
@@ -1230,11 +1252,11 @@ public class Controller3D : MonoBehaviour
                 if (!isCharging)
                 {
                     chargeVel = rigidbody.velocity;
-                  //  print("chargeVel.magnitude/100000f = " + chargeVel.magnitude / 100000f);
+                    chargeVelInput.Input(chargeVel.x, chargeVel.z);
                     isCharging = true;
 
-                    float glide = .01f - chargeVel.magnitude / 100000f;
-                    accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);
+                    float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
+                    accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);  //arbs
                     velVec = chargeVel;
                 }
 
@@ -1295,41 +1317,15 @@ public class Controller3D : MonoBehaviour
 
     private void CheckCharge()
     {
-        float chargeRate = 50;
+        float chargeRate = 50;  // character dependent??
         float chargeCost = .25f;
 
         if (ballGrabbed && isCharging)
         {
 
-            float chargeThrowSlowDownfactor = 1f;
-
-            if (chargeVel.magnitude <= standingThrowThresh && (standingThrowPower + throwCharge) < maxStandingThrowPower)     // *arbs
-            {
-             //   print("Charging Stand");
-             //   print("Charge @ " + throwCharge);
-                chargeRate = 50;
-                throwCharge += chargeRate * Time.deltaTime * 1000.0f;
-                throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
-            }
-            else
-            {
-                //  CheckStandingAutoRelease(chargeVel.magnitude);
-            }
-
-            if (chargeVel.magnitude > standingThrowThresh && (throwPower + throwCharge) < maxThrowPower)
-            {
-
-             //   print("Charging moving");
-           //     print("Charge @ " + throwCharge);
-                chargeRate = 20;
-                throwCharge += chargeRate * Time.deltaTime * 100.0f;
-                // clamp throwCharge
-
-            }
-            else
-            {
-                //  CheckMovingAutoRelease(chargeVel.magnitude);
-            }
+            throwCharge += chargeVel.magnitude * chargeRate * Time.deltaTime;
+            chargeTime += Time.deltaTime;
+           // throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
 
 
 
@@ -1545,7 +1541,7 @@ public class Controller3D : MonoBehaviour
             //  t_catchF = Time.realtimeSinceStartup;
             catchCoolDown -= Time.deltaTime;
 
-            if (catchCoolDown <= 0)
+            if (catchCoolDown <= 0) // && hasEnoughStamina
             {
                 catchReady = true;
             }
@@ -1765,10 +1761,11 @@ public class Controller3D : MonoBehaviour
     {
         //   print("button throw");
 
+
         Vector3 throwStandVec = Vector3.zero;
         Vector3 throwMovVec = Vector3.zero;
-        bool hasSeekVec = false;
         Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
+        Transform targetedOpp = null;
 
         /*
         if (GameManager.mode == "Basic" && GameManager.gameMode == "Solo")
@@ -1802,7 +1799,9 @@ public class Controller3D : MonoBehaviour
 
            ball.transform.position = cockBackPos;
 
+        Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedMuvAverage().x, 0f, chargeVelInput.GetWeightedMuvAverage().y);
 
+        /* 
         if (rigidbody.velocity.magnitude <= standingThrowThresh)
         {
             standingThrowPower = playerScript.standingThrowPower;
@@ -1816,16 +1815,17 @@ public class Controller3D : MonoBehaviour
                 {
                     seekVec = nearestOpp.transform.position - ball.transform.position;
                     seekVec = seekVec.normalized;
+                    targetedOpp = nearestOpp;
                 }
 
-                throww = seekVec * (standingThrowPower + throwCharge);
+               Vector3 aidVec = seekVec * (standingThrowPower + throwCharge);
+                throww = (aidVec + throwVec) / 2f;
                 print("Standing Throw . mag");
 
             }
+
             else
             {
-
-
                 Vector3 vel = rigidbody.velocity;
                 float xClamped = vel.x;
 
@@ -1845,9 +1845,12 @@ public class Controller3D : MonoBehaviour
             }
         }
 
-        else                   //moving throw
-        {
+     
 
+        else                   //moving throw
+
+           */
+        {
             Transform nearestOpp = GetTargetedOpp();
 
             if (hasThrowMag)
@@ -1859,18 +1862,15 @@ public class Controller3D : MonoBehaviour
 
                     seekVec = nearestOpp.transform.position - ball.transform.position;
                     seekVec = new Vector3(Mathf.Clamp(seekVec.x, -maxSeekVec, maxSeekVec), seekVec.y, Mathf.Clamp(seekVec.z, -maxSeekVec, maxSeekVec));
+                    targetedOpp = nearestOpp;
                 }
-
-
-                throww = rigidbody.velocity * throwPower;
-                throww = new Vector3(throww.x, 2.5f, throww.z);
-
-
-                // if (GameManager.mode == "Basic" && GameManager.gameMode == "Solo")       
+     
                 {
-                    //  print("moving Throw  . mag");
-                    throww = GetThrowAid(throww, seekVec);
-                    throww = new Vector3((throwPower + throwCharge) * rigidbody.velocity.x, 5f, rigidbody.velocity.z * (throwPower + throwCharge));
+                      print(" Throw  . mag");
+
+                    Vector3 aid = GetThrowAid(weightedMuvAvVec, seekVec);
+                    Vector3 throwVec = new Vector3((throwPower + throwCharge) * aid.x, 5f, aid.z * (throwPower + throwCharge)) + rigidbody.velocity;
+                    throww = (weightedMuvAvVec + throwVec)/ 2f;
 
                 }
 
@@ -1878,8 +1878,9 @@ public class Controller3D : MonoBehaviour
 
             else
             {
-                print("moving Throw  . no mag");
-                Vector3 movingThrowVec = new Vector3((throwPower + throwCharge) * rigidbody.velocity.x, 5f, rigidbody.velocity.z * (throwPower + throwCharge));
+                print(" Throw  . no mag");
+                
+                Vector3 movingThrowVec = new Vector3((throwPower + throwCharge) * weightedMuvAvVec.x, 5f, weightedMuvAvVec.z * (throwPower + throwCharge));     //arbs
                 throww = movingThrowVec;
 
             }
@@ -1906,7 +1907,6 @@ public class Controller3D : MonoBehaviour
         }
 
 
-        Transform targetedOpp = GetTargetedOpp();
         float renderLength = GetRenderLength();
         print("throww = " + throww);
         //  print("targetedOpp = " + targetedOpp);
@@ -1922,8 +1922,10 @@ public class Controller3D : MonoBehaviour
         ballCaught = false;
         throwCharge = 0;
         isCharging = false;
+        chargeTime = 0.0f;
         chargeVel = Vector3.zero;
         vel0 = Vector3.zero;
+        chargeVelInput.ClearMuvs();
         Invoke("NormalAccelerationRate", .1f);
         
 
@@ -2247,7 +2249,7 @@ public class Controller3D : MonoBehaviour
         if (!isCharging)
         {
             chargeVel = rigidbody.velocity;
-            print("chargeVel.magnitude/100000f = " + chargeVel.magnitude / 100000f);
+            chargeVelInput.Input(chargeVel.x, chargeVel.z);
             isCharging = true;
 
             float glide = .01f - chargeVel.magnitude / 100000f;
@@ -2259,7 +2261,7 @@ public class Controller3D : MonoBehaviour
 
         float chargeThrowSlowDownfactor = 1f;
 
-        if ((throwCharge) < maxStandingThrowPower)     // *arbs
+        if ((throwCharge) < maxStandingThrowPower)     // 
         {
             print("Super Charge");
             print("Charge @ " + throwCharge);
@@ -2418,7 +2420,7 @@ public class Controller3D : MonoBehaviour
         }
 
         if (superType == 2)  // King (Super Tech Ball) 
-        {
+        { 
 
             throww = new Vector3(throwPower * rigidbody.velocity.x, 4f, throwPower * rigidbody.velocity.z);
 
@@ -2674,7 +2676,7 @@ public class Controller3D : MonoBehaviour
                 playerConfigObject.transform.position = new Vector3(levelManager.stage.baseLineLeft + collider.bounds.extents.x + 0.05f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
                 inBounds = false;
-                print("Out of Bounds 1");
+             //   print("Out of Bounds 1");
 
             }
             if (collider.bounds.max.x > levelManager.stage.halfCourtLine)
@@ -2682,7 +2684,7 @@ public class Controller3D : MonoBehaviour
                 playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine - collider.bounds.extents.x - 0.05f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
                 inBounds = false;
-                print("Out of Bounds 1");
+              //  print("Out of Bounds 1");
 
             }
         }
@@ -2694,7 +2696,7 @@ public class Controller3D : MonoBehaviour
                 playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine + collider.bounds.extents.x + 0.05f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
                 inBounds = false;
-                print("Out of Bounds 2");
+            //    print("Out of Bounds 2");
 
             }
             if (collider.bounds.max.x > levelManager.stage.baseLineRight)
@@ -2702,7 +2704,7 @@ public class Controller3D : MonoBehaviour
                 playerConfigObject.transform.position = new Vector3(levelManager.stage.baseLineRight - collider.bounds.extents.x - 0.05f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
                 inBounds = false;
-                print("Out of Bounds 2");
+             //   print("Out of Bounds 2");
 
             }
         }

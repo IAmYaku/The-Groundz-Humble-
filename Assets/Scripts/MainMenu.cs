@@ -13,27 +13,27 @@ public class MainMenu : MonoBehaviour {
 
     private void Start()
     {
-        GlobalConfiguration.instance.GetJoysticks();
+        GlobalConfiguration.Instance.GetJoysticks();
     }
 
 
     public void PlayLocal()
     {
-        GlobalConfiguration.instance.SetGameMode("local");
+        GlobalConfiguration.Instance.SetGameMode("local");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void PlayMultiplayer()
 
     {
-        GlobalConfiguration.instance.SetGameMode("multiplayer");
+        GlobalConfiguration.Instance.SetGameMode("multiplayer");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
     }
 
     public void PlayStory()
     {
-        GlobalConfiguration.instance.SetGameMode("story");
+        GlobalConfiguration.Instance.SetGameMode("story");
         SceneManager.LoadScene("StoryMode");
     }
 

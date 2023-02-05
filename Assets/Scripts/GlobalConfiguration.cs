@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.EventSystems;
 
 public class GlobalConfiguration : MonoBehaviour
 {
-    public static GlobalConfiguration instance;
 
     public GameManager gameManager;
 
     public AudioSource audioSourceGM;
     public AudioSource audioSourceMenu;
+
 
     public GameObject playerPrefab;
 
@@ -34,12 +36,17 @@ public class GlobalConfiguration : MonoBehaviour
     public GameObject team1Object;
     public GameObject team2Object;
 
-    TeamSelect teamSelect;
+    QuickCharacterSelect quickCharacterSelect;
+    RevampTeamSelect revampTeamSelect;
     MainMenu mainMenu;  // <-- gotta find reference
     StageSelect stageSlect;  // <-- gotta find reference
 
-    enum GameMode { local, multiplayer, story };
-    GameMode gameMode;
+    public enum LoadPoint {gameMode, aradeMode, local, stage }
+
+    public static LoadPoint loadPoint;
+
+    public enum GameMode { none, arcade, multiplayer, story };
+    public GameMode gameMode = GameMode.none;
 
     List<MyJoystick> myJoysticks;
     public static string[] joysticks;
@@ -48,6 +55,8 @@ public class GlobalConfiguration : MonoBehaviour
 
     [SerializeField]
     int deviceCount;
+
+    public static int gamepadStarts;
 
     public GameObject MackObject;
     public GameObject KingObject;
@@ -59,26 +68,23 @@ public class GlobalConfiguration : MonoBehaviour
 
     Stage stage;
 
-    GameRule gameRule;
+    public bool gameStarted;
 
-    bool gameStarted;
-    bool isAtTeamSelect;
+    public static bool isAtQuickCharacterSelect;
+
+    public static bool isAtRevampTeamSelect;
     bool gamePaused;
 
     bool touchEnabled;
 
+    public MultiplayerEventSystem currentMultiplayerEventSystem;
+
 
     void Awake()
     {
-        if (instance != null)
-        {
-            Debug.Log("Error - Already have instance");
-        }
-        else
-        {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);  // move to GameManager
-        }
+        print("Global config Awake");
+
+         DontDestroyOnLoad(this);
 
         myJoysticks = new List<MyJoystick>();
 
@@ -115,9 +121,34 @@ public class GlobalConfiguration : MonoBehaviour
         tm1.SetNumber(1);
         tm2.SetNumber(2);
     }
+
+    internal RevampTeamSelect GetRevampTeamSelect()
+    {
+        return revampTeamSelect;
+    }
+
+    internal void LoadDefaultGame()
+    {
+        quickCharacterSelect = new QuickCharacterSelect();
+        quickCharacterSelect.QuickCharacterSelectInit();
+        quickCharacterSelect.PickMack();
+    }
+
+    internal void SetInputModule(int playerIndex, InputSystemUIInputModule inputSystemUIInputModule)
+    {
+     foreach (GameObject player in players)
+        {
+            PlayerInput pi = player.GetComponent<Player>().controller3DObject.GetComponent<PlayerInput>();
+            if (pi.playerIndex == playerIndex)
+            {
+                pi.uiInputModule = inputSystemUIInputModule;
+            }
+        }
+    }
+
     private void Start()
     {
-        // check structure and refs
+       SetGameStarted(true);
 
     }
 
@@ -156,7 +187,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     internal GameObject InstantiatePlayer1KeyPrefab()
     {
-        if (playerPrefab)
+        if (player1KeyPrefab)
         {
             GameObject returnMe = Instantiate(player1KeyPrefab);
 
@@ -205,6 +236,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     public void HandlePlayerJoin(PlayerInput pi)                 // pi on instnatiaded player prefab
     {
+        
         GetJoysticks();
 
         deviceCount++;                    // should allign w joySTick count
@@ -217,25 +249,51 @@ public class GlobalConfiguration : MonoBehaviour
         {
             print("New Device @ index: " + pi.playerIndex);
 
+            gamepadStarts++;
+
             GameObject playerObject = pi.transform.root.gameObject;
             Player playerScript = playerObject.GetComponent<Player>();
 
-            playerScript.CreateJoystick(pi.playerIndex, GetJoystickAt(pi.playerIndex));
+            playerScript.CreateJoystick(pi.playerIndex, GetJoystickAt(pi.playerIndex));  // should be obsolete
             myJoysticks.Add(playerScript.GetJoystick());
 
             AddNewPlayer(playerObject);
 
-            if (isAtTeamSelect)
+
+            if (isAtRevampTeamSelect)
             {
-                teamSelect.SetReadyCount(deviceCount);
-                teamSelect.EnableModule(pi.playerIndex, true);
+                RevampTeamSelect.starts++;
+                revampTeamSelect.EnableModule(pi.playerIndex);
+
+         
+             GameObject multiplayerEventSystemGamepadGameObject = revampTeamSelect.GetMultiplayerEventSystem(pi.playerIndex +1);
+                multiplayerEventSystemGamepadGameObject.SetActive(true);
+
+
+                if (multiplayerEventSystemGamepadGameObject)
+         { 
+                    InputSystemUIInputModule inputSystemUIInputModule = multiplayerEventSystemGamepadGameObject.GetComponent<InputSystemUIInputModule>();
+
+                     pi.uiInputModule = inputSystemUIInputModule;
+
+                    Debug.Log("Multiplayer Event System" + " " + (pi.playerIndex + 1));
+                }
+   
             }
 
 
+            if (isAtQuickCharacterSelect)
+            {
+                quickCharacterSelect.SetStartText(false);
 
+              //  InputSystemUIInputModule inputSystemUIInputModule = quickCharacterSelect.multiplayerEventSystem.gameObject.GetComponent<InputSystemUIInputModule>();
+               // pi.uiInputModule = inputSystemUIInputModule;
+                quickCharacterSelect.SetFirstSelectedToMack();
+
+            }
 
         }
-
+        
     }
 
     public void AddNewPlayer(GameObject playerObject)
@@ -260,11 +318,13 @@ public class GlobalConfiguration : MonoBehaviour
         //   myJoysticks.RemoveAt(pi.playerIndex - 1);   // actually depends if playerIndex's update on leave
 
 
-        if (isAtTeamSelect)
+        if (isAtQuickCharacterSelect)
         {
-            teamSelect.SetReadyCount(deviceCount);
+            quickCharacterSelect.SetReadyCount(deviceCount);
             //remove ui stick
         }
+
+        RevampTeamSelect.starts--;
 
         //
     }
@@ -274,19 +334,19 @@ public class GlobalConfiguration : MonoBehaviour
     {
         switch (x)
         {
-            case "local":                                          // aka arcade
-                gameMode = GameMode.local;
+            case "arcade":                                         
+                gameMode = GameMode.arcade;
                 LevelManager lm = gameManager.levelManager;
-                lm.SetGameMode("local");         
-                gameRule = lm.CreateGameRule("inf");      // should be a setting somewhere
+                lm.SetGameMode("arcade");         
+               
 
                 break;
             case "multiplayer":
                 gameMode = GameMode.multiplayer;
                 lm = gameManager.levelManager;
                 lm.SetGameMode("multiplayer");
-                gameRule = lm.CreateGameRule("basic");      // should be a setting somewhere
                 break;
+
             case "story":
                 gameMode = GameMode.story;
                 break;
@@ -309,20 +369,42 @@ public class GlobalConfiguration : MonoBehaviour
         }
     }
 
-
-    // SetGameRule
-
-
-    internal void SetTeamSelect(TeamSelect x)
+    internal void SetTeamInitAICount(int v, int count)
     {
-        teamSelect = x;
+        if (v == 1)
+        {
+            
+            team1Object.GetComponent<TeamManager>().SetInitAICount(count);
+        }
+
+        if (v == 2)
+        { 
+            team2Object.GetComponent<TeamManager>().SetInitAICount(count);
+        }
     }
 
-    internal void SetIsAtTeamSelect(bool v)
+
+
+
+    internal void SetQuickCharacterSelect(QuickCharacterSelect x)
     {
-        isAtTeamSelect = v;
+        quickCharacterSelect = x;
+    }
+    internal void SetRevampTeamSelect(RevampTeamSelect x)
+    {
+        revampTeamSelect = x;
     }
 
+
+    internal void SetIsAtQuickCharacterSelect(bool v)
+    {
+        isAtQuickCharacterSelect = v;
+    }
+
+    internal void SetIsAtRevampTeamSelect(bool v)
+    {
+        isAtRevampTeamSelect = v;
+    }
     public void SetStage(string x)
     {
 
@@ -365,8 +447,11 @@ public class GlobalConfiguration : MonoBehaviour
     }
     */
 
-    public void SetPlayerType(GameObject player, string type)
+    public void SetPlayerType(GameObject player, string type , int skinNum)
     {
+        print("char Type = " + type);
+        print("skinNum = " + skinNum);
+
         Player playerScript = player.GetComponent<Player>();
         GameObject playerConfigObject = playerScript.playerConfigObject;
         Controller3D controller3D = playerScript.controller3DObject.GetComponent<Controller3D>();
@@ -448,8 +533,11 @@ public class GlobalConfiguration : MonoBehaviour
             playerConfigObject.GetComponent<SpriteRenderer>().color = Color.white;
             // playerScript.color = Nina.color;
 
-            playerConfigObject.GetComponent<Animator>().runtimeAnimatorController = NinaObject.transform.GetChild(0).GetComponent<PlayerConfiguration>().play;       // till we can think of something better
-            playerConfigObject.GetComponent<PlayerConfiguration>().play = NinaObject.transform.GetChild(0).GetComponent<PlayerConfiguration>().play;
+            List<RuntimeAnimatorController> ninaControllerSkins = NinaObject.GetComponent<Player>().runtimeControlllers;
+
+            playerConfigObject.GetComponent<PlayerConfiguration>().play = ninaControllerSkins[skinNum];
+            playerConfigObject.GetComponent<Animator>().runtimeAnimatorController = ninaControllerSkins[skinNum];
+
             playerConfigObject.GetComponent<PlayerConfiguration>().win = NinaObject.transform.GetChild(0).GetComponent<PlayerConfiguration>().win;
 
             controller3D.isAudioReactive = false;
@@ -538,8 +626,9 @@ public class GlobalConfiguration : MonoBehaviour
             playerConfigObject.GetComponent<SpriteRenderer>().color = Color.white;
             //playerScript.color = Mack.color;
 
-            playerConfigObject.GetComponent<Animator>().runtimeAnimatorController = MackObject.transform.GetChild(0).GetComponent<PlayerConfiguration>().play;
-            playerConfigObject.GetComponent<PlayerConfiguration>().play = MackObject.transform.GetChild(0).GetComponent<PlayerConfiguration>().play;
+            List<RuntimeAnimatorController> mackControllerSkins = MackObject.GetComponent<Player>().runtimeControlllers;
+            playerConfigObject.GetComponent<PlayerConfiguration>().play = mackControllerSkins[skinNum];
+            playerConfigObject.GetComponent<Animator>().runtimeAnimatorController = mackControllerSkins[skinNum];
             playerConfigObject.GetComponent<PlayerConfiguration>().win = MackObject.transform.GetChild(0).GetComponent<PlayerConfiguration>().win;
 
             controller3D.isAudioReactive = false;
@@ -628,8 +717,9 @@ public class GlobalConfiguration : MonoBehaviour
             playerConfigObject.GetComponent<SpriteRenderer>().color = Color.white;
             // playerScript.color = King.color;
 
-            playerConfigObject.GetComponent<Animator>().runtimeAnimatorController = KingObject.transform.GetChild(0).GetComponent<PlayerConfiguration>().play;
-            playerConfigObject.GetComponent<PlayerConfiguration>().play = KingObject.transform.GetChild(0).GetComponent<PlayerConfiguration>().play;
+            List<RuntimeAnimatorController> kingControllerSkins = KingObject.GetComponent<Player>().runtimeControlllers;
+            playerConfigObject.GetComponent<Animator>().runtimeAnimatorController = kingControllerSkins[skinNum];
+            playerConfigObject.GetComponent<PlayerConfiguration>().play = kingControllerSkins[skinNum];
             playerConfigObject.GetComponent<PlayerConfiguration>().win = KingObject.transform.GetChild(0).GetComponent<PlayerConfiguration>().win;
 
             controller3D.isAudioReactive = false;
@@ -651,6 +741,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     }
 
+
     internal void SetDefaultJoin(bool v)
     {
         PlayerInputManager pim = gameManager.playerInputManager;
@@ -658,10 +749,12 @@ public class GlobalConfiguration : MonoBehaviour
         if (v)
         {
             pim.EnableJoining();
+            pim.enabled = true;
         }
         else
         {
             pim.DisableJoining();
+            pim.enabled = false;
         }
     }
 
@@ -694,6 +787,22 @@ public class GlobalConfiguration : MonoBehaviour
         return myJoysticks;
     }
 
+    internal void PopulateAIRevamp(int p1team, int ai1Count, int ai2Count)
+    {
+        if (p1team == 1)
+        {
+            PopulateAITeamRevamp(2, ai2Count);   //orders important to get opposite char type
+            PopulateAITeamRevamp(1, ai1Count);
+        }
+
+        if (p1team == 2)
+        {
+            PopulateAITeamRevamp(1, ai1Count);
+            PopulateAITeamRevamp(2, ai2Count);
+
+        }
+    }
+
     internal void PopulateAI(int p1team)
     {
         if (p1team == 1)
@@ -711,6 +820,55 @@ public class GlobalConfiguration : MonoBehaviour
 
     }
 
+    internal void PopulateArcadeAI(int team, string charName)
+    {
+       
+        if (team == 2)
+        {
+            PopulateAITeam(2,charName);
+
+        }
+
+        if (team == 1)
+        {
+            PopulateAITeam(1,charName);
+
+        }
+
+    }
+
+    void PopulateAITeam(int team, string charName)
+    {
+        if (team == 1)
+        {
+            TeamManager tm1 = team1Object.GetComponent<TeamManager>();
+            List<GameObject> ai1_new = tm1.PopulateAI(1,charName);
+            int i = 0;
+            foreach (GameObject ai1_ in ai1_new)
+            {
+                i++;
+                Player pScript = ai1_.GetComponent<Player>();
+                AddNewPlayer(ai1_);
+                AddPlayerToTeamManager(ai1_, 1, false);
+                pScript.SetColor(GetPlayerColor(i, pScript));
+            }
+        }
+
+        if (team == 2)
+        {
+            TeamManager tm2 = team2Object.GetComponent<TeamManager>();
+            List<GameObject> ai2_new = tm2.PopulateAI(2, charName);
+            int j = 0;
+            foreach (GameObject ai2_ in ai2_new)
+            {
+                j++;
+                Player pScript = ai2_.GetComponent<Player>();
+                AddNewPlayer(ai2_);
+                AddPlayerToTeamManager(ai2_, 2, false);
+                pScript.SetColor(GetPlayerColor(j, pScript));
+            }
+        }
+    }
     void PopulateAITeam(int team)
     {
         if (team == 1)
@@ -742,6 +900,41 @@ public class GlobalConfiguration : MonoBehaviour
                 pScript.SetColor(GetPlayerColor(j,pScript));
             }
         }
+    }
+    void PopulateAITeamRevamp(int team, int count)
+    {
+
+        if (team == 1)
+        {
+            TeamManager tm1 = team1Object.GetComponent<TeamManager>();
+
+                List<GameObject> ai1_new = tm1.PopulateAIRevamp(1, count);
+                int i = 0;
+                foreach (GameObject ai1_ in ai1_new)
+                {
+                    i++;
+                    Player pScript = ai1_.GetComponent<Player>();
+                    AddNewPlayer(ai1_);
+                    AddPlayerToTeamManager(ai1_, 1, false);
+                    pScript.SetColor(GetPlayerColor(i, pScript));
+                }
+        }
+
+        if (team == 2)
+        {
+            TeamManager tm2 = team2Object.GetComponent<TeamManager>();
+
+                List<GameObject> ai2_new = tm2.PopulateAIRevamp(2, count);
+            int j = 0;
+                foreach (GameObject ai2_ in ai2_new)
+                {
+                    j++;
+                    Player pScript = ai2_.GetComponent<Player>();
+                    AddNewPlayer(ai2_);
+                    AddPlayerToTeamManager(ai2_, 2, false);
+                    pScript.SetColor(GetPlayerColor(j, pScript));
+                }
+            }
     }
 
     internal void AddPlayerToTeamManager(GameObject pObject, int team, bool isUser)
@@ -865,6 +1058,52 @@ public class GlobalConfiguration : MonoBehaviour
         players.Clear();
     }
 
+    internal void ClearPlayers(int team)
+    {
+        int playerCount = players.Count;
+
+        List<GameObject> toRemove = new List<GameObject>();
+
+        for (int i = 0; i< playerCount;i++)
+        {    
+                if (players[i].GetComponent<Player>().team == team)
+            {
+                toRemove.Add(players[i]);
+
+            }
+        }
+
+        for (int j =0; j< toRemove.Count; j++)
+        {
+            players.Remove(toRemove[j]);
+            Destroy(toRemove[j]);
+        }
+
+    }
+
+    internal void ClearPlayers(int team, bool clearAdded)
+    {
+        int playerCount = players.Count;
+
+        List<GameObject> toRemove = new List<GameObject>();
+
+        for (int i = 0; i < playerCount; i++)
+        {
+            if (players[i].GetComponent<Player>().team == team && (clearAdded && players[i].GetComponent<Player>().aiObject.GetComponent<AI>().addedAtStage))
+            {
+                toRemove.Add(players[i]);
+
+            }
+        }
+
+        for (int j = 0; j < toRemove.Count; j++)
+        {
+            players.Remove(toRemove[j]);
+            Destroy(toRemove[j]);
+        }
+
+    }
+
     public Color GetPlayerColor(int index, Player pScript)
     {
         int team = pScript.team;
@@ -910,4 +1149,26 @@ public class GlobalConfiguration : MonoBehaviour
         return gameManager.audioManager.GetComponent<LobbyMusicScript>().GetIsThemeOff();
     }
 
+    #region Singleton
+
+    private static GlobalConfiguration instance;
+
+    public static GlobalConfiguration Instance
+    {
+        get
+        {
+            if (instance != null) return instance;
+
+            instance = FindObjectOfType<GlobalConfiguration>();
+            if (instance != null) return instance;
+
+            GameObject go = Instantiate(Resources.Load("PreFabs/GameManager/GameManager")) as GameObject;
+            instance = go.GetComponent<GlobalConfiguration>();
+            DontDestroyOnLoad(go);  // move to GameManager
+
+            return instance;
+        }
+    }
+
+    #endregion
 }

@@ -1,0 +1,360 @@
+fileFormatVersion: 2
+guid: d6a6d8c7f62f46e4b878760b5dc562fb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8988203439614955758
+    second: Mack.3.nebula.run_0
+  - first:
+      213: 204517203009854693
+    second: Mack.3.nebula.run_1
+  - first:
+      213: -385455058974569167
+    second: Mack.3.nebula.run_2
+  - first:
+      213: -2287833641716610651
+    second: Mack.3.nebula.run_3
+  - first:
+      213: -8807227197598599970
+    second: Mack.3.nebula.run_4
+  - first:
+      213: -5118168707439788922
+    second: Mack.3.nebula.run_5
+  - first:
+      213: -564040590372551666
+    second: Mack.3.nebula.run_6
+  - first:
+      213: 4933657501519077109
+    second: Mack.3.nebula.run_7
+  - first:
+      213: 5332804608172422147
+    second: Mack.3.nebula.run_8
+  - first:
+      213: 1176593301073122605
+    second: Mack.3.nebula.run_9
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Mack.3.nebula.run_0
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 723
+        width: 354
+        height: 557
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee0913328638cbc70800000000000000
+      internalID: 8988203439614955758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.run_1
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 718
+        width: 390
+        height: 563
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ecdbd3005796d200800000000000000
+      internalID: 204517203009854693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.run_2
+      rect:
+        serializedVersion: 2
+        x: 877
+        y: 721
+        width: 302
+        height: 560
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13d81f48aa696aaf0800000000000000
+      internalID: -385455058974569167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.run_3
+      rect:
+        serializedVersion: 2
+        x: 1236
+        y: 719
+        width: 272
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a90b40ac6bff30e0800000000000000
+      internalID: -2287833641716610651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.run_4
+      rect:
+        serializedVersion: 2
+        x: 1565
+        y: 719
+        width: 238
+        height: 561
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed4f9f6c68176c580800000000000000
+      internalID: -8807227197598599970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.run_5
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 106
+        width: 338
+        height: 556
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68cf7848dac98f8b0800000000000000
+      internalID: -5118168707439788922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.run_6
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 104
+        width: 388
+        height: 556
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0441fb42102c28f0800000000000000
+      internalID: -564040590372551666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.run_7
+      rect:
+        serializedVersion: 2
+        x: 859
+        y: 105
+        width: 308
+        height: 556
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fe5c75ab5fd77440800000000000000
+      internalID: 4933657501519077109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.run_8
+      rect:
+        serializedVersion: 2
+        x: 1224
+        y: 107
+        width: 274
+        height: 554
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 304fea6698de10a40800000000000000
+      internalID: 5332804608172422147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.run_9
+      rect:
+        serializedVersion: 2
+        x: 1555
+        y: 95
+        width: 250
+        height: 567
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d25519b9f59145010800000000000000
+      internalID: 1176593301073122605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 04895d7a37fab2243a0f096b8f1c27d2
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Mack.3.nebula.run_3: -2287833641716610651
+      Mack.3.nebula.run_7: 4933657501519077109
+      Mack.3.nebula.run_8: 5332804608172422147
+      Mack.3.nebula.run_5: -5118168707439788922
+      Mack.3.nebula.run_0: 8988203439614955758
+      Mack.3.nebula.run_2: -385455058974569167
+      Mack.3.nebula.run_4: -8807227197598599970
+      Mack.3.nebula.run_6: -564040590372551666
+      Mack.3.nebula.run_1: 204517203009854693
+      Mack.3.nebula.run_9: 1176593301073122605
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

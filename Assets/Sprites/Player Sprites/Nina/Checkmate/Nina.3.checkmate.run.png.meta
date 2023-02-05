@@ -1,0 +1,366 @@
+fileFormatVersion: 2
+guid: 736170324fdd7214da0aca87d0bc30eb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6466455610812273709
+    second: Nina.3.checkmate.run_0
+  - first:
+      213: -2918793874408194517
+    second: Nina.3.checkmate.run_1
+  - first:
+      213: -8492305897879611692
+    second: Nina.3.checkmate.run_2
+  - first:
+      213: 2798151009001685511
+    second: Nina.3.checkmate.run_3
+  - first:
+      213: 4880848874291070451
+    second: Nina.3.checkmate.run_4
+  - first:
+      213: -7405395762421063774
+    second: Nina.3.checkmate.run_5
+  - first:
+      213: -2752596034880031407
+    second: Nina.3.checkmate.run_6
+  - first:
+      213: 5329322631637653337
+    second: Nina.3.checkmate.run_7
+  - first:
+      213: -8832203900810861682
+    second: Nina.3.checkmate.run_8
+  - first:
+      213: -7819414573878596032
+    second: Nina.3.checkmate.run_9
+  - first:
+      213: -4190198183045200928
+    second: Nina.3.checkmate.run_10
+  - first:
+      213: -1427181743275082057
+    second: Nina.3.checkmate.run_11
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Nina.3.checkmate.run_0
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1102
+        width: 448
+        height: 469
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d241c460e177db950800000000000000
+      internalID: 6466455610812273709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.run_1
+      rect:
+        serializedVersion: 2
+        x: 521
+        y: 1100
+        width: 402
+        height: 471
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2e30578f6c5e77d0800000000000000
+      internalID: -2918793874408194517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.run_2
+      rect:
+        serializedVersion: 2
+        x: 978
+        y: 1094
+        width: 275
+        height: 478
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d65ee0b7c4452a80800000000000000
+      internalID: -8492305897879611692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.run_3
+      rect:
+        serializedVersion: 2
+        x: 1319
+        y: 1109
+        width: 302
+        height: 463
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7024277748705d620800000000000000
+      internalID: 2798151009001685511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.run_5
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 571
+        width: 382
+        height: 468
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2af95bf1acfba3990800000000000000
+      internalID: -7405395762421063774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.run_6
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 570
+        width: 448
+        height: 468
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 155b3da7d70dcc9d0800000000000000
+      internalID: -2752596034880031407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.run_7
+      rect:
+        serializedVersion: 2
+        x: 958
+        y: 561
+        width: 400
+        height: 478
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 957563092be85f940800000000000000
+      internalID: 5329322631637653337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.run_8
+      rect:
+        serializedVersion: 2
+        x: 1413
+        y: 561
+        width: 275
+        height: 478
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e836954e855bd6580800000000000000
+      internalID: -8832203900810861682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.run_9
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 44
+        width: 302
+        height: 462
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04e2474cfdbdb7390800000000000000
+      internalID: -7819414573878596032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.run_10
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 44
+        width: 378
+        height: 462
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e38a1104fc69d5c0800000000000000
+      internalID: -4190198183045200928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5a1cb300bfd1bda4882cba9efe2d86c2
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Nina.3.checkmate.run_3: 2798151009001685511
+      Nina.3.checkmate.run_10: -4190198183045200928
+      Nina.3.checkmate.run_2: -8492305897879611692
+      Nina.3.checkmate.run_8: -8832203900810861682
+      Nina.3.checkmate.run_9: -7819414573878596032
+      Nina.3.checkmate.run_7: 5329322631637653337
+      Nina.3.checkmate.run_5: -7405395762421063774
+      Nina.3.checkmate.run_6: -2752596034880031407
+      Nina.3.checkmate.run_1: -2918793874408194517
+      Nina.3.checkmate.run_0: 6466455610812273709
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

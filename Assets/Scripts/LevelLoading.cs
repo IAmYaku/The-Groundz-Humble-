@@ -19,7 +19,7 @@ public class LevelLoading : MonoBehaviour
     private void DestroyThemeMusic()
     {
 
-        GlobalConfiguration.instance.TurnThemeMusic(false);
+        GlobalConfiguration.Instance.TurnThemeMusic(false);
 
     }
 

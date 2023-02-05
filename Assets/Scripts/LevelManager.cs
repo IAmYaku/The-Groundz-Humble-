@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -82,7 +84,7 @@ public class LevelManager : MonoBehaviour
     ArcadeMode arcadeScript;
     public int roundLevel;
 
-    int difficultyScaler = 2;
+    float difficultyScaler = 1;
     int throwMag;
     int throwDecScalar;
 
@@ -107,18 +109,24 @@ public class LevelManager : MonoBehaviour
      GameObject[] powerBalls;
      GameObject speedBall;
 
+    PostGameScreen postGameScript;
+
 
     void Start()
     {
-        // if not gm
-        gameManager = GetComponent<GameManager>();
+        print("LevelManager start");
+
+
+        {
+            gameManager = GlobalConfiguration.Instance.gameManager.GetComponent<GameManager>();
+        }
 
         // if not fx
         fXManager = transform.GetChild(1).gameObject.GetComponent<FXManager>()
 ;
         // if not tms
-        tm1 = GlobalConfiguration.instance.team1Object.GetComponent<TeamManager>();
-        tm2 = GlobalConfiguration.instance.team2Object.GetComponent<TeamManager>();
+        tm1 = GlobalConfiguration.Instance.team1Object.GetComponent<TeamManager>();
+        tm2 = GlobalConfiguration.Instance.team2Object.GetComponent<TeamManager>();
 
         countDown = countDownNum;
 
@@ -244,19 +252,80 @@ public class LevelManager : MonoBehaviour
                 {
                     if (gameOver)
                     {
-                        start = false;
-                        Invoke("EndGameMenu", 3f);
+                        start = false;                     
+
+                        if (gameMode == "multiplayer")
+                        {                       
+                            Invoke("EndGameMenu", 3f);
+                        }
+
+                        if (gameMode == "arcade") { 
+                                                 
+
+                            if (team1Wins)
+                            {
+                                EndGameArcade();
+
+                                if (!arcadeScript.GetCompleted())
+                                {
+                                    arcadeScript.levelUp();
+                                    difficultyScaler += arcadeScript.diffFactor;
+                                    string nextOpp = arcadeScript.GetCurrentOppName();
+                                    AddOppsFaced(nextOpp);
+                                    GlobalConfiguration.Instance.PopulateArcadeAI(2, nextOpp);
+                                    Invoke("PostGameWinScreen", 1f);
+                                    Invoke("LoadNextArcadeScene", 3f);
+
+                                   
+                                }
+                                else
+                                {
+                                    // Arcade complete!
+                                    Controller3D.hasGrabMag = false;
+                                    Controller3D.grabMag = 10f;
+                                    Controller3D.hasThrowMag = false;
+                                    Controller3D.hasSeekVec = false;
+                                    Controller3D.throwMagnetism = 5.65f;
+                                    Controller3D.maxSeekVec = 100f;
+                                    Invoke("EndGameMenu", 3f);
+
+                                }
+                            }
+
+                            else
+                            {
+
+                                // continue gameMode
+                                // yes -> restart , no gameMode
+                                //  Invoke("EndGameMenu", 3f); //< - temp
+                                Invoke("PostGameLoseScreen", .5f);
+                            }
+
+                        }
+                        team1Wins = false;
+                        team2Wins = false;
                     }
                 }
 
             }
 
-        }
-
-
-
-       
+        }       
            
+    }
+    void PostGameWinScreen()
+    {
+        postGameScript.arcadeWin(tm1.players[0].GetComponent<Player>().type);
+    }
+
+    void PostGameLoseScreen()
+    {
+        postGameScript.arcadeDefeat(tm1.players[0].GetComponent<Player>().type);
+        postGameScript.SelectRestartArcadeDefeatButton();
+    }
+
+    void LoadNextArcadeScene()
+    {
+        SceneManager.LoadScene(GetArcadeSceneName());
     }
     internal bool GetSceneVisited(int buildIndex)
     {
@@ -300,10 +369,16 @@ public class LevelManager : MonoBehaviour
         start = v;
     }
 
+
     private void Referee()
     {
       	CheckHits();
-      	CheckTeamHasPlayer();     // most likely have to switch and update pi indexes
+
+        if (Gamepad.all.Count <= 1)    // doesn't take into account reconnectivity
+        {
+            CheckTeamHasPlayer();
+        }
+   
 
 
     }
@@ -342,8 +417,19 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    internal void SetCurrentOpp(string firstOppChar)
+    {
+        arcadeScript.SetCurrentOpp(firstOppChar);  // should be the last in facedOpps index
+    }
+
     internal List<GameObject> GetPlayers()
     {
+        if (!tm1|| !tm2)
+        {
+            tm1 = GlobalConfiguration.Instance.team1Object.GetComponent<TeamManager>();
+            tm2 = GlobalConfiguration.Instance.team2Object.GetComponent<TeamManager>();
+        }
+
         List<GameObject> returnMe = new List<GameObject>();
 
         returnMe.AddRange(tm1.players);
@@ -404,6 +490,8 @@ public class LevelManager : MonoBehaviour
         start = true;
         ready = true;                                         // just needed for a few older references.. should strike to see when updating
 
+        postGameScript = GameObject.Find("PostGamePanelContainer").GetComponent<PostGameScreen>();
+
         print("Level Loaded");
     }
 
@@ -419,10 +507,10 @@ public class LevelManager : MonoBehaviour
             gameRule = new GR_Stock(gameMode, this);
         }
 
-        if (ruleType == "inf")
+        if (ruleType == "arcade")
         {
             gameRule = new GR_Basic(gameMode, this);
-            gameRule.SetRoundsToWin(9);
+            gameRule.SetRoundsToWin(3);
         }
 
         return gameRule;
@@ -507,7 +595,7 @@ public class LevelManager : MonoBehaviour
         for (int i =0; i< gameRule.ballCount; i++)
         {
          //   print("location = " + ballSpwanLocations[i]);
-            GameObject ball = GlobalConfiguration.instance.InstantiateBallPrefab(ballSpwanLocations[i]);
+            GameObject ball = GlobalConfiguration.Instance.InstantiateBallPrefab(ballSpwanLocations[i]);
             ball.GetComponent<DropShadow>().SetGroundObject(stage.playingLevelPlane);
             balls.Add(ball);
 
@@ -604,15 +692,28 @@ public class LevelManager : MonoBehaviour
     {
         gameMode = v;
 
-        if (gameMode == "local")
+        if (gameMode == "arcade")
         {
-            arcadeScript = new ArcadeMode();
+            CreateGameRule("arcade");
+            arcadeScript = new ArcadeMode(this);
+            print("Arcade");
+        }
+
+        if (gameMode == "multiplayer")
+        {
+            CreateGameRule("basic");
+            print("multiplayer");
         }
     }
 
     internal void SetGameRule(string v)
     {
-        throw new NotImplementedException();
+      //  gameRule = v;
+    }
+
+    public GameRule GetGameRule()
+    {
+        return gameRule;
     }
 
     public void AddHit(GameObject ball, GameObject player)
@@ -704,8 +805,9 @@ public class LevelManager : MonoBehaviour
         }
 
         player.GetComponent<Player>().DisablePlayer();
+        player.GetComponent<Player>().PlayOutSound();
 
-  
+
     }
 
     private void RemoveCatch(GameObject ball)
@@ -785,6 +887,7 @@ public class LevelManager : MonoBehaviour
             tm1.players[index].GetComponentInChildren<SphereCollider>().enabled = true;
             tm1.players[index].GetComponentInChildren<Rigidbody>().useGravity = true;
             tm1.players[index].GetComponent<Player>().isOut = false;
+            tm1.players[index].GetComponent<Player>().shadow.SetActive(true);
             print(" bringing 1 in");
         }
         if (team == 2)
@@ -819,6 +922,7 @@ public class LevelManager : MonoBehaviour
             tm2.players[index].GetComponentInChildren<SphereCollider>().enabled = true;
             tm2.players[index].GetComponentInChildren<Rigidbody>().useGravity = true;
             tm2.players[index].GetComponent<Player>().isOut = false;
+            tm2.players[index].GetComponent<Player>().shadow.SetActive(true);
             print(" bringing 2 in");
         }
     }
@@ -1067,15 +1171,8 @@ public class LevelManager : MonoBehaviour
 
                 player.GetComponentInChildren<AI>().enabled = true;
                 player.GetComponentInChildren<UnityEngine.AI.NavMeshAgent>().enabled = true;
-
-                if (gameMode == "local")
-                {
-                    player.GetComponentInChildren<AI>().ResetLevel();
-                    RemoveAI(player);
-
-                }
-
             }
+
             else
             {
                   player.GetComponentInChildren<Animator>().runtimeAnimatorController = player.GetComponentInChildren<PlayerConfiguration>().play;
@@ -1088,8 +1185,23 @@ public class LevelManager : MonoBehaviour
 
         }
 
+        if (gameMode == "arcade")
+        {
+            
+            bool clearAdded = true;
+            GlobalConfiguration.Instance.ClearPlayers(2, clearAdded);
+            tm2.ClearAdded();
+            stage.ClearSpawnpoints(2);
+            SetPlayerUI(2, tm2.GetPlayerCount());
+            
+            
+
+        }
+
         SetTeamSpawnLocations(1, stage.GetSpawnLocations(1, tm1.GetPlayerCount()));
         SetTeamSpawnLocations(2, stage.GetSpawnLocations(2, tm2.GetPlayerCount()));
+
+
 
 
         List<Vector3> ballSpwanLocations = stage.GetBallSpawnLocations(gameRule.ballCount);
@@ -1118,7 +1230,7 @@ public class LevelManager : MonoBehaviour
     private void RemoveAI(GameObject player)
     {
         tm2.players.Remove(player);
-        GlobalConfiguration.instance.GetPlayers().Remove(player);
+        GlobalConfiguration.Instance.GetPlayers().Remove(player);
         Destroy(player);
     }
 
@@ -1132,9 +1244,9 @@ public class LevelManager : MonoBehaviour
         if (team1Scored)
         {
             // DecreaseThrowMag(difficultyScaler);
-            if (tm2.GetPlayerCount() < GlobalConfiguration.instance.maxTeamCount)
+            if (tm2.GetPlayerCount() < GlobalConfiguration.Instance.maxTeamCount)
             {
-                AddAI(2);
+                AddAI(2,arcadeScript.GetCurrentOppName());
             }
 
             foreach (GameObject player in tm2.players)
@@ -1168,22 +1280,22 @@ public class LevelManager : MonoBehaviour
         
     }
 
-    private void AddAI(int team)
+    private void AddAI(int team,string charName)
     {
         int count = 1;
 
        if (team == 1)
         {
-            List<GameObject> ai1_new = tm1.CreateAI(count);
+            List<GameObject> ai1_new = tm1.CreateAI(count, charName);
             int i = 0;
             foreach (GameObject ai1_ in ai1_new)
             {
                 i++;
                 Player pScript = ai1_.GetComponent<Player>();
                 AI aiAIScript = pScript.aiObject.GetComponent<AI>();
-                GlobalConfiguration.instance.AddNewPlayer(ai1_);
-                GlobalConfiguration.instance.AddPlayerToTeamManager(ai1_, 1, false);
-                pScript.SetColor(GlobalConfiguration.instance.GetPlayerColor(i, pScript));
+                GlobalConfiguration.Instance.AddNewPlayer(ai1_);
+                GlobalConfiguration.Instance.AddPlayerToTeamManager(ai1_, 1, false);
+                pScript.SetColor(GlobalConfiguration.Instance.GetPlayerColor(i, pScript));
                 aiAIScript.Init();
                 aiAIScript.addedAtStage = true;
             }
@@ -1191,18 +1303,18 @@ public class LevelManager : MonoBehaviour
 
         if (team == 2)
         {
-            List<GameObject> ai2_new = tm2.CreateAI(count);
+            List<GameObject> ai2_new = tm2.CreateAI(count,charName);
             int j = 0;
             foreach (GameObject ai2_ in ai2_new)
             {
                 j++;
                 Player p2Script = ai2_.GetComponent<Player>();
                 AI ai2AIScript = p2Script.aiObject.GetComponent<AI>();
-                GlobalConfiguration.instance.AddNewPlayer(ai2_);
-                GlobalConfiguration.instance.AddPlayerToTeamManager(ai2_, 2, false);
-                p2Script.SetColor(GlobalConfiguration.instance.GetPlayerColor(j, p2Script));
+                GlobalConfiguration.Instance.AddNewPlayer(ai2_);
+                GlobalConfiguration.Instance.AddPlayerToTeamManager(ai2_, 2, false);
+                p2Script.SetColor(GlobalConfiguration.Instance.GetPlayerColor(j, p2Script));
                 ai2AIScript.Init();
-                //  ai2AIScript.addedAtStage = true;
+                ai2AIScript.addedAtStage = true;
             }
         }
 
@@ -1250,7 +1362,7 @@ public class LevelManager : MonoBehaviour
         hits.Clear();
         throws.Clear();
 
-        if (gameMode == "local")
+        if (gameMode == "arcade")
         {
             IncreaseLevelDifficulty();
         } 
@@ -1277,7 +1389,8 @@ public class LevelManager : MonoBehaviour
             playerconfigObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
             playerconfigObject.GetComponent<Rigidbody>().useGravity = true;
             playerconfigObject.GetComponent<Rigidbody>().isKinematic = false;
-            player.GetComponent<Player>().shadow.SetActive(true);  
+            player.GetComponent<Player>().shadow.SetActive(true);
+        
 
             if (player.GetComponent<Player>().hasAI)
             {
@@ -1318,7 +1431,7 @@ public class LevelManager : MonoBehaviour
         SetTeamSpawnLocations(1, stage.GetSpawnLocations(1, tm1.GetPlayerCount()));
         SetTeamSpawnLocations(2, stage.GetSpawnLocations(2, tm2.GetPlayerCount()));
 
-        if (gameMode == "local" /* && PlayersAdded */)
+        if (gameMode == "arcade" /* && PlayersAdded */)
         {
             SetPlayerUI(2, tm2.GetPlayerCount());
 
@@ -1384,11 +1497,63 @@ public class LevelManager : MonoBehaviour
         team1Scored = false;
         team2Scored = false;
         roundLevel = 0;
+        isAtScene = false;
+
+        Controller3D.hasGrabMag = false;
+        Controller3D.grabMag = 10f;
+        Controller3D.hasThrowMag = false;
+        Controller3D.hasSeekVec = false;
+        Controller3D.throwMagnetism = 5.65f;
+        Controller3D.maxSeekVec = 100f;
 
         tm1.Clear();
         tm2.Clear();
-        GlobalConfiguration.instance.ClearPlayers();
-        GlobalConfiguration.instance.SetDefaultJoin(true);
+        GlobalConfiguration.Instance.ClearPlayers();
+        GlobalConfiguration.Instance.SetDefaultJoin(true);
+    }
+
+    internal void EndGameArcade()
+    {
+        print("EndGame Arcade");
+        start = false;
+        round = 0;
+        ready = false;
+        countDown = countDownNum;
+        timer = 0;
+        celebrationTime = 5.0f;
+        isCelebrating = false;
+        camController.Normal();
+        hits.Clear();
+        throws.Clear();
+        team1Scored = false;
+        team2Scored = false;
+
+        gameOver = false;
+        isPlaying = false;
+        // team1Wins = false; 
+        // team2Wins = false;
+        team1Points = 0;
+        team2Points = 0;
+        team1Scored = false;
+        team2Scored = false;
+        roundLevel = 0;
+        isAtScene = false;
+
+        foreach (GameObject player in tm1.players)
+        {
+            Controller3D pControl = player.GetComponent<Player>().controller3DObject.GetComponent<Controller3D>();
+            if (pControl.ballGrabbed)
+            {
+                pControl.DropBall();
+            }
+
+        }
+
+        tm2.Clear();
+
+        GlobalConfiguration.Instance.ClearPlayers(2);
+
+       // GlobalConfiguration.instance.SetDefaultJoin(true);
     }
 
     private bool GameOver()
@@ -1496,8 +1661,8 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    private void CheckTeamHasPlayer()           // def  must revamp, especially when we dont consider 
-    {                                                // most likely have to switch and update pi indexes
+    private void CheckTeamHasPlayer()           //  do for key
+    {                                                
         foreach (GameObject player in tm1.players)
         {
             if (player.GetComponent<Player>().isOut && player.GetComponent<Player>().hasJoystick)
@@ -1507,16 +1672,13 @@ public class LevelManager : MonoBehaviour
                 {
                     if (other.GetComponent<Player>().hasAI && other.GetComponent<Player>().isOut == false)
                     {
-                        if (GlobalConfiguration.instance.GetMyJoysticks().Count >= 1)
+                        if (GlobalConfiguration.Instance.GetMyJoysticks().Count >= 1)
                         {
                             other.GetComponent<Player>().ControlSwap(player);
                         }
-                   
 
-                        //other.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-
-                        player.GetComponent<Player>().hasAI = true;
-                        player.GetComponent<Player>().hasJoystick = false;
+                        player.GetComponent<Player>().enableAI();
+                        player.GetComponent<Player>().DisablePlayer();
 
                         break;
                     }
@@ -1532,19 +1694,41 @@ public class LevelManager : MonoBehaviour
                 {
                     if (other.GetComponent<Player>().hasAI && other.GetComponent<Player>().isOut == false)
                     {
-                        //other.GetComponent<Player>().enableController(joystickNumber, joysticks[joystickNumber - 1]);
-                        Destroy(other.transform.GetChild(0).transform.GetChild(0).gameObject);
-                        GameObject aura = Instantiate(player.transform.GetChild(0).transform.GetChild(0).gameObject, other.transform.GetChild(0));
-                        aura.SetActive(true);
-                        other.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-                        other.GetComponent<Player>().playerAura = aura;                                             // I think  we only need color
-                        other.GetComponent<Player>().color = aura.GetComponent<ParticleSystem>().startColor;
-                        player.GetComponent<Player>().hasAI = true;
-                        player.GetComponent<Player>().hasJoystick = false;
+
+                        if (GlobalConfiguration.Instance.GetMyJoysticks().Count >= 1)
+                        {
+                            other.GetComponent<Player>().ControlSwap(player);
+                        }
+
+                        player.GetComponent<Player>().enableAI();
+                        player.GetComponent<Player>().DisablePlayer();
+
                         break;
                     }
                 }
             }
         }
     }
+
+    public string GetArcadeSceneName()
+    {
+        return arcadeScript.GetScene();
+    }
+    internal int GetArcadeSceneIndex()
+    {
+        return arcadeScript.GetSceneIndex();
+    }
+
+
+    public void IncreaseDifficultyScalar(float x)
+    {
+        difficultyScaler += x;
+    }
+
+    public void AddOppsFaced(string x)
+    {
+        arcadeScript.AddOppCharacter(x);
+    }
+
+
 }

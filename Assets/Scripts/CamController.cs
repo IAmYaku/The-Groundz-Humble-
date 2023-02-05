@@ -58,8 +58,8 @@ public class CamController : MonoBehaviour {
 		posY = gameObject.transform.position.y;
 		posZ = gameObject.transform.position.z;
 
-		GameObject gameManagerObject = GameObject.Find ("GameManager");
-		gameManager = gameManagerObject.GetComponent<GameManager> ();
+        gameManager = GlobalConfiguration.Instance.gameManager.GetComponent<GameManager>();
+
         levelManager = gameManager.levelManager;
         levelManager.SetCamera(this);
         

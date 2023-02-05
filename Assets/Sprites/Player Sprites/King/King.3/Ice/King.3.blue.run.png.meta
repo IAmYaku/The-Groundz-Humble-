@@ -1,0 +1,360 @@
+fileFormatVersion: 2
+guid: 594b802bbeb7935468a8a598d1322fa9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8710071084272570908
+    second: King.3.blue.run_0
+  - first:
+      213: 3919941729780405881
+    second: King.3.blue.run_1
+  - first:
+      213: -3352852324825488244
+    second: King.3.blue.run_2
+  - first:
+      213: -1457373870825928906
+    second: King.3.blue.run_3
+  - first:
+      213: -167634498168439677
+    second: King.3.blue.run_4
+  - first:
+      213: -4338342645212423484
+    second: King.3.blue.run_5
+  - first:
+      213: -3357345210186720053
+    second: King.3.blue.run_6
+  - first:
+      213: 2673967548689654053
+    second: King.3.blue.run_7
+  - first:
+      213: 6869245018557079905
+    second: King.3.blue.run_8
+  - first:
+      213: -9092754683568097424
+    second: King.3.blue.run_9
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: King.3.blue.run_0
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 993
+        width: 427
+        height: 448
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c12d772d08360e870800000000000000
+      internalID: 8710071084272570908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.blue.run_1
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 997
+        width: 428
+        height: 443
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9769ac70c3e666630800000000000000
+      internalID: 3919941729780405881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.blue.run_2
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 992
+        width: 465
+        height: 448
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c842f6223964871d0800000000000000
+      internalID: -3352852324825488244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.blue.run_3
+      rect:
+        serializedVersion: 2
+        x: 1511
+        y: 992
+        width: 464
+        height: 448
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6370c7c9f2e56cbe0800000000000000
+      internalID: -1457373870825928906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.blue.run_4
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 505
+        width: 436
+        height: 430
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38cb194ef417cadf0800000000000000
+      internalID: -167634498168439677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.blue.run_5
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 506
+        width: 462
+        height: 430
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ca5f26895c1bc3c0800000000000000
+      internalID: -4338342645212423484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.blue.run_6
+      rect:
+        serializedVersion: 2
+        x: 1031
+        y: 510
+        width: 433
+        height: 425
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bcc167eb1505861d0800000000000000
+      internalID: -3357345210186720053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.blue.run_7
+      rect:
+        serializedVersion: 2
+        x: 1523
+        y: 515
+        width: 446
+        height: 420
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 521a1987157db1520800000000000000
+      internalID: 2673967548689654053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.blue.run_8
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 10
+        width: 438
+        height: 436
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 161673613f5745f50800000000000000
+      internalID: 6869245018557079905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.blue.run_9
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 12
+        width: 434
+        height: 435
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07777207acb00d180800000000000000
+      internalID: -9092754683568097424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 7f58480fbcaf961449fe8ea946e97641
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      King.3.blue.run_2: -3352852324825488244
+      King.3.blue.run_1: 3919941729780405881
+      King.3.blue.run_3: -1457373870825928906
+      King.3.blue.run_8: 6869245018557079905
+      King.3.blue.run_4: -167634498168439677
+      King.3.blue.run_9: -9092754683568097424
+      King.3.blue.run_6: -3357345210186720053
+      King.3.blue.run_7: 2673967548689654053
+      King.3.blue.run_0: 8710071084272570908
+      King.3.blue.run_5: -4338342645212423484
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

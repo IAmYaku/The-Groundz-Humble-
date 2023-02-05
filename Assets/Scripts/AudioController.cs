@@ -20,7 +20,7 @@ public class AudioController : MonoBehaviour {
             backSoundASource = transform.GetChild(1).gameObject.GetComponent<AudioSource>();
         }
 
-        clips = Resources.LoadAll<AudioClip>("Audio/Music");
+     //   clips = Resources.LoadAll<AudioClip>("Audio/Music");
 
         if (shuffle)
         {

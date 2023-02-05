@@ -43,29 +43,38 @@ public class Stage : MonoBehaviour
 
     public GameObject playingLevelPlane;
 
+    public static bool loadedFromStage;
+
     private void Awake()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-
-       gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         if (!gm)
         {
-            // gm = GlobalConfig.instaance.InstantiateGM
+            gm = GlobalConfiguration.Instance.gameManager.GetComponent<GameManager>();
+
         }
 
-       lm = gm.levelManager;
+
+        lm = gm.levelManager;
        lm.SetStage(this);
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        GlobalConfiguration.instance.SetIsAtScene(true, scene.buildIndex);
+        GlobalConfiguration.Instance.SetIsAtScene(true, scene.buildIndex);
 
 
     }
 
     void Start()
     {
+         if (GlobalConfiguration.Instance.gameMode == GlobalConfiguration.GameMode.none)
+        {
+            loadedFromStage = true;
+            GlobalConfiguration.Instance.LoadDefaultGame();
+            
+        }
+
         InitBounds();
         // CreateSpawnLocations();
         lm.LoadLevel();
@@ -256,5 +265,17 @@ public class Stage : MonoBehaviour
         
         return false;
 
+    }
+
+    internal void ClearSpawnpoints(int v)
+    {
+       if (v == 2)
+        {
+            tm2_spawnPoints.Clear();
+        }
+       if (v == 1)
+        {
+            tm1_spawnPoints.Clear();
+        }
     }
 }

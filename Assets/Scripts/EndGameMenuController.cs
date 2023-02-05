@@ -32,7 +32,7 @@ public class EndGameMenuController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		/*
 		if (Down()) {
 			i = (i + 1) % buttons.Length;
 			buttons [i].Select();
@@ -49,6 +49,7 @@ public class EndGameMenuController : MonoBehaviour {
 		    Input.GetKeyDown ("joystick 3 button 1") || Input.GetKeyDown ("joystick 4 button 1")) {
 			buttons [i].onClick.Invoke ();
 		}
+		*/
 
 	}
 

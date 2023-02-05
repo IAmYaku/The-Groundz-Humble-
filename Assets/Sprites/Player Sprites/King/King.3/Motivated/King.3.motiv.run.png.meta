@@ -1,0 +1,360 @@
+fileFormatVersion: 2
+guid: b7c614d39c9386445bee195f0102c91c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -752623922396918001
+    second: King.3.motiv.run_0
+  - first:
+      213: 1673513110729163262
+    second: King.3.motiv.run_1
+  - first:
+      213: -6776100258949680124
+    second: King.3.motiv.run_2
+  - first:
+      213: 8446201425038782705
+    second: King.3.motiv.run_3
+  - first:
+      213: -6721350460886170917
+    second: King.3.motiv.run_4
+  - first:
+      213: -522735211963544476
+    second: King.3.motiv.run_5
+  - first:
+      213: -6519457402584830088
+    second: King.3.motiv.run_6
+  - first:
+      213: 1037921165379397546
+    second: King.3.motiv.run_7
+  - first:
+      213: -1638637858946985211
+    second: King.3.motiv.run_8
+  - first:
+      213: -3679613734703235364
+    second: King.3.motiv.run_9
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: King.3.motiv.run_0
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 983
+        width: 427
+        height: 448
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0f0218b7842e85f0800000000000000
+      internalID: -752623922396918001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.motiv.run_1
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 987
+        width: 428
+        height: 443
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef188fbbe43893710800000000000000
+      internalID: 1673513110729163262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.motiv.run_2
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 988
+        width: 465
+        height: 442
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4043fde37b476f1a0800000000000000
+      internalID: -6776100258949680124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.motiv.run_3
+      rect:
+        serializedVersion: 2
+        x: 1511
+        y: 983
+        width: 464
+        height: 447
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f0b5d8327fe63570800000000000000
+      internalID: 8446201425038782705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.motiv.run_4
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 495
+        width: 436
+        height: 430
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd2c8f7fd57f8b2a0800000000000000
+      internalID: -6721350460886170917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.motiv.run_5
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 496
+        width: 462
+        height: 430
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46c0353281fdeb8f0800000000000000
+      internalID: -522735211963544476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.motiv.run_6
+      rect:
+        serializedVersion: 2
+        x: 1031
+        y: 490
+        width: 433
+        height: 435
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87fe3aea80c3685a0800000000000000
+      internalID: -6519457402584830088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.motiv.run_7
+      rect:
+        serializedVersion: 2
+        x: 1522
+        y: 487
+        width: 447
+        height: 438
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa76c4ffccf676e00800000000000000
+      internalID: 1037921165379397546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.motiv.run_8
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 13
+        width: 438
+        height: 423
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50355f59c836249e0800000000000000
+      internalID: -1638637858946985211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.motiv.run_9
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 16
+        width: 434
+        height: 421
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cde7d50cdc26fecc0800000000000000
+      internalID: -3679613734703235364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: d2bdfc09cd3dcb24f96b29f09aa5336e
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      King.3.motiv.run_4: -6721350460886170917
+      King.3.motiv.run_9: -3679613734703235364
+      King.3.motiv.run_6: -6519457402584830088
+      King.3.motiv.run_0: -752623922396918001
+      King.3.motiv.run_2: -6776100258949680124
+      King.3.motiv.run_3: 8446201425038782705
+      King.3.motiv.run_5: -522735211963544476
+      King.3.motiv.run_8: -1638637858946985211
+      King.3.motiv.run_7: 1037921165379397546
+      King.3.motiv.run_1: 1673513110729163262
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

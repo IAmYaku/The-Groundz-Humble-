@@ -1,0 +1,360 @@
+fileFormatVersion: 2
+guid: 2a3be5a6652f38d4cb294169e04f6637
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1370891803222023448
+    second: Nina.3.rosebud.run.ball_0
+  - first:
+      213: -3076153092359289723
+    second: Nina.3.rosebud.run.ball_1
+  - first:
+      213: -9218472808385885147
+    second: Nina.3.rosebud.run.ball_2
+  - first:
+      213: 6862993702389020506
+    second: Nina.3.rosebud.run.ball_3
+  - first:
+      213: 1549391902313540479
+    second: Nina.3.rosebud.run.ball_4
+  - first:
+      213: 1791965158232710351
+    second: Nina.3.rosebud.run.ball_5
+  - first:
+      213: -1353309787205117352
+    second: Nina.3.rosebud.run.ball_6
+  - first:
+      213: -4455645281533337590
+    second: Nina.3.rosebud.run.ball_7
+  - first:
+      213: 613935203189083629
+    second: Nina.3.rosebud.run.ball_8
+  - first:
+      213: 549752663094722821
+    second: Nina.3.rosebud.run.ball_9
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Nina.3.rosebud.run.ball_0
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 1093
+        width: 446
+        height: 467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81d1b8ce4d2660310800000000000000
+      internalID: 1370891803222023448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.rosebud.run.ball_1
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 1092
+        width: 400
+        height: 468
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58484378f0f4f45d0800000000000000
+      internalID: -3076153092359289723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.rosebud.run.ball_2
+      rect:
+        serializedVersion: 2
+        x: 980
+        y: 1085
+        width: 272
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52ccf8482d7611080800000000000000
+      internalID: -9218472808385885147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.rosebud.run.ball_3
+      rect:
+        serializedVersion: 2
+        x: 1320
+        y: 1091
+        width: 312
+        height: 470
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a57f3ae19604e3f50800000000000000
+      internalID: 6862993702389020506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.rosebud.run.ball_4
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 562
+        width: 408
+        height: 466
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7be343e9bb808510800000000000000
+      internalID: 1549391902313540479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.rosebud.run.ball_5
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 560
+        width: 446
+        height: 467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcc565231d65ed810800000000000000
+      internalID: 1791965158232710351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.rosebud.run.ball_6
+      rect:
+        serializedVersion: 2
+        x: 987
+        y: 552
+        width: 398
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85a549e2be3183de0800000000000000
+      internalID: -1353309787205117352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.rosebud.run.ball_7
+      rect:
+        serializedVersion: 2
+        x: 1443
+        y: 552
+        width: 310
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a006f05393e5a22c0800000000000000
+      internalID: -4455645281533337590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.rosebud.run.ball_8
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 25
+        width: 300
+        height: 470
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ded413580d2258800800000000000000
+      internalID: 613935203189083629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.rosebud.run.ball_9
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 35
+        width: 376
+        height: 460
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5010616622d11a700800000000000000
+      internalID: 549752663094722821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 0a6a0b6872f80054b8953ae27e5105aa
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Nina.3.rosebud.run.ball_5: 1791965158232710351
+      Nina.3.rosebud.run.ball_2: -9218472808385885147
+      Nina.3.rosebud.run.ball_8: 613935203189083629
+      Nina.3.rosebud.run.ball_0: 1370891803222023448
+      Nina.3.rosebud.run.ball_1: -3076153092359289723
+      Nina.3.rosebud.run.ball_9: 549752663094722821
+      Nina.3.rosebud.run.ball_3: 6862993702389020506
+      Nina.3.rosebud.run.ball_6: -1353309787205117352
+      Nina.3.rosebud.run.ball_4: 1549391902313540479
+      Nina.3.rosebud.run.ball_7: -4455645281533337590
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

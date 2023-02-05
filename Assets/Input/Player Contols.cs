@@ -152,13 +152,40 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Menu Controls"",
+            ""name"": ""Menu Controls (Gamepad)"",
             ""id"": ""18389432-e66d-4561-ace7-9cc9ef833c3b"",
             ""actions"": [
                 {
                     ""name"": ""Start"",
                     ""type"": ""Button"",
                     ""id"": ""706785f1-7e81-441d-8607-ce274c939985"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Button"",
+                    ""id"": ""cc506239-dbc2-4710-9146-0ee603340efd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""07ea39db-52b0-4056-8479-7d75af95dd82"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""eb54b6e7-948b-4c38-a281-9450974daf57"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -187,6 +214,279 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
                     ""action"": ""Start"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""134498dd-ae8a-4d2b-b9e3-d87c941d7876"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fc7c85b6-2919-4bc8-ae81-d7cfa29dc410"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""779eaef4-4148-465a-b716-8376cb27e0a2"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Menu Controls (Keyboard)"",
+            ""id"": ""db4b8c67-8cd0-4a1e-9a53-fc3195b7c324"",
+            ""actions"": [
+                {
+                    ""name"": ""Start"",
+                    ""type"": ""Button"",
+                    ""id"": ""21e59408-ba04-4537-b44f-cb798f723b54"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Button"",
+                    ""id"": ""86b876f4-2d69-49a8-96f7-2b0600da4698"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c4cf9a9-8339-452f-911d-3f4d9359a2a0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed411d0d-ad22-4b92-a97a-3421dbc434a9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""d0fd2246-36db-4223-aa69-61aae2aba107"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""bbed462d-46d1-4d05-b190-5996ccdd7a85"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""ff87631c-9983-4b18-84ae-504765881ed2"",
+                    ""path"": ""Dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""568a9b0b-4628-445d-935f-38d094cd92dd"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""ffac5368-6a14-48ed-9666-78d896c8002b"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""d5b6e574-1516-4343-b0fa-d57a643a997a"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""8a567563-de55-45e7-94ce-d3052309fedc"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b941ea05-5a13-4b4f-9e06-8727eb1a39c5"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""8970115d-5d89-46ec-ad81-ca496dce7da8"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""0bc028aa-4bb6-40c5-8e9d-6a1a11a5ecae"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""ca8f815b-26b5-45f5-83f6-a69907bb3792"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""78e2912a-7969-4280-9f08-cbdb5f5d71bf"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8813448-9e94-4504-a2f3-239049849015"",
+                    ""path"": ""<Pen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""daaa72ff-2f22-4903-ba40-58879d544d14"",
+                    ""path"": ""<Touchscreen>/touch*/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""63807352-fcd8-4fb6-b9cd-ffb5ebf4ac7f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse;Keyboard"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""005428a5-c02c-4bee-b559-5c2d99cd746a"",
+                    ""path"": ""<Pen>/tip"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""acbad608-cd7c-4b74-90b8-2b926ef26089"",
+                    ""path"": ""<Touchscreen>/touch*/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8f6ce33-d0a7-422c-8a72-dc15a634b2bc"",
+                    ""path"": ""<XRController>/trigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""XR"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -202,6 +502,11 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Keyboard"",
+            ""bindingGroup"": ""Keyboard"",
+            ""devices"": []
         }
     ]
 }");
@@ -213,9 +518,19 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
         m_PlayerControlsA_Dodge = m_PlayerControlsA.FindAction("Dodge", throwIfNotFound: true);
         m_PlayerControlsA_Super = m_PlayerControlsA.FindAction("Super", throwIfNotFound: true);
         m_PlayerControlsA_Pause = m_PlayerControlsA.FindAction("Pause", throwIfNotFound: true);
-        // Menu Controls
-        m_MenuControls = asset.FindActionMap("Menu Controls", throwIfNotFound: true);
-        m_MenuControls_Start = m_MenuControls.FindAction("Start", throwIfNotFound: true);
+        // Menu Controls (Gamepad)
+        m_MenuControlsGamepad = asset.FindActionMap("Menu Controls (Gamepad)", throwIfNotFound: true);
+        m_MenuControlsGamepad_Start = m_MenuControlsGamepad.FindAction("Start", throwIfNotFound: true);
+        m_MenuControlsGamepad_Movement = m_MenuControlsGamepad.FindAction("Movement", throwIfNotFound: true);
+        m_MenuControlsGamepad_Select = m_MenuControlsGamepad.FindAction("Select", throwIfNotFound: true);
+        m_MenuControlsGamepad_Cancel = m_MenuControlsGamepad.FindAction("Cancel", throwIfNotFound: true);
+        // Menu Controls (Keyboard)
+        m_MenuControlsKeyboard = asset.FindActionMap("Menu Controls (Keyboard)", throwIfNotFound: true);
+        m_MenuControlsKeyboard_Start = m_MenuControlsKeyboard.FindAction("Start", throwIfNotFound: true);
+        m_MenuControlsKeyboard_Movement = m_MenuControlsKeyboard.FindAction("Movement", throwIfNotFound: true);
+        m_MenuControlsKeyboard_Select = m_MenuControlsKeyboard.FindAction("Select", throwIfNotFound: true);
+        m_MenuControlsKeyboard_Cancel = m_MenuControlsKeyboard.FindAction("Cancel", throwIfNotFound: true);
+        m_MenuControlsKeyboard_Point = m_MenuControlsKeyboard.FindAction("Point", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -345,38 +660,127 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
     }
     public PlayerControlsAActions @PlayerControlsA => new PlayerControlsAActions(this);
 
-    // Menu Controls
-    private readonly InputActionMap m_MenuControls;
-    private IMenuControlsActions m_MenuControlsActionsCallbackInterface;
-    private readonly InputAction m_MenuControls_Start;
-    public struct MenuControlsActions
+    // Menu Controls (Gamepad)
+    private readonly InputActionMap m_MenuControlsGamepad;
+    private IMenuControlsGamepadActions m_MenuControlsGamepadActionsCallbackInterface;
+    private readonly InputAction m_MenuControlsGamepad_Start;
+    private readonly InputAction m_MenuControlsGamepad_Movement;
+    private readonly InputAction m_MenuControlsGamepad_Select;
+    private readonly InputAction m_MenuControlsGamepad_Cancel;
+    public struct MenuControlsGamepadActions
     {
         private @PlayerContols m_Wrapper;
-        public MenuControlsActions(@PlayerContols wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Start => m_Wrapper.m_MenuControls_Start;
-        public InputActionMap Get() { return m_Wrapper.m_MenuControls; }
+        public MenuControlsGamepadActions(@PlayerContols wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Start => m_Wrapper.m_MenuControlsGamepad_Start;
+        public InputAction @Movement => m_Wrapper.m_MenuControlsGamepad_Movement;
+        public InputAction @Select => m_Wrapper.m_MenuControlsGamepad_Select;
+        public InputAction @Cancel => m_Wrapper.m_MenuControlsGamepad_Cancel;
+        public InputActionMap Get() { return m_Wrapper.m_MenuControlsGamepad; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MenuControlsActions set) { return set.Get(); }
-        public void SetCallbacks(IMenuControlsActions instance)
+        public static implicit operator InputActionMap(MenuControlsGamepadActions set) { return set.Get(); }
+        public void SetCallbacks(IMenuControlsGamepadActions instance)
         {
-            if (m_Wrapper.m_MenuControlsActionsCallbackInterface != null)
+            if (m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface != null)
             {
-                @Start.started -= m_Wrapper.m_MenuControlsActionsCallbackInterface.OnStart;
-                @Start.performed -= m_Wrapper.m_MenuControlsActionsCallbackInterface.OnStart;
-                @Start.canceled -= m_Wrapper.m_MenuControlsActionsCallbackInterface.OnStart;
+                @Start.started -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnStart;
+                @Start.performed -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnStart;
+                @Start.canceled -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnStart;
+                @Movement.started -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnMovement;
+                @Select.started -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnSelect;
+                @Select.performed -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnSelect;
+                @Select.canceled -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnSelect;
+                @Cancel.started -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnCancel;
+                @Cancel.performed -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnCancel;
+                @Cancel.canceled -= m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface.OnCancel;
             }
-            m_Wrapper.m_MenuControlsActionsCallbackInterface = instance;
+            m_Wrapper.m_MenuControlsGamepadActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @Start.started += instance.OnStart;
                 @Start.performed += instance.OnStart;
                 @Start.canceled += instance.OnStart;
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+                @Select.started += instance.OnSelect;
+                @Select.performed += instance.OnSelect;
+                @Select.canceled += instance.OnSelect;
+                @Cancel.started += instance.OnCancel;
+                @Cancel.performed += instance.OnCancel;
+                @Cancel.canceled += instance.OnCancel;
             }
         }
     }
-    public MenuControlsActions @MenuControls => new MenuControlsActions(this);
+    public MenuControlsGamepadActions @MenuControlsGamepad => new MenuControlsGamepadActions(this);
+
+    // Menu Controls (Keyboard)
+    private readonly InputActionMap m_MenuControlsKeyboard;
+    private IMenuControlsKeyboardActions m_MenuControlsKeyboardActionsCallbackInterface;
+    private readonly InputAction m_MenuControlsKeyboard_Start;
+    private readonly InputAction m_MenuControlsKeyboard_Movement;
+    private readonly InputAction m_MenuControlsKeyboard_Select;
+    private readonly InputAction m_MenuControlsKeyboard_Cancel;
+    private readonly InputAction m_MenuControlsKeyboard_Point;
+    public struct MenuControlsKeyboardActions
+    {
+        private @PlayerContols m_Wrapper;
+        public MenuControlsKeyboardActions(@PlayerContols wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Start => m_Wrapper.m_MenuControlsKeyboard_Start;
+        public InputAction @Movement => m_Wrapper.m_MenuControlsKeyboard_Movement;
+        public InputAction @Select => m_Wrapper.m_MenuControlsKeyboard_Select;
+        public InputAction @Cancel => m_Wrapper.m_MenuControlsKeyboard_Cancel;
+        public InputAction @Point => m_Wrapper.m_MenuControlsKeyboard_Point;
+        public InputActionMap Get() { return m_Wrapper.m_MenuControlsKeyboard; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MenuControlsKeyboardActions set) { return set.Get(); }
+        public void SetCallbacks(IMenuControlsKeyboardActions instance)
+        {
+            if (m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface != null)
+            {
+                @Start.started -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnStart;
+                @Start.performed -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnStart;
+                @Start.canceled -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnStart;
+                @Movement.started -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnMovement;
+                @Select.started -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnSelect;
+                @Select.performed -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnSelect;
+                @Select.canceled -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnSelect;
+                @Cancel.started -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnCancel;
+                @Cancel.performed -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnCancel;
+                @Cancel.canceled -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnCancel;
+                @Point.started -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnPoint;
+                @Point.performed -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnPoint;
+                @Point.canceled -= m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface.OnPoint;
+            }
+            m_Wrapper.m_MenuControlsKeyboardActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Start.started += instance.OnStart;
+                @Start.performed += instance.OnStart;
+                @Start.canceled += instance.OnStart;
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+                @Select.started += instance.OnSelect;
+                @Select.performed += instance.OnSelect;
+                @Select.canceled += instance.OnSelect;
+                @Cancel.started += instance.OnCancel;
+                @Cancel.performed += instance.OnCancel;
+                @Cancel.canceled += instance.OnCancel;
+                @Point.started += instance.OnPoint;
+                @Point.performed += instance.OnPoint;
+                @Point.canceled += instance.OnPoint;
+            }
+        }
+    }
+    public MenuControlsKeyboardActions @MenuControlsKeyboard => new MenuControlsKeyboardActions(this);
     private int m_GamepadSchemeIndex = -1;
     public InputControlScheme GamepadScheme
     {
@@ -384,6 +788,15 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
         {
             if (m_GamepadSchemeIndex == -1) m_GamepadSchemeIndex = asset.FindControlSchemeIndex("Gamepad");
             return asset.controlSchemes[m_GamepadSchemeIndex];
+        }
+    }
+    private int m_KeyboardSchemeIndex = -1;
+    public InputControlScheme KeyboardScheme
+    {
+        get
+        {
+            if (m_KeyboardSchemeIndex == -1) m_KeyboardSchemeIndex = asset.FindControlSchemeIndex("Keyboard");
+            return asset.controlSchemes[m_KeyboardSchemeIndex];
         }
     }
     public interface IPlayerControlsAActions
@@ -395,8 +808,19 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
         void OnSuper(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
     }
-    public interface IMenuControlsActions
+    public interface IMenuControlsGamepadActions
     {
         void OnStart(InputAction.CallbackContext context);
+        void OnMovement(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
+    }
+    public interface IMenuControlsKeyboardActions
+    {
+        void OnStart(InputAction.CallbackContext context);
+        void OnMovement(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
+        void OnPoint(InputAction.CallbackContext context);
     }
 }

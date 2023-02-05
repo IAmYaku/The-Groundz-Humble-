@@ -14,7 +14,7 @@ public class MenuController : MonoBehaviour {
     public Button btnKeyboardView;
     public Button btnEasyAdv;
     public Button btnQuit;
-	private Button[] buttons = new Button[7];
+	private Button[] buttons = new Button[4];
 	int i = 0;
 	private bool wasUp;
 	private bool wasDown;
@@ -22,12 +22,12 @@ public class MenuController : MonoBehaviour {
 
 	void Start () {
 		buttons [0] = btnResume;
-		buttons [1] = btnStageSelect;
+		buttons [1] = btnControl ;
 		buttons [2] = btnRestart;
-		buttons [3] = btnControl;
-        buttons[4] = btnKeyboardView;
-        buttons[5] = btnEasyAdv;
-        buttons[6] = btnQuit;
+		buttons [3] = btnQuit ;
+		////  buttons[4] = btnKeyboardView;
+		//  buttons[5] = btnEasyAdv;
+		//   buttons[6] = btnStageSelect;
 
 		btnResume.Select ();
 
@@ -36,24 +36,24 @@ public class MenuController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-		if (Down()) {
-			i = (i + 1) % buttons.Length;
-			buttons [i].Select();
+		/*	
+			if (Down()) {
+				i = (i + 1) % buttons.Length;
+				buttons [i].Select();
 
-		}
-		else 	if (Up()) {
-			if (--i < 0) {
-				i = buttons.Length - 1;
 			}
-			buttons [i].Select ();
-		}
+			else 	if (Up()) {
+				if (--i < 0) {
+					i = buttons.Length - 1;
+				}
+				buttons [i].Select ();
+			}
 
-		if (Input.GetKeyDown ("joystick 1 button 1") || Input.GetKeyDown ("joystick 2 button 1") ||
-		    Input.GetKeyDown ("joystick 3 button 1") || Input.GetKeyDown ("joystick 4 button 1")) {
-			buttons [i].onClick.Invoke ();
-		}
-
+			if (Input.GetKeyDown ("joystick 1 button 1") || Input.GetKeyDown ("joystick 2 button 1") ||
+				Input.GetKeyDown ("joystick 3 button 1") || Input.GetKeyDown ("joystick 4 button 1")) {
+				buttons [i].onClick.Invoke ();
+			}
+		*/
 	}
 
 	bool Up()	{

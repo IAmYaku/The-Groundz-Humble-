@@ -1,0 +1,335 @@
+fileFormatVersion: 2
+guid: 9dc513f0855108c449e8b9d6725b0109
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6748356578502360564
+    second: Nina.3.royal.dodge_0
+  - first:
+      213: -318170151285593162
+    second: Nina.3.royal.dodge_1
+  - first:
+      213: -3153431886846085128
+    second: Nina.3.royal.dodge_2
+  - first:
+      213: -613937384379137939
+    second: Nina.3.royal.dodge_3
+  - first:
+      213: 9012753337532455302
+    second: Nina.3.royal.dodge_4
+  - first:
+      213: -1211583681945003663
+    second: Nina.3.royal.dodge_5
+  - first:
+      213: 6299801325089085349
+    second: Nina.3.royal.dodge_6
+  - first:
+      213: -4031270863805867036
+    second: Nina.3.royal.dodge_8
+  - first:
+      213: -200581369219629408
+    second: Nina.3.royal.dodge_9
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Nina.3.royal.dodge_0
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 635
+        width: 281
+        height: 515
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fdbd47cd8af6ad50800000000000000
+      internalID: 6748356578502360564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.dodge_1
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 675
+        width: 294
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bb6d72eee1a59bf0800000000000000
+      internalID: -318170151285593162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.dodge_2
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 622
+        width: 348
+        height: 529
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f736211862cc34d0800000000000000
+      internalID: -3153431886846085128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.dodge_3
+      rect:
+        serializedVersion: 2
+        x: 1114
+        y: 643
+        width: 384
+        height: 508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d60cfb1a33bda77f0800000000000000
+      internalID: -613937384379137939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.dodge_4
+      rect:
+        serializedVersion: 2
+        x: 1555
+        y: 663
+        width: 336
+        height: 487
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68996dba86bb31d70800000000000000
+      internalID: 9012753337532455302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.dodge_5
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 38
+        width: 321
+        height: 528
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 179120e7f079f2fe0800000000000000
+      internalID: -1211583681945003663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.dodge_6
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 44
+        width: 267
+        height: 522
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a758796de36d6750800000000000000
+      internalID: 6299801325089085349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.dodge_8
+      rect:
+        serializedVersion: 2
+        x: 739
+        y: 158
+        width: 210
+        height: 408
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4eb1879028c0e08c0800000000000000
+      internalID: -4031270863805867036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.dodge_9
+      rect:
+        serializedVersion: 2
+        x: 1006
+        y: 48
+        width: 265
+        height: 518
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0ae3a13be44673df0800000000000000
+      internalID: -200581369219629408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: fa5aacb891cd5de4c8ba9b11255f0b14
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Nina.3.royal.dodge_8: -4031270863805867036
+      Nina.3.royal.dodge_4: 9012753337532455302
+      Nina.3.royal.dodge_5: -1211583681945003663
+      Nina.3.royal.dodge_3: -613937384379137939
+      Nina.3.royal.dodge_6: 6299801325089085349
+      Nina.3.royal.dodge_2: -3153431886846085128
+      Nina.3.royal.dodge_0: 6748356578502360564
+      Nina.3.royal.dodge_1: -318170151285593162
+      Nina.3.royal.dodge_9: -200581369219629408
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

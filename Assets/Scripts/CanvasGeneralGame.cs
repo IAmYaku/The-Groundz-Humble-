@@ -54,7 +54,10 @@ public class CanvasGeneralGame : MonoBehaviour
     private void Awake()
     {
 
-        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+         if (!gm)
+        {
+            gm = GlobalConfiguration.Instance.gameManager.GetComponent<GameManager>();
+        }
 
         if (gm)
         {

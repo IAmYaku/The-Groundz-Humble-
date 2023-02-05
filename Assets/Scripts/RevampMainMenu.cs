@@ -14,13 +14,13 @@ public class RevampMainMenu : MonoBehaviour
 
     private void Start()
     {
-
+        GlobalConfiguration.loadPoint = GlobalConfiguration.LoadPoint.gameMode;
     }
 
 
     public void PlayLocal()
     {
-        GlobalConfiguration.instance.SetGameMode("local");
+        GlobalConfiguration.Instance.SetGameMode("arcade");
         SceneManager.LoadScene("QuickTeamSelect");
         print("Local");
     }
@@ -28,14 +28,14 @@ public class RevampMainMenu : MonoBehaviour
     public void PlayMultiplayer()
 
     {
-        GlobalConfiguration.instance.SetGameMode("multiplayer");
-        SceneManager.LoadScene("TeamSelect");
+        GlobalConfiguration.Instance.SetGameMode("multiplayer");
+        SceneManager.LoadScene("RevampTeamSelect");
         print("Multiplayer");
     }
 
     public void PlayStory()
     {
-        GlobalConfiguration.instance.SetGameMode("story");
+        GlobalConfiguration.Instance.SetGameMode("story");
         SceneManager.LoadScene("StoryMode");
     }
 

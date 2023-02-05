@@ -1,0 +1,360 @@
+fileFormatVersion: 2
+guid: ddd773cd3a073f94caad95a77092f72c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4677855194855014977
+    second: King.3.redmane.run_0
+  - first:
+      213: -3203698577419717172
+    second: King.3.redmane.run_1
+  - first:
+      213: 315567410866449729
+    second: King.3.redmane.run_2
+  - first:
+      213: 2746194186320387566
+    second: King.3.redmane.run_3
+  - first:
+      213: 6229066237906545726
+    second: King.3.redmane.run_4
+  - first:
+      213: 4991612118994014487
+    second: King.3.redmane.run_5
+  - first:
+      213: -8924672136371472775
+    second: King.3.redmane.run_6
+  - first:
+      213: 3743226415541459953
+    second: King.3.redmane.run_7
+  - first:
+      213: 6100766981533465754
+    second: King.3.redmane.run_8
+  - first:
+      213: 3713607909559270109
+    second: King.3.redmane.run_9
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: King.3.redmane.run_0
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 993
+        width: 427
+        height: 448
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1428c00f3841be040800000000000000
+      internalID: 4677855194855014977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.redmane.run_1
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 997
+        width: 428
+        height: 443
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc539752e1d2a83d0800000000000000
+      internalID: -3203698577419717172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.redmane.run_2
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 993
+        width: 465
+        height: 447
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14d626363ee116400800000000000000
+      internalID: 315567410866449729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.redmane.run_3
+      rect:
+        serializedVersion: 2
+        x: 1511
+        y: 1007
+        width: 464
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eed9edfff017c1620800000000000000
+      internalID: 2746194186320387566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.redmane.run_4
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 505
+        width: 436
+        height: 430
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3c6cc88db6127650800000000000000
+      internalID: 6229066237906545726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.redmane.run_5
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 506
+        width: 462
+        height: 430
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7115c2986c4c54540800000000000000
+      internalID: 4991612118994014487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.redmane.run_6
+      rect:
+        serializedVersion: 2
+        x: 1031
+        y: 510
+        width: 433
+        height: 425
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97670c61af1352480800000000000000
+      internalID: -8924672136371472775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.redmane.run_7
+      rect:
+        serializedVersion: 2
+        x: 1523
+        y: 512
+        width: 446
+        height: 423
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fb153ca79c92f330800000000000000
+      internalID: 3743226415541459953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.redmane.run_8
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 39
+        width: 438
+        height: 407
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9cfbb71f374aa450800000000000000
+      internalID: 6100766981533465754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: King.3.redmane.run_9
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 35
+        width: 434
+        height: 412
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dda7c5cd7b2698330800000000000000
+      internalID: 3713607909559270109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 7e4f20a6c773c284da2033712e0edae1
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      King.3.redmane.run_5: 4991612118994014487
+      King.3.redmane.run_4: 6229066237906545726
+      King.3.redmane.run_3: 2746194186320387566
+      King.3.redmane.run_0: 4677855194855014977
+      King.3.redmane.run_1: -3203698577419717172
+      King.3.redmane.run_2: 315567410866449729
+      King.3.redmane.run_8: 6100766981533465754
+      King.3.redmane.run_7: 3743226415541459953
+      King.3.redmane.run_6: -8924672136371472775
+      King.3.redmane.run_9: 3713607909559270109
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -171,7 +171,23 @@ public class AI : MonoBehaviour {
 
     void Start () {
 
-		GameObject gameManagerObject = GameObject.Find("GameManager");
+        GameObject gameManagerObject = GameObject.Find("GameManager");
+
+        if (gameManagerObject)
+        {
+            levelManager = gameManagerObject.GetComponent<LevelManager>();
+        }
+
+        else
+        {
+            gameManagerObject = GameObject.Find("GameManager(Clone)");
+
+            if (gameManagerObject)
+            {
+                levelManager = gameManagerObject.GetComponent<LevelManager>();
+            }
+        }
+
         levelManager = gameManagerObject.GetComponent<LevelManager>();
 
         playerScript = gameObject.GetComponentInParent<Player>();
@@ -554,7 +570,7 @@ public class AI : MonoBehaviour {
                     // if (!ball.GetComponent<Ball>().isSupering)                   
                     {
                         animator.SetTrigger("Ready");           
-                        print("Miss Pick Up");
+                       // print("Miss Pick Up");
                         action1Input = false;
 
                         /*
@@ -1195,29 +1211,32 @@ public class AI : MonoBehaviour {
         {
             foreach (GameObject opp in levelManager.tm2.players)
             {
-                if (opp.GetComponent<Player>().hasAI)
+                if (!opp.GetComponent<Player>().isOut)
                 {
-                    if (opp.GetComponentInChildren<AI>().ballGrabbed)
+                    if (opp.GetComponent<Player>().hasAI)
                     {
-                        returnMe--;
-                        returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));       //*arbitrary nums
-                    }
-                    else
-                    {
-                        returnMe += (int)(200 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));    //i dont think this is always true
-                    }
+                        if (opp.GetComponentInChildren<AI>().ballGrabbed)
+                        {
+                            returnMe--;
+                            returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));       //*arbitrary nums
+                        }
+                        else
+                        {
+                            returnMe += (int)(200 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));    //i dont think this is always true
+                        }
 
-                }
-                else
-                {
-                    if (opp.GetComponentInChildren<Controller3D>().ballGrabbed)
-                    {
-                        returnMe--;
-                        returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
                     }
                     else
                     {
-                        returnMe += (int)(200 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                        if (opp.GetComponentInChildren<Controller3D>().ballGrabbed)
+                        {
+                            returnMe--;
+                            returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                        }
+                        else
+                        {
+                            returnMe += (int)(200 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                        }
                     }
                 }
             }
@@ -1227,29 +1246,31 @@ public class AI : MonoBehaviour {
         {
             foreach (GameObject opp in levelManager.tm1.players)
             {
-               if (opp.GetComponent<Player>().hasAI)
-                {
-                    if (opp.GetComponentInChildren<AI>().ballGrabbed)
+              if (!opp.GetComponent<Player>().isOut) {
+                    if (opp.GetComponent<Player>().hasAI)
                     {
-                        returnMe--;
-                        returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
-                    }
-                    else
-                    {
-                        returnMe += (int)(50 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
-                    }
+                        if (opp.GetComponentInChildren<AI>().ballGrabbed)
+                        {
+                            returnMe--;
+                            returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                        }
+                        else
+                        {
+                            returnMe += (int)(50 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                        }
 
-                }
-                else
-                {
-                    if (opp.GetComponentInChildren<Controller3D>().ballGrabbed)
-                    {
-                        returnMe--;
-                        returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
                     }
                     else
                     {
-                        returnMe += (int)(50 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                        if (opp.GetComponentInChildren<Controller3D>().ballGrabbed)
+                        {
+                            returnMe--;
+                            returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                        }
+                        else
+                        {
+                            returnMe += (int)(50 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                        }
                     }
                 }
             }
@@ -1507,7 +1528,22 @@ public class AI : MonoBehaviour {
     public void Init()
     {
         GameObject gameManagerObject = GameObject.Find("GameManager");
-        levelManager = gameManagerObject.GetComponent<LevelManager>();
+
+        if (gameManagerObject)
+        {
+            levelManager = gameManagerObject.GetComponent<LevelManager>();
+        }
+
+        else
+        {
+            gameManagerObject = GameObject.Find("GameManager(Clone)");
+
+            if (gameManagerObject)
+            {
+                levelManager = gameManagerObject.GetComponent<LevelManager>();
+            }
+        }
+
 
         playerScript = gameObject.GetComponentInParent<Player>();
         parent = gameObject.transform.parent.gameObject;

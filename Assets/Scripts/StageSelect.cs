@@ -7,40 +7,39 @@ public class StageSelect : MonoBehaviour {
 
 public void selectScene()
     {
-        GlobalConfiguration.instance.SetGameStarted(true);
-
+      
         switch (this.gameObject.name)
         {
             case "TheGroundzEastButton":
-                GlobalConfiguration.instance.SetStage("theGroundzEast");
-                GlobalConfiguration.instance.TurnThemeMusic(false);
+                GlobalConfiguration.Instance.SetStage("theGroundzEast");
+                GlobalConfiguration.Instance.TurnThemeMusic(false);
                 SceneManager.LoadScene("TheGroundzEast");
                 break;
             case "TheGymButton":
-                GlobalConfiguration.instance.SetStage("theGym");
-                GlobalConfiguration.instance.TurnThemeMusic(false);
+                GlobalConfiguration.Instance.SetStage("theGym");
+                GlobalConfiguration.Instance.TurnThemeMusic(false);
                 SceneManager.LoadScene("TheGym");
                 break;
             case "TheBlockButton":
-                GlobalConfiguration.instance.SetStage("theBlock");
-                GlobalConfiguration.instance.TurnThemeMusic(false);
+                GlobalConfiguration.Instance.SetStage("theBlock");
+                GlobalConfiguration.Instance.TurnThemeMusic(false);
                 SceneManager.LoadScene("TheBlock");
                 break;
 
             case "TheLibraryButton":
-                GlobalConfiguration.instance.SetStage("theBlock");
-                GlobalConfiguration.instance.TurnThemeMusic(false);
+                GlobalConfiguration.Instance.SetStage("theBlock");
+                GlobalConfiguration.Instance.TurnThemeMusic(false);
                 SceneManager.LoadScene("TheBlock");
                 break;
 
             case "TheGroundzWestButton":
-                GlobalConfiguration.instance.SetStage("theBlock");
-                GlobalConfiguration.instance.TurnThemeMusic(false);
+                GlobalConfiguration.Instance.SetStage("theBlock");
+                GlobalConfiguration.Instance.TurnThemeMusic(false);
                 SceneManager.LoadScene("TheBlock");
                 break;
             case "TheBackyardButton":
-                GlobalConfiguration.instance.SetStage("theBackyard");
-                GlobalConfiguration.instance.TurnThemeMusic(false);
+                GlobalConfiguration.Instance.SetStage("theBackyard");
+                GlobalConfiguration.Instance.TurnThemeMusic(false);
                 SceneManager.LoadScene("TheBackyard");
                 break;
 

@@ -77,6 +77,13 @@ public class Player : MonoBehaviour
 
     private float fxSpeed = 1f;
 
+    public List<RuntimeAnimatorController> runtimeControlllers = new List<RuntimeAnimatorController>();
+ //   public RuntimeAnimatorController main; 0
+  //  public RuntimeAnimatorController alt1;
+  //  public RuntimeAnimatorController alt2;
+ //   public RuntimeAnimatorController alt3;
+
+
     public AudioSource playerAudioSource;
 
     public AudioClip catchSound;
@@ -91,16 +98,22 @@ public class Player : MonoBehaviour
     private float drC_t0;
     private float drC_tF;
 
+    public static event Action<InputUser, InputUserChange, InputDevice> onChange;
+    
 
 
     private void Awake()
     {
-        GameObject gameManagerObject = GameObject.Find("GameManager");
+        GameObject gameManagerObject = GlobalConfiguration.Instance.gameManager.gameObject;
+
         levelManager = gameManagerObject.GetComponent<LevelManager>();
 
         // print("Player Awake");
         CheckChildStructure();
         //isSet = false;
+        InputUser.listenForUnpairedDeviceActivity = 1;
+        onChange += DeviceChange();
+
 
     }
 
@@ -296,10 +309,12 @@ public class Player : MonoBehaviour
     public void enableAI()
     {
 
+
         hasAI = true;
 
         aiObject.SetActive(true);
         aiScript.enabled = true;
+        aiScript.Init();
 
         hasJoystick = false;
         controller3DObject.SetActive(false);
@@ -317,69 +332,142 @@ public class Player : MonoBehaviour
 
     }
 
+
+        
+
     public void ControlSwap(GameObject pSwap)
     {
         /// Gotta check keyboard 
-        /// 
-        Player pScript = pSwap.GetComponent<Player>();
-        Color pColor = pScript.color;
-        int pIndex = pScript.joystick.number;
+        
+      
 
-        print("pIndex " + pIndex);
+            Player pScript = pSwap.GetComponent<Player>();
+            Color pColor = pScript.color;
+            int pIndex = pScript.joystick.number;
 
-        PlayerInput pInput = PlayerInput.all[pIndex];
+        if (pIndex != -1)
+            {
+            print("pjoyNum " + pIndex);
 
-        print("PlayerInput.all size " + PlayerInput.all.Count);
-        print("playerInput.user.id " + pInput.user.id);
-        print("playerInput.user.index " + pInput.user.index);
-        print("playerInput.user.pairedDevices" + pInput.user.pairedDevices);
-        print(" InputSystem.devices " + pInput.devices);
+            PlayerInput pInput = PlayerInput.all[pIndex];
+            /*
+            print("playerInput.playerIndex " + pInput.playerIndex);
+            print(" InputUser.all " + InputUser.all.Count);
+            print("PlayerInput.all size " + PlayerInput.all.Count);
+            print("playerInput.user.id " + pInput.user.id);
+            print("playerInput.user.index " + pInput.user.index);
+            print("playerInput.user.pairedDevices" + pInput.user.pairedDevices);
+            print(" InputSystem.devices.count " + pInput.devices.Count);
+            */
 
-        disableAI();
+            disableAI();
 
-        hasJoystick = true;
+            hasJoystick = true;
 
-        joystick = pScript.joystick;
-        pScript.joystick = null;
+            joystick = pScript.joystick;
+            pScript.joystick = new MyJoystick();
 
-        pScript.color = color;
-        color = pColor;
-        SetAuraColor(color);
+            pScript.color = color;
+            color = pColor;
+            SetAuraColor(color);
 
-         enableController();
+            enableController();
 
-        PlayerInput myPlayerInput0 = controller3DObject.GetComponent<PlayerInput>();
-        PlayerInput myPlayerInput = PlayerInput.all[myPlayerInput0.playerIndex];
-        InputUser myPlayerInputUser = myPlayerInput.user;
+            PlayerInput myPlayerInput0 = controller3DObject.GetComponent<PlayerInput>();
+            PlayerInput myPlayerInput = PlayerInput.all[myPlayerInput0.playerIndex];
+            InputUser myPlayerInputUser = myPlayerInput.user;
 
 
-        print("myPlayerInput0 " + myPlayerInput0.playerIndex);
+            print("myPlayerInput0.playerIndex " + myPlayerInput0.playerIndex);
 
-        foreach (InputDevice device in pInput.user.pairedDevices)
-        {
-            InputUser.PerformPairingWithDevice(device, myPlayerInputUser);
+            print("joystick.number " + joystick.number);
+
+            print("Gamepad.all.Count " + Gamepad.all.Count);
+
+            CheckDevices();
+
+            /*
+            print(" InputUser.all " + InputUser.all.Count);
+            print(" myPlayerInputUser.valid " + myPlayerInputUser.valid);
+            print(" myPlayerInputUser.id " + myPlayerInputUser.id);
+            print("myPlayerInputUser.pairedDevices.Count " + myPlayerInputUser.pairedDevices.Count);
+            print("myPlayerInput.devices.count " + myPlayerInput.devices.Count);
+            print("myPlayerInputUser.index " + myPlayerInputUser.index);
+            */
+                // PlayerInput.all[
         }
 
-        pInput.user.UnpairDevices();
+        else
+        {
+            print("Key Control Swap");
+            disableAI();
 
-       // myPlayerInputUser.ActivateControlScheme("Gamepad");
-        print(" myPlayerInputUser.valid " + myPlayerInputUser.valid);
-        print(" myPlayerInputUser.id " + myPlayerInputUser.id);
-        print("myPlayerInputUser.pairedDevices " + myPlayerInputUser.pairedDevices);
-        print("myPlayerInput.devices" + myPlayerInput.devices);
-        print("myPlayerInputUser.index " + myPlayerInputUser.index);
+            hasJoystick = true;
 
+            joystick = pScript.joystick;
+            pScript.joystick = new MyJoystick();
 
+            pScript.color = color;
+            color = pColor;
+            SetAuraColor(color);
 
-        // PlayerInput.all[]
+            enableController();
+        }
+
     }
+
+    private Action<InputUser, InputUserChange, InputDevice> DeviceChange()
+    {
+     //   print("Device changed!");
+        /*
+        if (Gamepad.all.Count >= 1)
+        {
+            foreach (GameObject p in levelManager.GetPlayers())
+            {
+                if (p.GetComponent<Player>().hasJoystick)
+                {
+                    Player pScript = p.GetComponent<Player>();
+                    PlayerInput pInput = pScript.controller3DObject.GetComponent<PlayerInput>();
+                    InputUser pUser = pInput.user;
+                   Gamepad g = Gamepad.all[pScript.joystick.number];
+                   InputUser.PerformPairingWithDevice(g, pUser, InputUserPairingOptions.UnpairCurrentDevicesFromUser);
+                }
+              
+            }
+  
+        }
+        */
+        return null;
+    }
+
+    public void CheckDevices()
+    {
+        if (Gamepad.all.Count >= 1)
+        {
+            foreach (GameObject p in levelManager.GetPlayers())
+            {
+                if (p.GetComponent<Player>().hasJoystick)
+                {
+                    Player pScript = p.GetComponent<Player>();
+                    PlayerInput pInput = pScript.controller3DObject.GetComponent<PlayerInput>();
+                    InputUser pUser = pInput.user;
+                    Gamepad g = Gamepad.all[pScript.joystick.number];
+                    InputUser.PerformPairingWithDevice(g, pUser, InputUserPairingOptions.UnpairCurrentDevicesFromUser);
+                }
+                 }
+            }
+        }
 
     private void enableController()
     {
         controller3DObject.SetActive(true);
         controller3D.enabled = true;
         PlayerInput playerInput = controller3DObject.GetComponent<PlayerInput>();
-        playerInput.enabled = true;   // might be called twice .. (Controller3D.OnEnable())
+        if (playerInput)
+        {
+            playerInput.enabled = true;   // might be called twice .. (Controller3D.OnEnable())
+        }
+
         playerConfigObject.GetComponent<Rigidbody>().isKinematic = false;
         
     }
@@ -434,8 +522,6 @@ public class Player : MonoBehaviour
         navMeshAgent.enabled = false;
 
         playerAura.SetActive(false);
-
-        playerConfigObject.GetComponent<Rigidbody>().isKinematic = true;
     }
 
     private void SetAuraColor(Color color)
@@ -489,7 +575,12 @@ public class Player : MonoBehaviour
         controller3D.GetComponent<Controller3D>().enabled = true;
 
         PlayerInput playerInput = controller3DObject.GetComponent<PlayerInput>();    // might be called twice .. (Controller3D.OnEnable())
-        playerInput.enabled = true;
+       
+        if (playerInput)
+        {
+            playerInput.enabled = true;
+        }
+
 
         hasAI = false;
         aiScript.enabled = false;
@@ -532,7 +623,7 @@ public class Player : MonoBehaviour
 
     }
 
-    internal void PlayWinAnimation()
+    internal void PlayWintion()
     {
         playerConfigObject.GetComponent<PlayerConfiguration>().SwitchToWinAnimation();
 
@@ -556,15 +647,8 @@ public class Player : MonoBehaviour
             controller3D.ballContact = false;
             playerAura.gameObject.SetActive(false);
 
-            /*
-            ParticleSystem ps = player.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
-            ParticleSystem.MainModule ring_ps = ps.main;
-            ParticleSystem ps_2 = player.transform.GetChild(0).gameObject.transform.GetChild(0).GetChild(0).gameObject.GetComponent<ParticleSystem>();
-            ParticleSystem.MainModule spikes_ps = ps_2.main;
-            spikes_ps.simulationSpeed = 1;
-            ring_ps.simulationSpeed = 1;
-            */
         }
+
         else
         {
             if (aiScript.enabled)
@@ -583,7 +667,6 @@ public class Player : MonoBehaviour
             }
         }
 
-        PlayOutSound();
         DeRender();
 
     }

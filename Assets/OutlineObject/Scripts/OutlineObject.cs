@@ -182,7 +182,7 @@ public class OutlineObject : MonoBehaviour {
 			texture.filterMode = sprite.sprite.texture.filterMode;
 			texture.wrapMode   = sprite.sprite.texture.wrapMode;
 		} else {
-			texture.Resize (width, height);
+			texture.Reinitialize (width, height);
 		}
 	}
 

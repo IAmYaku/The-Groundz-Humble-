@@ -45,6 +45,8 @@ public class PlayerConfiguration : MonoBehaviour
 
     void Start()
     {
+       // print("PlayerConfig start");
+
         parent = this.transform.parent.gameObject;
 
         if (!player)
@@ -69,7 +71,23 @@ public class PlayerConfiguration : MonoBehaviour
 
         if (!levelManager)
         {
-            levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>(); 
+            GameObject gameManager = GameObject.Find("GameManager");
+
+            if (gameManager)
+            {
+              levelManager =  gameManager.GetComponent<LevelManager>();
+            }
+
+            else
+            {
+                 gameManager = GameObject.Find("GameManager(Clone)");
+
+                if (gameManager)
+                {
+                    levelManager = gameManager.GetComponent<LevelManager>();
+                }
+            }
+
         }
     }
 
@@ -93,101 +111,105 @@ public class PlayerConfiguration : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-       
-
-        if (!player.isOut)
+        if (levelManager)
         {
-            if (collision.gameObject.tag == "Ball")
+
+            if (!player.isOut && levelManager.isPlaying)
             {
-                ballHit = collision.gameObject;
-
-                if (ballHit.GetComponent<Ball>().CheckPlayerHit(player.team))                                                                           // make more module
+                if (collision.gameObject.tag == "Ball")
                 {
-                    print("~Contact~");
+                    ballHit = collision.gameObject;
 
-                    ballHit.GetComponent<Ball>().contact = true;
-
-                    float ballHitVelocity = Mathf.Clamp(ballHit.GetComponent<Rigidbody>().velocity.magnitude / 9, 3, 6);  // make numbers variables
-                    print("ballHitVelocity = " + ballHitVelocity);
-                    bool ballHitISupered = ballHit.GetComponent<Ball>().isSupering;
-                    
-                    ballContact = true;         // what if multiple balls
-                    float stallTime = .2f;
-                    float hitDelay = .0005f;
-                    SlowDownPlayer (hitDelay, stallTime);
-                    TriggerHitAnimation();
-
-                    if (ballHitISupered)
-
+                    if (ballHit.GetComponent<Ball>().CheckPlayerHit(player.team))                                                                           // make more module
                     {
-                        TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity);
-  
+                        print("~Contact~");
+
+                        ballHit.GetComponent<Ball>().contact = true;
+
+                        float ballHitVelocity = Mathf.Clamp(ballHit.GetComponent<Rigidbody>().velocity.magnitude / 9, 3, 6);  // make numbers variables
+                        print("ballHitVelocity = " + ballHitVelocity);
+                        bool ballHitISupered = ballHit.GetComponent<Ball>().isSupering;
+
+                        ballContact = true;         // what if multiple balls
+                        float stallTime = .2f;
+                        float hitDelay = .0005f;
+                        SlowDownPlayer(hitDelay, stallTime);
+                        TriggerHitAnimation();
+
+                        if (ballHitISupered)
+
+                        {
+                            TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity);
+
+                        }
+
+                        levelManager.AddHit(ballHit, parent);
+                        levelManager.TriggerHitFX(gameObject, ballHit);
+
+
+                        float hitPauseDuration = ballHitVelocity / 20f;
+                        float hitPausePreDelay = .125f;
+
+                        DelayPause(hitPauseDuration, hitPausePreDelay);
+
+                        levelManager.CamShake(ballHit.GetComponent<Rigidbody>().velocity.magnitude, transform);
+
+                        //if gameMode = local
+                        levelManager.PostFX("Player1Hit");
                     }
 
-                    levelManager.AddHit(ballHit, parent);
-                    levelManager.TriggerHitFX(gameObject, ballHit);
-
-
-                    float hitPauseDuration = ballHitVelocity / 20f;
-                    float hitPausePreDelay = .125f;
-
-                    DelayPause(hitPauseDuration, hitPausePreDelay);
-
-                    levelManager.CamShake(ballHit.GetComponent<Rigidbody>().velocity.magnitude, transform);
-
-                    //if gameMode = local
-                    levelManager.PostFX("Player1Hit");
-                }
-
-                else
-                {
-                    CorrectPosition(); 
-                 
-                }
-            }
-
-
-            // TODO doesnt make smoothe as intended 
-            if (collision.gameObject.tag == "Wall")
-            {
-                rigidbody.AddForce(-rigidbody.velocity.x, 0, -rigidbody.velocity.z);
-            }
-
-
-            if (collision.gameObject.tag == "Playing Level")
-            {
-                onGround = true;
-                if (isJumping)
-                {
-                    isJumping = false;
-                    if (animator)
+                    else
                     {
-                        animator.SetBool("Jumping", false);
+                        if (levelManager.isPlaying && !player.isOut)
+                        {
+                            CorrectPosition();
+                        }
+
                     }
                 }
+
+
+                // TODO doesnt make smoothe as intended 
+                if (collision.gameObject.tag == "Wall")
+                {
+                    rigidbody.AddForce(-rigidbody.velocity.x, 0, -rigidbody.velocity.z);
+                }
+
+
+                if (collision.gameObject.tag == "Playing Level")
+                {
+                    onGround = true;
+                    if (isJumping)
+                    {
+                        isJumping = false;
+                        if (animator)
+                        {
+                            animator.SetBool("Jumping", false);
+                        }
+                    }
+                }
+
+                if (collision.gameObject.tag == "Player Sprite")
+                {
+                    /*
+                    rigidbody.velocity = Vector3.zero;
+                    Vector3 pushBack = (transform.position - collision.transform.position);
+                    rigidbody.AddForce(pushBack * pushVal);
+                    print("Ouch!");
+
+                    */
+
+                    rigidbody.velocity = Vector3.zero;
+                    Vector3 diff = (transform.position - collision.transform.position) * pushVal;
+                    Vector3 nuPos = new Vector3(transform.position.x + diff.x, transform.position.y - .025f, transform.position.z + diff.z);
+                    rigidbody.MovePosition(nuPos);
+
+                }
+
+
             }
 
-            if (collision.gameObject.tag == "Player Sprite")
-            {
-                /*
-                rigidbody.velocity = Vector3.zero;
-                Vector3 pushBack = (transform.position - collision.transform.position);
-                rigidbody.AddForce(pushBack * pushVal);
-                print("Ouch!");
-
-                */
-
-                rigidbody.velocity = Vector3.zero;
-                Vector3 diff = (transform.position - collision.transform.position) * pushVal;
-                Vector3 nuPos = new Vector3(transform.position.x + diff.x, transform.position.y - .025f, transform.position.z + diff.z);
-                rigidbody.MovePosition(nuPos);
-
-            }
-
-
-        }
-
-        
+        }   
     }
 
     private void SlowDownPlayer(float delayTime, float stallTime )

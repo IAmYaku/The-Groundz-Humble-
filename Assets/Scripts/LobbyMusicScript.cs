@@ -47,7 +47,7 @@ public class LobbyMusicScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       if (!themeAudioSource.isPlaying)
+       if (!themeAudioSource.isPlaying && themeAudioSource.enabled)
         {
             if (shuffle)
             {

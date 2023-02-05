@@ -1,0 +1,360 @@
+fileFormatVersion: 2
+guid: 4c2ef8937f0aaab489ab59dc80991794
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8051875722745857546
+    second: Nina.3.royal.run_0
+  - first:
+      213: -1607330070081372996
+    second: Nina.3.royal.run_1
+  - first:
+      213: 4091904547533908054
+    second: Nina.3.royal.run_2
+  - first:
+      213: 327556661010531120
+    second: Nina.3.royal.run_3
+  - first:
+      213: -182555377005225626
+    second: Nina.3.royal.run_4
+  - first:
+      213: -1068817401861912837
+    second: Nina.3.royal.run_5
+  - first:
+      213: 5464134070317156369
+    second: Nina.3.royal.run_6
+  - first:
+      213: -5545539614663232883
+    second: Nina.3.royal.run_7
+  - first:
+      213: -5916762820024604819
+    second: Nina.3.royal.run_8
+  - first:
+      213: 1645546950414938013
+    second: Nina.3.royal.run_9
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Nina.3.royal.run_0
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 1093
+        width: 446
+        height: 467
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f9342ad0bdf14090800000000000000
+      internalID: -8051875722745857546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.run_1
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 1091
+        width: 400
+        height: 469
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbcfef731dd91b9e0800000000000000
+      internalID: -1607330070081372996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.run_2
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 1085
+        width: 273
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6586092918d59c830800000000000000
+      internalID: 4091904547533908054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.run_3
+      rect:
+        serializedVersion: 2
+        x: 1320
+        y: 1091
+        width: 300
+        height: 470
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03388573c07bb8400800000000000000
+      internalID: 327556661010531120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.run_4
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 562
+        width: 380
+        height: 466
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66914c11ade677df0800000000000000
+      internalID: -182555377005225626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.run_5
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 561
+        width: 446
+        height: 466
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf6c3406c3cca21f0800000000000000
+      internalID: -1068817401861912837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.run_6
+      rect:
+        serializedVersion: 2
+        x: 959
+        y: 552
+        width: 398
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1180d5a9cf084db40800000000000000
+      internalID: 5464134070317156369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.run_7
+      rect:
+        serializedVersion: 2
+        x: 1414
+        y: 552
+        width: 273
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d82342c1a194a03b0800000000000000
+      internalID: -5545539614663232883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.run_8
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 25
+        width: 300
+        height: 470
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d67e134409f63eda0800000000000000
+      internalID: -5916762820024604819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.royal.run_9
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 35
+        width: 376
+        height: 460
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9fa5b0ab3826d610800000000000000
+      internalID: 1645546950414938013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 50e5463658899ad4f96c1553898e14ce
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Nina.3.royal.run_2: 4091904547533908054
+      Nina.3.royal.run_6: 5464134070317156369
+      Nina.3.royal.run_0: -8051875722745857546
+      Nina.3.royal.run_1: -1607330070081372996
+      Nina.3.royal.run_7: -5545539614663232883
+      Nina.3.royal.run_9: 1645546950414938013
+      Nina.3.royal.run_4: -182555377005225626
+      Nina.3.royal.run_3: 327556661010531120
+      Nina.3.royal.run_8: -5916762820024604819
+      Nina.3.royal.run_5: -1068817401861912837
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

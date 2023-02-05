@@ -583,7 +583,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224402658}
-  - component: {fileID: 224402659}
   m_Layer: 5
   m_Name: SelectionMenu
   m_TagString: Untagged
@@ -611,21 +610,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &224402659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 224402657}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 951f2f4c88540ed40a7a77405401ff50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  btnTheCenter: {fileID: 0}
-  btnTheGroundz: {fileID: 1864067305}
-  btnTheBlock: {fileID: 653525158}
 --- !u!1 &325886430
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,11 +661,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 2
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_Mode: 4
+    m_SelectOnUp: {fileID: 8891671917645482818}
+    m_SelectOnDown: {fileID: 1230070164}
+    m_SelectOnLeft: {fileID: 1230070164}
+    m_SelectOnRight: {fileID: 8891671917645482818}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -801,7 +785,7 @@ MonoBehaviour:
   m_ScrollWheelAction: {fileID: 4502412055082496612, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_TrackedDevicePositionAction: {fileID: 4754684134866288074, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_TrackedDeviceOrientationAction: {fileID: 1025543830046995696, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_DeselectOnBackgroundClick: 1
+  m_DeselectOnBackgroundClick: 0
   m_PointerBehavior: 0
 --- !u!114 &537777242
 MonoBehaviour:
@@ -830,7 +814,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &653525155
 GameObject:
@@ -1048,7 +1032,13 @@ MonoBehaviour:
   - render: {fileID: 21300000, guid: 57b5b920fd3e13f43b4c20d4e6c32eea, type: 3}
     StageName: THELIBRARY
   - render: {fileID: 21300000, guid: 8a8081c128e9b0041b54a98cabba9f53, type: 3}
-    StageName: THEBACKYARDYARD
+    StageName: THEBACKYARD
+  - render: {fileID: 21300000, guid: d7d8b324bcf334e439bd841e27c89250, type: 3}
+    StageName: THEBLOCK
+  - render: {fileID: 21300000, guid: fe7da1f3777964973bc2b0c3647df86b, type: 3}
+    StageName: THEGYM
+  - render: {fileID: 21300000, guid: c95d55c06fbbeaa4fa1f7a3575bfc460, type: 3}
+    StageName: THEGROUNDZWEST
   stageTitle: {fileID: 807307523}
   stageImage: {fileID: 1817299081}
 --- !u!1 &682861068
@@ -1557,7 +1547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &967287741
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1744,7 +1734,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1037810191
 GameObject:
@@ -1878,7 +1868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 4
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -2291,7 +2281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: -1
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -2677,7 +2667,6 @@ GameObject:
   - component: {fileID: 1539194010}
   - component: {fileID: 1539194012}
   - component: {fileID: 1539194011}
-  - component: {fileID: 1539194013}
   - component: {fileID: 1539194014}
   - component: {fileID: 1539194015}
   m_Layer: 5
@@ -2754,21 +2743,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1539194009}
   m_CullTransparentMesh: 0
---- !u!114 &1539194013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1539194009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 951f2f4c88540ed40a7a77405401ff50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  btnTheCenter: {fileID: 0}
-  btnTheGroundz: {fileID: 1864067305}
-  btnTheBlock: {fileID: 653525158}
 --- !u!225 &1539194014
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -3688,7 +3662,6 @@ GameObject:
   - component: {fileID: 1864067307}
   - component: {fileID: 1864067306}
   - component: {fileID: 1864067305}
-  - component: {fileID: 1864067304}
   m_Layer: 5
   m_Name: TheGroundzEastButton
   m_TagString: Untagged
@@ -3716,18 +3689,6 @@ RectTransform:
   m_AnchoredPosition: {x: -13, y: -369.99997}
   m_SizeDelta: {x: 314.8, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1864067304
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1864067302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a4f534b86158b0448025c112244064c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1864067305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3766,23 +3727,11 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1864067306}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 12267280}
-        m_TargetAssemblyTypeName: LevelLoading, Assembly-CSharp
-        m_MethodName: LoadGameLevel
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
-          m_FloatArgument: 0
-          m_StringArgument: TheGroundzEast
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1864067306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3805,7 +3754,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: ad248a1691d34f542bb97b4a367849dd, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

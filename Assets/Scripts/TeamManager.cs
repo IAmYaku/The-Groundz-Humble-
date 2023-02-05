@@ -15,13 +15,17 @@ public class TeamManager : MonoBehaviour
 
      int initPlayerCount = 1;  // set in teamSelect
 
-    int playerCount;
+   public int playerCount;
 
     int aiCount;
 
     int userCount;
 
     int outCount;
+
+    int mackCount;
+    int kingCount;
+    int ninaCount;
 
     void Start()
     {
@@ -88,6 +92,33 @@ public class TeamManager : MonoBehaviour
 
 
 
+    internal List<GameObject> PopulateAI(int team, string charName)
+    {
+        List<GameObject> returnMe = new List<GameObject>();
+
+        int x = 1;            //  init for Arcade
+
+        for (int i = 0; i < x; i++)
+        {
+            GameObject pObject = GlobalConfiguration.Instance.InstantiateAIPrefab();
+            Player pScript = pObject.GetComponent<Player>();
+            pScript.team = team;
+            pScript.hasAI = true;
+
+            // pScript.enableAI();    // cant unlessAtScene
+
+            pScript.SetOnStandby(true);
+            GlobalConfiguration.Instance.SetPlayerType(pObject, charName, GetCharCount(charName));
+            AddCharCount(charName);
+            AddObject(pObject, false);      // gets unparented then reparented on global config level..
+
+            returnMe.Add(pObject);
+        }
+
+        return returnMe;
+    }
+
+
     internal List<GameObject> PopulateAI(int team)
     {
         List<GameObject> returnMe = new List<GameObject>();
@@ -96,7 +127,7 @@ public class TeamManager : MonoBehaviour
 
         for (int i = 0; i < x; i++)
         {
-            GameObject pObject = GlobalConfiguration.instance.InstantiateAIPrefab();
+            GameObject pObject = GlobalConfiguration.Instance.InstantiateAIPrefab();
             Player pScript = pObject.GetComponent<Player>();
             pScript.team = team;
             pScript.hasAI = true;
@@ -105,7 +136,38 @@ public class TeamManager : MonoBehaviour
 
             pScript.SetOnStandby(true);
 
-            GlobalConfiguration.instance.SetPlayerType(pObject, GetOppPlayerType());
+            GlobalConfiguration.Instance.SetPlayerType(pObject, GetOppPlayerType(), GetCharCount(GetOppPlayerType()));
+            AddObject(pObject, false);      // gets unparented then reparented on global config level..
+
+            returnMe.Add(pObject);
+        }
+
+        return returnMe;
+    }
+    internal List<GameObject> PopulateAIRevamp(int team,int count)
+    {
+        List<GameObject> returnMe = new List<GameObject>();
+        int x = count;
+        int maxTeamCount = GlobalConfiguration.Instance.maxTeamCount;
+
+        if (count + userCount > maxTeamCount)
+        {
+            x = Mathf.Clamp(maxTeamCount - userCount, 0, maxTeamCount);
+        }
+          // what if we want to replace
+
+        for (int i = 0; i < x; i++)
+        {
+            GameObject pObject = GlobalConfiguration.Instance.InstantiateAIPrefab();
+            Player pScript = pObject.GetComponent<Player>();
+            pScript.team = team;
+            pScript.hasAI = true;
+
+            // pScript.enableAI();    // cant unlessAtScene
+
+            pScript.SetOnStandby(true);
+
+            GlobalConfiguration.Instance.SetPlayerType(pObject, GetOppPlayerType(), GetCharCount(GetOppPlayerType()));
             AddObject(pObject, false);      // gets unparented then reparented on global config level..
 
             returnMe.Add(pObject);
@@ -120,7 +182,7 @@ public class TeamManager : MonoBehaviour
 
         for (int i = 0; i< count; i++)
         {
-            GameObject pObject = GlobalConfiguration.instance.InstantiateAIPrefab();
+            GameObject pObject = GlobalConfiguration.Instance.InstantiateAIPrefab();
             Player pScript = pObject.GetComponent<Player>();
             pScript.team = number;
             pScript.hasAI = true;
@@ -129,9 +191,34 @@ public class TeamManager : MonoBehaviour
 
             pScript.SetOnStandby(true);
 
-            GlobalConfiguration.instance.SetPlayerType(pObject, GetOppPlayerType());
+            GlobalConfiguration.Instance.SetPlayerType(pObject, GetOppPlayerType(), GetCharCount(GetOppPlayerType()));
             AddObject(pObject, false);      // gets unparented then reparented on global config level..
 
+            returnMe.Add(pObject);
+        }
+
+        return returnMe;
+    }
+
+    public List<GameObject> CreateAI(int count, string charName)
+    {
+        List<GameObject> returnMe = new List<GameObject>();
+
+        for (int i = 0; i < count; i++)
+        {
+            GameObject pObject = GlobalConfiguration.Instance.InstantiateAIPrefab();
+            Player pScript = pObject.GetComponent<Player>();
+            pScript.team = number;
+            pScript.hasAI = true;
+
+            //  pScript.enableAI();   
+
+            pScript.SetOnStandby(true);
+
+            GlobalConfiguration.Instance.SetPlayerType(pObject, charName, GetCharCount(charName));
+
+            AddObject(pObject, false);      // gets unparented then reparented on global config level..
+            AddCharCount(charName);
             returnMe.Add(pObject);
         }
 
@@ -145,7 +232,7 @@ public class TeamManager : MonoBehaviour
         bool kingSelected = false;
         bool ninaSelected = false;
 
-        foreach (GameObject player in GlobalConfiguration.instance.GetPlayers())
+        foreach (GameObject player in GlobalConfiguration.Instance.GetPlayers())
         {
             Player playerScript = player.GetComponent<Player>();
 
@@ -182,57 +269,127 @@ public class TeamManager : MonoBehaviour
         }
     }
 
+    private void AddCharCount(string charName)
+    {
+        if (charName == Mack.name)
+        {
+            mackCount++;
+            print("mackCount = "+mackCount);
+
+        }
+
+        if (charName == King.name)
+        {
+            kingCount++;
+            print("kingCount = " + kingCount);
+        }
+
+        if (charName == Nina.name)
+        {
+            ninaCount++;
+            print("ninaCount = " + ninaCount);
+        }
+    }
+
     private string GetOppPlayerType()
 
     {
         if (number == 1)
         { 
             {
-                Player playerScript = GlobalConfiguration.instance.GetPlayer(2, 1).GetComponent<Player>();
+                Player playerScript = GlobalConfiguration.Instance.GetPlayer(2, 1).GetComponent<Player>();
 
                 if (playerScript.type == Mack.name)
                 {
+                    kingCount++;
                     return King.name;
                 }
 
                 if (playerScript.type == King.name)
                 {
+                    mackCount++;
                         return Mack.name;
                  }
 
                 if (playerScript.type == Nina.name)
                 {
+                    ninaCount++;
                         return GetRandomCharacterType();
-                  }
+                }
             }
         }
         
 
         if (number == 2)
         {
-                Player playerScript = GlobalConfiguration.instance.GetPlayer(1, 1).GetComponent<Player>(); ;
+                Player playerScript = GlobalConfiguration.Instance.GetPlayer(1, 1).GetComponent<Player>(); ;
 
                 if (playerScript.type == Mack.name)
                 {
-                    return King.name;
+                kingCount++;
+                return King.name;
                 }
 
                 if (playerScript.type == King.name)
                 {
-                    return Mack.name;
+                mackCount++;
+                return Mack.name;
                 }
 
                 if (playerScript.type == Nina.name)
                 {
-                    return GetRandomCharacterType();
+                ninaCount++;
+                return GetRandomCharacterType();
                 }
             }
 
         return GetRandomCharacterType();
     }
 
+    public int GetCharCount(string name)
+    {
+        if (name == "Mack" || name == "mack")
+        {
+            if (mackCount < 4)
+            {
+                return mackCount;
+            }
+            else
+            {
+                return (int) (UnityEngine.Random.Range(0f, 3.9f));
+            }
+        }
+        if (name == "King" || name == "king")
+        {
+            if (kingCount < 4)
+            {
+                return kingCount;
+            }
+            else
+            {
+                return (int)(UnityEngine.Random.Range(0f, 3.9f));
+            }
+        }
+        if (name == "Nina" || name == "nina")
+        {
+            if (ninaCount < 4)
+            {
+                return ninaCount;
+            }
+            else
+            {
+                return (int)(UnityEngine.Random.Range(0f, 3.9f));
+            }
+        }
+        return (int)(UnityEngine.Random.Range(0f, 3.99f));
+    }
 
-        internal void StandByPlayers(bool v)
+    internal void SetInitAICount(int count)
+    {
+        aiCount = count;
+    }
+
+    internal void StandByPlayers(bool v)
     {
         foreach (GameObject player in players)
         {
@@ -256,11 +413,13 @@ public class TeamManager : MonoBehaviour
         */
         if (ran > .5f && !King.isLocked)
         {
+            kingCount++;
             return king;
         }
 
         if (ran <= .5f && !Mack.isLocked)
         {
+            mackCount++;
             return mack;
         }
 
@@ -269,6 +428,9 @@ public class TeamManager : MonoBehaviour
 
     internal void MoveToSpawnPoints(List<Vector3> spawnPoints)
     {
+        print(" team = " + number);
+        print("playerCount = " + playerCount);
+        print("spawnPoints.Count " + spawnPoints.Count);
         for (int i = 0; i < playerCount; i++)
         {
             players[i].transform.position = spawnPoints[i];
@@ -348,4 +510,26 @@ public class TeamManager : MonoBehaviour
     {
         return playerCount;
     }
+
+    internal void ClearAdded()
+    {
+        List<GameObject> toRemove = new List<GameObject>();
+
+        foreach (GameObject player in players)
+        {
+            if (player.GetComponent<Player>().aiObject.GetComponent<AI>().addedAtStage)
+            {
+                toRemove.Add(player);
+            }
+        }
+
+        for (int i=0; i< toRemove.Count; i++)
+        {
+            ais.Remove(toRemove[i]);
+            aiCount--;
+            playerCount--;
+            players.Remove(toRemove[i]);
+        }
+    }
+
 }

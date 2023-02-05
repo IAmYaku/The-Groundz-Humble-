@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 public class EndGameMenuScript : MonoBehaviour {
 
     public bool GameIsOver = false;
+
+    public GameObject postgameUI;
+
     public GameObject endGameMenuUI;
 
     public LevelManager levelManager;
@@ -24,10 +27,15 @@ public class EndGameMenuScript : MonoBehaviour {
         }
         else
         {
-            levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
+             GameObject gameManager = GlobalConfiguration.Instance.gameManager.gameObject;
+            levelManager = gameManager.GetComponent<LevelManager>();
             players = levelManager.GetPlayers().ToArray();
         }
 
+        if (!postgameUI)
+        {
+            postgameUI = GameObject.Find("PostGamePanelContainer");
+        }
     }
     void Update ()
     {
@@ -69,6 +77,7 @@ public class EndGameMenuScript : MonoBehaviour {
     public void LoadMenu()
     {
         // GameManager.playerTypes.Clear();
+        
         levelManager.EndGame();
         Time.timeScale = 1f;
         SceneManager.LoadScene("GamemodeMenu");
@@ -82,8 +91,18 @@ public class EndGameMenuScript : MonoBehaviour {
         endGameMenuUI.SetActive(false);
         Time.timeScale = 1f;
         levelManager.SetStart(true);
+        SetPostGameInActive();
 
         // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void SetPostGameInActive()
+    {
+        for (int i=0; i< postgameUI.transform.childCount; i++)
+        {
+            postgameUI.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        postgameUI.SetActive(false);
     }
 
     public void LoadControls()

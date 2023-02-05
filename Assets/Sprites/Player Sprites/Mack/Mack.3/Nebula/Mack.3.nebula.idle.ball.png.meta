@@ -1,0 +1,310 @@
+fileFormatVersion: 2
+guid: 4905fd2c66ae23449b00926c938fa86a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1654197042427021479
+    second: Mack.3.nebula.idle.ball_0
+  - first:
+      213: 4188297251250206147
+    second: Mack.3.nebula.idle.ball_1
+  - first:
+      213: -2638024116476002827
+    second: Mack.3.nebula.idle.ball_2
+  - first:
+      213: -872547978420125963
+    second: Mack.3.nebula.idle.ball_3
+  - first:
+      213: -4050311081545230120
+    second: Mack.3.nebula.idle.ball_4
+  - first:
+      213: 7813801425042733549
+    second: Mack.3.nebula.idle.ball_5
+  - first:
+      213: -1394323242912333096
+    second: Mack.3.nebula.idle.ball_6
+  - first:
+      213: -754380002093346512
+    second: Mack.3.nebula.idle.ball_7
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Mack.3.nebula.idle.ball_0
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 699
+        width: 422
+        height: 582
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a84d5e1273e4f610800000000000000
+      internalID: 1654197042427021479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.idle.ball_1
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 699
+        width: 424
+        height: 581
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c57382d822df1a30800000000000000
+      internalID: 4188297251250206147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.idle.ball_2
+      rect:
+        serializedVersion: 2
+        x: 980
+        y: 703
+        width: 424
+        height: 578
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fdb88cfa0bd36bd0800000000000000
+      internalID: -2638024116476002827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.idle.ball_3
+      rect:
+        serializedVersion: 2
+        x: 1463
+        y: 705
+        width: 426
+        height: 575
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fe78c09c3614e3f0800000000000000
+      internalID: -872547978420125963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.idle.ball_4
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 73
+        width: 397
+        height: 568
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d81ba2e7876ac7c0800000000000000
+      internalID: -4050311081545230120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.idle.ball_5
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 66
+        width: 390
+        height: 576
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de9fc1d2ff2307c60800000000000000
+      internalID: 7813801425042733549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.idle.ball_6
+      rect:
+        serializedVersion: 2
+        x: 921
+        y: 60
+        width: 388
+        height: 581
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d2c324e56e56ace0800000000000000
+      internalID: -1394323242912333096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.nebula.idle.ball_7
+      rect:
+        serializedVersion: 2
+        x: 1367
+        y: 58
+        width: 420
+        height: 584
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 031519d8267e785f0800000000000000
+      internalID: -754380002093346512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 48b4b486de54a684bb95b1d4e1c9a05a
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Mack.3.nebula.idle.ball_5: 7813801425042733549
+      Mack.3.nebula.idle.ball_2: -2638024116476002827
+      Mack.3.nebula.idle.ball_6: -1394323242912333096
+      Mack.3.nebula.idle.ball_1: 4188297251250206147
+      Mack.3.nebula.idle.ball_0: 1654197042427021479
+      Mack.3.nebula.idle.ball_4: -4050311081545230120
+      Mack.3.nebula.idle.ball_7: -754380002093346512
+      Mack.3.nebula.idle.ball_3: -872547978420125963
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

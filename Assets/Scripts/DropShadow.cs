@@ -30,7 +30,7 @@ public class DropShadow : MonoBehaviour {
 		if (ground)
         {
 			shadow.GetComponent<SpriteRenderer>().sprite = shadowImage.sprite;
-			shadow.transform.localScale = new Vector3(transform.localScale.x * Mathf.Clamp(GetDistance(), 0.0f, 1.0f) * (shadowImage.flipX ? -1 : 1), transform.localScale.y, transform.localScale.z * Mathf.Clamp(GetDistance(), 0.0f, 1.0f));
+			shadow.transform.localScale = new Vector3(-1 * transform.localScale.x * Mathf.Clamp(GetDistance(), 0.0f, 1.0f) * (shadowImage.flipX ? -1 : 1), transform.localScale.y, transform.localScale.z * Mathf.Clamp(GetDistance(), 0.0f, 1.0f));
 			shadow.transform.position = new Vector3(transform.position.x, ground.transform.position.y, transform.position.z);
             shadow.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, Mathf.Clamp(maxDistance / GetDistance(), 0.0f, 0.35f));
 

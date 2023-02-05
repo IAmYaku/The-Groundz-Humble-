@@ -1,0 +1,310 @@
+fileFormatVersion: 2
+guid: d6624af2e150384419998e7fef459ec7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 127145484530657190
+    second: Mack.3.orange.idle.ball_0
+  - first:
+      213: 8456411924533230123
+    second: Mack.3.orange.idle.ball_1
+  - first:
+      213: 1785999080218164638
+    second: Mack.3.orange.idle.ball_2
+  - first:
+      213: 47904682937814028
+    second: Mack.3.orange.idle.ball_3
+  - first:
+      213: 2380777600528875811
+    second: Mack.3.orange.idle.ball_4
+  - first:
+      213: 2751436045882866346
+    second: Mack.3.orange.idle.ball_5
+  - first:
+      213: 4385317860314246574
+    second: Mack.3.orange.idle.ball_6
+  - first:
+      213: -876172750464052663
+    second: Mack.3.orange.idle.ball_7
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Mack.3.orange.idle.ball_0
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 683
+        width: 422
+        height: 582
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a7ae300526b3c100800000000000000
+      internalID: 127145484530657190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.orange.idle.ball_1
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 683
+        width: 424
+        height: 581
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2a3e2467d53b5570800000000000000
+      internalID: 8456411924533230123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.orange.idle.ball_2
+      rect:
+        serializedVersion: 2
+        x: 980
+        y: 687
+        width: 424
+        height: 578
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9df39963b429c810800000000000000
+      internalID: 1785999080218164638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.orange.idle.ball_3
+      rect:
+        serializedVersion: 2
+        x: 1463
+        y: 689
+        width: 426
+        height: 575
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0c06992e013aa000800000000000000
+      internalID: 47904682937814028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.orange.idle.ball_4
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 57
+        width: 397
+        height: 568
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3210bb02d983a0120800000000000000
+      internalID: 2380777600528875811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.orange.idle.ball_5
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 50
+        width: 390
+        height: 576
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aaabd0981801f2620800000000000000
+      internalID: 2751436045882866346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.orange.idle.ball_6
+      rect:
+        serializedVersion: 2
+        x: 921
+        y: 44
+        width: 388
+        height: 581
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eade43b0c57cbdc30800000000000000
+      internalID: 4385317860314246574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mack.3.orange.idle.ball_7
+      rect:
+        serializedVersion: 2
+        x: 1367
+        y: 42
+        width: 420
+        height: 584
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94296be868537d3f0800000000000000
+      internalID: -876172750464052663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 97283fc6939499c46a2f106a63a2bceb
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Mack.3.orange.idle.ball_6: 4385317860314246574
+      Mack.3.orange.idle.ball_7: -876172750464052663
+      Mack.3.orange.idle.ball_3: 47904682937814028
+      Mack.3.orange.idle.ball_4: 2380777600528875811
+      Mack.3.orange.idle.ball_0: 127145484530657190
+      Mack.3.orange.idle.ball_5: 2751436045882866346
+      Mack.3.orange.idle.ball_2: 1785999080218164638
+      Mack.3.orange.idle.ball_1: 8456411924533230123
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

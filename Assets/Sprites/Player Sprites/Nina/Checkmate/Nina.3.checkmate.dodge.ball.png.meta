@@ -1,0 +1,335 @@
+fileFormatVersion: 2
+guid: 7836d02347e42214697dc91e4f03ff7b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3515953983704893833
+    second: Nina.3.checkmate.dodge.ball_0
+  - first:
+      213: -438041739376499050
+    second: Nina.3.checkmate.dodge.ball_1
+  - first:
+      213: 6380433699143599302
+    second: Nina.3.checkmate.dodge.ball_2
+  - first:
+      213: -3521742411401244555
+    second: Nina.3.checkmate.dodge.ball_3
+  - first:
+      213: 80484574155462680
+    second: Nina.3.checkmate.dodge.ball_4
+  - first:
+      213: -7373996135344819010
+    second: Nina.3.checkmate.dodge.ball_5
+  - first:
+      213: -1586457796264411795
+    second: Nina.3.checkmate.dodge.ball_6
+  - first:
+      213: -6854540809995476248
+    second: Nina.3.checkmate.dodge.ball_8
+  - first:
+      213: 4802229795715949232
+    second: Nina.3.checkmate.dodge.ball_10
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Nina.3.checkmate.dodge.ball_0
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 696
+        width: 288
+        height: 514
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9898955158d2bc030800000000000000
+      internalID: 3515953983704893833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.dodge.ball_1
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 735
+        width: 302
+        height: 476
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6966bafdb53cbe9f0800000000000000
+      internalID: -438041739376499050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.dodge.ball_2
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 679
+        width: 348
+        height: 529
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c4c266f4aadb8850800000000000000
+      internalID: 6380433699143599302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.dodge.ball_3
+      rect:
+        serializedVersion: 2
+        x: 1128
+        y: 665
+        width: 384
+        height: 545
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57050029fe1402fc0800000000000000
+      internalID: -3521742411401244555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.dodge.ball_4
+      rect:
+        serializedVersion: 2
+        x: 1569
+        y: 687
+        width: 336
+        height: 524
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8185f643b40fd1100800000000000000
+      internalID: 80484574155462680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.dodge.ball_5
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 66
+        width: 326
+        height: 541
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb43ba1859d4aa990800000000000000
+      internalID: -7373996135344819010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.dodge.ball_6
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 80
+        width: 317
+        height: 532
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6db28a2a05cbf9e0800000000000000
+      internalID: -1586457796264411795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.dodge.ball_8
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 80
+        width: 337
+        height: 538
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e22dc14377cfd0a0800000000000000
+      internalID: -6854540809995476248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Nina.3.checkmate.dodge.ball_10
+      rect:
+        serializedVersion: 2
+        x: 1148
+        y: 90
+        width: 284
+        height: 518
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b2227f4e82f4a240800000000000000
+      internalID: 4802229795715949232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: a3252224cb8f5964fb91bcbe63608e4d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Nina.3.checkmate.dodge.ball_2: 6380433699143599302
+      Nina.3.checkmate.dodge.ball_8: -6854540809995476248
+      Nina.3.checkmate.dodge.ball_10: 4802229795715949232
+      Nina.3.checkmate.dodge.ball_1: -438041739376499050
+      Nina.3.checkmate.dodge.ball_3: -3521742411401244555
+      Nina.3.checkmate.dodge.ball_4: 80484574155462680
+      Nina.3.checkmate.dodge.ball_6: -1586457796264411795
+      Nina.3.checkmate.dodge.ball_5: -7373996135344819010
+      Nina.3.checkmate.dodge.ball_0: 3515953983704893833
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

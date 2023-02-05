@@ -23,12 +23,12 @@ public class PauseMenuScript : MonoBehaviour {
 
         if (levelManager)
         {
-            
             players = levelManager.GetPlayers().ToArray();
         }
         else
         {
-            levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
+            GameObject gameManager = GlobalConfiguration.Instance.gameManager.gameObject;
+            levelManager = gameManager.GetComponent<LevelManager>();
             players = levelManager.GetPlayers().ToArray();
         }
     }
