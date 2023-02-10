@@ -10,24 +10,20 @@ public class ChargeVelInput : MonoBehaviour
     int bufferSize = 2; //frames
 
     Vector2 muv;
-    Vector2 muv0;
-    Vector2 muv_delta;
-    List<Vector2> muvs;
 
-    float deltaMuvAv;
-    float deltaMuvAv0;
+    List<Vector2> muvs;
+    List<Vector2> velocities;
+
     public float k = 1f; // weight
 
     public float muvXceleration;
-    bool isFilling;
 
-    int index = 0;
 
 
     public ChargeVelInput()
     {
         muvs = new List<Vector2>();
-
+        velocities = new List<Vector2>();
     }
 
     void Start()
@@ -56,11 +52,11 @@ public class ChargeVelInput : MonoBehaviour
 
     internal void Input(float horizontal, float vertical)
     {
-        muv = new Vector2();
-        muv.x = horizontal;
-        muv.y = vertical;
+        Vector2 velocityInput = new Vector2();
+        velocityInput.x = horizontal;
+        velocityInput.y = vertical;
 
-        muvs.Add(muv);
+        velocities.Add(velocityInput);
                                                   
     }
   
@@ -76,15 +72,15 @@ public class ChargeVelInput : MonoBehaviour
         return (addMe / muvs.Count);
     }
 
-    public Vector2 GetWeightedMuvAverage()
+    public Vector2 GetWeightedVelAverage()
     {
         Vector2 addMe = Vector2.zero;
 
-        for (int i = muvs.Count-1; i>=0; i--)
+        for (int i = velocities.Count-1; i>=0; i--)
         {
-            addMe += muvs[i]/(i+1);
+            addMe += velocities[i]/(i+1);
         }
-        return (addMe / muvs.Count);
+        return (addMe / velocities.Count);
     }
 
     public void PrintMoveAv()
@@ -106,9 +102,10 @@ public class ChargeVelInput : MonoBehaviour
         return muvs;
     }
 
-    public void ClearMuvs()
+    public void ClearVelocities()
     {
         muvs.Clear();
+        velocities.Clear();
     }
 
 }

@@ -61,8 +61,8 @@ public class Controller3D : MonoBehaviour
     Vector3 chargeVel;
 
     public float throwPower = 200f;
-    public float standingThrowPower = 100f;
     float standingThrowThresh = 20f;
+
     public float maxThrowPower = 240f;
     public float maxStandingThrowPower = 1600;
 
@@ -72,6 +72,7 @@ public class Controller3D : MonoBehaviour
 
     public Vector3 handSize = new Vector3(3f, 3f, 3f);
     public float grabRadius = 5f;
+    public static float grabHelpMultiplier = 1f; // gr or diff
     Vector3 cockBackPos;
 
     public GameObject nearestBall;
@@ -92,7 +93,7 @@ public class Controller3D : MonoBehaviour
     public static float grabMag = 10f;
     public static bool hasThrowMag = false;
     public static bool hasSeekVec = false;
-    public static float throwMagnetism = 5.65f;
+    public static float throwMagnetism = 0f;
     public static float maxSeekVec = 100f;
 
     private Vector3 throwDirection;
@@ -505,12 +506,11 @@ public class Controller3D : MonoBehaviour
 
                         nearestBall = GetNearestBall();
 
-                        float distanceScale = 1f;
                         float slowDownThresh = 10f;
                         float velMag = rigidbody.velocity.magnitude;
                         // print("VelMag = " + velMag);
 
-                        if (!ballGrabbed && BallIsInGrabDistance(nearestBall, distanceScale) && (velMag > slowDownThresh))
+                        if (!ballGrabbed && IsInGrabDistance(nearestBall, "ball") && (velMag > slowDownThresh))
                         {
                             if (!nearestBall.GetComponent<Ball>().thrown && IsFacingObj(nearestBall))
                             {
@@ -810,7 +810,7 @@ public class Controller3D : MonoBehaviour
                     }
                 }
 
-                if (move.x > moveThresh)
+                if (move.x > moveThresh)      
                 {
                     if (!isFacingRight)
                     {
@@ -1317,13 +1317,13 @@ public class Controller3D : MonoBehaviour
 
     private void CheckCharge()
     {
-        float chargeRate = 50;  // character dependent??
+        float chargeRate = 1000;  // character dependent??
         float chargeCost = .25f;
 
         if (ballGrabbed && isCharging)
         {
 
-            throwCharge += chargeVel.magnitude * chargeRate * Time.deltaTime;
+            throwCharge += chargeRate * Time.deltaTime;
             chargeTime += Time.deltaTime;
            // throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
 
@@ -1377,6 +1377,8 @@ public class Controller3D : MonoBehaviour
 
     private void CheckStandingAutoRelease(float chargeVel)
     {
+
+        float standingThrowPower = playerScript.standingThrowPower;
         float chargeCost = .25f;
 
         Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
@@ -1757,40 +1759,24 @@ public class Controller3D : MonoBehaviour
         animator.ResetTrigger("Charge");
     }
 
-    private void Throw()   // button throw
+    private void Throw()   // throw
     {
         //   print("button throw");
 
 
         Vector3 throwStandVec = Vector3.zero;
         Vector3 throwMovVec = Vector3.zero;
+
         Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
+       
+        
         Transform targetedOpp = null;
-
-        /*
-        if (GameManager.mode == "Basic" && GameManager.gameMode == "Solo")
-        {
-           hasSeekVec = false;
-        }
-
-        if ((throwDirection.x > 0 && playerScript.team == 1) || (throwDirection.x < 0 && playerScript.team == 2))           // need to face opp for seek vec assisance
-        {
-            hasSeekVec = false;
-        }
-        */
+        Vector3 throwAidVec = new Vector3(1.0f, 1.0f, 1.0f);
 
 
-        if (gameObject.GetComponentInParent<Player>().team == 1)
-        {
-            ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 1);
-        }
-        if (gameObject.GetComponentInParent<Player>().team == 2)
-        {
-            ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 2);
-        }
 
-
-        if (BallIsInGrabDistance(GetTargetedOpp().gameObject, 1f) && GetTargetedOpp())
+        //Tag
+        if (IsInGrabDistance(GetTargetedOpp().gameObject, "ball") && GetTargetedOpp())  
         {
             cockBackPos=  new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
             cockBackPos = (cockBackPos + GetTargetedOpp().position) / 2;      // tag pos  
@@ -1799,96 +1785,55 @@ public class Controller3D : MonoBehaviour
 
            ball.transform.position = cockBackPos;
 
-        Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedMuvAverage().x, 0f, chargeVelInput.GetWeightedMuvAverage().y);
-
-        /* 
         if (rigidbody.velocity.magnitude <= standingThrowThresh)
         {
-            standingThrowPower = playerScript.standingThrowPower;
+            throwPower = playerScript.standingThrowPower;
+        }
+        else
+        {
+            throwPower = playerScript.throwPower0;
+        }
 
-            if (hasThrowMag)
+        print("throwPower = " + throwPower);
+
+        Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedVelAverage().x, 0f, chargeVelInput.GetWeightedVelAverage().y);
+
+        if (Mathf.Abs(weightedMuvAvVec.x) < 25f)
+        {
+            weightedMuvAvVec.x = throwDirection.x * throwPower / 100f;
+        }
+
+        print("weightedMuvAvVec = " + weightedMuvAvVec);
+
+        if (hasThrowMag)
             {
-                Vector3 seekVec = new Vector3(1.0f, 0.0f, 0.0f);
                 Transform nearestOpp = GetTargetedOpp();
 
                 if (nearestOpp && throwDirection.x > 0)
                 {
-                    seekVec = nearestOpp.transform.position - ball.transform.position;
-                    seekVec = seekVec.normalized;
-                    targetedOpp = nearestOpp;
-                }
-
-               Vector3 aidVec = seekVec * (standingThrowPower + throwCharge);
-                throww = (aidVec + throwVec) / 2f;
-                print("Standing Throw . mag");
-
-            }
-
-            else
-            {
-                Vector3 vel = rigidbody.velocity;
-                float xClamped = vel.x;
-
-                if (vel.x > -1.0f && vel.x < 1.0f)
-                {
-                    xClamped = throwDirection.x;
-                }
-
-
-                vel = new Vector3(xClamped, vel.y, vel.z);
-                //  Vector3 velNorm = Vector3.Normalize(rigidbody.velocity);
-                //  print("veNorm = " + velNorm);
-                Vector3 standingThrowVec = new Vector3(vel.x * (standingThrowPower + throwCharge), 5f, (vel.z) * (standingThrowPower + throwCharge));
-                throww = standingThrowVec;
-
-                print("Standing Throw . no mag");
-            }
-        }
-
-     
-
-        else                   //moving throw
-
-           */
-        {
-            Transform nearestOpp = GetTargetedOpp();
-
-            if (hasThrowMag)
-            {
-                Vector3 seekVec = Vector3.one;
-
-                if (nearestOpp)
-                {
-
-                    seekVec = nearestOpp.transform.position - ball.transform.position;
+                    Vector3 seekVec = nearestOpp.transform.position - ball.transform.position;
                     seekVec = new Vector3(Mathf.Clamp(seekVec.x, -maxSeekVec, maxSeekVec), seekVec.y, Mathf.Clamp(seekVec.z, -maxSeekVec, maxSeekVec));
+                    seekVec = seekVec.normalized;
+
                     targetedOpp = nearestOpp;
-                }
-     
-                {
-                      print(" Throw  . mag");
 
-                    Vector3 aid = GetThrowAid(weightedMuvAvVec, seekVec);
-                    Vector3 throwVec = new Vector3((throwPower + throwCharge) * aid.x, 5f, aid.z * (throwPower + throwCharge)) + rigidbody.velocity;
-                    throww = (weightedMuvAvVec + throwVec)/ 2f;
-
-                }
+                   // throwAidVec = GetThrowAid(weightedMuvAvVec, seekVec);
+            }
 
             }
 
-            else
-            {
-                print(" Throw  . no mag");
-                
-                Vector3 movingThrowVec = new Vector3((throwPower + throwCharge) * weightedMuvAvVec.x, 5f, weightedMuvAvVec.z * (throwPower + throwCharge));     //arbs
-                throww = movingThrowVec;
+       
+        print("throwAidVec = " + throwAidVec);
 
-            }
-        }
+        Vector3 throwVec = new Vector3((throwPower + throwCharge) * throwAidVec.x * weightedMuvAvVec.x, 5f, throwAidVec.z * (throwPower + throwCharge) * weightedMuvAvVec.z);
+
+
+
+
 
         if (animator)
         {
-            float throwMag = Vector3.Magnitude(throww);
+            float throwMag = Vector3.Magnitude(throwVec);           //methodize per character
             float mack3ThrowSpeedThresh = 3500f;
 
             float throwAnimSpeed = Mathf.Clamp(throwMag / mack3ThrowSpeedThresh, 1.25f, 1.75f);
@@ -1908,12 +1853,28 @@ public class Controller3D : MonoBehaviour
 
 
         float renderLength = GetRenderLength();
-        print("throww = " + throww);
+
+
+        print("chargeTime = " + chargeTime);
+        print("throwCharge = " + throwCharge);
+        print("throww = " + throwVec);
+
+
         //  print("targetedOpp = " + targetedOpp);
         //   print("hasThrowMag = " + hasThrowMag);
         // print("throw Magnetism = "+throwMagnetism);
 
-        ball.GetComponent<Ball>().Throw(throww, playerScript.color, hasSeekVec, throwMagnetism, targetedOpp, renderLength, ChargePowerAlpha);
+        ball.GetComponent<Ball>().Throw(throwVec, playerScript.color, hasSeekVec, throwMagnetism, targetedOpp, renderLength, ChargePowerAlpha);
+
+        //For hit purposes
+        if (gameObject.GetComponentInParent<Player>().team == 1)
+        {
+            ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 1);
+        }
+        if (gameObject.GetComponentInParent<Player>().team == 2)
+        {
+            ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 2);
+        }
 
         playerScript.playThrowSound();
         playerScript.playThrowSound();
@@ -1925,7 +1886,7 @@ public class Controller3D : MonoBehaviour
         chargeTime = 0.0f;
         chargeVel = Vector3.zero;
         vel0 = Vector3.zero;
-        chargeVelInput.ClearMuvs();
+        chargeVelInput.ClearVelocities();
         Invoke("NormalAccelerationRate", .1f);
         
 
@@ -2037,7 +1998,7 @@ public class Controller3D : MonoBehaviour
         }
 
 
-        if (BallIsInGrabDistance(GetTargetedOpp().gameObject, 1f) && GetTargetedOpp())
+        if (IsInGrabDistance(GetTargetedOpp().gameObject, "ball") && GetTargetedOpp())
         {
            cockBackPos =  new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
             cockBackPos = (cockBackPos + GetTargetedOpp().position) / 2;      // tag pos  
@@ -2554,27 +2515,31 @@ public class Controller3D : MonoBehaviour
         return false;
     }
 
-    private bool BallIsInGrabDistance(GameObject nearest, float v)
+    private bool IsInGrabDistance(GameObject objectToCheck, string type)
     {
-        if (playerConfigObject.transform.position.x + grabRadius * v > nearest.transform.position.x &&
-                   playerConfigObject.transform.position.x - grabRadius * v < nearest.transform.position.x)
+        if (playerConfigObject.transform.position.x + grabRadius * grabHelpMultiplier > objectToCheck.transform.position.x &&
+                   playerConfigObject.transform.position.x - grabRadius * grabHelpMultiplier < objectToCheck.transform.position.x)
         {
-            if (playerConfigObject.transform.position.y + grabRadius * v > nearest.transform.position.y &&
-                playerConfigObject.transform.position.y - grabRadius * v < nearest.transform.position.y)
+            if (playerConfigObject.transform.position.y + grabRadius * grabHelpMultiplier > objectToCheck.transform.position.y &&
+                playerConfigObject.transform.position.y - grabRadius * grabHelpMultiplier < objectToCheck.transform.position.y)
             {
-                if (playerConfigObject.transform.position.z + grabRadius * v > nearest.transform.position.z &&
-                    playerConfigObject.transform.position.z - grabRadius * v < nearest.transform.position.z)
+                if (playerConfigObject.transform.position.z + grabRadius * grabHelpMultiplier > objectToCheck.transform.position.z &&
+                    playerConfigObject.transform.position.z - grabRadius * grabHelpMultiplier < objectToCheck.transform.position.z)
                 {
-                    if ((IsAboutToCollideWBall(nearest) && nearest.GetComponent<Ball>().thrown == false) && !inBallPause && ballPauseReady)
+                    if ( type == "ball")
                     {
-                        inBallPause = true;
-                        float ballPauseTime = .5f;                                // gr
-                        Invoke("TurnInBallPauseFalse", ballPauseTime);
-                        ballPauseReady = false;
+                        if ((IsAboutToCollideWBall(objectToCheck) && objectToCheck.GetComponent<Ball>().thrown == false) && !inBallPause && ballPauseReady)
+                        {
+                            inBallPause = true;
+                            float ballPauseTime = .5f;                                // gr
+                            Invoke("TurnInBallPauseFalse", ballPauseTime);
+                            ballPauseReady = false;
+                        }
                     }
 
+                    // Check facing object
                     float angle = 180f;
-                    if (Vector3.Angle(playerConfigObject.transform.forward, nearest.transform.position - playerConfigObject.transform.position) < angle)
+                    if (Vector3.Angle(playerConfigObject.transform.forward, objectToCheck.transform.position - playerConfigObject.transform.position) < angle)
                     {
                         return true;
                     }
@@ -2583,6 +2548,7 @@ public class Controller3D : MonoBehaviour
         }
         return false;
     }
+
 
     private void TurnInBallPauseFalse()
     {

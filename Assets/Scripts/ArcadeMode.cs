@@ -31,7 +31,7 @@ public class ArcadeMode : MonoBehaviour
        // Controller3D.grabMag = 10f;
         Controller3D.hasThrowMag = true;
         Controller3D.hasSeekVec = true;
-        Controller3D.throwMagnetism = 5.65f;
+       // Controller3D.throwMagnetism = 5.65f;
         Controller3D.maxSeekVec = 100f;
 }
     void Update()

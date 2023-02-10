@@ -475,7 +475,7 @@ public class GlobalConfiguration : MonoBehaviour
 
             controller3D.handSize = Nina.handSize;
             controller3D.throwPower = Nina.throwPower0;
-            controller3D.standingThrowPower = Nina.standingThrowPower;
+           // controller3D.standingThrowPower = Nina.standingThrowPower;
             controller3D.maxThrowPower = Nina.maxThrowPower;
             controller3D.maxStandingThrowPower = Nina.maxStandingThrowPower;
 
@@ -572,7 +572,7 @@ public class GlobalConfiguration : MonoBehaviour
             controller3D.handSize = Mack.handSize;
 
             controller3D.throwPower = Mack.throwPower0;
-            controller3D.standingThrowPower = Mack.standingThrowPower;
+            //controller3D.standingThrowPower = Mack.standingThrowPower;
             controller3D.maxThrowPower = Mack.maxThrowPower;
             controller3D.maxStandingThrowPower = Mack.maxStandingThrowPower;
 
@@ -665,7 +665,7 @@ public class GlobalConfiguration : MonoBehaviour
             controller3D.grabRadius = King.grabRadius;
 
             controller3D.throwPower = King.throwPower0;
-            controller3D.standingThrowPower = King.standingThrowPower;
+            //controller3D.standingThrowPower = King.standingThrowPower;
             controller3D.maxThrowPower = King.maxThrowPower;
             controller3D.maxStandingThrowPower = King.maxStandingThrowPower;
 
