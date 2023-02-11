@@ -1252,7 +1252,6 @@ public class Controller3D : MonoBehaviour
                 if (!isCharging)
                 {
                     chargeVel = rigidbody.velocity;
-                    chargeVelInput.Input(chargeVel.x, chargeVel.z);
                     isCharging = true;
 
                     float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
@@ -1323,11 +1322,11 @@ public class Controller3D : MonoBehaviour
         if (ballGrabbed && isCharging)
         {
 
-            throwCharge += chargeRate * Time.deltaTime;
+            throwCharge += (chargeRate * Time.deltaTime) + chargeVel.magnitude /100f;
             chargeTime += Time.deltaTime;
-           // throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
+            // throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
 
-
+            chargeVelInput.Input(rigidbody.velocity.x, rigidbody.velocity.z);
 
             DepleteStamina(chargeCost);
 
@@ -1798,7 +1797,7 @@ public class Controller3D : MonoBehaviour
 
         Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedVelAverage().x, 0f, chargeVelInput.GetWeightedVelAverage().y);
 
-        if (Mathf.Abs(weightedMuvAvVec.x) < 25f)
+        if (Mathf.Abs(weightedMuvAvVec.magnitude) < 25f)
         {
             weightedMuvAvVec.x = throwDirection.x * throwPower / 100f;
         }

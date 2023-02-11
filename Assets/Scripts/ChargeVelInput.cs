@@ -66,8 +66,9 @@ public class ChargeVelInput : MonoBehaviour
         Vector2 addMe = Vector2.zero;
 
         for (int i = 0; i < muvs.Count; i++)
-        {
+        { 
             addMe += muvs[i];
+            
         }
         return (addMe / muvs.Count);
     }
@@ -78,7 +79,9 @@ public class ChargeVelInput : MonoBehaviour
 
         for (int i = velocities.Count-1; i>=0; i--)
         {
-            addMe += velocities[i]/(i+1);
+            // addMe += velocities[i]/(i+1);
+            addMe += velocities[i];
+
         }
         return (addMe / velocities.Count);
     }
