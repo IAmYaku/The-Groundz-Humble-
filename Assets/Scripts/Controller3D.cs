@@ -1797,7 +1797,7 @@ public class Controller3D : MonoBehaviour
 
         Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedVelAverage().x, 0f, chargeVelInput.GetWeightedVelAverage().y);
 
-        if (Mathf.Abs(weightedMuvAvVec.magnitude) < 25f)
+        if (Mathf.Abs(weightedMuvAvVec.magnitude) < 25f)  // Have to check if wasn't moving dyring charge
         {
             weightedMuvAvVec.x = throwDirection.x * throwPower / 100f;
         }
