@@ -387,7 +387,7 @@ public class Controller3D : MonoBehaviour
                 chargeVelInput.Input(chargeVel.x, chargeVel.z);
                 isCharging = true;
 
-                float glide = chargeVel.magnitude/100f;
+                float glide = chargeVel.magnitude/500f;
                 accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);
                 print("accelerationRate = " + accelerationRate);
 
@@ -990,21 +990,9 @@ public class Controller3D : MonoBehaviour
     {
               float maxKoJVel = 4f;
 
-            //float xVelocity = move.x * Time.deltaTime * (Mathf.Pow(xSpeed, 1f + joyInput.muvXceleration * acceleration));
-            // float zVelocity = move.z * Time.deltaTime * (Mathf.Pow(zSpeed, 1f + joyInput.muvXceleration * acceleration));     
-
-            //   float xVelocity = Mathf.Clamp(move.x * Time.deltaTime * xSpeed * xCelerate, -maxKoJVel, maxKoJVel);
-            //    float zVelocity = Mathf.Clamp(move.z * Time.deltaTime * zSpeed * zCelerate, -maxKoJVel, maxKoJVel);
-
-            // float xCelerate = (Mathf.Pow(1.85f, 1.5f + joyInput.muvXceleration * acceleration));
-            // float zCelerate = (Mathf.Pow(1.85f, 1.5f + joyInput.muvXceleration * acceleration));
-
             float muvXcel_x = Mathf.Abs(joyInput.GetMuvDelta().x);
             float muvXcel_z = Mathf.Abs(joyInput.GetMuvDelta().y);
             float muvMag = Vector2.SqrMagnitude(new Vector2(muvXcel_x, muvXcel_z));
-
-            //   print("muvXcel_x = " + muvXcel_x);
-            //    print("muvXcel_z = " + muvXcel_z);
 
             float pow0_x = 4.6f;
             float pow0_z = 6.0f;
@@ -1020,13 +1008,6 @@ public class Controller3D : MonoBehaviour
             float xCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_x * acceleration, pow0_x + muvXcel_x)), 0.0f, clampMult_x);                       // impartial but feels good
             float zCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_z * acceleration * accMult_z, pow0_z + muvXcel_z)), 0.0f, clampMult_z);
 
-
-
-            //   print("xCelerate = " + xCelerate);
-            //    print("zCelerate = " + zCelerate);
-
-            //print("Celerate Mag = " + Vector2.SqrMagnitude(new Vector2(xCelerate, zCelerate)));
-
         float xMultiplier = 6f;
         float zMultiplier = 8f;   //   < -- faulty, but feels good
         float frameMult = 0.017f;
@@ -1035,28 +1016,21 @@ public class Controller3D : MonoBehaviour
 
         float xVelocity = move.x * frameMult * xSpeed * xMultiplier * acceleration * Time.deltaTime  * timeMultiplier;
         float zVelocity = move.z * frameMult * zSpeed * zMultiplier * acceleration * Time.deltaTime * timeMultiplier;
-
-
-
-            // rigidbody.velocity =  new Vector3(xVelocity,rigidbody.velocity.y, zVelocity);
-            //  print("xVeclocity = " + xVelocity);
-            //  print("zVeclocity = " + zVelocity);
-
-        // rigidbody.AddForce(move.x * xCelerate , 0 , move.z * zCelerate, ForceMode.VelocityChange);
+==
 
         if (isSlowingDown || isCharging)
             {
                 if (isCharging)
                 {
 
-                velVec = new Vector3(xVelocity, 0f, zVelocity) / (1 + chargeTime);
+                velVec = new Vector3(xVelocity, 0f, zVelocity) / (1 + chargeTime * 2f); ;
 
                 if (vel0.magnitude == 0)
                 {
                     vel0 = chargeVel;
                 }
 
-                 //   Vector3 followThroughVec = (velVec + vel0) / (1+ (chargeTime * 100f));
+                 
                 Vector3 followThroughVec = (velVec + vel0)/2;
 
                 Vector3 chargeVelVec = Vector3.Lerp(followThroughVec, Vector3.zero, accelerationRate);
