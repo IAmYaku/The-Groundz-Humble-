@@ -387,9 +387,9 @@ public class Controller3D : MonoBehaviour
                 chargeVelInput.Input(chargeVel.x, chargeVel.z);
                 isCharging = true;
 
-                float glide = .01f - chargeVel.magnitude/100000f;
+                float glide = chargeVel.magnitude/100f;
                 accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);
-                velVec = chargeVel;
+                print("accelerationRate = " + accelerationRate);
 
 
             }
@@ -497,7 +497,6 @@ public class Controller3D : MonoBehaviour
         {
             if (!isKnockedOut)
             {
-
                 if (onGround)
                 {
                     if (staminaCool < stamina - .1f)
@@ -878,15 +877,6 @@ public class Controller3D : MonoBehaviour
         spriteRenderer.flipX = true;
     }
 
-    private void SlowDown(float scale)
-    {
-        
-     /*
-        move.x = (move.x) * scale;
-       move.z = (move.z) *scale;
-
-        */
-    }
 
     public void SlowDownByVelocity( float decelerationRate, float decelerationTime)
     {
@@ -1037,52 +1027,60 @@ public class Controller3D : MonoBehaviour
 
             //print("Celerate Mag = " + Vector2.SqrMagnitude(new Vector2(xCelerate, zCelerate)));
 
-            float xMultiplier = 6f;
-            float zMultiplier = 8f;   //   < -- faulty, but feels good
-            float frameMult = 0.017f;
+        float xMultiplier = 6f;
+        float zMultiplier = 8f;   //   < -- faulty, but feels good
+        float frameMult = 0.017f;
 
-            float xVelocity = move.x * frameMult * xSpeed * xMultiplier * acceleration;
-            float zVelocity = move.z * frameMult * zSpeed * zMultiplier * acceleration;
+        float timeMultiplier = 300f;
+
+        float xVelocity = move.x * frameMult * xSpeed * xMultiplier * acceleration * Time.deltaTime  * timeMultiplier;
+        float zVelocity = move.z * frameMult * zSpeed * zMultiplier * acceleration * Time.deltaTime * timeMultiplier;
+
 
 
             // rigidbody.velocity =  new Vector3(xVelocity,rigidbody.velocity.y, zVelocity);
-           //  print("xVeclocity = " + xVelocity);
-           //  print("zVeclocity = " + zVelocity);
+            //  print("xVeclocity = " + xVelocity);
+            //  print("zVeclocity = " + zVelocity);
 
-            // rigidbody.AddForce(move.x * xCelerate , 0 , move.z * zCelerate, ForceMode.VelocityChange);
+        // rigidbody.AddForce(move.x * xCelerate , 0 , move.z * zCelerate, ForceMode.VelocityChange);
 
-            if (isSlowingDown || isCharging)
+        if (isSlowingDown || isCharging)
             {
                 if (isCharging)
                 {
-                    Vector3 chargeVelVec = new Vector3();
-                    Vector3 inVec = new Vector3(xVelocity, 0f, zVelocity) / 250f;
 
-                    if (vel0.magnitude > 0)
-                    {
-                        velVec = vel0;
-                    }
+                velVec = new Vector3(xVelocity, 0f, zVelocity) / (1 + chargeTime);
 
+                if (vel0.magnitude == 0)
+                {
+                    vel0 = chargeVel;
+                }
 
-                    //  Vector3 followThroughVec = (velVec + inVec) / 2f;
-                    Vector3 followThroughVec = velVec + inVec;
-                    chargeVelVec = Vector3.Lerp(followThroughVec, Vector3.zero, accelerationRate);
+                 //   Vector3 followThroughVec = (velVec + vel0) / (1+ (chargeTime * 100f));
+                Vector3 followThroughVec = (velVec + vel0)/2;
+
+                Vector3 chargeVelVec = Vector3.Lerp(followThroughVec, Vector3.zero, accelerationRate);
 
                     rigidbody.velocity = chargeVelVec;
 
                     vel0 = rigidbody.velocity;
-                    
-                }
+
+                print("velVec = " +velVec);
+                print("chargeVel = " + chargeVel);
+                print("followThroughVec = " + followThroughVec);
+                print("chargeVelVec = " + chargeVelVec);
+
+            }
                 else
                 {
                     rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, Vector3.zero, accelerationRate);
 
                 }
             }
+
             else
             {
                 velVec = new Vector3(xVelocity, 0f, zVelocity);
-
                 rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, velVec, accelerationRate);
             }          
 
@@ -1256,7 +1254,6 @@ public class Controller3D : MonoBehaviour
 
                     float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
                     accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);  //arbs
-                    velVec = chargeVel;
                 }
 
             }
