@@ -875,8 +875,6 @@ public class LevelManager : MonoBehaviour
             {
                 tm1.players[index].GetComponentInChildren<Controller3D>().enabled = true;
                 tm1.players[index].GetComponent<Player>().playerAura.SetActive(true);
-                tm1.players[index].GetComponentInChildren<Controller3D>().SetTapThrowReadyToFalse();
-                tm1.players[index].GetComponentInChildren<Controller3D>().ResetTouch1PhasePrev();
                 tm1.players[index].GetComponentInChildren<Rigidbody>().isKinematic = false;
             }
 
@@ -909,8 +907,6 @@ public class LevelManager : MonoBehaviour
             else
             {
                 tm2.players[index].GetComponentInChildren<Controller3D>().enabled = true;
-                tm2.players[index].GetComponentInChildren<Controller3D>().SetTapThrowReadyToFalse();
-                tm2.players[index].GetComponentInChildren<Controller3D>().ResetTouch1PhasePrev();
                 tm2.players[index].GetComponentInChildren<Rigidbody>().isKinematic = false;
                 tm2.players[index].GetComponent<Player>().playerAura.SetActive(true);
             }

@@ -383,7 +383,7 @@ public class GR_Stock : GameRule
             {
                 player.GetComponentInChildren<Controller3D>().DropBall();
             }
-            player.GetComponentInChildren<Controller3D>().SetTouch0FXActivate(false);
+           
             player.GetComponentInChildren<Controller3D>().isKnockedOut = false;
             player.GetComponentInChildren<Controller3D>().ballContact = false;
             player.GetComponentInChildren<Controller3D>().enabled = false;
@@ -457,8 +457,6 @@ public class GR_Stock : GameRule
             else
             {
                 t1Players[index].GetComponentInChildren<Controller3D>().enabled = true;
-                t1Players[index].GetComponentInChildren<Controller3D>().SetTapThrowReadyToFalse();
-                t1Players[index].GetComponentInChildren<Controller3D>().ResetTouch1PhasePrev();
                 t1Players[index].GetComponentInChildren<Rigidbody>().isKinematic = false;
             }
             t1Players[index].transform.GetChild(1).gameObject.SetActive(true);
@@ -489,8 +487,6 @@ public class GR_Stock : GameRule
             else
             {
                 t2Players[index].GetComponentInChildren<Controller3D>().enabled = true;
-                t2Players[index].GetComponentInChildren<Controller3D>().SetTapThrowReadyToFalse();
-                t2Players[index].GetComponentInChildren<Controller3D>().ResetTouch1PhasePrev();
                 t2Players[index].GetComponentInChildren<Rigidbody>().isKinematic = false;
             }
             t2Players[index].transform.GetChild(1).gameObject.SetActive(true);

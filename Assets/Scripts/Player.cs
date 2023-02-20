@@ -642,7 +642,6 @@ public class Player : MonoBehaviour
                 controller3D.DropBall();
             }
 
-            controller3D.SetTouch0FXActivate(false);
             controller3D.isKnockedOut = false;
             controller3D.ballContact = false;
             playerAura.gameObject.SetActive(false);
