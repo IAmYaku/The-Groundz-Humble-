@@ -286,8 +286,8 @@ public class Controller3D : MonoBehaviour
             CheckKeyInput();
 
             MoveInput();
-            CheckStamina();
             GrabInput();
+            CheckStamina();
             CheckSuperCool();
             HandleContact();
             // HandlePerks(perkDur,1f);
@@ -296,7 +296,7 @@ public class Controller3D : MonoBehaviour
         }
         else
         {
-            rigidbody.velocity = Vector3.zero; 
+            rigidbody.velocity = Vector3.zero;  // should be a ready method
         }
     }
 
@@ -470,6 +470,25 @@ public class Controller3D : MonoBehaviour
         }
     }
 
+    private void CheckKeyPickUp()
+    {
+        if (Input.GetKeyDown(playerScript.joystick.altAction1Input) && !IsKeyPickUp)
+        {
+            IsKeyPickUp = true;
+            // print("IsKeyPickUp is true");
+        }
+
+        float pickUpDelay = .5f;
+
+        Invoke("SetKeyPickUpFalse", pickUpDelay);
+    }
+
+    private void SetKeyPickUpFalse()
+    {
+        IsKeyPickUp = false;
+        //print("IsKeyPickUp is false");
+    }
+
     #endregion
 
     #region Move Logic
@@ -630,10 +649,10 @@ public class Controller3D : MonoBehaviour
 
                 vel0 = rigidbody.velocity;
 
-                print("velVec = " + velVec);
-                print("chargeVel = " + chargeVel);
-                print("followThroughVec = " + followThroughVec);
-                print("chargeVelVec = " + chargeVelVec);
+               // print("velVec = " + velVec);
+               // print("chargeVel = " + chargeVel);
+              //  print("followThroughVec = " + followThroughVec);
+               // print("chargeVelVec = " + chargeVelVec);
 
             }
             else
@@ -795,252 +814,26 @@ public class Controller3D : MonoBehaviour
 
     #endregion
 
+    #region Pick up/Drop & Catch Logic
 
-
-
-    //handle Dodge/Jump Input
-    public void DodgeInput(CallbackContext context)
+    void GrabInput()
     {
-        if (levelManager.isPlaying && !playerScript.isOut)
-        {
-            if (context.performed)
-            {
-                Dodge();
-            }
-        }
-    }
+        // A ~ Pick up/Drop
 
-    private void Dodge()
-    {
-        float dodgeStaminaThresh = stamina / 2f;
+        PickUpActivate();
 
-        {
-            if (InBounds() && staminaCool <= dodgeStaminaThresh)
-            {
-                //Dodge
-                if (IsInDodgeRange() && !isDodging)
-                {
-                    if (Mathf.Abs(move.z) > Mathf.Abs(move.x))
-                    {
-                        print("Dodge!");
-                        isDodging = true;
-                        dodgeThrowDelay = true;
+        CheckCatchCool();
 
-                        if (animator)
-                        {
-                            animator.SetTrigger("Dodge");
-                        }
+        CheckCharge();
 
-                        staminaCool += staminaDodgeCost;
-                        rigidbody.AddForce(new Vector3(0f, jumpSpeed / 4f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed) * 75, ForceMode.Impulse);  //*arb
-                        playerScript.PlayDodgeSound();
+        MoveBall();
 
-                        float dodgeCool = .5f + (rigidbody.velocity.magnitude / 1000f);
-                        float dodgeThrowDelayCool = 1f + (rigidbody.velocity.magnitude / 1000f);
-                        Invoke("SetDodgingF", dodgeCool);
-                        Invoke("SetDodgeThrowDelayF", dodgeThrowDelayCool);
-
-
-                    }
-                    else
-                    {
-                        print("Dodge!");
-                        isDodging = true;
-
-                        if (animator)
-                        {
-                            animator.SetTrigger("Dodge");
-                        }
-
-                        staminaCool += staminaDodgeCost;
-                        rigidbody.AddForce(new Vector3(0f, jumpSpeed / 4f, GetDodgeDirection() * 100.0f * dodgeSpeed), ForceMode.Impulse);  //*arb
-                        playerScript.PlayDodgeSound();
-
-                        float dodgeCool = .5f + (rigidbody.velocity.magnitude / 1000f);
-                        float dodgeThrowDelayCool = 1f + (rigidbody.velocity.magnitude / 1000f);
-                        Invoke("SetDodgingF", dodgeCool);
-                        Invoke("SetDodgeThrowDelayF", dodgeThrowDelayCool);
-                    }
-                }
-
-
-                //jump throw init
-                if (canJumpThrow)
-                {
-                    /*
-                    if (Mathf.Abs(rigidbody.velocity.z) < Mathf.Abs(rigidbody.velocity.x) && ballGrabbed)
-                    {
-                        if (animator)
-                        {
-                            if (animator.GetBool("Jumping") == false)
-                            {
-                                animator.SetTrigger("Jump");
-                                animator.SetBool("Jumping", true);
-                            }
-                        }
-                        rigidbody.AddForce(new Vector3(Mathf.Sign(rigidbody.velocity.x), jumpSpeed, 0f), ForceMode.Impulse);
-                        isJumping = true;
-                        onGround = false;
-                    }
-
-                    playerScript.ToggleActivateDodge();
-                    Invoke("SetDodgingF", 1);
-
-                    */
-                }
-            }
-        }
-    }
-    private float GetDodgeDirection()
-    {
-        float zPos = playerConfigObject.transform.position.z;
-
-        if (zPos > -10.0f && zPos < 10.0f)
-        {
-            return CoinFlip();
-        }
-
-        if (zPos < -10.0f)
-        {
-            return 1.0f;
-        }
-
-        if (zPos > 10.0f)
-        {
-            return -1.0f;
-        }
-
-        return 0.0f;
-    }
-
-    private float CoinFlip()
-    {
-        float ran = (UnityEngine.Random.Range(-1.0f, 1.0f));
-
-        if (ran > 0.0f)
-        {
-            return 1.0f;
-        }
-        else
-        {
-            return -1.0f;
-        }
-    }
-
-
-    private bool IsFacingObj(GameObject obj)
-    {
-        if (isFacingRight && (playerConfigObject.transform.position.magnitude - nearestBall.transform.position.magnitude > 0))
-        {
-            return true;
-        }
-
-        if (!isFacingRight && (playerConfigObject.transform.position.magnitude - nearestBall.transform.position.magnitude < 0))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    private void FlipRight()
-    {
-        spriteRenderer.flipX = false;
-    }
-
-    private void FlipLeft()
-    {
-        spriteRenderer.flipX = true;
-    }
-
-
-    public void SlowDownByVelocity( float decelerationRate, float decelerationTime)
-    {
-        if (!isSlowingDown)
-        {
-            isSlowingDown = true;
-            accelerationRate = decelerationRate;
-            Invoke("NormalAccelerationRate", decelerationTime);
-        }
-
-    }
-
-    float LerpFloatDT(float start, float end, float t, float speed)
-    {
-        float delta = end - start;
-        if (delta == 0)
-            return end;
-        start += (t * speed * Mathf.Sign(delta));
-        if ((end - start) * delta < 0)
-            return end;
-        return start;
-    }
-
-
-    private float ReMap(float value, float from1, float to1, float from2, float to2)
-    {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
-    }
-
-
-    private bool IsInDodgeRange()
-    {
-        if (rigidbody.velocity.z > 0)
-        {
-            if (ObjectIsInGrabDistance(levelManager.stage.BackPlane))
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if (ObjectIsInGrabDistance(levelManager.stage.FrontPlane))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private bool IsWallNear()
-    {
-        GameObject[] walls = levelManager.stage.GetWalls();
-
-        foreach (GameObject wall in walls)
-        {
-
-            return (ObjectIsInGrabDistance(wall));
-        }
-        return false;
-    }
-
-
-    private bool PlayerNear()
-    {
-        int team = playerScript.GetComponent<Player>().team;
-        int number = playerScript.GetComponent<Player>().number;
-
-        foreach (GameObject other in levelManager.GetPlayers())
-        {
-            int otherNum = other.GetComponent<Player>().number;
-            GameObject otherConfig = other.transform.GetChild(0).gameObject;
-            bool oCIsOut = other.GetComponent<Player>().isOut;
-
-            if (otherNum != number)
-            {
-                if (ObjectIsInGrabDistance(otherConfig) && !oCIsOut)
-                {
-                   // print("Player Near");
-                    return true;
-                }
-            }
-
-        }
-        return false;
+        CheckHasBallAnim();
     }
 
     public void GrabInput(CallbackContext context)
     {
-        if (levelManager.isPlaying && !playerScript.isOut )
+        if (levelManager.isPlaying && !playerScript.isOut)
         {
             if (context.performed)
             {
@@ -1084,7 +877,6 @@ public class Controller3D : MonoBehaviour
 
                         ball.transform.GetChild(1).gameObject.SetActive(false);   // most likely pikUp Deactivaate
 
-
                         ballComp.PickUpDeactivate();
 
                         Physics.IgnoreLayerCollision(5, 3, false);              //?
@@ -1092,12 +884,10 @@ public class Controller3D : MonoBehaviour
 
                         if (ThrownByOpp(ball, 2) || ThrownByOpp(ball, 1))
                         {
-
                             if (animator)
                             {
                                 animator.SetTrigger("Catch");
                                 Invoke("ResetCatchTrigger", 1f);
-
                             }
 
                             ballContact = false;
@@ -1111,30 +901,26 @@ public class Controller3D : MonoBehaviour
                             levelManager.LastThrowerOut(ball);
                             levelManager.GetAnotherPlayer(gameObject.GetComponentInParent<Player>().team);
                             levelManager.RemoveHit(ball);
-                            levelManager.CatchDisplay(playerScript.color, playerConfigObject.transform.position, (Vector3.Magnitude(rigidbody.velocity) + Vector3.Magnitude(velocityCaught))/2f);
+                            levelManager.CatchDisplay(playerScript.color, playerConfigObject.transform.position, (Vector3.Magnitude(rigidbody.velocity) + Vector3.Magnitude(velocityCaught)) / 2f);
                             ballComp.DeactivateThrow();
-
-
 
                             float hitPauseDuration = velocityCaught.magnitude / 100f;
                             float hitPausePreDelay = .25f;
+
+                            DelayPause(hitPauseDuration, hitPausePreDelay);
 
                             print("~!Caught!~");
                         }
                         else
                         {
-
-
                             if (animator)
                             {
-                                if (ball.transform.position.y < 2f)
+                              //  if (ball.transform.position.y < 2f)  // handle w catch logic
                                 {
                                     animator.SetTrigger("PickUp");
                                     animator.ResetTrigger("PickUp");
                                 }
                             }
-
-
                         }
                     }
                 }
@@ -1158,8 +944,8 @@ public class Controller3D : MonoBehaviour
             //  print("vel mag = " + (rigidbody.velocity.magnitude) / 100f);
             float action1SlowDownfactor = Mathf.Clamp(.0001f - (rigidbody.velocity.magnitude) / 10000f, .0001f, 100f);     //split to ready pickUp catch and character attribute specific
             float stallTime = .1f;
-            SlowDownByVelocity(action1SlowDownfactor,stallTime);
-   
+            SlowDownByVelocity(action1SlowDownfactor, stallTime);
+
         }
 
         else
@@ -1169,7 +955,7 @@ public class Controller3D : MonoBehaviour
 
             if (ballGrabbed && playerIndex != -1 && catchReady)
             {
-                
+
                 DropBall();
 
                 catchReady = false;
@@ -1179,11 +965,96 @@ public class Controller3D : MonoBehaviour
                 float stallTime = .1f;
                 SlowDownByVelocity(dropSlowDownfactor, stallTime);
 
-                
+
             }
         }
     }
 
+    private void CheckCatchCool()
+    {
+        if (!catchReady)
+        {
+            //  t_catchF = Time.realtimeSinceStartup;
+            catchCoolDown -= Time.deltaTime;
+
+            if (catchCoolDown <= 0) // && hasEnoughStamina
+            {
+                catchReady = true;
+            }
+        }
+    }
+
+    private void PickUpActivate()
+    {
+        if (!ballGrabbed)
+        {
+            nearestBall = GetNearestBall();
+            if (nearestBall)
+            {
+                if (ObjectIsInGrabDistance(nearestBall) && nearestBall.GetComponent<Ball>().grounded)
+                {
+                    nearestBall.GetComponent<Ball>().PickUpActivate(playerScript.color);
+                }
+            }
+        }
+
+    }
+
+    private void MoveBall()
+    {
+        if (ballGrabbed && !isBlocking)
+        {
+            Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
+
+            if (levelManager.IsInGameBounds(cockBackPos))
+            {
+                if (!isSupering)
+                {
+                    ball.transform.position = cockBackPos;
+                }
+
+                else
+                {
+                    Vector3 nuVec = cockBackPos * 1.25f;
+                    ball.transform.position = nuVec;
+
+                }
+            }
+        }
+
+    }
+
+    public void DropBall()
+
+    {
+        print("Dropping the ball");
+
+        Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
+
+        if (levelManager.IsInGameBounds(cockBackPos))       //      isnt valid if we'reusing this on restart
+        {
+            throwCharge = 0;
+            isCharging = false;
+            ballGrabbed = false;
+            ballCaught = false;
+            ball.GetComponent<Ball>().grabbed = false;
+            ball.GetComponent<SphereCollider>().enabled = true;
+            ball.GetComponent<Rigidbody>().useGravity = true;
+            ball.GetComponent<SpriteRenderer>().enabled = true;
+            ball.transform.GetChild(3).gameObject.SetActive(true);
+
+            if (animator)
+            {
+                animator.SetBool("hasBall", false);
+            }
+        }
+
+    }
+
+    #endregion
+
+    #region Throw Logic
+    // X ~Throw Mechanic
     public void ThrowInput(CallbackContext context)
     {
         if (levelManager.isPlaying && !playerScript.isOut)
@@ -1200,7 +1071,6 @@ public class Controller3D : MonoBehaviour
                     float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
                     accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);  //arbs
                 }
-
             }
 
             //release
@@ -1213,7 +1083,6 @@ public class Controller3D : MonoBehaviour
                 {
                     if (!dodgeThrowDelay)
                     {
-
                         float mackThrowDelay = .1f;
                         //  Invoke("Throw", mackThrowDelay);
                         Throw();
@@ -1223,7 +1092,6 @@ public class Controller3D : MonoBehaviour
                         DodgeThrow();
                     }
                 }
-
 
                 if (animator)
                 {
@@ -1554,23 +1422,6 @@ public class Controller3D : MonoBehaviour
 
     }
 
-
-    void GrabInput()
-    {
-        // A ~ Pick up/Drop, X~ Throw Mechanic
-
-
-        PickUpActivate();
-
-        CheckHasBallAnim();
-
-        CheckCatchCool();
-
-        CheckCharge();
-
-        MoveBall();
-    }
-
     private void CheckCharge()
     {
         float chargeRate = 1000;  // character dependent??
@@ -1579,7 +1430,7 @@ public class Controller3D : MonoBehaviour
         if (ballGrabbed && isCharging)
         {
 
-            throwCharge += (chargeRate * Time.deltaTime) + chargeVel.magnitude /100f;
+            throwCharge += (chargeRate * Time.deltaTime) + chargeVel.magnitude / 100f;
             chargeTime += Time.deltaTime;
             // throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
 
@@ -1593,167 +1444,248 @@ public class Controller3D : MonoBehaviour
         }
     }
 
-    private void MoveBall()
+    #endregion
+
+    //handle Dodge/Jump Input
+    public void DodgeInput(CallbackContext context)
     {
-        if (ballGrabbed && !isBlocking)
+        if (levelManager.isPlaying && !playerScript.isOut)
         {
-            Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
-            
-            if (levelManager.IsInGameBounds(cockBackPos))
+            if (context.performed)
             {
-                if (!isSupering)
-                {
-                    // float nuBallX = transform.position.x + throwDirection.x * handSize.x;
-                    //  float nuBallY = transform.position.y + handSize.y;
-                    //left handed or right handed
-                    //    float nuBallZ = transform.position.z + handSize.z;
+                Dodge();
+            }
+        }
+    }
 
-                    ball.transform.position = cockBackPos;
+    private void Dodge()
+    {
+        float dodgeStaminaThresh = stamina / 2f;
+
+        {
+            if (InBounds() && staminaCool <= dodgeStaminaThresh)
+            {
+                //Dodge
+                if (IsInDodgeRange() && !isDodging)
+                {
+                    if (Mathf.Abs(move.z) > Mathf.Abs(move.x))
+                    {
+                        print("Dodge!");
+                        isDodging = true;
+                        dodgeThrowDelay = true;
+
+                        if (animator)
+                        {
+                            animator.SetTrigger("Dodge");
+                        }
+
+                        staminaCool += staminaDodgeCost;
+                        rigidbody.AddForce(new Vector3(0f, jumpSpeed / 4f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed) * 75, ForceMode.Impulse);  //*arb
+                        playerScript.PlayDodgeSound();
+
+                        float dodgeCool = .5f + (rigidbody.velocity.magnitude / 1000f);
+                        float dodgeThrowDelayCool = 1f + (rigidbody.velocity.magnitude / 1000f);
+                        Invoke("SetDodgingF", dodgeCool);
+                        Invoke("SetDodgeThrowDelayF", dodgeThrowDelayCool);
+
+
+                    }
+                    else
+                    {
+                        print("Dodge!");
+                        isDodging = true;
+
+                        if (animator)
+                        {
+                            animator.SetTrigger("Dodge");
+                        }
+
+                        staminaCool += staminaDodgeCost;
+                        rigidbody.AddForce(new Vector3(0f, jumpSpeed / 4f, GetDodgeDirection() * 100.0f * dodgeSpeed), ForceMode.Impulse);  //*arb
+                        playerScript.PlayDodgeSound();
+
+                        float dodgeCool = .5f + (rigidbody.velocity.magnitude / 1000f);
+                        float dodgeThrowDelayCool = 1f + (rigidbody.velocity.magnitude / 1000f);
+                        Invoke("SetDodgingF", dodgeCool);
+                        Invoke("SetDodgeThrowDelayF", dodgeThrowDelayCool);
+                    }
                 }
-                else
-                {
-                    Vector3 nuVec = cockBackPos * 1.25f;
-                    ball.transform.position = nuVec;
 
+
+                //jump throw init
+                if (canJumpThrow)
+                {
+                    /*
+                    if (Mathf.Abs(rigidbody.velocity.z) < Mathf.Abs(rigidbody.velocity.x) && ballGrabbed)
+                    {
+                        if (animator)
+                        {
+                            if (animator.GetBool("Jumping") == false)
+                            {
+                                animator.SetTrigger("Jump");
+                                animator.SetBool("Jumping", true);
+                            }
+                        }
+                        rigidbody.AddForce(new Vector3(Mathf.Sign(rigidbody.velocity.x), jumpSpeed, 0f), ForceMode.Impulse);
+                        isJumping = true;
+                        onGround = false;
+                    }
+
+                    playerScript.ToggleActivateDodge();
+                    Invoke("SetDodgingF", 1);
+
+                    */
                 }
             }
         }
+    }
+    private float GetDodgeDirection()
+    {
+        float zPos = playerConfigObject.transform.position.z;
 
+        if (zPos > -10.0f && zPos < 10.0f)
+        {
+            return CoinFlip();
+        }
+
+        if (zPos < -10.0f)
+        {
+            return 1.0f;
+        }
+
+        if (zPos > 10.0f)
+        {
+            return -1.0f;
+        }
+
+        return 0.0f;
     }
 
-    private bool CheckReleaseInput()
+    private float CoinFlip()
     {
-        if ((Input.GetButtonUp(playerScript.joystick.rTriggerInput) || (Input.GetKeyUp(playerScript.joystick.altAction1Input) && !IsKeyPickUp) || (playerScript.joystick.number == 1 && throwButton && throwButton.Pressed)))
+        float ran = (UnityEngine.Random.Range(-1.0f, 1.0f));
+
+        if (ran > 0.0f)
+        {
+            return 1.0f;
+        }
+        else
+        {
+            return -1.0f;
+        }
+    }
+
+    private bool IsFacingObj(GameObject obj)
+    {
+        if (isFacingRight && (playerConfigObject.transform.position.magnitude - nearestBall.transform.position.magnitude > 0))
         {
             return true;
         }
 
+        if (!isFacingRight && (playerConfigObject.transform.position.magnitude - nearestBall.transform.position.magnitude < 0))
+        {
+            return true;
+        }
         return false;
     }
 
-    private void CheckStandingAutoRelease(float chargeVel)
+    private void FlipRight()
     {
+        spriteRenderer.flipX = false;
+    }
 
-        float standingThrowPower = playerScript.standingThrowPower;
-        float chargeCost = .25f;
+    private void FlipLeft()
+    {
+        spriteRenderer.flipX = true;
+    }
 
-        Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
 
-        if ((standingThrowPower + throwCharge) >= maxStandingThrowPower && chargeVel <= standingThrowThresh)
+    public void SlowDownByVelocity( float decelerationRate, float decelerationTime)
+    {
+        if (!isSlowingDown)
         {
-            if (levelManager.IsInGameBounds(cockBackPos))
+            isSlowingDown = true;
+            accelerationRate = decelerationRate;
+            Invoke("NormalAccelerationRate", decelerationTime);
+        }
+
+    }
+
+    float LerpFloatDT(float start, float end, float t, float speed)
+    {
+        float delta = end - start;
+        if (delta == 0)
+            return end;
+        start += (t * speed * Mathf.Sign(delta));
+        if ((end - start) * delta < 0)
+            return end;
+        return start;
+    }
+
+
+    private float ReMap(float value, float from1, float to1, float from2, float to2)
+    {
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+    }
+
+
+    private bool IsInDodgeRange()
+    {
+        if (rigidbody.velocity.z > 0)
+        {
+            if (ObjectIsInGrabDistance(levelManager.stage.BackPlane))
             {
-                if (!dodgeThrowDelay)
-                {
-                    print("Charge throw maxed @ " + throwCharge);
-                    /*
-                    chargeThrowSlowDownfactor = .0125f;
-                    float stallTime = .25f;
-                    SlowDownByVelocity(chargeThrowSlowDownfactor, stallTime);
-
-                    */
-
-                    {
-                        float mackThrowDelay = .1f;
-                        Throw();
-                    }
-                }
-                else
-                {
-                    DodgeThrow();
-                }
-
-                if (animator)
-                {
-                    float mackThrowDelay = .1f;
-                    animator.SetBool("hasBall", false);
-                    Invoke("ResetThrowAnimations", .05125f);    //arbs
-                }
-
-                float throwSlowDownfactor = .25f;
-                float stallTime = .25f;
-                //   SlowDownByVelocity(throwSlowDownfactor, stallTime);
-
-
-
-                DepleteStamina(chargeCost);
+                return false;
             }
         }
-    }
-
-    private void CheckMovingAutoRelease(float chargevel)
-    {
-        float chargeCost = .25f;
-
-        Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
-
-        if ((throwPower + throwCharge) >= maxThrowPower && chargevel > standingThrowThresh)
+        else
         {
-            if (levelManager.IsInGameBounds(cockBackPos))
+            if (ObjectIsInGrabDistance(levelManager.stage.FrontPlane))
             {
-                if (!dodgeThrowDelay)
-                {
-                    print("Charge throw maxed @ " + throwCharge);
-                    /*
-                    chargeThrowSlowDownfactor = .0125f;
-                    float stallTime = .25f;
-                    SlowDownByVelocity(chargeThrowSlowDownfactor,stallTime);
-
-                    */
-
-                    {
-                        float mackThrowDelay = .1f;
-                        //  Invoke("Throw", mackThrowDelay);
-                        Throw();
-                    }
-                }
-
-                else
-                {
-                    DodgeThrow();
-                }
-
-                if (animator)
-                {
-                    float mackThrowDelay = .1f;
-                    animator.SetBool("hasBall", false);
-                    Invoke("ResetThrowAnimations", .05125f);    //arbs
-                }
-
-                float throwSlowDownfactor = .25f;
-                float stallTime = .25f;
-                //   SlowDownByVelocity(throwSlowDownfactor,stallTime);
-
-
-
-                DepleteStamina(chargeCost);
+                return false;
             }
         }
+        return true;
     }
 
-    private void ResetCatchTrigger()
+    private bool IsWallNear()
     {
-        animator.ResetTrigger("Catch");
-    }
+        GameObject[] walls = levelManager.stage.GetWalls();
 
-    private void CheckKeyPickUp()
-    {
-        if (Input.GetKeyDown(playerScript.joystick.altAction1Input) && !IsKeyPickUp)
+        foreach (GameObject wall in walls)
         {
-            IsKeyPickUp = true;
-           // print("IsKeyPickUp is true");
+
+            return (ObjectIsInGrabDistance(wall));
         }
-
-        float pickUpDelay = .5f;
-
-        Invoke("SetKeyPickUpFalse", pickUpDelay);
+        return false;
     }
 
-    private void SetKeyPickUpFalse()
+
+    private bool PlayerNear()
     {
-        IsKeyPickUp = false;
-        //print("IsKeyPickUp is false");
+        int team = playerScript.GetComponent<Player>().team;
+        int number = playerScript.GetComponent<Player>().number;
+
+        foreach (GameObject other in levelManager.GetPlayers())
+        {
+            int otherNum = other.GetComponent<Player>().number;
+            GameObject otherConfig = other.transform.GetChild(0).gameObject;
+            bool oCIsOut = other.GetComponent<Player>().isOut;
+
+            if (otherNum != number)
+            {
+                if (ObjectIsInGrabDistance(otherConfig) && !oCIsOut)
+                {
+                   // print("Player Near");
+                    return true;
+                }
+            }
+
+        }
+        return false;
     }
+
+
 
     private void DepleteStamina(float cost)
     {
@@ -1781,19 +1713,6 @@ public class Controller3D : MonoBehaviour
         return false;
     }
 
-    private void CheckCatchCool()
-    {
-        if (!catchReady)
-        {
-            //  t_catchF = Time.realtimeSinceStartup;
-            catchCoolDown -= Time.deltaTime;
-
-            if (catchCoolDown <= 0) // && hasEnoughStamina
-            {
-                catchReady = true;
-            }
-        }
-    }
 
 
     private void CheckHasBallAnim()
@@ -1810,53 +1729,6 @@ public class Controller3D : MonoBehaviour
                 animator.SetBool("hasBall", true);
         }
     }
-
-    private void PickUpActivate()
-    {
-        if (!ballGrabbed)
-        {
-            nearestBall = GetNearestBall();
-            if (nearestBall)
-            {
-                if (ObjectIsInGrabDistance(nearestBall) && nearestBall.GetComponent<Ball>().grounded)
-                {
-                    nearestBall.GetComponent<Ball>().PickUpActivate(playerScript.color);
-                }
-            }
-        }
-
-    }
-
-
-
-    public void DropBall()
-    {
-        print("Dropping the ball");
-
-          Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
-         
-        if (levelManager.IsInGameBounds(cockBackPos))       //      isnt valid if we'reusing this on restart
-        {
-            throwCharge = 0;
-            isCharging = false;
-            ballGrabbed = false;
-            ballCaught = false;
-            ball.GetComponent<Ball>().grabbed = false;
-            ball.GetComponent<SphereCollider>().enabled = true;
-            ball.GetComponent<Rigidbody>().useGravity = true;
-            ball.GetComponent<SpriteRenderer>().enabled = true;
-            ball.transform.GetChild(3).gameObject.SetActive(true);
-
-            if (animator)
-            {
-                animator.SetBool("hasBall", false);
-            }
-        }
-
-    }
-
-  
-
 
     private void ResetThrowAnimations()
     {
@@ -2359,6 +2231,18 @@ public class Controller3D : MonoBehaviour
     {
         accelerationRate = .85f;
         ballPauseReady = true;
+    }
+
+
+    private void DelayPause(float hitPauseDuration, float hitPausePreDelay)
+    {
+        levelManager.SetHitPauseDuration(hitPauseDuration);
+        Invoke("DoHitPause", hitPausePreDelay);
+    }
+
+    private void DoHitPause()
+    {
+        levelManager.HitPause();
     }
 
     private bool IsAboutToCollideWBall(GameObject Ball)
