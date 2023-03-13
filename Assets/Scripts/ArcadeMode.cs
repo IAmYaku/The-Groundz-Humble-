@@ -29,8 +29,8 @@ public class ArcadeMode : MonoBehaviour
         gr.roundsToWin = Mathf.Clamp(3 + level, 3, 6);
         // Controller3D.hasGrabMag = false;
        // Controller3D.grabMag = 10f;
-        Controller3D.hasThrowMag = true;
-        Controller3D.hasSeekVec = true;
+        Controller3D.hasThrowMag = false;
+        Controller3D.hasSeekVec = false;
        // Controller3D.throwMagnetism = 5.65f;
         Controller3D.maxSeekVec = 100f;
 }

@@ -1146,7 +1146,7 @@ public class Controller3D : MonoBehaviour
 
         Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedVelAverage().x, 0f, chargeVelInput.GetWeightedVelAverage().y);
 
-        if (Mathf.Abs(weightedMuvAvVec.magnitude) < 25f)  // Have to check if wasn't moving dyring charge
+        if (Mathf.Abs(weightedMuvAvVec.magnitude) < 10f)  // Have to check if wasn't moving during charge
         {
             weightedMuvAvVec.x = throwDirection.x * throwPower / 100f;
         }
@@ -1165,7 +1165,7 @@ public class Controller3D : MonoBehaviour
 
                 targetedOpp = nearestOpp;
 
-                // throwAidVec = GetThrowAid(weightedMuvAvVec, seekVec);
+                 throwAidVec = GetThrowAid(weightedMuvAvVec, seekVec);
             }
 
         }

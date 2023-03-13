@@ -536,7 +536,7 @@ public class AI : MonoBehaviour {
                             levelManager.LastThrowerOut(ball);
                             levelManager.GetAnotherPlayer(gameObject.GetComponentInParent<Player>().team);   // GR check
                             levelManager.RemoveHit(ball);
-                            levelManager.CatchDisplay(gameObject.transform.position);
+                            levelManager.CatchDisplay(playerConfigObject.transform.position);
                             ball.GetComponent<Ball>().DeactivateThrow();
 
                             float hitPauseDuration = velocityCaught.magnitude / 100f;
