@@ -904,7 +904,7 @@ public class Controller3D : MonoBehaviour
                             levelManager.CatchDisplay(playerScript.color, playerConfigObject.transform.position, (Vector3.Magnitude(rigidbody.velocity) + Vector3.Magnitude(velocityCaught)) / 2f);
                             ballComp.DeactivateThrow();
 
-                            float hitPauseDuration = velocityCaught.magnitude / 100f;
+                            float hitPauseDuration = Mathf.Clamp( velocityCaught.magnitude / 100f, 0, 3f);
                             float hitPausePreDelay = .25f;
 
                             DelayPause(hitPauseDuration, hitPausePreDelay);
@@ -1146,9 +1146,13 @@ public class Controller3D : MonoBehaviour
 
         Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedVelAverage().x, 0f, chargeVelInput.GetWeightedVelAverage().y);
 
-        if (Mathf.Abs(weightedMuvAvVec.magnitude) < 10f)  // Have to check if wasn't moving during charge
+        if (Mathf.Abs(weightedMuvAvVec.magnitude) < 10f || float.IsNaN(weightedMuvAvVec.magnitude))  // Have to check if wasn't moving during charge
         {
             weightedMuvAvVec.x = throwDirection.x * throwPower / 100f;
+
+         if   (float.IsNaN(weightedMuvAvVec.magnitude)) {
+                weightedMuvAvVec.z = throwDirection.z * (throwPower / 100f) * move.z;
+            }
         }
 
         print("weightedMuvAvVec = " + weightedMuvAvVec);
@@ -1892,13 +1896,13 @@ public class Controller3D : MonoBehaviour
 
         float chargeThrowSlowDownfactor = 1f;
 
-        if ((throwCharge) < maxStandingThrowPower)     // 
+       // if ((throwCharge) < maxStandingThrowPower)     // 
         {
             print("Super Charge");
             print("Charge @ " + throwCharge);
             float chargeRate = 50;
             throwCharge += chargeRate * Time.deltaTime * 100.0f;
-            throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower + 1);
+          //  throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower + 1);
 
             chargeThrowSlowDownfactor = .025f * Time.deltaTime * 100.0f;
             float stallTime = .1f;
@@ -1913,9 +1917,9 @@ public class Controller3D : MonoBehaviour
 
         }
 
-        else
+      //  else
         {
-            SuperRelease(chargeVel.magnitude, superType);
+      //      SuperRelease(chargeVel.magnitude, superType);
         }
 
 

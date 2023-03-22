@@ -41,6 +41,12 @@ public class FXManager : MonoBehaviour
     public HitPause hitPause;
     private float hitPauseDuration;
 
+    public static float min_HitPauseDuration = 0.1f;
+    public static float max_HitPauseDuration = 3f;
+
+    public static float min_CatchPauseDuration = 0.25f;
+    public static float max_CatchPauseDuration = 3f;
+
 
     void Start()
     {
@@ -160,6 +166,9 @@ public class FXManager : MonoBehaviour
         if (catchFX != null)
         {
             GameObject catchFXObject1 = Instantiate(catchFX, position, catchFX.transform.rotation);
+
+            /*
+
             ParticleSystem.MainModule catchPsMain1 = catchFXObject1.GetComponent<ParticleSystem>().main;
             ParticleSystem.VelocityOverLifetimeModule catchPsVelMod = catchFXObject1.GetComponent<ParticleSystem>().velocityOverLifetime;
             ParticleSystem.ColorOverLifetimeModule catchPsColMod = catchFXObject1.GetComponent<ParticleSystem>().colorOverLifetime;
@@ -169,7 +178,7 @@ public class FXManager : MonoBehaviour
             grad.SetKeys(new GradientColorKey[] { new GradientColorKey(c, 1.0f), new GradientColorKey(c, 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 0.0f), new GradientAlphaKey(0.0f, 1.0f) });
 
             catchPsColMod.color = grad;
-//
+
             catchPsVelMod.orbitalZMultiplier = 1 + velocity;
 
             GameObject catchFXObject2 = catchFXObject1.transform.GetChild(0).gameObject;
@@ -188,7 +197,7 @@ public class FXManager : MonoBehaviour
 
             Gradient grad2 = new Gradient();
 
-          //  grad2.SetKeys(new GradientColorKey[] { new GradientColorKey(Color.white, 1.0f), new GradientColorKey(c, 0.5f), new GradientColorKey(Color.white, 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(0.0f, 0.0f), new GradientAlphaKey(1f, 0.5f), new GradientAlphaKey(0.0f, 1.0f) });
+            grad2.SetKeys(new GradientColorKey[] { new GradientColorKey(Color.white, 1.0f), new GradientColorKey(c, 0.5f), new GradientColorKey(Color.white, 0.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(0.0f, 0.0f), new GradientAlphaKey(1f, 0.5f), new GradientAlphaKey(0.0f, 1.0f) });
 
             Material myMat = catchFXObject1.GetComponent<Renderer>().material;
             int intensity = 6;
@@ -196,6 +205,8 @@ public class FXManager : MonoBehaviour
 
             Material myMat1 = catchFXObject2.GetComponent<Renderer>().material;
             myMat1.SetColor("_EmissionColor", new Color(c.r, c.g, c.b, .36f) * intensity*4);
+
+            */
 
         }
     }

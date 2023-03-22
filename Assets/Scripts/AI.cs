@@ -67,8 +67,10 @@ public class AI : MonoBehaviour {
 
     private float xCeleration = 0;
 	public float maxCeleration = 6;
-	public float accelerationTime = 0.35f;
-	private Vector3 velocityDamp;
+	//public float accelerationTime = 0.35f;
+    public float accelerationRate = 0.95f;
+
+    private Vector3 velocityDamp;
 	public float jumpSpeed = 10.0f;
 
 	//private Vector3 velocity;      TBC, look at its references as well
@@ -125,6 +127,8 @@ public class AI : MonoBehaviour {
     private GameObject ballSupered;
     public bool isKnockedOut;
     private float knockedOutTime;
+
+    bool isSlowingDown;
 
 
     private float t_k0;
@@ -454,10 +458,10 @@ public class AI : MonoBehaviour {
         move.x = horzInput;
         move.z = vertInput;
 
-        if (Vector3.SqrMagnitude(move) > 0.0f)   
+        if (Vector3.SqrMagnitude(move) > 0.0f || playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)    // aka if we want to overide navMesh
         {
             Vector3 agentVelocity = new Vector3(move.x * xSpeed, 0.0f, move.z * zSpeed);
-            navMeshAgent.velocity = agentVelocity;
+            SetNavVelocity(agentVelocity);
           //  print("CustomMove Debug");
           //  print("agentVelocity = " + agentVelocity);
         }
@@ -466,22 +470,42 @@ public class AI : MonoBehaviour {
     internal void SetNavVelocity(Vector3 vector3)
     {
 
-        navMeshAgent.velocity = vector3;
+        if (!isSlowingDown)
+        {
+            navMeshAgent.velocity = Vector3.Lerp(navMeshAgent.velocity, vector3, accelerationRate); 
+        }
+        else
+        {
+            navMeshAgent.velocity = Vector3.Lerp(navMeshAgent.velocity, Vector3.zero, accelerationRate);
+        }
 
         float runAnimThresh = 8f;
-
         if (vector3.magnitude >=  runAnimThresh)
         {
             animator.SetBool("Running", true);
         }
     }
 
+    public void SlowDown(float decelerationRate, float stallTime)
+    {
+        isSlowingDown = true;
+        accelerationRate = decelerationRate;
+
+        Invoke("NormalNavSpeed", stallTime);
+    }
+
+    void NormalNavSpeed()
+    {
+        isSlowingDown = false;
+        accelerationRate = .85f;
+        navMeshAgent.speed = navSpeed;
+    }
+  
     void GrabInput() {
 
         // pick up /catch
 
         CheckCatchCool();
-        CheckHasBallAnim();
 
         if (staminaCool< stamina - 1)
         {
@@ -539,7 +563,7 @@ public class AI : MonoBehaviour {
                             levelManager.CatchDisplay(playerConfigObject.transform.position);
                             ball.GetComponent<Ball>().DeactivateThrow();
 
-                            float hitPauseDuration = velocityCaught.magnitude / 100f;
+                            float hitPauseDuration = Mathf.Clamp(velocityCaught.magnitude / 100f, FXManager.min_CatchPauseDuration, FXManager.max_CatchPauseDuration);
                             float hitPausePreDelay = .25f;
 
                             DelayPause(hitPauseDuration, hitPausePreDelay);
@@ -553,7 +577,8 @@ public class AI : MonoBehaviour {
 
                             if (animator)
                             {
-                                animator.SetBool("hasBall", true);
+                                animator.SetTrigger("PickUp");
+                                animator.ResetTrigger("PickUp");
                             }
                         }
 
@@ -567,7 +592,7 @@ public class AI : MonoBehaviour {
                 }
                 else
                 {
-                    // if (!ball.GetComponent<Ball>().isSupering)                   
+                     if (!ball.GetComponent<Ball>().isSupering)                   
                     {
                         animator.SetTrigger("Ready");           
                        // print("Miss Pick Up");
@@ -597,6 +622,10 @@ public class AI : MonoBehaviour {
                     catchReady = false;
                     catchCoolDown = catchLagTime;
                 }
+
+
+                CheckHasBallAnim();
+
 
             }
 
@@ -716,7 +745,7 @@ public class AI : MonoBehaviour {
 
     private void CheckHasBallAnim()
     {
-        /*
+        
         if (!ballGrabbed)
         {
 
@@ -728,7 +757,7 @@ public class AI : MonoBehaviour {
             if (animator.GetBool("hasBall") == false)
                 animator.SetBool("hasBall", true);
         }
-        */
+        
     }
 
     private void DepleteStamina(float cost)
@@ -1513,17 +1542,6 @@ public class AI : MonoBehaviour {
         }
     }
 
-    public void SlowDown(float delay, float stallTime)
-    {
-        navMeshAgent.speed = navMeshAgent.speed / 2f;
-        rigidbody.velocity = rigidbody.velocity / 2f;
-        Invoke("NormalNavSpeed", stallTime);
-    }
-
-    void NormalNavSpeed()
-    {
-        navMeshAgent.speed = navSpeed;
-    }
 
     public void Init()
     {

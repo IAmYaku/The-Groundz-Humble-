@@ -36,7 +36,7 @@ public class PlayerConfiguration : MonoBehaviour
 
     float t_contact0;
 
-    bool ballContact;     // what if multiple balls
+    public bool ballContact;     // what if multiple balls
     GameObject ballHit;
 
 
@@ -131,23 +131,23 @@ public class PlayerConfiguration : MonoBehaviour
                         bool ballHitISupered = ballHit.GetComponent<Ball>().isSupering;
 
                         ballContact = true;         // what if multiple balls
-                        float stallTime = .2f;
-                        float hitDelay = .0005f;
-                        SlowDownPlayer(hitDelay, stallTime);
+
+                        
                         TriggerHitAnimation();
 
-                        if (ballHitISupered)
+                        float stallTime = .2f;
+                        float hitDelay = .0005f;
+         
+                        TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity, ballHitISupered);
+                        SlowDownPlayer(hitDelay, stallTime);
 
-                        {
-                            TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity);
 
-                        }
 
                         levelManager.AddHit(ballHit, parent);
                         levelManager.TriggerHitFX(gameObject, ballHit);
 
 
-                        float hitPauseDuration = ballHitVelocity / 20f;
+                        float hitPauseDuration = Mathf.Clamp( ballHitVelocity / 20f, FXManager.min_HitPauseDuration, FXManager.max_HitPauseDuration);
                         float hitPausePreDelay = .125f;
 
                         DelayPause(hitPauseDuration, hitPausePreDelay);
@@ -266,16 +266,38 @@ public class PlayerConfiguration : MonoBehaviour
         }
     }
 
-    private void TriggerKnockBack(Vector3 ballVelocity)                                                                    // important to revitalize
+    private void TriggerKnockBack(Vector3 ballVelocity, bool ballIsSupered)                                                                    // important to revitalize
     {
+
+        float superMultipliier = 10f;
+        Vector3 knockBackForce = new Vector3(.25f, .125f, .25f);
+
+        if (ballIsSupered)
+        {
+            knockBackForce *= superMultipliier;
+        }
+
+        Vector3 knockBackVec = Vector3.Scale(ballVelocity, knockBackForce);
+
+        if (player.hasAI)
+        {
+            ai.SetNavVelocity(ai.navMeshAgent.velocity + knockBackVec);
+
+            print("knockBackVec= " + knockBackVec);
+            print(" aiNavMeshagent vel = " + ai.navMeshAgent.velocity);
+        }
+        else
+        {
+            rigidbody.velocity += (knockBackVec);
+        }
+        
         /*
-        rigidbody.AddExplosionForce(ballVelocity.magnitude, ballVelocity, ballVelocity.magnitude / 10);
-        knockedOutTime = 3f;
-        t_k0 = Time.realtimeSinceStartup;
-        isKnockedOut = true;
-        animator.SetTrigger("Head Hit");
-        // animator.SetTrigger("Knock Out");
-        */
+       knockedOutTime = 3f;
+       t_k0 = Time.realtimeSinceStartup;
+       isKnockedOut = true;
+       animator.SetTrigger("Head Hit");
+       // animator.SetTrigger("Knock Out");
+       */
 
     }
 
