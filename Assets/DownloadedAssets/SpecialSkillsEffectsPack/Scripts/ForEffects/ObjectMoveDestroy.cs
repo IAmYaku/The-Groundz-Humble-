@@ -18,6 +18,7 @@ public class ObjectMoveDestroy : MonoBehaviour
     public bool isCheckHitTag;
     public string mtag;
     public bool isShieldActive = false;
+    public bool isHitMake = true;
 
     float time;
     bool ishit;
@@ -51,6 +52,8 @@ public class ObjectMoveDestroy : MonoBehaviour
 
     void MakeHitObject(RaycastHit hit)
     {
+        if (isHitMake == false)
+            return;
         m_makedObject = Instantiate(m_hitObject, hit.point, Quaternion.LookRotation(hit.normal)).gameObject;
         m_makedObject.transform.parent = transform.parent;
         m_makedObject.transform.localScale = new Vector3(1, 1, 1);
@@ -58,6 +61,8 @@ public class ObjectMoveDestroy : MonoBehaviour
 
     void MakeHitObject(Transform point)
     {
+        if (isHitMake == false)
+            return;
         m_makedObject = Instantiate(m_hitObject, point.transform.position, point.rotation).gameObject;
         m_makedObject.transform.parent = transform.parent;
         m_makedObject.transform.localScale = new Vector3(1, 1, 1);

@@ -84,7 +84,7 @@ public class LevelManager : MonoBehaviour
     ArcadeMode arcadeScript;
     public int roundLevel;
 
-    float difficultyScaler = 1;
+    float difficultyScaler = 3f;
     int throwMag;
     int throwDecScalar;
 
@@ -407,6 +407,8 @@ public class LevelManager : MonoBehaviour
                     {
                         toRemove.Add(ball);
                     }
+
+                    ClearContacts(ball);
                 }
             }
             foreach (GameObject ball in toRemove)
@@ -805,7 +807,9 @@ public class LevelManager : MonoBehaviour
         }
 
         player.GetComponent<Player>().DisablePlayer();
+        player.GetComponent<Player>().DisablePlayer();
         player.GetComponent<Player>().PlayOutSound();
+
 
 
     }

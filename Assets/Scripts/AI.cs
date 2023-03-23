@@ -49,7 +49,7 @@ public class AI : MonoBehaviour {
     private float randomThrowFactor = 30f;
     public float randomThrowFactor0 = 30f;
     private int level = 1;
-    float throwScale = 7f;                   
+    float throwScale = 10f;                   
     float speedScale = 1f;
     float catchProb = .2f;
 
@@ -377,7 +377,7 @@ public class AI : MonoBehaviour {
 
                         if (animator)
                         {
-                            animator.SetFloat("Speed", Mathf.Clamp(navMeshAgent.velocity.magnitude / 10f, 1f, 2f)); // *arbitrary nums
+                            animator.SetFloat("Speed", Mathf.Clamp(navMeshAgent.velocity.magnitude / 20f, 1f, 2f)); // *arbitrary nums
 
                             if (animator.GetBool("Running") == false)
                             {
