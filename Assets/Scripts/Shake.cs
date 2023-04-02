@@ -25,10 +25,27 @@ public class Shake : AIState
     }
     public void Update(GameManager manager, AI ai)
     {
+        ai.EvaluateGameState();
+
+        Action();
+
+       // if
+
+
     }
 
-    public void Action(GameManager manager, AI ai, float dur, Vector3 target)
+    
+
+    public  void Action(GameManager manager, AI ai, float dur, float intensity)
     {
+
+
+    }
+
+    public void Action()
+    {
+
+
     }
 
     int AIState.GetNum()
@@ -41,5 +58,13 @@ public class Shake : AIState
         Debug.Log("Returning " + name);
         return name;
     }
+    public void SetInAction(bool x)
+    {
+        inAction = x;
+    }
 
+    public void Action(GameManager manager, AI ai, float dur, Vector3 target)
+    {
+        throw new NotImplementedException();
+    }
 }

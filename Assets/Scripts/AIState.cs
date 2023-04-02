@@ -18,6 +18,8 @@ public interface AIState	{
     // idle 0, GetBall 1, ThrowBall 2, Ready 3, Panic 4, Retreat 5, Shake 6
 
     string GetName();
+
+    void SetInAction(bool x);
 }
 
 

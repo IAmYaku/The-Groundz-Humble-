@@ -9,6 +9,8 @@ public class ThrowBall : AIState
 
     bool inAction;
     GameObject gameObject;
+    GameManager gameManager;
+
 
     AI ai;
 
@@ -30,122 +32,180 @@ public class ThrowBall : AIState
     {
         ai = ai_;
         gameObject = ai.gameObject;
+        gameManager = manager;
 
     }
 
 
     public void Update(GameManager manager, AI _ai)
     {
-        ai.ValuateGameState();
+        ai.EvaluateGameState();
 
         if (ai.type == AI.Type.timid)
-
         {
-            if (!inAction)
-            {
-                if (ai.gameState == AI.GameState.safe)
-                {
-                    if (ai.ballGrabbed)
-                    {
-                        Action(manager, ai, 2, Vector3.zero);
-                    }
-                    else
-                    {
-                        ai.rTriggerInput = false;
-                        ai.SetState(ai.getBall_);
-                    }
-                }
-                if (ai.gameState == AI.GameState.mildly_safe)
-                {
-                    if (ai.ballGrabbed)
-                    {
-                        Action(manager, ai, 2, Vector3.zero);
-                    }
-                    else
-                    {
-                        ai.rTriggerInput = false;
-                        ai.SetState(ai.getBall_);
-                    }
-                }
+            TimidBehavior(manager, _ai);
+        }
 
-                if (ai.gameState == AI.GameState.mild)
-                {
-                    if (ai.ballGrabbed)
-                    {
-                        Action(manager, ai, 2, Vector3.zero);
-                    }
-                    else
-                    {
-                        ai.rTriggerInput = false;
-                        ai.SetState(ai.getBall_);
-                    }
-                }
+        if (ai.type == AI.Type.aggresive)
+        {
+            AggressiveBehavior(manager, _ai);
+        }
 
-                if (ai.gameState == AI.GameState.mildly_dangerous)
-                {
-                    ai.SetState(ai.panic_);
-                }
-
-                if (ai.gameState == AI.GameState.dangerous)
-                {
-                    ai.SetState(ai.panic_);
-                }
-            }
-
-            else                                                                              
-            {                                                                            // iffy code
-                if (ai.gameState == AI.GameState.safe)
-                {
-                    if (ai.ballGrabbed)
-                    {
-                        Action(manager, ai, 1, Vector3.zero);
-                    }
-                    else
-                    {
-                        ai.SetState(ai.getBall_);
-                    }
-                }
-                if (ai.gameState == AI.GameState.mildly_safe)
-                {
-                    if (ai.ballGrabbed)
-                    {
-                        Action(manager, ai, 1, Vector3.zero);
-                    }
-                    else
-                    {
-                        ai.SetState(ai.getBall_);
-                    }
-                }
-                if (ai.gameState == AI.GameState.mild)
-                {
-                    ai.SetState(ai.idle_);
-                }
-                if (ai.gameState == AI.GameState.mildly_dangerous)
-                {
-                    ai.SetState(ai.retreat_);
-                }
-                if (ai.gameState == AI.GameState.dangerous)
-                {
-                    ai.SetState(ai.panic_);
-                }
-
-            }
+        if (ai.type == AI.Type.random)
+        {
+            RandomBehavior();
         }
 
     }
 
+    #region Behaviors
+    private void TimidBehavior(GameManager manager, AI ai)
+    {
+        if (!inAction)
+        {
+            if (ai.gameState == AI.GameState.safe)
+            {
+                if (ai.ballGrabbed)
+                {
+                    Action(manager, ai, 2, Vector3.zero);
+                }
+                else
+                {
+                    ai.rTriggerInput = false;
+                    ai.SetState(ai.getBall_);
+                }
+            }
+            if (ai.gameState == AI.GameState.mildly_safe)
+            {
+                if (ai.ballGrabbed)
+                {
+                    Action(manager, ai, 2, Vector3.zero);
+                }
+                else
+                {
+                    ai.rTriggerInput = false;
+                    ai.SetState(ai.getBall_);
+                }
+            }
+
+            if (ai.gameState == AI.GameState.mild)
+            {
+                if (ai.ballGrabbed)
+                {
+                    Action(manager, ai, 2, Vector3.zero);
+                }
+                else
+                {
+                    ai.rTriggerInput = false;
+                    ai.SetState(ai.getBall_);
+                }
+            }
+
+            if (ai.gameState == AI.GameState.mildly_dangerous)
+            {
+                ai.SetState(ai.panic_);
+            }
+
+            if (ai.gameState == AI.GameState.dangerous)
+            {
+                ai.SetState(ai.panic_);
+            }
+        }
+
+        else
+        {                                                                            // iffy code
+            if (ai.gameState == AI.GameState.safe)
+            {
+                if (ai.ballGrabbed)
+                {
+                    Action(manager, ai, 1, Vector3.zero);
+                }
+                else
+                {
+                    ai.SetState(ai.getBall_);
+                }
+            }
+            if (ai.gameState == AI.GameState.mildly_safe)
+            {
+                if (ai.ballGrabbed)
+                {
+                    Action(manager, ai, 1, Vector3.zero);
+                }
+                else
+                {
+                    ai.SetState(ai.getBall_);
+                }
+            }
+            if (ai.gameState == AI.GameState.mild)
+            {
+                ai.SetState(ai.idle_);
+            }
+            if (ai.gameState == AI.GameState.mildly_dangerous)
+            {
+                ai.SetState(ai.retreat_);
+            }
+            if (ai.gameState == AI.GameState.dangerous)
+            {
+                ai.SetState(ai.panic_);
+            }
+
+        }
+    }
+
+    private void AggressiveBehavior(GameManager manager, AI ai)
+    {
+        if (ai.ballGrabbed)
+        {
+            Action(manager, ai, 3, Vector3.zero);
+        }
+        else
+        {
+            ai.rTriggerInput = false;
+            ai.SetState(ai.getBall_);
+
+        }
+    }
+
+    void RandomBehavior()
+    {
+
+        float randomInt = UnityEngine.Random.Range(0, 3f);
+
+        if (randomInt < 1 && randomInt > 0)
+        {
+            if (ai.ballGrabbed)
+            {
+                Action(gameManager, ai, 2, Vector3.zero);
+            }
+            else
+            {
+                ai.SetState(ai.getBall_);
+            }
+        }
+
+        if (randomInt > 1 && randomInt < 2)
+        {
+            ai.SetState(ai.idle_);
+        }
+
+        if (randomInt > 2 && randomInt < 3)
+        {
+            ai.SetState(ai.panic_);
+        }
+
+
+    }
+
+    #endregion
 
     public void Action(GameManager manager, AI _ai, float urgency, Vector3 target)
     {
         ai = _ai;
         Vector3 pos = ai.navMeshAgent.gameObject.transform.position;
 
-
-        if (urgency == 2)
-        {
             inAction = true;
             float proximity = 50 - 10*urgency;
-            if (Vector3.Distance(pos, GetNearestOpp(manager, ai)) < proximity)
+            if (Vector3.Distance(pos, GetNearestOpp(manager, ai)) < proximity )
             {
                 FaceOpp();
                 ai.rTriggerInput = true;
@@ -160,42 +220,7 @@ public class ThrowBall : AIState
                 Debug.Log("Moving to Player");
             }
         }
-        if (urgency == 1)
-        {
-
-            FaceOpp();
-            inAction = true;
-            float proximity = 50 - 10 * urgency;
-            if (Vector3.Distance(pos, GetNearestOpp(manager, ai)) < proximity)
-            {
-                FaceOpp();
-                ai.rTriggerInput = true;
-                inAction = false;
-                ai.SetState(ai.idle_);
-            }
-            else
-            {
-                MoveTowardsOpp(manager, ai);
-            }
-        }
-        if (urgency == 0)
-        {
-            FaceOpp();
-            inAction = true;
-            float proximity = 50 - 10 * urgency;
-            if (Vector3.Distance(pos, GetNearestOpp(manager, ai)) < proximity)
-            {
-                FaceOpp();
-                ai.rTriggerInput = true;
-                inAction = false;
-                ai.SetState(ai.idle_);
-            }
-            else
-            {
-                MoveTowardsOpp(manager, ai);
-            }
-        }
-    }
+  
 
     private void FaceOpp()
     {
@@ -273,5 +298,10 @@ public class ThrowBall : AIState
     {
         Debug.Log("Returning " + name);
         return name;
+    }
+
+    public void SetInAction(bool x)
+    {
+        inAction = x;
     }
 }

@@ -21,12 +21,12 @@ public class Retreat : AIState {
     public void Update(GameManager manager, AI ai)
     {
 
-        ai.ValuateGameState();
+        ai.EvaluateGameState();
 
         if (!inAction)
         {
 
-            if (ai.type == AI.Type.timid)
+            //if (ai.type == AI.Type.timid)
             {
                 if (ai.IsAtRetreatPoint())
                 {
@@ -117,4 +117,9 @@ public class Retreat : AIState {
         Debug.Log("Returning " + name);
         return name;
     }
+    public void SetInAction(bool x)
+    {
+        inAction = x;
+    }
+
 }

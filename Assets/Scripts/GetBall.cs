@@ -21,7 +21,6 @@ public class GetBall : AIState {
 	public bool superInput;
 	public bool blockInput;
 
-	public bool ballGrabbed;
 
     float counter;
     float t0;
@@ -30,10 +29,13 @@ public class GetBall : AIState {
     int num = 1;
     string name = "GetBall";
 
+    GameManager gameManager;
+
     public void Start(GameManager manager, AI ai_)          // make gameManager
     {
         ai = ai_;
         gameObject = ai.gameObject;
+        gameManager = manager;
 
     }
 
@@ -41,112 +43,29 @@ public class GetBall : AIState {
     public void Update(GameManager manager, AI ai)
     {
 
-        ai.ValuateGameState();
+        ai.EvaluateGameState();
 
         Vector3 pos = ai.navMeshAgent.gameObject.transform.position;
         GameObject nearestBall = GetNearestBall(pos, manager);
 
         if (ai.type == AI.Type.timid)
         {
+            TimidBehavior(nearestBall);
+        }
 
-            if (!ai.ballGrabbed && nearestBall)
-            {
-                if (ai.gameState == AI.GameState.safe)
-                {
-                    Action(manager, ai, 2, Vector3.zero);
-                }
+        if (ai.type == AI.Type.aggresive)
+        {
+            AggressiveBehavior(nearestBall);
+        }
 
-                if (ai.gameState == AI.GameState.mildly_safe)
-                {
-                    Action(manager, ai, 1, Vector3.zero);
-                }
-
-                if (ai.gameState == AI.GameState.mild)
-                {
-                    Action(manager, ai, 0, Vector3.zero);
-                }
-
-                if (ai.gameState == AI.GameState.mildly_dangerous)
-                {
-                    ai.SetState(ai.retreat_);
-                }
-
-                if (ai.gameState == AI.GameState.dangerous)
-                {
-                    ai.SetState(ai.panic_);
-                }
-            }
-
-            else
-
-            {
-                if (ai.ballGrabbed)
-                {
-
-                    if (ai.gameState == AI.GameState.safe)
-                    {
-                        ai.SetState(ai.throwBall_);
-                    }
-
-                    if (ai.gameState == AI.GameState.mildly_safe)
-                    {
-                        ai.SetState(ai.throwBall_);
-                    }
-
-                    if (ai.gameState == AI.GameState.mild)
-                    {
-                        ai.SetState(ai.idle_);
-                    }
-
-                    if (ai.gameState == AI.GameState.mildly_dangerous)
-                    {
-                        ai.SetState(ai.retreat_);
-                    }
-
-                    if (ai.gameState == AI.GameState.dangerous)
-                    {
-                        ai.SetState(ai.panic_);
-                    }
-                }
-
-                else
-                {
-                    if (!nearestBall)
-                    {
-                        if (ai.gameState == AI.GameState.safe)
-                        {
-                           ai.SetState(ai.idle_);
-                        }
-
-                        if (ai.gameState == AI.GameState.mildly_safe)
-                        {
-                            ai.SetState(ai.idle_);
-                        }
-
-                        if (ai.gameState == AI.GameState.mild)
-                        {
-                            ai.SetState(ai.idle_);
-                        }
-
-                        if (ai.gameState == AI.GameState.mildly_dangerous)
-                        {
-                            ai.SetState(ai.retreat_);
-                        }
-
-                        if (ai.gameState == AI.GameState.dangerous)
-                        {
-                            ai.SetState(ai.panic_);
-                        }
-                    }
-                }
-            }
+        if (ai.type == AI.Type.random)
+        {
+            RandomBehavior(nearestBall);
         }
     }
 
     public void Action(GameManager manager, AI ai, float urgency, Vector3 tar)                  // Make better
     {
-        
-
      //   Debug.Log("GrabInput Action");
 
         inAction = true;
@@ -154,21 +73,23 @@ public class GetBall : AIState {
         int count = 0;
         int team = ai.gameObject.GetComponentInParent<Player>().team;
 
-        if (urgency == 2)
-        {
-          //  Debug.Log("urgency 2");
+          //  Debug.Log("urgency");
             GameObject nearestBall = GetNearestBall(pos, manager);
 
             if (nearestBall != null)
             {
               //  Debug.Log("Found Ball");
 
-
                 if (Vector3.Distance(nearestBall.transform.position, ai.navMeshAgent.gameObject.transform.position) <= ai.grabRadius) // 
                 {
                     Debug.Log("ActionInput");
                     ai.action1Input = true;
                     ai.EndAgentNavigation();
+
+                    if (ai.ballGrabbed)
+                    {
+                        inAction = false;
+                    }
                 }
                 else
                 {
@@ -185,7 +106,7 @@ public class GetBall : AIState {
                    // Debug.Log("GrabRadius = "+ ai.grabRadius);
                    // Debug.Log("Distance = " + Vector3.Distance(nearestBall.transform.position, ai.navMeshAgent.gameObject.transform.position));
 
-
+                   // ai.navSpeed
                     ai.SetAgentDestination(nearestBall.transform);
                 }
             }
@@ -196,100 +117,120 @@ public class GetBall : AIState {
                 inAction = false;
 
             }
-        }
-        if (urgency == 1)
-        {
-         //   Debug.Log("urgency 1");
-
-            GameObject nearestBall = GetNearestBall(pos, manager);
-
-            if (nearestBall != null)
-            {
-            //   Debug.Log("Found Ball");
-
-                if (Vector3.Distance(nearestBall.transform.position, ai.navMeshAgent.gameObject.transform.position) < ai.grabRadius)
-                {
-                    Debug.Log("ActionInput");
-                    ai.action1Input = true;
-                    ai.EndAgentNavigation();
-                }
-                else
-                {
-                    if (ai.navMeshAgent.isStopped)
-                    {
-                        ai.navMeshAgent.isStopped = false;
-                    }
-                    //     Vector3 move = GetMoveTowards(pos, nearestBall);
-                    //   ai.horzInput = move.x;
-                    //    ai.vertInput = move.z;
-
-                  //  Debug.Log("Moving towards ball");
-                   // Debug.Log("GrabRadius = " + ai.grabRadius);
-                   // Debug.Log("Distance = " + Vector3.Distance(nearestBall.transform.position, ai.navMeshAgent.gameObject.transform.position));
-
-                    ai.SetAgentDestination(nearestBall.transform);
-                }
-            }
-            else
-            {
-             Debug.Log("No Ball found");
-                inAction = false;
-                ai.DoIdle();
-
-
-            }
-        }
-        if (urgency == 0)
-        {
-         //   Debug.Log("urgency 0");
-
-            GameObject nearestBall = GetNearestBall(pos, manager);
-
-            if (nearestBall != null)
-            {
-             //  Debug.Log("Found Ball");
-                if (Vector3.Distance(nearestBall.transform.position, ai.navMeshAgent.gameObject.transform.position) < ai.grabRadius)
-                {
-                    Debug.Log("ActionInput");
-                    ai.action1Input = true;
-                    ai.EndAgentNavigation();
-
-                }
-                else
-                {
-                    if (ai.navMeshAgent.isStopped)
-                    {
-                        ai.navMeshAgent.isStopped = false;
-                    }
-
-
-                    //     Vector3 move = GetMoveTowards(pos, nearestBall);
-                    //   ai.horzInput = move.x;
-                    //  ai.vertInput = move.z;
-
-                  // Debug.Log("Moving towards ball");
-                 //   Debug.Log("GrabRadius = " + ai.grabRadius);
-                  //  Debug.Log("Distance = " + Vector3.Distance(nearestBall.transform.position, ai.navMeshAgent.gameObject.transform.position));
-
-
-                    ai.SetAgentDestination(nearestBall.transform);
-
-                }
-            }
-
-            else
-            {
-               Debug.Log("No Ball found");
-                inAction = false;
-                ai.DoIdle();
-
-
-            }
-        }
+        
 
     }
 
-	GameObject GetNearestBall( Vector3 pos, GameManager manager){
+    #region Behaviors
+    void TimidBehavior(GameObject nearestBall)
+    {
+        if (ai.gameState == AI.GameState.safe)
+        {
+            if (inAction) { 
+                Action(gameManager, ai, 2, Vector3.zero);
+        }
+            else
+            {
+                if (ai.ballGrabbed)
+                {
+                    ai.SetState(ai.throwBall_);
+                }
+            }
+        }
+
+        if (ai.gameState == AI.GameState.mildly_safe)
+        {
+            if (inAction)
+            {
+                Action(gameManager, ai, 1, Vector3.zero);
+            }
+            else
+            {
+                if (ai.ballGrabbed)
+                {
+                    ai.SetState(ai.throwBall_);
+                }
+            }
+        }
+
+        if (ai.gameState == AI.GameState.mild)
+        {
+            if (inAction)
+            {
+                Action(gameManager, ai, 0, Vector3.zero);
+            }
+            }
+
+            if (ai.gameState == AI.GameState.mildly_dangerous)
+        {
+            if (!inAction)
+            {
+                ai.SetState(ai.retreat_);
+            }
+                
+        }
+
+        if (ai.gameState == AI.GameState.dangerous)
+        {
+            if (inAction)
+            {
+                ai.SetState(ai.panic_);
+            }
+
+        }
+    }
+
+    void AggressiveBehavior (GameObject nearestBall)
+    {
+        if (ai.ballGrabbed)
+        {
+            ai.SetState(ai.throwBall_);
+        }
+        else
+        {
+            if (nearestBall)
+            {
+                Action(gameManager, ai, 2, Vector3.zero);
+            }
+            else
+            {
+                ai.SetState(ai.idle_); // or run pattern
+            }
+            
+        }
+    }
+
+    void RandomBehavior(GameObject nearestBall)
+    {
+        float randomInt = UnityEngine.Random.Range(0, 3f);
+
+        if (randomInt < 1 && randomInt > 0)
+        {
+            if (nearestBall)
+            {
+                ai.SetState(ai.throwBall_);
+            }
+            else
+            {
+                Action(gameManager, ai, 2, Vector3.zero);
+            }
+        }
+
+        if (randomInt > 1 && randomInt < 2)
+        {
+            ai.SetState(ai.idle_);
+        }
+
+        if (randomInt > 2 && randomInt < 3)
+        {
+            ai.SetState(ai.panic_);
+        }
+
+
+    }
+    #endregion
+
+    GameObject GetNearestBall( Vector3 pos, GameManager manager){
 
 
 		float min = 10000000f;
@@ -358,4 +299,107 @@ public class GetBall : AIState {
         Debug.Log("Returning " + name);
         return name;
     }
+
+    public void SetInAction(bool x)
+    {
+        inAction = x;
+    }
 }
+
+
+
+
+/*
+ * 
+ * if (!ai.ballGrabbed && nearestBall)
+        {
+            if (ai.gameState == AI.GameState.safe)
+            {
+                Action(gameManager, ai, 2, Vector3.zero);
+            }
+
+            if (ai.gameState == AI.GameState.mildly_safe)
+            {
+                Action(gameManager, ai, 1, Vector3.zero);
+            }
+
+            if (ai.gameState == AI.GameState.mild)
+            {
+                Action(gameManager, ai, 0, Vector3.zero);
+            }
+
+            if (ai.gameState == AI.GameState.mildly_dangerous)
+            {
+                ai.SetState(ai.retreat_);
+            }
+
+            if (ai.gameState == AI.GameState.dangerous)
+            {
+                ai.SetState(ai.panic_);
+            }
+        }
+
+        else
+
+        {
+            if (ai.ballGrabbed)
+            {
+
+                if (ai.gameState == AI.GameState.safe)
+                {
+                    ai.SetState(ai.throwBall_);
+                }
+
+                if (ai.gameState == AI.GameState.mildly_safe)
+                {
+                    ai.SetState(ai.throwBall_);
+                }
+
+                if (ai.gameState == AI.GameState.mild)
+                {
+                    ai.SetState(ai.idle_);
+                }
+
+                if (ai.gameState == AI.GameState.mildly_dangerous)
+                {
+                    ai.SetState(ai.retreat_);
+                }
+
+                if (ai.gameState == AI.GameState.dangerous)
+                {
+                    ai.SetState(ai.panic_);
+                }
+            }
+
+            else
+            {
+                if (!nearestBall)
+                {
+                    if (ai.gameState == AI.GameState.safe)
+                    {
+                        ai.SetState(ai.idle_);
+                    }
+
+                    if (ai.gameState == AI.GameState.mildly_safe)
+                    {
+                        ai.SetState(ai.idle_);
+                    }
+
+                    if (ai.gameState == AI.GameState.mild)
+                    {
+                        ai.SetState(ai.idle_);
+                    }
+
+                    if (ai.gameState == AI.GameState.mildly_dangerous)
+                    {
+                        ai.SetState(ai.retreat_);
+                    }
+
+                    if (ai.gameState == AI.GameState.dangerous)
+                    {
+                        ai.SetState(ai.panic_);
+                    }
+                }
+            }
+        }
+ * */

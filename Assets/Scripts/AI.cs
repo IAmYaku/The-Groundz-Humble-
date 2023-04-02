@@ -49,7 +49,7 @@ public class AI : MonoBehaviour {
     private float randomThrowFactor = 30f;
     public float randomThrowFactor0 = 30f;
     private int level = 1;
-    float throwScale = 10f;                   
+    float throwScale = 25f;                   
     float speedScale = 1f;
     float catchProb = .2f;
 
@@ -151,9 +151,10 @@ public class AI : MonoBehaviour {
     public AIState ready_ = new Ready();             //3
     public AIState panic_ = new Panic();            //4
     public AIState retreat_ = new Retreat();       //5
-    // Retrieve //6
+    public AIState shake_ = new Shake();          //6
 
-    // public AIState shake_ = new Shake();
+                                         // public AIState runPattern_ = new RunPattern();       //7
+
 
 
     public Transform retreatPoint;
@@ -272,7 +273,7 @@ public class AI : MonoBehaviour {
 
                 aiState.Update(gameManager, this);
 
-               // print(" aiState num = " + aiState.GetNum());
+                print(" aiState num = " + aiState.GetNum());
 
                 if (prevStateNum != aiState.GetNum())
                 {
@@ -840,7 +841,7 @@ public class AI : MonoBehaviour {
         return false;
     }
 
-    private GameObject GetNearestBall()               //reg ball
+    public GameObject GetNearestBall()               //reg ball
 	{
 		GameObject nearestBall = null;
 		Vector3 smallest = new Vector3(10000f, 10000f, 10000f);
@@ -1115,10 +1116,11 @@ public class AI : MonoBehaviour {
     public void SetState(AIState nuState) {
 
 		aiState = nuState;
+        aiState.SetInAction(true);
 	}
-   public void ValuateGameState()
+   public void EvaluateGameState()
     {
-        intensity = Getintensity();
+        intensity = GetIntensity();
     
         if (intensity > 4 && intensity <= 8)
         {
@@ -1149,7 +1151,7 @@ public class AI : MonoBehaviour {
     }
 
 
-    public int Getintensity()
+    public int GetIntensity()
     {
         int ballIntensity = GetBallIntensity();
 

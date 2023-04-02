@@ -992,6 +992,8 @@ public class LevelManager : MonoBehaviour
         Ball ballScript = ball.GetComponent<Ball>();
         ballScript.ActivateTrail(terColor, teeColor);
 
+        ballScript.SetActiveHitFX(true);
+
     }
 
     public void CatchDisplay(Vector3 position)
@@ -1298,6 +1300,7 @@ public class LevelManager : MonoBehaviour
                 pScript.SetColor(GlobalConfiguration.Instance.GetPlayerColor(i, pScript));
                 aiAIScript.Init();
                 aiAIScript.addedAtStage = true;
+                aiAIScript.type = AI.Type.aggresive;
             }
         }
 
@@ -1315,6 +1318,7 @@ public class LevelManager : MonoBehaviour
                 p2Script.SetColor(GlobalConfiguration.Instance.GetPlayerColor(j, p2Script));
                 ai2AIScript.Init();
                 ai2AIScript.addedAtStage = true;
+                ai2AIScript.type = AI.Type.aggresive;
             }
         }
 

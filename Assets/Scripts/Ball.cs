@@ -52,7 +52,9 @@ public class Ball : MonoBehaviour {
     public bool isInPickUpRange = false;
 
     public GameObject thrownIndicator;
+    public GameObject hitIndicator;
     public GameObject Player2BallAura;
+
     public float xSquashFactor = 1000f;
     public float ySquashFactor = 2000f;
 
@@ -117,7 +119,7 @@ public class Ball : MonoBehaviour {
           Seek(magnetism, target);     
         }
 
-        if (IsRendering)
+        if (IsRendering) // Fix
         {
             if(renderLength > 0)
             {
@@ -125,7 +127,7 @@ public class Ball : MonoBehaviour {
             }
             else
             {
-                gameObject.transform.GetChild(3).gameObject.SetActive(true); // methodize
+                gameObject.transform.GetChild(4).gameObject.SetActive(true); // methodize
 
                 gameObject.transform.GetChild(1).gameObject.SetActive(true);
                 gameObject.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().color = pColor;
@@ -340,6 +342,8 @@ public class Ball : MonoBehaviour {
         ParticleSystem hit_ps = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
         hit_ps.GetComponent<Renderer>().sortingOrder = 1;
         hit_ps.startSize = 0;
+
+        hitIndicator.SetActive(false);
 
         gameObject.transform.GetChild(1).gameObject.SetActive(false);
 
@@ -575,6 +579,11 @@ public class Ball : MonoBehaviour {
         }
 
         return false;
+    }
+
+    internal void SetActiveHitFX(bool x)
+    {
+        hitIndicator.SetActive(x);
     }
 }
         

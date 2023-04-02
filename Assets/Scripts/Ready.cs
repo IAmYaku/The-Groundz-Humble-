@@ -36,7 +36,7 @@ public class Ready : AIState
         // gotta check if player has ball or balls been thrown
         // gotta check if we caught before proceeding to next state
 
-        ai.ValuateGameState();
+        ai.EvaluateGameState();
 
             if (inAction || isReady)
             {
@@ -150,6 +150,11 @@ public class Ready : AIState
     {
         Debug.Log("Returning " + name);
         return name;
+    }
+
+    public void SetInAction(bool x)
+    {
+        inAction = x;
     }
 
 }

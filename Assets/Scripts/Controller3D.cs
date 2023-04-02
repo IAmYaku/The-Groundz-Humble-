@@ -1229,7 +1229,6 @@ public class Controller3D : MonoBehaviour
         }
 
         playerScript.playThrowSound();
-        playerScript.playThrowSound();
         levelManager.AddThrow(ball, parent);
         ballGrabbed = false;
         ballCaught = false;
