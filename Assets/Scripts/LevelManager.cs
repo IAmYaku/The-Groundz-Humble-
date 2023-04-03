@@ -1318,7 +1318,7 @@ public class LevelManager : MonoBehaviour
                 p2Script.SetColor(GlobalConfiguration.Instance.GetPlayerColor(j, p2Script));
                 ai2AIScript.Init();
                 ai2AIScript.addedAtStage = true;
-                ai2AIScript.type = AI.Type.aggresive;
+                ai2AIScript.type = AI.Type.timid;
             }
         }
 

@@ -137,14 +137,18 @@ public class Panic : AIState {
 
               //  Debug.Log(" ai.vertInput =  " + Mathf.Lerp(ranVelVec, ai.vertInput, .33f));
                 
-                if (CatchProb(aiCatchProb))
-                {
-                    ai.action1Input = true;
-                }
 
-                else
+                if (!ai.ballGrabbed)
                 {
-                    ai.action1Input = false;
+                    if (CatchProb(aiCatchProb))
+                    {
+                        ai.action1Input = true;
+                    }
+
+                    else
+                    {
+                        ai.action1Input = false;
+                    }
                 }
                 
                //Debug.Log("ai.vertInput = "  + ai.vertInput);
@@ -262,7 +266,7 @@ public class Panic : AIState {
     }
     string AIState.GetName()
     {
-        Debug.Log("Returning " + name);
+       // Debug.Log("Returning " + name);
         return name;
     }
 

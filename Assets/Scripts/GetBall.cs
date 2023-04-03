@@ -62,6 +62,8 @@ public class GetBall : AIState {
         {
             RandomBehavior(nearestBall);
         }
+
+        Debug.Log("InAction = " + inAction);
     }
 
     public void Action(GameManager manager, AI ai, float urgency, Vector3 tar)                  // Make better
@@ -93,7 +95,7 @@ public class GetBall : AIState {
                 }
                 else
                 {
-                    if (ai.navMeshAgent.isStopped)
+                    if (ai.navMeshAgent.isStopped || (nearestBall && ai.ballGrabbed))
                     {
                         ai.navMeshAgent.isStopped = false;
                     }
@@ -127,13 +129,24 @@ public class GetBall : AIState {
         if (ai.gameState == AI.GameState.safe)
         {
             if (inAction) { 
-                Action(gameManager, ai, 2, Vector3.zero);
+                Action(gameManager, ai, 3, Vector3.zero);
         }
             else
             {
                 if (ai.ballGrabbed)
                 {
                     ai.SetState(ai.throwBall_);
+                }
+                else
+                {
+                if (ai.GetNearestBall())
+                    {
+                        Action(gameManager, ai, 3, Vector3.zero);
+                    }
+                    else
+                    {
+                        ai.SetState(ai.idle_);
+                    }
                 }
             }
         }
@@ -142,7 +155,7 @@ public class GetBall : AIState {
         {
             if (inAction)
             {
-                Action(gameManager, ai, 1, Vector3.zero);
+                Action(gameManager, ai, 2, Vector3.zero);
             }
             else
             {
@@ -150,29 +163,70 @@ public class GetBall : AIState {
                 {
                     ai.SetState(ai.throwBall_);
                 }
+                if (ai.GetNearestBall())
+                {
+                    Action(gameManager, ai, 2, Vector3.zero);
+                }
+                else
+                {
+                    ai.SetState(ai.idle_);
+                }
             }
+        
         }
 
         if (ai.gameState == AI.GameState.mild)
         {
             if (inAction)
             {
-                Action(gameManager, ai, 0, Vector3.zero);
+                Action(gameManager, ai, 1, Vector3.zero);
+            }
+
+            else
+            {
+                if (ai.ballGrabbed)
+                {
+                    ai.SetState(ai.throwBall_);     // <--- Should try wait code here too
+                }
+                if (ai.GetNearestBall())
+                {
+                    Action(gameManager, ai, 1, Vector3.zero);
+                }
+                else
+                {
+                    ai.SetState(ai.idle_);
+                }
             }
             }
 
             if (ai.gameState == AI.GameState.mildly_dangerous)
         {
-            if (!inAction)
+            if (inAction)
             {
-                ai.SetState(ai.retreat_);
+                Action(gameManager, ai, 0, Vector3.zero);
             }
-                
+
+            else
+            {
+                if (ai.ballGrabbed)
+                {
+                    ai.SetState(ai.retreat_);     // <--- Should try wait code here too
+                }
+                if (ai.GetNearestBall())
+                {
+                    Action(gameManager, ai, 0, Vector3.zero); // <--- Should try wait code here too
+                }
+                else
+                {
+                    ai.SetState(ai.retreat_);
+                }
+            }
+
         }
 
         if (ai.gameState == AI.GameState.dangerous)
         {
-            if (inAction)
+            if (!inAction)
             {
                 ai.SetState(ai.panic_);
             }
@@ -296,7 +350,7 @@ public class GetBall : AIState {
 
     string AIState.GetName()
     {
-        Debug.Log("Returning " + name);
+      //  Debug.Log("Returning " + name);
         return name;
     }
 

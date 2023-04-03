@@ -61,14 +61,14 @@ public class ThrowBall : AIState
     #region Behaviors
     private void TimidBehavior(GameManager manager, AI ai)
     {
-        if (!inAction)
-        {
+        
             if (ai.gameState == AI.GameState.safe)
             {
-                if (ai.ballGrabbed)
+                if (inAction)
                 {
                     Action(manager, ai, 2, Vector3.zero);
                 }
+
                 else
                 {
                     ai.rTriggerInput = false;
@@ -77,9 +77,9 @@ public class ThrowBall : AIState
             }
             if (ai.gameState == AI.GameState.mildly_safe)
             {
-                if (ai.ballGrabbed)
+                if (inAction)
                 {
-                    Action(manager, ai, 2, Vector3.zero);
+                    Action(manager, ai, 1, Vector3.zero);
                 }
                 else
                 {
@@ -90,9 +90,9 @@ public class ThrowBall : AIState
 
             if (ai.gameState == AI.GameState.mild)
             {
-                if (ai.ballGrabbed)
+                if (inAction)
                 {
-                    Action(manager, ai, 2, Vector3.zero);
+                    Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too
                 }
                 else
                 {
@@ -103,53 +103,20 @@ public class ThrowBall : AIState
 
             if (ai.gameState == AI.GameState.mildly_dangerous)
             {
+            if (!inAction)
+            {
                 ai.SetState(ai.panic_);
+            }
+
             }
 
             if (ai.gameState == AI.GameState.dangerous)
             {
-                ai.SetState(ai.panic_);
-            }
-        }
-
-        else
-        {                                                                            // iffy code
-            if (ai.gameState == AI.GameState.safe)
-            {
-                if (ai.ballGrabbed)
-                {
-                    Action(manager, ai, 1, Vector3.zero);
-                }
-                else
-                {
-                    ai.SetState(ai.getBall_);
-                }
-            }
-            if (ai.gameState == AI.GameState.mildly_safe)
-            {
-                if (ai.ballGrabbed)
-                {
-                    Action(manager, ai, 1, Vector3.zero);
-                }
-                else
-                {
-                    ai.SetState(ai.getBall_);
-                }
-            }
-            if (ai.gameState == AI.GameState.mild)
-            {
-                ai.SetState(ai.idle_);
-            }
-            if (ai.gameState == AI.GameState.mildly_dangerous)
-            {
-                ai.SetState(ai.retreat_);
-            }
-            if (ai.gameState == AI.GameState.dangerous)
+            if (!inAction)
             {
                 ai.SetState(ai.panic_);
             }
-
-        }
+            }
     }
 
     private void AggressiveBehavior(GameManager manager, AI ai)
@@ -205,12 +172,11 @@ public class ThrowBall : AIState
 
             inAction = true;
             float proximity = 50 - 10*urgency;
-            if (Vector3.Distance(pos, GetNearestOpp(manager, ai)) < proximity )
+            if (Vector3.Distance(pos, GetNearestOpp(manager, ai)) < proximity)
             {
                 FaceOpp();
                 ai.rTriggerInput = true;
                 inAction = false;
-                ai.SetState(ai.idle_);
 
                 Debug.Log("AI Throwing");
             }
@@ -296,7 +262,7 @@ public class ThrowBall : AIState
 
     string AIState.GetName()
     {
-        Debug.Log("Returning " + name);
+       // Debug.Log("Returning " + name);
         return name;
     }
 

@@ -15,6 +15,8 @@ public class Idle : AIState {
 
     float dur = 0f;
 
+    bool isWaiting;
+
     int num = 0;
     string name = "Idle";
     GameManager gameManager;
@@ -103,7 +105,15 @@ public class Idle : AIState {
                 }
                 else
                 {
-                    ai.SetState(ai.getBall_);
+                    if (ai.GetNearestBall())
+                    {
+                        ai.SetState(ai.getBall_);
+                    }
+                    else
+                    {
+                        Action(gameManager, ai, 4.0f, Vector3.zero);
+                    }
+                   
                 }
             }
 
@@ -123,14 +133,22 @@ public class Idle : AIState {
                 }
                 else
                 {
-                    ai.SetState(ai.getBall_);
+                    if (ai.GetNearestBall())
+                    {
+                        ai.SetState(ai.getBall_);
+                    }
+                    else
+                    {
+                        Action(gameManager, ai, 3.0f, Vector3.zero);
+                    }
+
                 }
             }
         }
 
         if (ai.gameState == AI.GameState.mild)
         {
-            if (inAction)
+            if (inAction /* || isWaiting */)
             {
                 Action(gameManager, ai, 2.0f, Vector3.zero);
             }
@@ -138,12 +156,21 @@ public class Idle : AIState {
             {
                 if (ai.ballGrabbed)
                 {
-                    ai.SetState(ai.throwBall_);     //   <-- Here we can introduce a coin flip to randomize throwing or idling.. (and can use in other places as well)
+                   // WaitAndDoTask(1.0f, ai.throwBall_.GetName());
+                    ai.SetState(ai.throwBall_);
                 }
                 else
                 {
-                    //ready
-                    ai.SetState(ai.getBall_);     // <-- same here between get ball and ready... (weights can be applied based on difficulty)
+                    if (ai.GetNearestBall())
+                    {
+                        // WaitAndDoTask(1.0f, ai.getBall_.GetName());
+                        ai.SetState(ai.getBall_);
+                    }
+                    else
+                    {
+                        Action(gameManager, ai, 2.0f, Vector3.zero);
+                    }
+
                 }
             }
         }
@@ -308,5 +335,12 @@ public class Idle : AIState {
     public void SetInAction(bool x)
     {
         inAction = x;
+    }
+
+    IEnumerator WaitAndDoTask(float duration, string taskName)
+    {
+        isWaiting = true;
+        yield return new WaitForSeconds(duration);
+        Debug.Log("Coroutine ended: " + Time.time + " seconds");
     }
 }
