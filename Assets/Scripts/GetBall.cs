@@ -78,11 +78,15 @@ public class GetBall : AIState {
           //  Debug.Log("urgency");
             GameObject nearestBall = GetNearestBall(pos, manager);
 
+       
+
             if (nearestBall != null)
             {
-              //  Debug.Log("Found Ball");
 
-                if (Vector3.Distance(nearestBall.transform.position, ai.navMeshAgent.gameObject.transform.position) <= ai.grabRadius) // 
+            Debug.Log("nearestballPos = " + nearestBall.transform.position);
+            //  Debug.Log("Found Ball");
+
+            if (Vector3.Distance(nearestBall.transform.position, ai.navMeshAgent.gameObject.transform.position) <= ai.grabRadius) // 
                 {
                     Debug.Log("ActionInput");
                     ai.action1Input = true;
@@ -226,7 +230,12 @@ public class GetBall : AIState {
 
         if (ai.gameState == AI.GameState.dangerous)
         {
-            if (!inAction)
+            if (inAction)
+            {
+                Action(gameManager, ai, 0, Vector3.zero);
+            }
+
+            else
             {
                 ai.SetState(ai.panic_);
             }

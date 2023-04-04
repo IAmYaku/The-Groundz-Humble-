@@ -11,10 +11,13 @@ public class Retreat : AIState {
     int num = 5;
     string name = "Retreat";
 
+    GameManager gameManager;
+
     public void Start(GameManager manager, AI ai_)
     {
         ai = ai_;
         gameObject = ai.gameObject;
+        gameManager = manager;
 
     }
 
@@ -23,57 +26,124 @@ public class Retreat : AIState {
 
         ai.EvaluateGameState();
 
-        if (!inAction)
+        if (ai.gameState == AI.GameState.safe)
         {
-
-            //if (ai.type == AI.Type.timid)
+            if (!inAction)
             {
-                if (ai.IsAtRetreatPoint())
+                if (ai.ballGrabbed)
                 {
-
-                    if (ai.gameState == AI.GameState.safe)
-                    {
-                        if (!ai.ballGrabbed)
-                        {
-                            ai.SetState(ai.getBall_);
-                        }
-                        else
-                        {
-                            ai.SetState(ai.throwBall_);
-                        }
-                    }
-                    if (ai.gameState == AI.GameState.mildly_safe)
-                    {
-                        if (!ai.ballGrabbed)
-                        {
-                            ai.SetState(ai.getBall_);
-                        }
-                        else
-                        {
-                            ai.SetState(ai.throwBall_);
-                        }
-                    }
-                    if (ai.gameState == AI.GameState.mild)
-                    {
-                        ai.SetState(ai.idle_);
-                    }
-
-                    if (ai.gameState == AI.GameState.mildly_dangerous)
-                    {
-                        ai.SetState(ai.idle_);
-                    }
-                    if (ai.gameState == AI.GameState.dangerous)
-                    {
-                        ai.SetState(ai.idle_);
-                    }
+                    ai.SetState(ai.throwBall_);
                 }
-
                 else
                 {
-                    Action(manager, ai, 2, Vector3.zero);
+                    if (ai.GetNearestBall())
+                    {
+                        ai.SetState(ai.getBall_);
+                    }
+                    else
+                    {
+                        ai.SetState(ai.idle_);
+                    }
                 }
             }
+            else
+            {
+                Action(gameManager, ai, 3, Vector3.zero);
+            }
         }
+
+        if (ai.gameState == AI.GameState.mildly_safe)
+        {
+            if (!inAction)
+            {
+                if (ai.ballGrabbed)
+                {
+                    ai.SetState(ai.throwBall_);
+                }
+                else
+                {
+                    if (ai.GetNearestBall())
+                    {
+                        ai.SetState(ai.getBall_);
+                    }
+                    else
+                    {
+                        ai.SetState(ai.idle_);
+                    }
+                }
+            }
+            else
+            {
+                Action(gameManager, ai, 2, Vector3.zero);
+            }
+        }
+
+        if (ai.gameState == AI.GameState.mild)
+        {
+            if (!inAction)
+            {
+                if (ai.ballGrabbed)
+                {
+                    ai.SetState(ai.throwBall_);
+                }
+                else
+                {
+                    if (ai.GetNearestBall())
+                    {
+                        ai.SetState(ai.getBall_);
+                    }
+                    else
+                    {
+                        ai.SetState(ai.idle_);
+                    }
+                }
+            }
+            else
+            {
+                Action(gameManager, ai, 3, Vector3.zero);
+            }
+        }
+
+        if (ai.gameState == AI.GameState.mildly_dangerous)
+        {
+            if (!inAction)
+            {
+                if (ai.ballGrabbed)
+                {
+                    Action(gameManager, ai, 3, Vector3.zero);
+                }
+                else
+                {
+                    if (ai.GetNearestBall())
+                    {
+                        Action(gameManager, ai, 3, Vector3.zero);
+                    }
+                    else
+                    {
+                        ai.SetState(ai.panic_);
+                    }
+                }
+            }
+            else
+            {
+                Action(gameManager, ai, 2, Vector3.zero);
+            }
+        }
+
+        if (ai.gameState == AI.GameState.dangerous)
+        {
+            if (inAction)
+            {
+                Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too
+            }
+            else 
+            {
+                ai.SetState(ai.panic_);
+            }
+
+        }
+
+        Debug.Log("InAction = " + inAction);
 
     }
 
@@ -90,7 +160,7 @@ public class Retreat : AIState {
             float t0 = Time.realtimeSinceStartup;
             int team = ai.gameObject.GetComponentInParent<Player>().team;
 
-         //   Debug.Log("retreat point = " + ai.retreatPoint.position);
+          Debug.Log("retreat point = " + ai.retreatPoint.position);
             ai.SetAgentDestination(ai.retreatPoint);
         }
 
@@ -100,7 +170,7 @@ public class Retreat : AIState {
 
             inAction = false;
             ai.EndAgentNavigation();
-        //    Debug.Log("At retreat point ");
+            Debug.Log("At retreat point ");
         }
 
 

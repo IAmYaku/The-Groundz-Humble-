@@ -103,7 +103,10 @@ public class ThrowBall : AIState
 
             if (ai.gameState == AI.GameState.mildly_dangerous)
             {
-            if (!inAction)
+            if (inAction)
+            {
+                Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too
+            }
             {
                 ai.SetState(ai.panic_);
             }
@@ -112,7 +115,10 @@ public class ThrowBall : AIState
 
             if (ai.gameState == AI.GameState.dangerous)
             {
-            if (!inAction)
+            if (inAction)
+            {
+                Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too
+            }
             {
                 ai.SetState(ai.panic_);
             }
