@@ -107,6 +107,7 @@ public class ThrowBall : AIState
             {
                 Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too
             }
+            else
             {
                 ai.SetState(ai.panic_);
             }
@@ -119,6 +120,7 @@ public class ThrowBall : AIState
             {
                 Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too
             }
+            else
             {
                 ai.SetState(ai.panic_);
             }

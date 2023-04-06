@@ -196,7 +196,11 @@ public class Idle : AIState {
 
         if (ai.gameState == AI.GameState.dangerous)
         {
-            if (!inAction)
+            if (inAction)
+            {
+                Action(gameManager, ai, 0.0f, Vector3.zero);
+            }
+            else
             {
                 ai.SetState(ai.panic_);
             }

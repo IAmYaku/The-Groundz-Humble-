@@ -25,8 +25,10 @@ public class Panic : AIState {
 
     public bool panicked;
 
-    float panick0 = .6f;
+    float panickTime;
 
+    float panick0 = .6f;
+       
     float panickDelayTime;
     float panickDelay;
 
@@ -73,22 +75,8 @@ public class Panic : AIState {
             RandomBehavior();
         }
 
-        if (!inAction) {
-
-            ai.EvaluateGameState();
-
-            if (ai.type == AI.Type.random) {
-
-                Action(manager, ai, 2, Vector3.zero);
-            }
-
-         //   if (ai.type == AI.Type.timid)
-            
-        }
-        else
-        {
-            Action(3, ai);   // intensity number  is faulty
-        }
+      
+   
     }
 
     public void Action(GameManager manager, AI ai, float dur, Vector3 target) 
@@ -101,21 +89,13 @@ public class Panic : AIState {
 
     public void Action(int intensity, AI ai)
     {
-        float panickTime = Mathf.Abs(intensity * panick0);
-
-        if (!inAction)   // first time we're here
+        if ( panickTime == 0.0f)
         {
-
-            // panickTime is global ^^^
-            panicked = false;   // shouldn't need due to CheckPanicDelay but fuck it lol
-            t0 = Time.realtimeSinceStartup;
-            intensity = Mathf.Abs(intensity *2);     // *arb
-            sec = 0;
-            ai.FaceOpp();
-
+            panickTime = Mathf.Abs(intensity * panick0);
+            panicked = false;
         }
+        
 
-        {
             if (sec < panickTime)
             {
               //  Debug.Log("PANICKING");
@@ -127,13 +107,13 @@ public class Panic : AIState {
                 aiCatchProb = ai.GetCatchProb();
 
 
-                if (sec < .1f  || (sec % Mathf.Clamp(.3f - intensity/100f,0.01f,10f)) == 0)
+                if (float.Parse(sec.ToString("F1")) % .5f == 0.0f ) 
                 {
-                    ranVelVec = Random.Range(-.1f, .1f) * (intensity / 2.0f);               // aiLevel stuff here
+                    ranVelVec = Random.Range(-.1f, .1f) * (intensity / 10.0f);               // aiLevel stuff here
                 }
             
 
-                ai.vertInput = Mathf.Lerp(ranVelVec, ai.vertInput, .33f);
+                ai.vertInput = Mathf.Lerp(ranVelVec, ai.vertInput, .25f);
 
               //  Debug.Log(" ai.vertInput =  " + Mathf.Lerp(ranVelVec, ai.vertInput, .33f));
                 
@@ -150,25 +130,24 @@ public class Panic : AIState {
                         ai.action1Input = false;
                     }
                 }
-                
-               //Debug.Log("ai.vertInput = "  + ai.vertInput);
-               // ai.vertInput = Mathf.Clamp(ai.vertInput, -1.0f, 1.0f);
 
+            //Debug.Log("ai.vertInput = "  + ai.vertInput);
+            // ai.vertInput = Mathf.Clamp(ai.vertInput, -1.0f, 1.0f);
 
-                float tF = Time.realtimeSinceStartup;
-                sec = tF - t0;
+            sec += Time.deltaTime;
             }
 
             else
             {
              //   Debug.Log("panicked : @ " + sec);
                 ai.vertInput = 0.0f;
+                panickTime = 0.0f;
+                sec = 0.0f;
                 ai.action1Input = false;
                 panicked = true;
                 inAction = false;
                 panicked0 = Time.realtimeSinceStartup;
             }
-        }
     }
 
     void TimidBehavior()
@@ -176,6 +155,10 @@ public class Panic : AIState {
         {
             if (ai.gameState == AI.GameState.safe)
             {
+                if (inAction)
+                {
+
+                }
                 if (!ai.ballGrabbed)
                 {
                     ai.SetState(ai.getBall_);
