@@ -599,6 +599,7 @@ public class LevelManager : MonoBehaviour
          //   print("location = " + ballSpwanLocations[i]);
             GameObject ball = GlobalConfiguration.Instance.InstantiateBallPrefab(ballSpwanLocations[i]);
             ball.GetComponent<DropShadow>().SetGroundObject(stage.playingLevelPlane);
+            ball.GetComponent <Ball>().floorMarker.GetComponent<FloorMarker>().SetGroundObject(stage.playingLevelPlane);
             balls.Add(ball);
 
         }
@@ -993,6 +994,8 @@ public class LevelManager : MonoBehaviour
         ballScript.ActivateTrail(terColor, teeColor);
 
         ballScript.SetActiveHitFX(true);
+
+        ballScript.SetActiveFloorMarker(true);
 
     }
 

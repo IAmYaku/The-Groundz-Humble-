@@ -87,7 +87,7 @@ public class Panic : AIState {
       //  ai.vertInput = Random.Range(-2.0f, 2.0f);
     }
 
-    public void Action(int intensity, AI ai)
+    public void Action(float intensity, AI ai)
     {
         if ( panickTime == 0.0f)
         {
@@ -104,10 +104,12 @@ public class Panic : AIState {
                 ai.FaceOpp();                                          // <-- this may not be working lol; 
 
                 aiLevel = ai.GetLevel();
+
                 aiCatchProb = ai.GetCatchProb();
 
 
-                if (float.Parse(sec.ToString("F1")) % .5f == 0.0f ) 
+
+            if (float.Parse(sec.ToString("F1")) % .5f == 0.0f ) 
                 {
                     ranVelVec = Random.Range(-.1f, .1f) * (intensity / 10.0f);               // aiLevel stuff here
                 }
@@ -130,6 +132,11 @@ public class Panic : AIState {
                         ai.action1Input = false;
                     }
                 }
+
+                if (DodgeProb() )
+            {
+                ai.jumpInput = true;
+            }
 
             //Debug.Log("ai.vertInput = "  + ai.vertInput);
             // ai.vertInput = Mathf.Clamp(ai.vertInput, -1.0f, 1.0f);
@@ -193,7 +200,7 @@ public class Panic : AIState {
                 }
                 else
                 {
-                    Action(ai.intensity, ai);
+                    Action(ai.intensity/2f, ai);
                 }
             }
             if (ai.gameState == AI.GameState.dangerous)
@@ -205,7 +212,7 @@ public class Panic : AIState {
                 }
                 else
                 {
-                    Action(ai.intensity, ai);
+                    Action(ai.intensity/2f, ai);
                 }
             }
         }
@@ -262,6 +269,20 @@ public class Panic : AIState {
             return true;
         }
          else
+        {
+            return false;
+        }
+    }
+
+    bool DodgeProb()
+    {
+        float ran = Random.Range(0, 1);
+        if (ran < ai.GetLevel() * .25f)
+        {
+
+            return true;
+        }
+        else
         {
             return false;
         }

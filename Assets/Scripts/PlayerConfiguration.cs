@@ -138,7 +138,7 @@ public class PlayerConfiguration : MonoBehaviour
                         float stallTime = .2f;
                         float hitDelay = .0005f;
          
-                        TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity, ballHitISupered);
+                        //TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity, ballHitISupered);
                         SlowDownPlayer(hitDelay, stallTime);
 
 
@@ -160,7 +160,7 @@ public class PlayerConfiguration : MonoBehaviour
 
                     else
                     {
-                        if (levelManager.isPlaying && !player.isOut)
+                        if (levelManager.isPlaying && !player.isOut) // ?
                         {
                             CorrectPosition();
                         }
@@ -269,8 +269,8 @@ public class PlayerConfiguration : MonoBehaviour
     private void TriggerKnockBack(Vector3 ballVelocity, bool ballIsSupered)                                                                    // important to revitalize
     {
 
-        float superMultipliier = 10f;
-        Vector3 knockBackForce = new Vector3(.25f, .125f, .25f);
+        float superMultipliier = 5f;
+        Vector3 knockBackForce = new Vector3(.125f, .0125f, .125f);
 
         if (ballIsSupered)
         {
@@ -281,10 +281,11 @@ public class PlayerConfiguration : MonoBehaviour
 
         if (player.hasAI)
         {
+            
             ai.SetNavVelocity(ai.navMeshAgent.velocity + knockBackVec);
 
-            print("knockBackVec= " + knockBackVec);
-            print(" aiNavMeshagent vel = " + ai.navMeshAgent.velocity);
+           // print("knockBackVec= " + knockBackVec);
+            // print(" aiNavMeshagent vel = " + ai.navMeshAgent.velocity);
         }
         else
         {

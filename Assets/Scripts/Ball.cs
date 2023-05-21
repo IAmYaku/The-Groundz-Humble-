@@ -54,6 +54,8 @@ public class Ball : MonoBehaviour {
     public GameObject thrownIndicator;
     public GameObject hitIndicator;
     public GameObject Player2BallAura;
+    public GameObject shadow;
+    public GameObject floorMarker;
 
     public float xSquashFactor = 1000f;
     public float ySquashFactor = 2000f;
@@ -80,9 +82,25 @@ public class Ball : MonoBehaviour {
 		size = transform.localScale;
 
 		if (!BallAudioSource) {
-            BallAudioSource = GameObject.Find("Audio Source Ball").GetComponent<AudioSource>();
+            BallAudioSource = gameObject.transform.Find("Audio Source Ball").GetComponent<AudioSource>();
 		}
-	}
+        if (!thrownIndicator)
+        {
+            thrownIndicator = gameObject.transform.Find("Thrown Indicator").gameObject;
+        }
+        if (!hitIndicator)
+        {
+            hitIndicator = gameObject.transform.Find("Hit Indicator").gameObject;
+        }
+        if (!Player2BallAura)
+        {
+            Player2BallAura = gameObject.transform.Find("Player2BallAura").gameObject;
+        }
+        if (!shadow)
+        {
+            shadow = GameObject.Find("Shadow");
+        }
+    }
 
 	void Update () {
 
@@ -127,13 +145,15 @@ public class Ball : MonoBehaviour {
             }
             else
             {
-                gameObject.transform.GetChild(4).gameObject.SetActive(true); // methodize
+                shadow.SetActive(true); // methodize
 
-                gameObject.transform.GetChild(1).gameObject.SetActive(true);
-                gameObject.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().color = pColor;
-                ParticleSystem.MainModule mps = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+                thrownIndicator.gameObject.SetActive(true);
+                thrownIndicator.gameObject.GetComponent<SpriteRenderer>().color = pColor;
+                ParticleSystem.MainModule mps = thrownIndicator.gameObject.GetComponent<ParticleSystem>().main;
                 mps.startColor = pColor;
-                gameObject.GetComponent<SpriteRenderer>().enabled = true;
+
+                this.GetComponent<SpriteRenderer>().enabled = true;
+
                 IsRendering = false;
             }
         }
@@ -253,7 +273,7 @@ public class Ball : MonoBehaviour {
                 if (!isSupering)
                 {
                     
-                    if (collision.gameObject.tag == "Gate")
+                    if (collision.gameObject.tag == "Gate") // faulty
                     {
                         collision.gameObject.GetComponent<AudioSource>().pitch = UnityEngine.Random.Range(.8f, 1.2f);
                         collision.gameObject.GetComponent<AudioSource>().volume = Mathf.Clamp(velocity.magnitude / 1000, 0f, 1f);
@@ -287,6 +307,7 @@ public class Ball : MonoBehaviour {
                     SuperDeactivate();
                 }
             }
+
             hasWhipped = false;
         }
 
@@ -327,9 +348,11 @@ public class Ball : MonoBehaviour {
         {
             levelManager.RemoveThrow(gameObject);
         }
-        if (contact)
+      //  if (contact)
         {
             DeactivateTrail();
+            hitIndicator.SetActive(false);
+            floorMarker.SetActive(false); // or inverse of Caught FX
         }
 
 
@@ -343,7 +366,9 @@ public class Ball : MonoBehaviour {
         hit_ps.GetComponent<Renderer>().sortingOrder = 1;
         hit_ps.startSize = 0;
 
-        hitIndicator.SetActive(false);
+
+
+        //Add to 
 
         gameObject.transform.GetChild(1).gameObject.SetActive(false);
 
@@ -442,7 +467,7 @@ public class Ball : MonoBehaviour {
 
     }
 
-    private void ReRender(float rL)
+    private void ReRender(float rL)         // important for animation purposes but technically isnt sufficient as people can get hit by invisible balls lol
     {
         IsRendering = true;
         renderLength = rL;
@@ -585,6 +610,24 @@ public class Ball : MonoBehaviour {
     {
         hitIndicator.SetActive(x);
     }
+    internal void SetActiveFloorMarker(bool v)
+    {
+        floorMarker.SetActive(v);
+    }
+
+
+    internal void DeRender()
+    {
+        print("DeRednering");
+        this.GetComponent<SpriteRenderer>().enabled = false;
+        shadow.SetActive(false);
+        this.GetComponent<SphereCollider>().enabled = false;
+        this.GetComponent<Rigidbody>().useGravity = false;
+
+        thrownIndicator.SetActive(false);   
+    }
+
+  
 }
         
     

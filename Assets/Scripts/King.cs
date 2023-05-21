@@ -17,8 +17,8 @@ public class King : Character
     public static float jumpSpeed = 10.0f;
 
     public static float throwPower0 = 170;
-    public static float standingThrowPower = 1000;
-    public static float maxThrowPower = 600;
+    public static float standingThrowPower = 900;
+    public static float maxThrowPower = 500;
     public static float maxStandingThrowPower = 2400;
 
     public static float superCoolDown = 30.0f;

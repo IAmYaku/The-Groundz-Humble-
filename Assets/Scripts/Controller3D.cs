@@ -406,10 +406,20 @@ public class Controller3D : MonoBehaviour
                     Invoke("ResetThrowAnimations", .05125f);    //arbs
                 }
 
-                float throwSlowDownfactor = .00025f;
+                float throwSlowDownfactor = .0005f;
                 float stallTime = .1f;
                 SlowDownByVelocity(throwSlowDownfactor, stallTime);
 
+            }
+
+            else
+            {
+                if (Input.GetKeyUp(playerScript.joystick.altAction1Input) && IsKeyPickUp && ballGrabbed)
+                {
+                    float pickUpDelay = .25f;
+
+                    Invoke("SetKeyPickUpFalse", pickUpDelay);
+                }
             }
         }
         
@@ -475,18 +485,14 @@ public class Controller3D : MonoBehaviour
         if (Input.GetKeyDown(playerScript.joystick.altAction1Input) && !IsKeyPickUp)
         {
             IsKeyPickUp = true;
-            // print("IsKeyPickUp is true");
+            print("IsKeyPickUp is true");
         }
-
-        float pickUpDelay = .5f;
-
-        Invoke("SetKeyPickUpFalse", pickUpDelay);
     }
 
     private void SetKeyPickUpFalse()
     {
         IsKeyPickUp = false;
-        //print("IsKeyPickUp is false");
+        print("IsKeyPickUp is false");
     }
 
     #endregion
@@ -560,16 +566,20 @@ public class Controller3D : MonoBehaviour
         float velMag = rigidbody.velocity.magnitude;
         // print("VelMag = " + velMag);
 
-        if (!ballGrabbed && IsInGrabDistance(nearestBall, "ball") && (velMag > slowDownThresh))
+        if (nearestBall)
         {
-            if (!nearestBall.GetComponent<Ball>().thrown && IsFacingObj(nearestBall))
-            {
-                //  print("Slowing down for ball");
-                float grabHelpSlowDownfactor = .000125f + velMag / 1000f;     // should be game level dependent
-                float stallTime = .1f;
-                //print("grabHelpSlowDownFactor = "+ grabHelpSlowDownfactor);
-                SlowDownByVelocity(grabHelpSlowDownfactor, stallTime);
 
+            if (!ballGrabbed && IsInGrabDistance(nearestBall, "ball") && (velMag > slowDownThresh))
+            {
+                if (!nearestBall.GetComponent<Ball>().thrown && IsFacingObj(nearestBall))
+                {
+                    //  print("Slowing down for ball");
+                    float grabHelpSlowDownfactor = .000125f + velMag / 1000f;     // should be game level dependent
+                    float stallTime = .1f;
+                    //print("grabHelpSlowDownFactor = "+ grabHelpSlowDownfactor);
+                    SlowDownByVelocity(grabHelpSlowDownfactor, stallTime);
+
+                }
             }
         }
 
@@ -605,12 +615,12 @@ public class Controller3D : MonoBehaviour
         float muvXcel_z = Mathf.Abs(joyInput.GetMuvDelta().y);
         float muvMag = Vector2.SqrMagnitude(new Vector2(muvXcel_x, muvXcel_z));
 
-        float pow0_x = 4.6f;
-        float pow0_z = 6.0f;
+        float pow0_x = 4.0f;
+        float pow0_z = 4.0f;
 
         //float powMult = 2.0f;
         float clampMult_x = 20.0f;
-        float clampMult_z = 30.0f;
+        float clampMult_z = 20.0f;
 
 
 
@@ -620,7 +630,7 @@ public class Controller3D : MonoBehaviour
         float zCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_z * acceleration * accMult_z, pow0_z + muvXcel_z)), 0.0f, clampMult_z);
 
         float xMultiplier = 6f;
-        float zMultiplier = 8f;   //   < -- faulty, but feels good
+        float zMultiplier = 6f;   //   < -- faulty, but feels good
         float frameMult = 0.017f;
 
         float timeMultiplier = 300f;
@@ -870,13 +880,8 @@ public class Controller3D : MonoBehaviour
                         ballGrabbed = true;
                         ballComp.grounded = false;                         //methodize
                         ballComp.grabbed = true;
-                        ball.GetComponent<SpriteRenderer>().enabled = false;
-                        ball.transform.GetChild(3).gameObject.SetActive(false);
-                        ball.GetComponent<SphereCollider>().enabled = false;
-                        ball.GetComponent<Rigidbody>().useGravity = false;
 
-                        ball.transform.GetChild(1).gameObject.SetActive(false);   // most likely pikUp Deactivaate
-
+                        ballComp.DeRender();
                         ballComp.PickUpDeactivate();
 
                         Physics.IgnoreLayerCollision(5, 3, false);              //?
@@ -942,8 +947,8 @@ public class Controller3D : MonoBehaviour
             }
 
             //  print("vel mag = " + (rigidbody.velocity.magnitude) / 100f);
-            float action1SlowDownfactor = Mathf.Clamp(.0001f - (rigidbody.velocity.magnitude) / 10000f, .0001f, 100f);     //split to ready pickUp catch and character attribute specific
-            float stallTime = .1f;
+            float action1SlowDownfactor = Mathf.Clamp(.0002f - (rigidbody.velocity.magnitude) / 10000f, .0001f, 100f);     //split to ready pickUp catch and character attribute specific
+            float stallTime = .2f;
             SlowDownByVelocity(action1SlowDownfactor, stallTime);
 
         }

@@ -105,7 +105,7 @@ public class ThrowBall : AIState
             {
             if (inAction)
             {
-                Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too
+                Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too 
             }
             else
             {
@@ -118,11 +118,11 @@ public class ThrowBall : AIState
             {
             if (inAction)
             {
-                Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too
+                Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too 
             }
             else
             {
-                ai.SetState(ai.panic_);
+                ai.SetState(ai.panic_); 
             }
             }
     }
@@ -175,23 +175,29 @@ public class ThrowBall : AIState
 
     public void Action(GameManager manager, AI _ai, float urgency, Vector3 target)
     {
-        ai = _ai;
-        Vector3 pos = ai.navMeshAgent.gameObject.transform.position;
+            ai = _ai;
+            Vector3 pos = ai.navMeshAgent.gameObject.transform.position;
 
             inAction = true;
             float proximity = 50 - 10*urgency;
+
             if (Vector3.Distance(pos, GetNearestOpp(manager, ai)) < proximity)
             {
                 FaceOpp();
                 ai.rTriggerInput = true;
-                inAction = false;
+           // Debug.Log("AI Throwing");
 
-                Debug.Log("AI Throwing");
+            if (ai.ballGrabbed == false)
+            {
+                inAction = false;
+               // ai.SetNavVelocity(Vector3.zero);
+            }
+
             }
             else
             {
                 MoveTowardsOpp(manager, ai);
-                Debug.Log("Moving to Player");
+             //   Debug.Log("Moving to Player");
             }
         }
   

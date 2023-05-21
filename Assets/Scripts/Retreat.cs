@@ -13,6 +13,8 @@ public class Retreat : AIState {
 
     GameManager gameManager;
 
+    GameObject retreatObject;
+
     public void Start(GameManager manager, AI ai_)
     {
         ai = ai_;
@@ -143,25 +145,51 @@ public class Retreat : AIState {
 
         }
 
-        Debug.Log("InAction = " + inAction);
+     //   Debug.Log("InAction = " + inAction);
 
     }
 
     public void Action(GameManager manager, AI ai, float intensity, Vector3 target)
     {
-        if (!ai.IsAtRetreatPoint())
+
+
+
+        if (!IsAtRetreatPoint())
         {
+
             if (ai.navMeshAgent.isStopped)
             {
                 ai.navMeshAgent.isStopped = false;
+   
             }
 
             float sec = intensity;
             float t0 = Time.realtimeSinceStartup;
             int team = ai.gameObject.GetComponentInParent<Player>().team;
 
-          Debug.Log("retreat point = " + ai.retreatPoint.position);
-            ai.SetAgentDestination(ai.retreatPoint);
+           if (!retreatObject)
+            {
+                retreatObject = new GameObject();
+
+                float padding = 5f;
+                Vector3 retreatPointPos;
+
+                if (ai.GetTeam() == 2)
+                {
+                    retreatPointPos = new Vector3(ai.GetLevelManager().stage.RightPlane.transform.position.x - padding, ai.GetPosition().y, ai.GetPosition().z);
+                }
+
+                else
+                {
+                    retreatPointPos = new Vector3(ai.GetLevelManager().stage.LeftPlane.transform.position.x + padding, ai.GetPosition().y, ai.GetPosition().z);
+                }
+
+                retreatObject.transform.position = retreatPointPos;
+
+                ai.SetAgentDestination(retreatObject.transform);
+            }
+
+            ai.SetAgentDestination(retreatObject.transform);
         }
 
         else
@@ -170,7 +198,8 @@ public class Retreat : AIState {
 
             inAction = false;
             ai.EndAgentNavigation();
-            Debug.Log("At retreat point ");
+            GameObject.Destroy(retreatObject);
+            retreatObject = null;
         }
 
 
@@ -184,12 +213,26 @@ public class Retreat : AIState {
 
     string AIState.GetName()
     {
-        Debug.Log("Returning " + name);
         return name;
     }
     public void SetInAction(bool x)
     {
         inAction = x;
+    }
+
+    internal bool IsAtRetreatPoint()
+    {
+        float prox = 10.0f;
+        if (retreatObject)
+        {
+            if (Vector3.Magnitude(ai.GetPosition() - retreatObject.transform.position) < prox)
+            {
+                return true;
+            }
+        }
+        
+
+        return false;
     }
 
 }

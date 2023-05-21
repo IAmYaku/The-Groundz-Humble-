@@ -63,12 +63,12 @@ public class GetBall : AIState {
             RandomBehavior(nearestBall);
         }
 
-        Debug.Log("InAction = " + inAction);
+     //   Debug.Log("InAction = " + inAction);
     }
 
     public void Action(GameManager manager, AI ai, float urgency, Vector3 tar)                  // Make better
     {
-     //   Debug.Log("GrabInput Action");
+     //   Debug.Log("GetBall Action");
 
         inAction = true;
         Vector3 pos = ai.navMeshAgent.gameObject.transform.position;
@@ -83,12 +83,12 @@ public class GetBall : AIState {
             if (nearestBall != null)
             {
 
-            Debug.Log("nearestballPos = " + nearestBall.transform.position);
+            //Debug.Log("nearestballPos = " + nearestBall.transform.position);
             //  Debug.Log("Found Ball");
 
             if (Vector3.Distance(nearestBall.transform.position, ai.navMeshAgent.gameObject.transform.position) <= ai.grabRadius) // 
                 {
-                    Debug.Log("ActionInput");
+                   // Debug.Log("ActionInput");
                     ai.action1Input = true;
                     ai.EndAgentNavigation();
 
@@ -119,7 +119,7 @@ public class GetBall : AIState {
 
             else
             {
-              Debug.Log("No Ball found");
+            //  Debug.Log("No Ball found");
                 inAction = false;
 
             }
@@ -132,9 +132,10 @@ public class GetBall : AIState {
     {
         if (ai.gameState == AI.GameState.safe)
         {
-            if (inAction) { 
+            if (inAction)
+            {
                 Action(gameManager, ai, 3, Vector3.zero);
-        }
+            }
             else
             {
                 if (ai.ballGrabbed)
@@ -143,7 +144,7 @@ public class GetBall : AIState {
                 }
                 else
                 {
-                if (ai.GetNearestBall())
+                    if (ai.GetNearestBall())
                     {
                         Action(gameManager, ai, 3, Vector3.zero);
                     }
@@ -154,6 +155,7 @@ public class GetBall : AIState {
                 }
             }
         }
+
 
         if (ai.gameState == AI.GameState.mildly_safe)
         {

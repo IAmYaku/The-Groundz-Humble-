@@ -274,7 +274,7 @@ public class Idle : AIState {
 
     string AIState.GetName()
     {
-        Debug.Log("Returning " + name);
+       // Debug.Log("Returning " + name);
         return name;
  
     }

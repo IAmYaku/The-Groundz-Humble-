@@ -46,6 +46,12 @@ public class AI : MonoBehaviour {
 
     private Vector3 throww;
 
+    float throwCharge = 0;
+    bool isCharging = false;
+    float chargeTime;
+    Vector3 chargeVel;
+    float maxCharge;
+
     private float randomThrowFactor = 30f;
     public float randomThrowFactor0 = 30f;
     private int level = 1;
@@ -136,7 +142,7 @@ public class AI : MonoBehaviour {
 
 
     public AIState aiState;
-    public string stateDisplayString;
+    public string aiStateDisplayString;
     int prevStateNum;
 
     public enum GameState { safe, mildly_safe, mild, mildly_dangerous, dangerous };
@@ -272,8 +278,9 @@ public class AI : MonoBehaviour {
                 GameManager gameManager = levelManager.gameObject.GetComponent<GameManager>();    // todo
 
                 aiState.Update(gameManager, this);
+                aiStateDisplayString = aiState.GetName();
 
-                print(" aiState num = " + aiState.GetNum());
+             //   print(" aiState num = " + aiState.GetNum());
 
                 if (prevStateNum != aiState.GetNum())
                 {
@@ -291,7 +298,7 @@ public class AI : MonoBehaviour {
 
             else
             {
-            //    print(" !OnNAvMesh");
+                print(" !OnNAvMesh");
             }
 
         }
@@ -417,7 +424,9 @@ public class AI : MonoBehaviour {
 				isDodging = true;
 				rigidbody.AddForce (new Vector3 (0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed));
 				superCoolDown = 50.0f;
-			} 
+                jumpInput = false;
+
+            } 
 		}	else {
 			if (superCoolDown > -2.0f) {
 				superCoolDown--;
@@ -507,6 +516,7 @@ public class AI : MonoBehaviour {
         // pick up /catch
 
         CheckCatchCool();
+        CheckCharge();
 
         if (staminaCool< stamina - 1)
         {
@@ -521,79 +531,79 @@ public class AI : MonoBehaviour {
             DepleteStamina(action1Cost);                                                                                                                 
 
                 ball = GetNearestBall();  
-
-                if (Vector3.Distance(playerConfigObject.transform.position, ball.transform.position) < grabRadius)
-                {
-                //   print("GrabInput check 2: distance less than grab radius");
-
-                    if (!ball.GetComponent<Ball>().isSupering)                        
+              if (ball) {
+                    if ((Vector3.Distance(playerConfigObject.transform.position, ball.transform.position) < grabRadius) && ball)
                     {
+                        //   print("GrabInput check 2: distance less than grab radius");
 
-                        //    print("GrabInput check 3: !isSupering");
-                        Vector3 velocityCaught = ball.GetComponent<Rigidbody>().velocity;
-                        ball.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
-
-                        ballGrabbed = true;                                 // grabbed 
-                        ball.GetComponent<Ball>().grounded = false;
-                        ball.GetComponent<Ball>().grabbed = true;
-                        ball.transform.GetChild(3).gameObject.SetActive(false);
-                        ball.GetComponent<SpriteRenderer>().enabled = false;
-                        ball.GetComponent<SphereCollider>().enabled = false;
-                        ball.GetComponent<Rigidbody>().useGravity = false;
-
-                        ball.GetComponent<Ball>().PickUpDeactivate();
-                        ball.transform.GetChild(1).gameObject.SetActive(false);     // most likely pikUp Deactivaate
-    
-
-                        if (ThrownByOpp(ball, 2) || ThrownByOpp(ball, 1))                          // check catch
+                        if (!ball.GetComponent<Ball>().isSupering)
                         {
-                            if (animator)
+
+                            //    print("GrabInput check 3: !isSupering");
+                            Vector3 velocityCaught = ball.GetComponent<Rigidbody>().velocity;
+                            ball.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
+
+                            ballGrabbed = true;                                 // grabbed 
+                            ball.GetComponent<Ball>().grounded = false;
+                            ball.GetComponent<Ball>().grabbed = true;
+                            ball.transform.GetChild(3).gameObject.SetActive(false);
+                            ball.GetComponent<SpriteRenderer>().enabled = false;
+                            ball.GetComponent<SphereCollider>().enabled = false;
+                            ball.GetComponent<Rigidbody>().useGravity = false;
+
+                            ball.GetComponent<Ball>().PickUpDeactivate();
+                            ball.transform.GetChild(1).gameObject.SetActive(false);     // most likely pikUp Deactivaate
+
+
+                            if (ThrownByOpp(ball, 2) || ThrownByOpp(ball, 1))                          // check catch
                             {
-                                animator.SetTrigger("Catch");
+                                if (animator)
+                                {
+                                    animator.SetTrigger("Catch");
+                                }
+
+                                ballContact = false;  // what if therre's multiple balls
+                                ballCaught = true;     // what if therre's multiple balls
+
+                                ball.GetComponent<Ball>().playCatch();
+
+                                levelManager.AddCatch(ball, parent);
+                                levelManager.LastThrowerOut(ball);
+                                levelManager.GetAnotherPlayer(gameObject.GetComponentInParent<Player>().team);   // GR check
+                                levelManager.RemoveHit(ball);
+                                levelManager.CatchDisplay(playerConfigObject.transform.position);
+                                ball.GetComponent<Ball>().DeactivateThrow();
+
+                                float hitPauseDuration = Mathf.Clamp(velocityCaught.magnitude / 100f, FXManager.min_CatchPauseDuration, FXManager.max_CatchPauseDuration);
+                                float hitPausePreDelay = .25f;
+
+                                DelayPause(hitPauseDuration, hitPausePreDelay);
+                                print("~!Caught!~");
+
+
+                            }
+                            else
+                            {
+                                print("~PickUp~");
+
+                                if (animator)
+                                {
+                                    animator.SetTrigger("PickUp");
+                                    animator.ResetTrigger("PickUp");
+                                }
                             }
 
-                            ballContact = false;  // what if therre's multiple balls
-                            ballCaught = true;     // what if therre's multiple balls
-
-                            ball.GetComponent<Ball>().playCatch();
-                     
-                            levelManager.AddCatch(ball, parent);
-                            levelManager.LastThrowerOut(ball);
-                            levelManager.GetAnotherPlayer(gameObject.GetComponentInParent<Player>().team);   // GR check
-                            levelManager.RemoveHit(ball);
-                            levelManager.CatchDisplay(playerConfigObject.transform.position);
-                            ball.GetComponent<Ball>().DeactivateThrow();
-
-                            float hitPauseDuration = Mathf.Clamp(velocityCaught.magnitude / 100f, FXManager.min_CatchPauseDuration, FXManager.max_CatchPauseDuration);
-                            float hitPausePreDelay = .25f;
-
-                            DelayPause(hitPauseDuration, hitPausePreDelay);
-                            print("~!Caught!~");
-
-                   
+                            action1Input = false;
                         }
-                        else
+                        else                                  // gotta reset +1
                         {
-                            print("~PickUp~");
-
-                            if (animator)
-                            {
-                                animator.SetTrigger("PickUp");
-                                animator.ResetTrigger("PickUp");
-                            }
+                            action1Input = false;
                         }
-
-                        action1Input = false;         
                     }
-                    else                                  // gotta reset +1
-                    {
-                        action1Input = false;
-                    }
-
                 }
                 else
                 {
-                     if (!ball.GetComponent<Ball>().isSupering)                   
+                     //if (!ball.GetComponent<Ball>().isSupering)                   
                     {
                         animator.SetTrigger("Ready");           
                        // print("Miss Pick Up");
@@ -641,80 +651,105 @@ public class AI : MonoBehaviour {
                 {
                     if (ballGrabbed && (rTriggerInput) && ball && catchReady)           //should technically be throwReady
                     {
-                        print("~Throwing");
 
-                        ball.transform.position = cockBackPos;
-
-                        if (playerScript.team == 1 && throwDirection.x == -1)                // orientate correctly
+                        if (!isCharging)
                         {
-                            spriteRenderer.flipX = !spriteRenderer.flipX;
-                            throwDirection.x = 1;
-                        }
-                        if (playerScript.team == 2 && throwDirection.x == 1)
-                        {
-                            spriteRenderer.flipX = !spriteRenderer.flipX;
-                            throwDirection.x = -1;
-                        }
+                             chargeVel = rigidbody.velocity;
+                            isCharging = true;
 
-                        Transform nearestOpp = GetTargetedOpp();
-                        Vector3 seekVec = Vector3.one;
+                            float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
+                            accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);  //arbs
 
-                        if (nearestOpp)
-                        {
-                            seekVec = nearestOpp.transform.position - ball.transform.position;
-                        }
-
-                        Vector3 randThrowVec = GetRandThrowVec( randomThrowFactor);
-                        seekVec += randThrowVec;
-                        
-
-                        Transform targetedOpp = GetTargetedOpp();
-                        float renderLength = GetRenderLength();
-
-                        throww = ((seekVec + rigidbody.velocity) / 2) * throwPower;
-
-                        throww = new Vector3(throww.x, 2.5f, throww.z);
-
-                        ball.GetComponent<Ball>().Throw(throww, playerScript.color, false, 0, targetedOpp, renderLength, 0f);
-
-
-                        if (animator)
-                        {
-                            float throwMag = Vector3.Magnitude(throww);
-                            float throwSpeedThresh = 300f;
-
-                            float throwAnimSpeed = Mathf.Clamp(throwMag / throwSpeedThresh, 2f, 3f);
-
-                            animator.SetFloat("ThrowSpeed", throwAnimSpeed);
-
-                            animator.SetFloat("ThrowSpeed", throwAnimSpeed);
 
                             animator.SetTrigger("Charge");
                         }
 
 
-                        levelManager.AddThrow(ball, parent);
 
-                        staminaCool += 5f;
-
-                        ballGrabbed = false;
-                        ballCaught = false;
-                        // Debug.Log("AI Standing Throw");
-
-                        if (playerScript.team == 1)
+                        if (throwCharge > maxCharge)
                         {
-                            ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 1);
-                        }
-                        if (playerScript.team == 2)
-                        {
-                            ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 2);
-                        }
+
+
+
+                            print("~Throwing");
+
+                            ball.transform.position = cockBackPos;
+
+                            if (playerScript.team == 1 && throwDirection.x == -1)                // orientate correctly
+                            {
+                                spriteRenderer.flipX = !spriteRenderer.flipX;
+                                throwDirection.x = 1;
+                            }
+                            if (playerScript.team == 2 && throwDirection.x == 1)
+                            {
+                                spriteRenderer.flipX = !spriteRenderer.flipX;
+                                throwDirection.x = -1;
+                            }
+
+                            Transform nearestOpp = GetTargetedOpp();
+                            Vector3 seekVec = Vector3.one;
+
+                            if (nearestOpp)
+                            {
+                                seekVec = nearestOpp.transform.position - ball.transform.position;
+                            }
+
+                            Vector3 randThrowVec = GetRandThrowVec(randomThrowFactor);
+                            seekVec += randThrowVec;
+
+
+                            Transform targetedOpp = GetTargetedOpp();
+                            float renderLength = GetRenderLength();
+
+                            throww = ((seekVec + rigidbody.velocity) / 2) * throwPower;
+
+                            throww = new Vector3(throww.x, 2.5f, throww.z);
+
+                            ball.GetComponent<Ball>().Throw(throww, playerScript.color, false, 0, targetedOpp, renderLength, 0f);
+
+
                             if (animator)
                             {
-                            animator.SetBool("hasBall", false);
-                            //Invoke("ResetThrowAnimations", .0125f);
+                                float throwMag = Vector3.Magnitude(throww);
+                                float throwSpeedThresh = 300f;
+
+                                float throwAnimSpeed = Mathf.Clamp(throwMag / throwSpeedThresh, 2f, 3f);
+
+                                animator.SetFloat("ThrowSpeed", throwAnimSpeed);
+
+                                animator.SetFloat("ThrowSpeed", throwAnimSpeed);
+                                animator.SetTrigger("Release");
+                            }
+
+
+                            levelManager.AddThrow(ball, parent);
+
+                            staminaCool += 5f;
+
+                            ballGrabbed = false;
+                            ballCaught = false;
+                            // Debug.Log("AI Standing Throw");
+
+                            if (playerScript.team == 1)
+                            {
+                                ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 1);
+                            }
+                            if (playerScript.team == 2)
+                            {
+                                ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 2);
+                            }
+                            if (animator)
+                            {
+                                animator.SetBool("hasBall", false);
+                                Invoke("ResetThrowAnimations", .0125f);
 
                             }
+
+                            chargeVel = Vector3.zero;
+                            throwCharge = 0;
+                            chargeTime = 0;
+                            isCharging = false;
+                        }
                     }
                  
                 }
@@ -780,6 +815,26 @@ public class AI : MonoBehaviour {
             {
                 catchReady = true;
             }
+        }
+    }
+
+    private void CheckCharge()
+    {
+        float chargeRate = 1000;  // character dependent??
+        float chargeCost = .25f;
+
+        if (ballGrabbed && isCharging)
+        {
+
+            throwCharge += (chargeRate * Time.deltaTime) + chargeVel.magnitude / 100f;
+            chargeTime += Time.deltaTime;
+            // throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
+
+            DepleteStamina(chargeCost);
+
+           // animator.SetTrigger("Charge");
+            // Invoke("ResetChargeAnimations", .05125f);    //arbs
+
         }
     }
 
@@ -1361,7 +1416,7 @@ public class AI : MonoBehaviour {
         return false;
     }
 
-    internal bool IsAtRetreatPoint()
+    internal bool IsAtRetreatPoint() // Deprecated
     {
         float prox = 10.0f;
 
@@ -1597,5 +1652,15 @@ public class AI : MonoBehaviour {
 
         aiState = idle_;                    //   <-- $ Name me something initty 
                                             //   aiState = ready_;
+    }
+
+    public Vector3 GetPosition()
+    {
+        return playerConfigObject.transform.position;
+    }
+
+    public LevelManager GetLevelManager()
+    {
+        return levelManager;
     }
 }

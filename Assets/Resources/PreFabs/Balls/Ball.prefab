@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1607723911442573359}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 906.05, y: -983.87, z: 2663.949}
+  m_LocalPosition: {x: 883.59, y: -3082.8, z: 9186.73}
   m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -40,6 +40,7 @@ Transform:
   - {fileID: 4601448555407370357}
   - {fileID: 6053918832612611222}
   - {fileID: 594179048072431596}
+  - {fileID: 3987339286975610943}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -98,6 +99,8 @@ MonoBehaviour:
   thrownIndicator: {fileID: 4496364449700254707}
   hitIndicator: {fileID: 4767265908349115260}
   Player2BallAura: {fileID: 2194282623551792494}
+  shadow: {fileID: 5797177800815575082}
+  floorMarker: {fileID: 7611513853350453195}
   xSquashFactor: 10
   ySquashFactor: 20
   superPackage: {fileID: 0}
@@ -175,7 +178,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ae4bd2bfbe5feee409f42cd62343a844, type: 2}
+  - {fileID: 2100000, guid: 695873166113ab64997efed81c2426c7, type: 2}
   - {fileID: 2100000, guid: 944bc1016f6ac38439ec1bf04fab9550, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -197,7 +200,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 1
+  m_Time: 2
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -207,20 +210,29 @@ TrailRenderer:
       - serializedVersion: 3
         time: 0
         value: 1
-        inSlope: -2.3413916
-        outSlope: -2.3413916
-        tangentMode: 0
+        inSlope: -0.44867134
+        outSlope: -0.96932185
+        tangentMode: 1
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.21995465
+        outWeight: 0.8888207
+      - serializedVersion: 3
+        time: 0.4914069
+        value: 0.5145568
+        inSlope: -0.6825743
+        outSlope: -1.0019253
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.4938287
+        outWeight: 0.20804876
       - serializedVersion: 3
         time: 1
         value: 0
-        inSlope: 0
-        outSlope: 0
+        inSlope: -1.1919502
+        outSlope: -1.1919502
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.48662066
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -260,7 +272,7 @@ TrailRenderer:
     textureMode: 2
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 2
+  m_MinVertexDistance: 1
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!135 &6964172968133908242
@@ -15177,3 +15189,50 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &7611513853350453195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3987339286975610943}
+  - component: {fileID: 3170169045342517556}
+  m_Layer: 10
+  m_Name: Floor Marker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &3987339286975610943
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7611513853350453195}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7518783217358128913}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &3170169045342517556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7611513853350453195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b9a461fc57607478b3dc3b2340ad90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floorImage: {fileID: 21300000, guid: 48c0d4d6bebaa934384b07aa1e2f8184, type: 3}
+  ground: {fileID: 0}
+  maxDistance: 12

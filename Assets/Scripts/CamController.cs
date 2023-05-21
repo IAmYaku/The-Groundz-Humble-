@@ -76,8 +76,8 @@ public class CamController : MonoBehaviour {
                 if (isShaking == false)
                 {
                     float nuSize = Mathf.Clamp(padding + Mathf.Abs(MaxDistance()) * zoomWeight,smallestZoomSize,maxZoomSize); 
-                    float size0 = Camera.main.orthographicSize;
-                    Camera.main.orthographicSize = Mathf.SmoothDamp(size0, nuSize, ref zoomDamp, cameraSmoothe);
+                    float size0 = this.GetComponent<Camera>().orthographicSize;
+                    this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(size0, nuSize, ref zoomDamp, cameraSmoothe);
                 
                     Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f) * xWeight;                                                               // blows up if there ant any balls or players
                    // float deltaX = (average.x - transform.position.x) * xWeight;
