@@ -416,7 +416,7 @@ public class Controller3D : MonoBehaviour
             {
                 if (Input.GetKeyUp(playerScript.joystick.altAction1Input) && IsKeyPickUp && ballGrabbed)
                 {
-                    float pickUpDelay = .25f;
+                    float pickUpDelay = .0125f;
 
                     Invoke("SetKeyPickUpFalse", pickUpDelay);
                 }

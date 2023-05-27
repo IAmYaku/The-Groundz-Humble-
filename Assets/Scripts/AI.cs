@@ -88,6 +88,7 @@ public class AI : MonoBehaviour {
     public float stamina;
     public float staminaCool;
     public float staminaCoolRate;
+    public float dodgeStaminaCost = 10f;
     public float throwStaminaCost;
     public float moveStaminaCost;
     public float catchStaminaCost;
@@ -101,9 +102,10 @@ public class AI : MonoBehaviour {
 	public bool inBounds;
 
 
-    private bool canDodge;
-	public bool isDodging;
-	public float dodgeSpeed = 100.0f;
+    private float dodgeCoolTime = 2.0f;
+    private float dodgeCool = 0.0f;
+    public bool isDodging;
+	public float dodgeSpeed = 3f;
 
 	public Vector3 handSize = new Vector3 (3f, 3f, 3f);
 	public float grabRadius = 5f;
@@ -407,7 +409,7 @@ public class AI : MonoBehaviour {
                         }
                         if (staminaCool > 0.0f)
                         {
-                            staminaCool -= 1f;
+                            staminaCool -= 1f; // deprecated
                         }
                     }
                 }
@@ -416,24 +418,37 @@ public class AI : MonoBehaviour {
 
 
 		//handle Dodge/Jump Input
-		if ((jumpInput) && superCoolDown <= 0.0f) {
+		if ((jumpInput) && dodgeCool <= 0 && staminaCool < stamina) {
 			if (InBounds ()) 
             {
 				print ("Dodge!");
 				// TODO vary force on Input. I.e implement an actual jump
 				isDodging = true;
-				rigidbody.AddForce (new Vector3 (0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed));
-				superCoolDown = 50.0f;
+				navMeshAgent.velocity += (new Vector3 (0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed));
                 jumpInput = false;
+                dodgeCool = dodgeCoolTime;
+                staminaCool += dodgeStaminaCost;
+
+                if (animator)
+                {
+                    animator.SetTrigger("Dodge");
+                }
+
+                Invoke("ResetDodgeTrigger", .2f);
 
             } 
 		}	else {
-			if (superCoolDown > -2.0f) {
-				superCoolDown--;
-				if (superCoolDown < 30.0f) {
-					isDodging = false;
+           
+				if (dodgeCool > 0) {
+
+                dodgeCool -= Time.deltaTime;
+
+                if (dodgeCool <= 0)
+                {
+                    isDodging = false;
+                }
+                 
 				}
-			}
 		}
 
         playerConfigObject.transform.LookAt(Camera.main.transform.position, Vector3.up);   
@@ -1662,5 +1677,25 @@ public class AI : MonoBehaviour {
     public LevelManager GetLevelManager()
     {
         return levelManager;
+    }
+
+    private void CheckStamina()
+    {
+        if (navMeshAgent.velocity.magnitude < 3f)             // *arb = moveThresh
+        {
+
+            if (staminaCool > 0.0f)      // should invert ... i.e - cost, as opposed to + cost
+            {
+                staminaCool -= staminaCoolRate;        //  *Should go time dependent
+            }
+        }
+    }
+
+    void ResetDodgeTrigger()
+    {
+        if (animator)
+        {
+            animator.ResetTrigger("Dodge");
+        }
     }
 }

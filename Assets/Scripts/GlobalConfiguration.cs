@@ -461,6 +461,8 @@ public class GlobalConfiguration : MonoBehaviour
 
         playerScript.SetisSet(true);
 
+        float aiDodgeWeight = 10f;
+
         if (type == "Nina")
         {
             player.GetComponent<Player>().type = type;
@@ -469,7 +471,7 @@ public class GlobalConfiguration : MonoBehaviour
             controller3D.maxSpeed = Nina.maxSpeed;
             controller3D.xSpeed = Nina.xSpeed;
             controller3D.zSpeed = Nina.zSpeed;
-            // controller3D.acceleration = Nina.acceleration;
+            // controller3D.acceleration = Nina.acceleration; 
             controller3D.jumpSpeed = Nina.jumpSpeed;
             controller3D.dodgeSpeed = Nina.dodgeSpeed;
 
@@ -496,7 +498,7 @@ public class GlobalConfiguration : MonoBehaviour
             aiScript.acceleration = Nina.acceleration;
 
             aiScript.jumpSpeed = Nina.jumpSpeed;
-            aiScript.dodgeSpeed = Nina.dodgeSpeed;
+            aiScript.dodgeSpeed = Nina.dodgeSpeed / aiDodgeWeight;
             aiScript.handSize = Nina.handSize;
             aiScript.throwPower = Nina.throwPower0;
             aiScript.standingThrowPower = Nina.standingThrowPower;
@@ -591,7 +593,7 @@ public class GlobalConfiguration : MonoBehaviour
 
             aiScript.acceleration = Mack.acceleration;
             aiScript.jumpSpeed = Mack.jumpSpeed;
-            aiScript.dodgeSpeed = Mack.dodgeSpeed;
+            aiScript.dodgeSpeed = Mack.dodgeSpeed/ aiDodgeWeight;
             aiScript.handSize = Mack.handSize;
             aiScript.throwPower = Mack.throwPower0;
             aiScript.standingThrowPower = Mack.standingThrowPower;
@@ -683,7 +685,7 @@ public class GlobalConfiguration : MonoBehaviour
 
             aiScript.acceleration = King.acceleration;
             aiScript.jumpSpeed = King.jumpSpeed;
-            aiScript.dodgeSpeed = King.dodgeSpeed;
+            aiScript.dodgeSpeed = King.dodgeSpeed / aiDodgeWeight;
             aiScript.handSize = King.handSize;
             aiScript.standingThrowPower = King.standingThrowPower;
             aiScript.grabRadius = King.grabRadius;
