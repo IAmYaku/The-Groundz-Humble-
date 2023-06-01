@@ -371,11 +371,10 @@ public class AI : MonoBehaviour {
             if (!isKnockedOut)
             {
 
-                if (onGround)
+                if (onGround && !isDodging)
                 {
 
                     CustomMoveInput();      
-
                 }
 
                 float moveThresh = 2f;
@@ -421,10 +420,19 @@ public class AI : MonoBehaviour {
 		if ((jumpInput) && dodgeCool <= 0 && staminaCool < stamina) {
 			if (InBounds ()) 
             {
-				print ("Dodge!");
+				//print ("Dodge!");
 				// TODO vary force on Input. I.e implement an actual jump
 				isDodging = true;
-				navMeshAgent.velocity += (new Vector3 (0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed));
+                Vector3 dodgeForce = (new Vector3(0f, 0f,UnityEngine.Random.Range(-2.0f, 2.0f) * dodgeSpeed));
+
+                if (dodgeForce.magnitude < dodgeSpeed )
+                {
+                    dodgeForce.z = Mathf.Clamp(dodgeForce.z, Mathf.Sign(dodgeForce.z) * dodgeSpeed, Mathf.Sign(dodgeForce.z) * dodgeSpeed);
+                }
+
+                navMeshAgent.velocity += dodgeForce;
+
+               //print("dodgeForce = " + dodgeForce);
                 jumpInput = false;
                 dodgeCool = dodgeCoolTime;
                 staminaCool += dodgeStaminaCost;
@@ -442,6 +450,7 @@ public class AI : MonoBehaviour {
 				if (dodgeCool > 0) {
 
                 dodgeCool -= Time.deltaTime;
+                navMeshAgent.velocity /= 1.025f;
 
                 if (dodgeCool <= 0)
                 {

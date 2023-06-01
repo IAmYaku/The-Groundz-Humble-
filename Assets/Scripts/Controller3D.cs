@@ -1353,18 +1353,26 @@ public class Controller3D : MonoBehaviour
             ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 2);
         }
 
-
+        /*
         if (IsInGrabDistance(GetTargetedOpp().gameObject, "ball") && GetTargetedOpp())
         {
             cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
             cockBackPos = (cockBackPos + GetTargetedOpp().position) / 2;      // tag pos  
                                                                               // print("Tag cockback");
         }
+        else
+
+        */
+        {
+             cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
+        }
 
         ball.transform.position = cockBackPos;
 
         print("Dodge Throw");
-        Vector3 dodgeThrowVec = new Vector3((dodgeSpeed * 2f + throwCharge) * move.x, 5f, move.z * (dodgeSpeed + throwCharge) * .5f);
+       // Vector3 dodgeThrowVec = new Vector3((dodgeSpeed * 2f + throwCharge) * move.x, 5f, move.z * (dodgeSpeed + throwCharge) * .5f);
+        Vector3 dodgeThrowVec = new Vector3(dodgeSpeed * throwCharge /100f, 5f,0f);
+
         throww = dodgeThrowVec;
 
 
@@ -2387,7 +2395,7 @@ public class Controller3D : MonoBehaviour
     {
         isDodging = false;
         playerScript.ToggleActivateDodge();
-        print("Dodge is false");
+       // print("Dodge is false");
     }
 
     private void SetDodgeThrowDelayF()
