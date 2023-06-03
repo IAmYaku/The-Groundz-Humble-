@@ -50,7 +50,7 @@ public class AI : MonoBehaviour {
     bool isCharging = false;
     float chargeTime;
     Vector3 chargeVel;
-    float maxCharge;
+    float maxCharge = 10f;
 
     private float randomThrowFactor = 30f;
     public float randomThrowFactor0 = 30f;
@@ -678,7 +678,8 @@ public class AI : MonoBehaviour {
 
                         if (!isCharging)
                         {
-                             chargeVel = rigidbody.velocity;
+                             chargeVel = navMeshAgent.velocity;
+                            throwCharge += chargeVel.magnitude / 100f;
                             isCharging = true;
 
                             float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
@@ -690,7 +691,7 @@ public class AI : MonoBehaviour {
 
 
 
-                        if (throwCharge > maxCharge)
+                        if (chargeTime > .2f)
                         {
 
 
@@ -711,7 +712,7 @@ public class AI : MonoBehaviour {
                             }
 
                             Transform nearestOpp = GetTargetedOpp();
-                            Vector3 seekVec = Vector3.one;
+                            Vector3 seekVec = Vector3.zero;
 
                             if (nearestOpp)
                             {
@@ -725,11 +726,13 @@ public class AI : MonoBehaviour {
                             Transform targetedOpp = GetTargetedOpp();
                             float renderLength = GetRenderLength();
 
-                            throww = ((seekVec + rigidbody.velocity) / 2) * throwPower;
+                            throww = ((seekVec + rigidbody.velocity) / 2) * (throwPower + throwCharge);
 
                             throww = new Vector3(throww.x, 2.5f, throww.z);
 
                             ball.GetComponent<Ball>().Throw(throww, playerScript.color, false, 0, targetedOpp, renderLength, 0f);
+
+                            print("throwCharge = " + throwCharge);
 
 
                             if (animator)
@@ -844,13 +847,13 @@ public class AI : MonoBehaviour {
 
     private void CheckCharge()
     {
-        float chargeRate = 1000;  // character dependent??
+        float chargeRate = 1;  // character dependent??
         float chargeCost = .25f;
 
         if (ballGrabbed && isCharging)
         {
 
-            throwCharge += (chargeRate * Time.deltaTime) + chargeVel.magnitude / 100f;
+            throwCharge += (chargeRate * Time.deltaTime);
             chargeTime += Time.deltaTime;
             // throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
 
