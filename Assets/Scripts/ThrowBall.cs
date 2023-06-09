@@ -263,8 +263,8 @@ public class ThrowBall : AIState
         
         ai.SetNavVelocity(new Vector3(aiXVelocity/1000 , 0f, aiZVelocity/1000 ));           // *arbitrary nums
 
-      //  Debug.Log("aiVelocity= " + ai.navMesh.velocity);
-        //Debug.Log("aiXVelocity= " + aiXVelocity);
+       // Debug.Log("aiVelocity= " + ai.navMeshAgent.velocity);
+       // Debug.Log("aiXVelocity= " + aiXVelocity);
         //Debug.Log("aiZVelocity= " + aiZVelocity);
 
     }

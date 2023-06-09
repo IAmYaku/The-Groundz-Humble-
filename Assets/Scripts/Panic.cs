@@ -109,28 +109,21 @@ public class Panic : AIState {
 
 
 
-            if (float.Parse(sec.ToString("F1")) % .5f == 0.0f ) 
+          //  if (sec % .25f < 0.001f ) 
                 {
-                    ranVelVec = Random.Range(-.1f, .1f) * (intensity / 10.0f);               // aiLevel stuff here
+                    ranVelVec = Random.Range(-1f, 1f) * (intensity/10f );               // aiLevel stuff here
                 }
-            
 
-                ai.vertInput = Mathf.Lerp(ranVelVec, ai.vertInput, .25f);
+           
+            ai.vertInput = Mathf.Lerp(ranVelVec, ai.vertInput, .25f);
 
-              //  Debug.Log(" ai.vertInput =  " + Mathf.Lerp(ranVelVec, ai.vertInput, .33f));
-                
-
-                if (!ai.ballGrabbed)
+            if (!ai.ballGrabbed)
                 {
                     if (CatchProb(aiCatchProb))
                     {
                         ai.action1Input = true;
-                    }
 
-                    else
-                    {
-                        ai.action1Input = false;
-                    }
+                }
                 }
 
                 if (DodgeProb() )
@@ -164,8 +157,9 @@ public class Panic : AIState {
             {
                 if (inAction)
                 {
-
+                    Action(ai.intensity / 3f, ai);
                 }
+
                 if (!ai.ballGrabbed)
                 {
                     ai.SetState(ai.getBall_);
@@ -200,7 +194,7 @@ public class Panic : AIState {
                 }
                 else
                 {
-                    Action(ai.intensity/2f, ai);
+                    Action(ai.intensity/3f, ai);
                 }
             }
             if (ai.gameState == AI.GameState.dangerous)
@@ -212,7 +206,7 @@ public class Panic : AIState {
                 }
                 else
                 {
-                    Action(ai.intensity/2f, ai);
+                    Action(ai.intensity/3f, ai);
                 }
             }
         }
@@ -265,6 +259,7 @@ public class Panic : AIState {
         float ran = UnityEngine.Random.Range(0.0f, 1.0f);
 
          if (ran < prob) {
+
 
             return true;
         }

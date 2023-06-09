@@ -54,7 +54,7 @@ public class AI : MonoBehaviour {
 
     private float randomThrowFactor = 30f;
     public float randomThrowFactor0 = 30f;
-    private int level = 1;
+    public int level = 1;
     float throwScale = 25f;                   
     float speedScale = 1f;
     float catchProb = .2f;
@@ -74,7 +74,7 @@ public class AI : MonoBehaviour {
     private float xCeleration = 0;
 	public float maxCeleration = 6;
 	//public float accelerationTime = 0.35f;
-    public float accelerationRate = 0.95f;
+    public float accelerationRate = 1f;
 
     private Vector3 velocityDamp;
 	public float jumpSpeed = 10.0f;
@@ -102,7 +102,7 @@ public class AI : MonoBehaviour {
 	public bool inBounds;
 
 
-    private float dodgeCoolTime = 2.0f;
+    private float dodgeCoolTime = 2f;
     private float dodgeCool = 0.0f;
     public bool isDodging;
 	public float dodgeSpeed = 3f;
@@ -321,7 +321,7 @@ public class AI : MonoBehaviour {
     {
         if (navMeshAgent.isOnNavMesh)
         {
-            rigidbody.velocity = Vector3.zero;
+            navMeshAgent.velocity = Vector3.zero;
             navMeshAgent.isStopped = true;
             navMeshAgent.ResetPath();
             horzInput = 0f;
@@ -450,12 +450,21 @@ public class AI : MonoBehaviour {
 				if (dodgeCool > 0) {
 
                 dodgeCool -= Time.deltaTime;
-                navMeshAgent.velocity /= 1.025f;
 
-                if (dodgeCool <= 0)
+                if (dodgeCool > dodgeCoolTime/2f)
                 {
-                    isDodging = false;
+                    navMeshAgent.velocity /= 1.025f;
                 }
+                else
+                {
+                    if (isDodging)
+                    {
+                        isDodging = false;
+                    }
+                   
+                }
+
+
                  
 				}
 		}
@@ -506,11 +515,17 @@ public class AI : MonoBehaviour {
 
         if (!isSlowingDown)
         {
-            navMeshAgent.velocity = Vector3.Lerp(navMeshAgent.velocity, vector3, accelerationRate); 
+           // navMeshAgent.velocity = Vector3.Lerp(navMeshAgent.velocity, vector3, accelerationRate);
+            navMeshAgent.velocity = vector3;
+
+          //  print("vector3 = " + vector3);
+          //  print("navMeshAgent.velocity = " + navMeshAgent.velocity);
+
         }
         else
         {
             navMeshAgent.velocity = Vector3.Lerp(navMeshAgent.velocity, Vector3.zero, accelerationRate);
+           
         }
 
         float runAnimThresh = 8f;
@@ -624,33 +639,35 @@ public class AI : MonoBehaviour {
                             action1Input = false;
                         }
                     }
-                }
-                else
-                {
-                     //if (!ball.GetComponent<Ball>().isSupering)                   
+
+                    else
                     {
-                        animator.SetTrigger("Ready");           
-                       // print("Miss Pick Up");
-                        action1Input = false;
-
-                        /*
-                        float rand = UnityEngine.Random.Range(-1.0f, 1.0f);             //   <--   insert frame counting coding
-                                                                                                                                           // here, we're also reaching a level of athleticsim, "fear", emotion intensity
-                        print("IJNcnisniNteri" + intensity +       "smiitiyintensity");
-
-                        if (rand> 0)
+                        //if (!ball.GetComponent<Ball>().isSupering)                   
                         {
-                            action1Input = true;
+                            animator.SetTrigger("Ready");
+                            // print("Miss Pick Up");
+                            action1Input = false;
+
+                            /*
+                            float rand = UnityEngine.Random.Range(-1.0f, 1.0f);             //   <--   insert frame counting coding
+                                                                                                                                               // here, we're also reaching a level of athleticsim, "fear", emotion intensity
+                            print("IJNcnisniNteri" + intensity +       "smiitiyintensity");
+
+                            if (rand> 0)
+                            {
+                                action1Input = true;
+                            }
+                                else
+                            {
+                                action1Input = true;
+                            }
+                          */
+
                         }
-                            else
-                        {
-                            action1Input = true;
-                        }
-                      */
 
                     }
-
                 }
+               
 
                 if (catchReady)       // and catchframecount <= 0
                 {
@@ -682,8 +699,8 @@ public class AI : MonoBehaviour {
                             throwCharge += chargeVel.magnitude / 100f;
                             isCharging = true;
 
-                            float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
-                            accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);  //arbs
+                          //  float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
+                          //  accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);  //arbs
 
 
                             animator.SetTrigger("Charge");
@@ -1250,7 +1267,10 @@ public class AI : MonoBehaviour {
         int team = gameObject.GetComponentInParent<Player>().team;
         float halfCourt = levelManager.stage.halfCourtLine;
 
-        float ballNegatives =0;
+        float ballThrownMult = 1f;
+
+        float ballThrownAwareness;
+
 
         if (team == 1)
         {
@@ -1266,10 +1286,6 @@ public class AI : MonoBehaviour {
                 }
                 else
                 {
-                    if (ball.transform.position.x == 0)
-                    {
-                        count += 0;                                   // tf lol?
-                    }
 
                     if (ball.transform.position.x > halfCourt)     // uneccessary check ... tf *2 lol
                     {
@@ -1278,9 +1294,17 @@ public class AI : MonoBehaviour {
                         count -= Mathf.Clamp ((int)  (Mathf.Abs(ball.transform.position.x - halfCourt)),0,1);
 
                     }
-                }
 
-               // print("ballNegatives = " + ballNegatives);
+                    if (ball.GetComponent<Ball>().thrownBy2)
+                    {
+                        if (IsAware())
+                        {
+                          // print("~~Yikes~~!");
+                            count -= 3 * level;
+                        }
+                    }
+
+                }
             }
         }
 
@@ -1298,14 +1322,19 @@ public class AI : MonoBehaviour {
                 }
                 else
                 {
-                    if (ball.transform.position.x == 0)
-                    {
-                        count += 0;
-                    }
 
                     if (ball.transform.position.x < halfCourt)
                     {
                         count -= Mathf.Clamp((int)(Mathf.Abs(ball.transform.position.x - halfCourt)), 0, 1);
+                    }
+
+                    if (ball.GetComponent<Ball>().thrownBy1)
+                    {
+                        if (IsAware())
+                        {
+                           // print("~~Yikes~~!");
+                            count -=3 * level;
+                        }
                     }
                 }
             }
@@ -1389,6 +1418,22 @@ public class AI : MonoBehaviour {
             }
         }
         return returnMe;
+    }
+
+    bool IsAware()
+    {
+        float ran = UnityEngine.Random.Range(0, 1f);
+
+        float prob = level / 5f;
+
+        if (ran < prob)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     internal void TriggerHeadHitAnimation()
@@ -1541,6 +1586,7 @@ public class AI : MonoBehaviour {
         AddNavSpeed(x * speedScale);
         AddThrowPower(x * throwScale);
         IncreaseCatchProb(x);
+        //IncreaseDodgeProb
         DecreaseCatchLag(x);
         DecreasePanickDelayTime(x);
 
