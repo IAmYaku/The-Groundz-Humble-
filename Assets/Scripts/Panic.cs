@@ -27,7 +27,7 @@ public class Panic : AIState {
 
     float panickTime;
 
-    float panick0 = .6f;
+    float panick0 = .2f;
        
     float panickDelayTime;
     float panickDelay;
@@ -92,7 +92,9 @@ public class Panic : AIState {
         if ( panickTime == 0.0f)
         {
             panickTime = Mathf.Abs(intensity * panick0);
-            panicked = false;
+            Debug.Log("panickTime = " + panickTime);
+            ai.isPanicking = true;
+
         }
         
 
@@ -111,11 +113,11 @@ public class Panic : AIState {
 
           //  if (sec % .25f < 0.001f ) 
                 {
-                    ranVelVec = Random.Range(-1f, 1f) * (intensity/10f );               // aiLevel stuff here
+                    ranVelVec = Random.Range(-1f, 1f) * (intensity/25f );               // aiLevel stuff here
                 }
 
            
-            ai.vertInput = Mathf.Lerp(ranVelVec, ai.vertInput, .25f);
+            ai.vertInput = Mathf.Lerp(ranVelVec, ai.vertInput, .0125f);
 
             if (!ai.ballGrabbed)
                 {
@@ -147,6 +149,7 @@ public class Panic : AIState {
                 panicked = true;
                 inAction = false;
                 panicked0 = Time.realtimeSinceStartup;
+                ai.isPanicking = false;
             }
     }
 
@@ -157,56 +160,92 @@ public class Panic : AIState {
             {
                 if (inAction)
                 {
-                    Action(ai.intensity / 3f, ai);
-                }
-
-                if (!ai.ballGrabbed)
-                {
-                    ai.SetState(ai.getBall_);
+                    Action(ai.intensity / 5f, ai);
                 }
                 else
                 {
-                    ai.SetState(ai.throwBall_);
+                    if (!ai.ballGrabbed)
+                    {
+                        ai.SetState(ai.getBall_);
+                    }
+                    else
+                    {
+                        ai.SetState(ai.throwBall_);
+                    }
                 }
+  
             }
             if (ai.gameState == AI.GameState.mildly_safe)
             {
-                if (!ai.ballGrabbed)
+                if (inAction)
                 {
-                    ai.SetState(ai.getBall_);
+                    Action(ai.intensity / 4f, ai);
                 }
                 else
                 {
-                    ai.SetState(ai.throwBall_);
+                    if (!ai.ballGrabbed)
+                    {
+                        ai.SetState(ai.getBall_);
+                    }
+                    else
+                    {
+                        ai.SetState(ai.throwBall_);
+                    }
                 }
             }
+
+
             if (ai.gameState == AI.GameState.mild)
             {
-                ai.SetState(ai.idle_);
+
+                if (inAction)
+                {
+                    Action(ai.intensity / 3f, ai);
+                }
+                else
+                {
+                    ai.SetState(ai.idle_);
+                }
             }
 
             if (ai.gameState == AI.GameState.mildly_dangerous)
             {
-                if (panicked)
+                if (inAction)
                 {
-
-                    ai.SetState(ai.retreat_);
+                    Action(ai.intensity / 2f, ai);
                 }
                 else
                 {
-                    Action(ai.intensity/3f, ai);
+                    if (panicked)
+                    {
+
+                        ai.SetState(ai.retreat_);
+                    }
+                    else
+                    {
+                        Action(ai.intensity, ai);
+                    }
                 }
             }
+
             if (ai.gameState == AI.GameState.dangerous)
             {
-                if (panicked)
+                if (inAction)
                 {
-
-                    ai.SetState(ai.retreat_);
+                    Action(ai.intensity , ai);
                 }
+
                 else
                 {
-                    Action(ai.intensity/3f, ai);
+                    if (panicked)
+                    {
+
+                        ai.SetState(ai.retreat_);
+                    }
+                    else
+                    {
+                        Action(ai.intensity, ai);
+                    }
                 }
             }
         }
@@ -230,12 +269,13 @@ public class Panic : AIState {
         {
             float panickedTf = Time.realtimeSinceStartup;
             panickDelay = panickedTf - panicked0;
+            Debug.Log("panickDelay = " + panickDelay);
 
             panickDelayTime = ai.GetPanickDelayTime();
 
             if (panickDelay >= panickDelayTime)
             {
-              //  Debug.Log("panickDelay = " + panickDelay);
+               Debug.Log("panickDelayTime = " + panickDelayTime);
 
                 panicked = false;
                 panickDelay = 0;   

@@ -65,6 +65,7 @@ public class AI : MonoBehaviour {
     int catchFrameCount = 1;           
     int catchFrameCool;
     float panickDelayTime = 3.0f;
+    public bool isPanicking;
 
 
     public float xSpeed = 0.0f;
@@ -74,7 +75,7 @@ public class AI : MonoBehaviour {
     private float xCeleration = 0;
 	public float maxCeleration = 6;
 	//public float accelerationTime = 0.35f;
-    public float accelerationRate = 1f;
+    public float accelerationRate = .125f;
 
     private Vector3 velocityDamp;
 	public float jumpSpeed = 10.0f;
@@ -174,6 +175,9 @@ public class AI : MonoBehaviour {
     public bool debugMode;
 
     public bool addedAtStage;
+
+    float awareness = 1f;
+    bool didAwarenessRoll;
 
 
     private void Awake()
@@ -613,10 +617,10 @@ public class AI : MonoBehaviour {
                                 levelManager.CatchDisplay(playerConfigObject.transform.position);
                                 ball.GetComponent<Ball>().DeactivateThrow();
 
-                                float hitPauseDuration = Mathf.Clamp(velocityCaught.magnitude / 100f, FXManager.min_CatchPauseDuration, FXManager.max_CatchPauseDuration);
-                                float hitPausePreDelay = .25f;
+                                float catchPauseDuration = Mathf.Clamp(velocityCaught.magnitude / 100f, FXManager.min_CatchPauseDuration, FXManager.max_CatchPauseDuration);
+                                float catchPausePreDelay = .5f;
 
-                                DelayPause(hitPauseDuration, hitPausePreDelay);
+                                DelayPause(catchPauseDuration, catchPausePreDelay);
                                 print("~!Caught!~");
 
 
@@ -644,7 +648,11 @@ public class AI : MonoBehaviour {
                     {
                         //if (!ball.GetComponent<Ball>().isSupering)                   
                         {
-                            animator.SetTrigger("Ready");
+                            if (!isPanicking) {
+                                animator.SetTrigger("Ready");
+                            }
+                                
+  
                             // print("Miss Pick Up");
                             action1Input = false;
 
@@ -1297,11 +1305,26 @@ public class AI : MonoBehaviour {
 
                     if (ball.GetComponent<Ball>().thrownBy2)
                     {
-                        if (IsAware())
+                        if (didAwarenessRoll)
                         {
-                          // print("~~Yikes~~!");
-                            count -= 3 * level;
+                            count -= (int) (awareness * level);
                         }
+                        else
+                        {
+                            didAwarenessRoll = true;
+                            Invoke("NormalAwarenss",3/level);
+
+                            if (IsAware())
+                            {
+                                // print("~~Yikes~~!");
+                                awareness = 3f;
+                            }
+                            else
+                            {
+                                awareness = 1f;
+                            }
+                        }
+                   
                     }
 
                 }
@@ -1330,10 +1353,24 @@ public class AI : MonoBehaviour {
 
                     if (ball.GetComponent<Ball>().thrownBy1)
                     {
-                        if (IsAware())
+                        if (didAwarenessRoll)
                         {
-                           // print("~~Yikes~~!");
-                            count -=3 * level;
+                            count -= (int)(awareness * level);
+                        }
+                        else
+                        {
+                            didAwarenessRoll = true;
+                            Invoke("NormalAwarenss", level);
+
+                            if (IsAware())
+                            {
+                                // print("~~Yikes~~!");
+                                awareness = 3f;
+                            }
+                            else
+                            {
+                                awareness = 1f;
+                            }
                         }
                     }
                 }
@@ -1434,6 +1471,11 @@ public class AI : MonoBehaviour {
         {
             return false;
         }
+    }
+
+    void NormalAwarenss()
+    {
+        didAwarenessRoll = false;
     }
 
     internal void TriggerHeadHitAnimation()

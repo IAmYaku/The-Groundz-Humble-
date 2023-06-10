@@ -16,6 +16,7 @@ public class Shake : AIState
     int num = 6;
     string name = "Shake";
 
+   List<int[]> moveList;
 
     public void Start(GameManager manager, AI ai_)
     {
@@ -26,8 +27,6 @@ public class Shake : AIState
     public void Update(GameManager manager, AI ai)
     {
         ai.EvaluateGameState();
-
-        Action();
 
        // if
 

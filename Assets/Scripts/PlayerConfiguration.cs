@@ -147,8 +147,8 @@ public class PlayerConfiguration : MonoBehaviour
                         levelManager.TriggerHitFX(gameObject, ballHit);
 
 
-                        float hitPauseDuration = Mathf.Clamp( ballHitVelocity / 20f, FXManager.min_HitPauseDuration, FXManager.max_HitPauseDuration);
-                        float hitPausePreDelay = .125f;
+                        float hitPauseDuration = Mathf.Clamp( ballHitVelocity / 50f, FXManager.min_HitPauseDuration, FXManager.max_HitPauseDuration);
+                        float hitPausePreDelay = .0125f;
 
                         DelayPause(hitPauseDuration, hitPausePreDelay);
 
