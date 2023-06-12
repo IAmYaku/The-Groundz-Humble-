@@ -56,7 +56,7 @@ public class AI : MonoBehaviour {
     public float randomThrowFactor0 = 30f;
     public int level = 1;
     float throwScale = 25f;                   
-    float speedScale = 1f;
+    float speedScale = 2f;
     float catchProb = .2f;
 
     bool catchReady = true;
@@ -651,7 +651,15 @@ public class AI : MonoBehaviour {
                             if (!isPanicking) {
                                 animator.SetTrigger("Ready");
                             }
-                                
+                                else
+                            {
+                                float ran = UnityEngine.Random.Range(0f, 1f);
+                                float prob = .5f / level;
+                                if (ran < prob)
+                                {
+                                    animator.SetTrigger("Ready");
+                                }
+                            }
   
                             // print("Miss Pick Up");
                             action1Input = false;
@@ -1229,23 +1237,23 @@ public class AI : MonoBehaviour {
     {
         intensity = GetIntensity();
     
-        if (intensity > 4 && intensity <= 8)
+        if (intensity > 11)
         {
             gameState = GameState.safe;
         }
-        if (intensity > 0 && intensity <= 4)
+        if (intensity > 6 && intensity <= 10)
         {
             gameState = GameState.mildly_safe;
         }
-        if (intensity == 0)
+        if (intensity >= -5 && intensity <= 5)
         {
             gameState = GameState.mild;
         }
-        if (intensity >= -4 && intensity < 0)
+        if (intensity >= -10 && intensity < -6)
         {
             gameState = GameState.mildly_dangerous;
         }
-        if (intensity < -4)
+        if (intensity < -11)
         {
             gameState = GameState.dangerous;
         }
@@ -1284,7 +1292,7 @@ public class AI : MonoBehaviour {
         {
             foreach (GameObject ball in levelManager.balls)
             {
-                if (ball.transform.position.x <= halfCourt)
+                if (ball.transform.position.x <= halfCourt && ball.GetComponent<Ball>().thrownBy2)
                 {
                     count++;
                     if (Vector3.Distance(playerConfigObject.transform.position, ball.transform.position) < grabRadius*2)        // *arb
@@ -1312,16 +1320,16 @@ public class AI : MonoBehaviour {
                         else
                         {
                             didAwarenessRoll = true;
-                            Invoke("NormalAwarenss",3/level);
+                            Invoke("NormalAwarenss",level);
 
                             if (IsAware())
                             {
                                 // print("~~Yikes~~!");
-                                awareness = 3f;
+                                awareness = 10f;
                             }
                             else
                             {
-                                awareness = 1f;
+                                awareness = 2f;
                             }
                         }
                    
@@ -1335,7 +1343,7 @@ public class AI : MonoBehaviour {
         {
             foreach (GameObject ball in levelManager.balls)
             {
-                if (ball.transform.position.x >= halfCourt)
+                if (ball.transform.position.x >= halfCourt && !ball.GetComponent<Ball>().thrownBy1)
                 {
                     count++;
                     if (Vector3.Distance(playerConfigObject.transform.position, ball.transform.position) < grabRadius * 2)
@@ -1355,27 +1363,28 @@ public class AI : MonoBehaviour {
                     {
                         if (didAwarenessRoll)
                         {
-                            count -= (int)(awareness * level);
+                            count -= (int)(awareness * level);   // *distance                        
                         }
+
                         else
                         {
                             didAwarenessRoll = true;
-                            Invoke("NormalAwarenss", level);
+                            Invoke("NormalAwareness", level);
 
                             if (IsAware())
                             {
-                                // print("~~Yikes~~!");
-                                awareness = 3f;
+                                awareness = 10f;
                             }
                             else
                             {
-                                awareness = 1f;
+                                awareness = 2f;
                             }
                         }
                     }
                 }
             }
         }
+
         return count;
 
     }
@@ -1473,7 +1482,7 @@ public class AI : MonoBehaviour {
         }
     }
 
-    void NormalAwarenss()
+    void NormalAwareness()
     {
         didAwarenessRoll = false;
     }
@@ -1555,8 +1564,8 @@ public class AI : MonoBehaviour {
     }
     public void AddNavSpeed(float s)
     {
-        navMeshAgent.speed += s * 1.45f;
-        navMeshAgent.acceleration += s *1.45f;
+        navMeshAgent.speed += s * 1.5f;
+        navMeshAgent.acceleration += s *1.5f;
     }
 
     public void AddThrowPower(float p)
@@ -1651,6 +1660,7 @@ public class AI : MonoBehaviour {
 
     internal float GetPanickDelayTime()
     {
+        return panickDelayTime;
         return panickDelayTime;
     }
 

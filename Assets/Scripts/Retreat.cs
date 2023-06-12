@@ -171,7 +171,7 @@ public class Retreat : AIState {
             {
                 retreatObject = new GameObject();
 
-                float padding = 5f;
+                float padding = 8f;
                 Vector3 retreatPointPos;
 
                 if (ai.GetTeam() == 2)

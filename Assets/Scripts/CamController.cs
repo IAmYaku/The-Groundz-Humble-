@@ -25,9 +25,11 @@ public class CamController : MonoBehaviour {
     float smallestZoomSize = 15f;
     public float xWeight = .5f;
 
+    float fxMultiplier = 1f;
+
     private float xDamp;
     private float zoomDamp;
-	private float cameraSmoothe = 1f;
+	private float cameraSmoothe = .5f;
 
     public float playerWeight = 1.1f;
 
@@ -75,9 +77,9 @@ public class CamController : MonoBehaviour {
             {
                 if (isShaking == false)
                 {
-                    float nuSize = Mathf.Clamp(padding + Mathf.Abs(MaxDistance()) * zoomWeight,smallestZoomSize,maxZoomSize); 
+                    float nuSize = Mathf.Clamp((padding + Mathf.Abs(MaxDistance()) * zoomWeight * fxMultiplier), smallestZoomSize,maxZoomSize); 
                     float size0 = this.GetComponent<Camera>().orthographicSize;
-                    this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(size0, nuSize, ref zoomDamp, cameraSmoothe);
+                    this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(size0, nuSize, ref zoomDamp, cameraSmoothe  * fxMultiplier);
                 
                     Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f) * xWeight;                                                               // blows up if there ant any balls or players
                    // float deltaX = (average.x - transform.position.x) * xWeight;
@@ -113,7 +115,9 @@ public class CamController : MonoBehaviour {
 		float min = 1000000.0f;
 		float max = -1000000.0f;
 
-		foreach (GameObject player in levelManager.GetPlayers()) {
+        fxMultiplier = 1f;
+
+        foreach (GameObject player in levelManager.GetPlayers()) {
 			if (player.transform.GetChild (0).position.x < min) {
 				min = player.transform.GetChild (0).position.x;
 
@@ -122,7 +126,27 @@ public class CamController : MonoBehaviour {
 			if (player.transform.GetChild (0).position.x > max) {
 				max = player.transform.GetChild (0).position.x;
 			}
-		}
+
+            Player playerComp = player.GetComponent<Player>();
+
+            if (!playerComp.hasAI)
+            {
+                if (playerComp.controller3DObject.GetComponent<Controller3D>().ballCaught)
+                {
+                    fxMultiplier -= .25f;
+                   // print("fxMultiplier = " + fxMultiplier);
+                }
+                else
+                {
+                  if(  playerComp.aiObject.GetComponent<AI>().ballCaught)
+                    {
+                        fxMultiplier -= .25f;
+                       // print("fxMultiplier = " + fxMultiplier);
+                    }
+                }
+            }
+
+        }
 		foreach (GameObject ball in gameManager.levelManager.balls) {
 			if (ball.transform.position.x < min) {
 				min = ball.transform.position.x;
@@ -130,9 +154,19 @@ public class CamController : MonoBehaviour {
 			if (ball.transform.position.x > max) {
 				max = ball.transform.position.x;
 			}
-		}
 
-		return max - min;
+            Ball ballComp = ball.GetComponent<Ball>();
+            if (ballComp.contact)
+            {
+                fxMultiplier -= .250f;
+               // print("fxMultiplier = " + fxMultiplier);
+            }
+
+        }
+
+        fxMultiplier = Mathf.Clamp(fxMultiplier, 0f, 1f);
+
+		return (max - min) * fxMultiplier ;
 	}
 
 	public float GetAverage(){

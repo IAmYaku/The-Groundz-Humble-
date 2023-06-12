@@ -92,7 +92,7 @@ public class Panic : AIState {
         if ( panickTime == 0.0f)
         {
             panickTime = Mathf.Abs(intensity * panick0);
-            Debug.Log("panickTime = " + panickTime);
+          //  Debug.Log("panickTime = " + panickTime);
             ai.isPanicking = true;
 
         }
@@ -141,15 +141,16 @@ public class Panic : AIState {
 
             else
             {
-             //   Debug.Log("panicked : @ " + sec);
+            if (!panicked)
+            {
+                //   Debug.Log("panicked : @ " + sec);
+                inAction = false;
                 ai.vertInput = 0.0f;
-                panickTime = 0.0f;
-                sec = 0.0f;
                 ai.action1Input = false;
                 panicked = true;
-                inAction = false;
                 panicked0 = Time.realtimeSinceStartup;
                 ai.isPanicking = false;
+            }
             }
     }
 
@@ -269,17 +270,19 @@ public class Panic : AIState {
         {
             float panickedTf = Time.realtimeSinceStartup;
             panickDelay = panickedTf - panicked0;
-            Debug.Log("panickDelay = " + panickDelay);
+            //Debug.Log("panickDelay = " + panickDelay);
 
             panickDelayTime = ai.GetPanickDelayTime();
 
             if (panickDelay >= panickDelayTime)
             {
-               Debug.Log("panickDelayTime = " + panickDelayTime);
+             //  Debug.Log("panickDelayTime = " + panickDelayTime);
 
                 panicked = false;
-                panickDelay = 0;   
-                
+                panickDelay = 0;
+                panickTime = 0.0f;
+                sec = 0.0f;
+
             }
         }
     }
