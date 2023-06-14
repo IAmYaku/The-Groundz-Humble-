@@ -1496,7 +1496,7 @@ public class Controller3D : MonoBehaviour
                         }
 
                         staminaCool += staminaDodgeCost;
-                        rigidbody.AddForce(new Vector3(0f, jumpSpeed / 4f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed) * 75, ForceMode.Impulse);  //*arb
+                        rigidbody.AddForce(new Vector3(0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed) * 75, ForceMode.Impulse);  //*arb
                         playerScript.PlayDodgeSound();
 
                         float dodgeCool = .5f + (rigidbody.velocity.magnitude / 1000f);

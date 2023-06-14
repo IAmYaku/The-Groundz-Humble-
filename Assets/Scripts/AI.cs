@@ -846,10 +846,11 @@ public class AI : MonoBehaviour {
         {
 
             if (animator.GetBool("hasBall") == true)
-                animator.SetBool("hasBall", false);
+                Invoke("SetHasBallFalse", .25f);
         }
         else
         {
+           
             if (animator.GetBool("hasBall") == false)
                 animator.SetBool("hasBall", true);
         }
@@ -876,6 +877,11 @@ public class AI : MonoBehaviour {
                 catchReady = true;
             }
         }
+    }
+
+    void SetHasBallFalse()
+    {
+        animator.SetBool("hasBall", false);
     }
 
     private void CheckCharge()
