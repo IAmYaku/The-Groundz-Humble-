@@ -20,9 +20,9 @@ public class CamController : MonoBehaviour {
     private float offsetX;
 
 	public float padding=20f;
-    private float zoomWeight = .092f;
-    float maxZoomSize = 25.0f;
-    float smallestZoomSize = 15f;
+    private float zoomWeight = 50f;
+    float maxZoomSize = 50.0f;
+    float smallestZoomSize = 5f;
     public float xWeight = .5f;
 
     float fxMultiplier = 1f;
@@ -38,7 +38,7 @@ public class CamController : MonoBehaviour {
     private bool isGlitching;
     private bool isShaking;
     private float glitchIntensity;
-    private float shakeIntensity;
+    private float shakeIntensity; 
     private float shakeTime;
     private float glitchTime;
     //public float shakeAmp = .125f;
@@ -57,13 +57,18 @@ public class CamController : MonoBehaviour {
 
     public CameraType type;
 
-   //lol
+    float size0Persp;
+
+    float size0Main;
+
+
+    //lol
 
     //...  
-    
+
     //lolol!
-    
-	void Start () {
+
+    void Start () {
 		posX = gameObject.transform.position.x;
 		posY = gameObject.transform.position.y;
 		posZ = gameObject.transform.position.z;
@@ -73,12 +78,22 @@ public class CamController : MonoBehaviour {
         levelManager = gameManager.levelManager;
         levelManager.SetCamera(this);
 
+        if (type == CameraType.Perspective)
+        {
+             size0Persp = this.GetComponent<Camera>().fieldOfView;
+        }
+        else
+        {
+            size0Main = this.GetComponent<Camera>().orthographicSize;
+        }
 
-        
-	}
 
-	// Update is called once per frame
-	void LateUpdate () {
+
+
+    }
+
+    // Update is called once per frame
+    void LateUpdate () {
 
 
         if (levelManager.isPlaying)
@@ -87,18 +102,18 @@ public class CamController : MonoBehaviour {
             {
                 if (isShaking == false)
                 {
-                    float nuSize = Mathf.Clamp((padding + Mathf.Abs(MaxDistance()) * zoomWeight * fxMultiplier), smallestZoomSize,maxZoomSize); 
+                    float nuSize = Mathf.Clamp((padding + Mathf.Abs(MaxDistance()) * fxMultiplier), smallestZoomSize, maxZoomSize) / zoomWeight;
 
                     if (type == CameraType.Perspective)
                     {
-                        float size0 = this.GetComponent<Camera>().fieldOfView;
-                        this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(size0, nuSize, ref zoomDamp, cameraSmoothe * fxMultiplier);
+                        float sizePrev = this.GetComponent<Camera>().fieldOfView;
+                        this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(sizePrev, nuSize + size0Persp, ref zoomDamp, cameraSmoothe * fxMultiplier);
                     }
                     
                     else
                     {
-                        float size0 = this.GetComponent<Camera>().orthographicSize;
-                        this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(size0, nuSize, ref zoomDamp, cameraSmoothe * fxMultiplier);
+                        float sizePrev = this.GetComponent<Camera>().orthographicSize;
+                        this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(sizePrev , nuSize + size0Main, ref zoomDamp, cameraSmoothe * fxMultiplier);
                     }
                 
                     Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f) * xWeight;                                                               // blows up if there ant any balls or players
