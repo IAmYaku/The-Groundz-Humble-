@@ -49,6 +49,14 @@ public class CamController : MonoBehaviour {
 
     private bool normaled;
 
+    public enum CameraType
+    {
+        Perspective,
+        Main,
+    }
+
+    public CameraType type;
+
    //lol
 
     //...  
@@ -64,6 +72,8 @@ public class CamController : MonoBehaviour {
 
         levelManager = gameManager.levelManager;
         levelManager.SetCamera(this);
+
+
         
 	}
 
@@ -78,8 +88,18 @@ public class CamController : MonoBehaviour {
                 if (isShaking == false)
                 {
                     float nuSize = Mathf.Clamp((padding + Mathf.Abs(MaxDistance()) * zoomWeight * fxMultiplier), smallestZoomSize,maxZoomSize); 
-                    float size0 = this.GetComponent<Camera>().orthographicSize;
-                    this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(size0, nuSize, ref zoomDamp, cameraSmoothe  * fxMultiplier);
+
+                    if (type == CameraType.Perspective)
+                    {
+                        float size0 = this.GetComponent<Camera>().fieldOfView;
+                        this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(size0, nuSize, ref zoomDamp, cameraSmoothe * fxMultiplier);
+                    }
+                    
+                    else
+                    {
+                        float size0 = this.GetComponent<Camera>().orthographicSize;
+                        this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(size0, nuSize, ref zoomDamp, cameraSmoothe * fxMultiplier);
+                    }
                 
                     Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f) * xWeight;                                                               // blows up if there ant any balls or players
                    // float deltaX = (average.x - transform.position.x) * xWeight;

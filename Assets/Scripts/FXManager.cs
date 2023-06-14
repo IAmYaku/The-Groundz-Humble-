@@ -146,7 +146,7 @@ public class FXManager : MonoBehaviour
             // main.startColor = new ParticleSystem.MinMaxGradient(new Color(R, G, B, A));
 
             float ballVelocity = (ball.GetComponent<Rigidbody>().velocity.magnitude);
-            float bv4s = Mathf.Clamp(ballVelocity / 30, 1.5f, 4);
+            float bv4s = Mathf.Clamp(ballVelocity / 100f, .25f, 3f);
             hfx.transform.localScale = new Vector3(bv4s, bv4s, bv4s);
             // psMain.simulationSpeed = Mathf.Clamp(20 / (ballVelocity / 40), 15, 25);
         }
