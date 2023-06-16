@@ -147,7 +147,8 @@ public class FXManager : MonoBehaviour
 
             float ballVelocity = (ball.GetComponent<Rigidbody>().velocity.magnitude);
             float bv4s = Mathf.Clamp(ballVelocity / 100f, .25f, 3f);
-            hfx.transform.localScale = new Vector3(bv4s, bv4s, bv4s);
+           // hfx.transform.localScale = new Vector3(bv4s, bv4s, bv4s);
+            hfx.transform.localScale = new Vector3(0, 0, 0);
             // psMain.simulationSpeed = Mathf.Clamp(20 / (ballVelocity / 40), 15, 25);
         }
 

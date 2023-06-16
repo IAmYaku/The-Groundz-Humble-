@@ -41,6 +41,9 @@ public class Controller3D : MonoBehaviour
     private Vector3 move;
     private Vector3 move0;
 
+    float moveThresh = .2f;
+
+
     public float maxSpeed = 40f;
     public float xSpeed = 40.0f;
     public float zSpeed = 40.0f;
@@ -507,8 +510,12 @@ public class Controller3D : MonoBehaviour
 
         if (!inBallPause && !isDodging)
         {
-            ApplyVelocity(move);
-            UpdateAcceleration(move);
+            if (move.magnitude > moveThresh && onGround)
+            {
+                ApplyVelocity(move);
+                UpdateAcceleration(move);
+            }
+          
         }
 
         AnimateMovement();
@@ -668,10 +675,10 @@ public class Controller3D : MonoBehaviour
             else
             {
                 rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, Vector3.zero, accelerationRate);
-
+               
             }
         }
-
+        
         else
         {
             velVec = new Vector3(xVelocity, 0f, zVelocity);
@@ -741,7 +748,6 @@ public class Controller3D : MonoBehaviour
 
     private void AnimateMovement()
     {
-        float moveThresh = .2f;
 
         if (Mathf.Abs(move.x) > moveThresh || Mathf.Abs(move.z) > moveThresh)          // *arb num  ... moveThesh
         {
@@ -1462,7 +1468,7 @@ public class Controller3D : MonoBehaviour
 
     #endregion
 
-    //handle Dodge/Jump Input
+    #region Doddge Logic
     public void DodgeInput(CallbackContext context)
     {
         if (levelManager.isPlaying && !playerScript.isOut)
@@ -1496,7 +1502,7 @@ public class Controller3D : MonoBehaviour
                         }
 
                         staminaCool += staminaDodgeCost;
-                        rigidbody.AddForce(new Vector3(0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed) * 75, ForceMode.Impulse);  //*arb
+                        rigidbody.AddForce(new Vector3(0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed) * 75, ForceMode.Force);  //*arb
                         playerScript.PlayDodgeSound();
 
                         float dodgeCool = .5f + (rigidbody.velocity.magnitude / 1000f);
@@ -1605,6 +1611,7 @@ public class Controller3D : MonoBehaviour
         return false;
     }
 
+    #endregion
     private void FlipRight()
     {
         spriteRenderer.flipX = false;

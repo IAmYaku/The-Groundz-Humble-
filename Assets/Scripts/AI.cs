@@ -1326,11 +1326,11 @@ public class AI : MonoBehaviour {
                         else
                         {
                             didAwarenessRoll = true;
-                            Invoke("NormalAwarenss",level);
 
                             if (IsAware())
                             {
                                 // print("~~Yikes~~!");
+                                ball.GetComponent<Ball>().SetAwareAI(this);
                                 awareness = 10f;
                             }
                             else
@@ -1369,18 +1369,20 @@ public class AI : MonoBehaviour {
                     {
                         if (didAwarenessRoll)
                         {
-                            count -= (int)(awareness * level);   // *distance                        
+                            count -= (int)(awareness * level);   // *distance                         
                         }
 
                         else
                         {
                             didAwarenessRoll = true;
-                            Invoke("NormalAwareness", level);
 
                             if (IsAware())
                             {
                                 awareness = 10f;
+                                ball.GetComponent<Ball>().SetAwareAI(this);
+                                print("Is Awaareree!");
                             }
+
                             else
                             {
                                 awareness = 2f;
@@ -1478,6 +1480,9 @@ public class AI : MonoBehaviour {
 
         float prob = level / 5f;
 
+        print("ran = " + ran);
+        print("prob = " + prob);
+
         if (ran < prob)
         {
             return true;
@@ -1488,7 +1493,7 @@ public class AI : MonoBehaviour {
         }
     }
 
-    void NormalAwareness()
+    public void NormalAwareness()
     {
         didAwarenessRoll = false;
     }

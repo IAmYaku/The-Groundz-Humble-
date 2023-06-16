@@ -34,7 +34,8 @@ public class Ball : MonoBehaviour {
 	public bool thrownBy1;   // change to int thrownByTeam
     public bool thrownBy2;   
     public bool grounded =true;
-	public bool contact;
+
+    public bool contact;
     private bool hasMag;
     private float magnetism;
     private Transform target;
@@ -68,6 +69,9 @@ public class Ball : MonoBehaviour {
     private bool IsRendering;
 
     Color pColor;
+
+    AI aiAware;
+
 
     void Start () {
 
@@ -361,6 +365,11 @@ public class Ball : MonoBehaviour {
         thrownBy1 = false;
         thrownBy2 = false;
         grounded = true;
+       
+        if (aiAware)
+        {
+            aiAware.NormalAwareness();
+        }
 
         ParticleSystem hit_ps = gameObject.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
         hit_ps.GetComponent<Renderer>().sortingOrder = 1;
@@ -627,7 +636,10 @@ public class Ball : MonoBehaviour {
         thrownIndicator.SetActive(false);   
     }
 
-  
+    internal void SetAwareAI(AI aI)
+    {
+        aiAware = aI;
+    }
 }
         
     

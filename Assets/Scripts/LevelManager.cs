@@ -991,6 +991,7 @@ public class LevelManager : MonoBehaviour
         Color teeColor = hittee.GetComponentInParent<Player>().color;
 
         Ball ballScript = ball.GetComponent<Ball>();
+
         ballScript.ActivateTrail(terColor, teeColor);
 
         ballScript.SetActiveHitFX(true);
