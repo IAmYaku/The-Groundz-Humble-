@@ -13,7 +13,7 @@ public class Mack : Character
     public  static float zSpeed = 260f;
     public static float acceleration = 1;
 
-    public static float dodgeSpeed = 1600f;
+    public static float dodgeSpeed = 120f;
     public static float jumpSpeed = 10.0f;
     public static float throwPower0 = 150f;
     public static float standingThrowPower = 900;

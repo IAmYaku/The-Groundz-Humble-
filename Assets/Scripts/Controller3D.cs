@@ -1502,7 +1502,7 @@ public class Controller3D : MonoBehaviour
                         }
 
                         staminaCool += staminaDodgeCost;
-                        rigidbody.AddForce(new Vector3(0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed) * 75, ForceMode.Force);  //*arb
+                        rigidbody.velocity += new Vector3(0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed);  //*arb
                         playerScript.PlayDodgeSound();
 
                         float dodgeCool = .5f + (rigidbody.velocity.magnitude / 1000f);
@@ -1523,7 +1523,7 @@ public class Controller3D : MonoBehaviour
                         }
 
                         staminaCool += staminaDodgeCost;
-                        rigidbody.AddForce(new Vector3(0f, jumpSpeed / 4f, GetDodgeDirection() * 100.0f * dodgeSpeed), ForceMode.Impulse);  //*arb
+                        rigidbody.velocity += new Vector3(0f, 0f, GetDodgeDirection() * dodgeSpeed);  //*arb
                         playerScript.PlayDodgeSound();
 
                         float dodgeCool = .5f + (rigidbody.velocity.magnitude / 1000f);
@@ -2351,32 +2351,53 @@ public class Controller3D : MonoBehaviour
 
     public bool InBounds()
     {
+        float padding = 5f;
+
         inBounds = true;
         if (gameObject.GetComponentInParent<Player>().team == 1)
         {
-            if (collider.bounds.min.x < levelManager.stage.baseLineLeft)
+            if (collider.bounds.min.x < levelManager.stage.baseLineLeft + padding)
             {
-                playerConfigObject.transform.position = new Vector3(levelManager.stage.baseLineLeft + collider.bounds.extents.x + 0.05f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
+                playerConfigObject.transform.position = new Vector3(levelManager.stage.baseLineLeft + collider.bounds.extents.x + padding, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
                 inBounds = false;
              //   print("Out of Bounds 1");
 
             }
-            if (collider.bounds.max.x > levelManager.stage.halfCourtLine)
+            if (collider.bounds.max.x > levelManager.stage.halfCourtLine - padding)
             {
-                playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine - collider.bounds.extents.x - 0.05f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
+                playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine - collider.bounds.extents.x - padding, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
                 inBounds = false;
               //  print("Out of Bounds 1");
 
             }
+
+            if (collider.bounds.max.z > levelManager.stage.farSideLine - padding)
+            {
+                playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.farSideLine - collider.bounds.extents.z - padding);
+                rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
+                inBounds = false;
+                //   print("Out of Bounds 1");
+
+            }
+
+            if (collider.bounds.min.z < levelManager.stage.nearSideLine + padding)
+            {
+                playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.nearSideLine + collider.bounds.extents.z + padding);
+                rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
+                inBounds = false;
+                //   print("Out of Bounds 1");
+
+            }
+
         }
 
         if (gameObject.GetComponentInParent<Player>().team == 2)
         {
             if (collider.bounds.min.x < levelManager.stage.halfCourtLine)
             {
-                playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine + collider.bounds.extents.x + 0.05f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
+                playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine + collider.bounds.extents.x + padding, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
                 inBounds = false;
             //    print("Out of Bounds 2");
@@ -2384,10 +2405,28 @@ public class Controller3D : MonoBehaviour
             }
             if (collider.bounds.max.x > levelManager.stage.baseLineRight)
             {
-                playerConfigObject.transform.position = new Vector3(levelManager.stage.baseLineRight - collider.bounds.extents.x - 0.05f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
+                playerConfigObject.transform.position = new Vector3(levelManager.stage.baseLineRight - collider.bounds.extents.x - padding, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
                 inBounds = false;
              //   print("Out of Bounds 2");
+
+            }
+
+            if (collider.bounds.max.z > levelManager.stage.farSideLine - padding)
+            {
+                playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.farSideLine - collider.bounds.extents.z - padding);
+                rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
+                inBounds = false;
+                //   print("Out of Bounds 1");
+
+            }
+
+            if (collider.bounds.min.z < levelManager.stage.nearSideLine + padding)
+            {
+                playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.nearSideLine + collider.bounds.extents.z + padding);
+                rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
+                inBounds = false;
+                //   print("Out of Bounds 1");
 
             }
         }

@@ -10691,6 +10691,18 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 288873482076107595, guid: c4c1243c962c14130bd0cebac72b8746, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 288873482076107595, guid: c4c1243c962c14130bd0cebac72b8746, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 288873482076107595, guid: c4c1243c962c14130bd0cebac72b8746, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 288873482076107595, guid: c4c1243c962c14130bd0cebac72b8746, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -21855,11 +21867,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5478914884341914693, guid: 2beb2cbe43e994ec1b2e30b8b39e0df4, type: 3}
       propertyPath: far clip plane
-      value: 150.3
+      value: 160
       objectReference: {fileID: 0}
     - target: {fileID: 5478914884341914693, guid: 2beb2cbe43e994ec1b2e30b8b39e0df4, type: 3}
       propertyPath: orthographic size
-      value: 20
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 5478914884341914693, guid: 2beb2cbe43e994ec1b2e30b8b39e0df4, type: 3}
       propertyPath: m_CullingMask.m_Bits

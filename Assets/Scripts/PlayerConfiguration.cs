@@ -172,7 +172,7 @@ public class PlayerConfiguration : MonoBehaviour
                 // TODO doesnt make smoothe as intended 
                 if (collision.gameObject.tag == "Wall")
                 {
-                    rigidbody.AddForce(-rigidbody.velocity.x, 0, -rigidbody.velocity.z);
+                   // CorrectPosition(collision.gameObject)
                 }
 
 
@@ -235,6 +235,16 @@ public class PlayerConfiguration : MonoBehaviour
             Vector3 nuPos = new Vector3(transform.position.x + diff.x, transform.position.y - .025f, transform.position.z + diff.z);
             rigidbody.MovePosition(nuPos);              // ?? why not Addforce?
         }
+    }
+
+    private void CorrectPosition(GameObject collisionObject, float correctionValue)
+    {
+        float velMag = rigidbody.velocity.magnitude;
+
+            Vector3 diff = (transform.position - collisionObject.transform.position) * pushVal * (velMag / 100f) * correctionValue;
+            rigidbody.velocity = Vector3.zero;
+            Vector3 nuPos = new Vector3(transform.position.x + diff.x, transform.position.y , transform.position.z + diff.z);
+            rigidbody.MovePosition(nuPos);              // ?? why not Addforce?
     }
 
     private void OnCollisionExit(Collision collision)
