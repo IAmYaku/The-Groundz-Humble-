@@ -27,7 +27,8 @@ public class LevelManager : MonoBehaviour
     public Stage stage;                // make privates
     public CanvasGeneralGame cgg;
 
-    CamController camController;
+    CamController mainCamController;
+    CamController perspCamController;
 
     bool isAtScene;
 
@@ -115,7 +116,6 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         print("LevelManager start");
-
 
         {
             gameManager = GlobalConfiguration.Instance.gameManager.GetComponent<GameManager>();
@@ -207,14 +207,16 @@ public class LevelManager : MonoBehaviour
 
                     if (team1Scored)
                     {
-                        camController.ZoomToSide(1);
+                        mainCamController.ZoomToSide(1);
+                         perspCamController.ZoomToSide(1);
                         Invoke("ResetTeam1Animators",2f);
                     }
                     else
                     {
                         if (team2Scored)
                         {
-                            camController.ZoomToSide(2);
+                            mainCamController.ZoomToSide(2);
+                            perspCamController.ZoomToSide(2);
                             Invoke("ResetTeam2Animators",2f);
                             /*
                             if (!isCelebrating)
@@ -615,9 +617,14 @@ public class LevelManager : MonoBehaviour
         cgg = x;
     }
 
-    internal void SetCamera(CamController cC)
+    internal void SetMainCamera(CamController cC)
     {
-        camController = cC;
+        mainCamController = cC;
+    }
+
+    internal void SetPerspCamera(CamController cC)
+    {
+        perspCamController = cC;
     }
 
     public void SetMode(string mode)
@@ -1122,7 +1129,8 @@ public class LevelManager : MonoBehaviour
         countDown = countDownNum;
         timer = 0;
         isCelebrating = false;
-        camController.GetComponent<CamController>().Normal();
+        mainCamController.GetComponent<CamController>().Normal();
+        perspCamController.GetComponent<CamController>().Normal();
         hits.Clear();
         throws.Clear();
         team1Scored = false;
@@ -1350,12 +1358,14 @@ public class LevelManager : MonoBehaviour
 
     public void CamShake(float intensity, Transform playerT)
     {
-        camController.TrigCamShake(intensity, playerT);
+        mainCamController.TrigCamShake(intensity, playerT);
+        perspCamController.TrigCamShake(intensity, playerT);
     }
 
     internal void CamGlitch(float ballVelocity)
     {
-        camController.GetComponent<CamController>().ActivateGlitch(ballVelocity);
+        mainCamController.GetComponent<CamController>().ActivateGlitch(ballVelocity);
+       // mainCamController.GetComponent<CamController>().ActivateGlitch(ballVelocity);
     }
     public void GameRestart()
     {
@@ -1366,7 +1376,8 @@ public class LevelManager : MonoBehaviour
         timer = 0;
         celebrationTime = 5.0f;
         isCelebrating = false;
-        camController.Normal();
+        mainCamController.Normal();
+        perspCamController.Normal();
         hits.Clear();
         throws.Clear();
 
@@ -1490,7 +1501,8 @@ public class LevelManager : MonoBehaviour
         timer = 0;
         celebrationTime = 5.0f;
         isCelebrating = false;
-        camController.Normal();
+        mainCamController.Normal();
+        perspCamController.Normal();
         hits.Clear();
         throws.Clear();
         team1Scored = false;
@@ -1530,7 +1542,8 @@ public class LevelManager : MonoBehaviour
         timer = 0;
         celebrationTime = 5.0f;
         isCelebrating = false;
-        camController.Normal();
+        mainCamController.Normal();
+        perspCamController.Normal();
         hits.Clear();
         throws.Clear();
         team1Scored = false;

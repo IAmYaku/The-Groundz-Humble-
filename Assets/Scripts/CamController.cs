@@ -13,25 +13,27 @@ public class CamController : MonoBehaviour {
     LevelManager levelManager;
 
 
-	public float posX;
-	public float posY;
-	public float posZ;
+	Vector3 position0 = new Vector3();
+    Vector3 rotation0 = new Vector3();
+    float zoom0;
     
     private float offsetX;
 
-	public float padding=20f;
-    private float zoomWeight = 50f;
+	private float zoomPadding= -10f;
+    private float zoomWeight = 1.25f;
     float maxZoomSize = 50.0f;
-    float smallestZoomSize = 5f;
-    public float xWeight = .5f;
+    float smallestZoomSize = 0f;
+    public float xMultiplier = 2f;
 
     float fxMultiplier = 1f;
 
     private float xDamp;
     private float zoomDamp;
-	private float cameraSmoothe = .5f;
+	private float cameraSmoothe = 1.5f;
 
-    public float playerWeight = 1.1f;
+    public float playerWeight = 5f;
+
+     public float aiWeight = 1f;
 
     public bool movable = false;
 
@@ -61,6 +63,10 @@ public class CamController : MonoBehaviour {
 
     float size0Main;
 
+    bool isZoomingToSide;
+
+    float maxXpos = 20f;
+     float minXpos = -15f;
 
     //lol
 
@@ -69,25 +75,30 @@ public class CamController : MonoBehaviour {
     //lolol!
 
     void Start () {
-		posX = gameObject.transform.position.x;
-		posY = gameObject.transform.position.y;
-		posZ = gameObject.transform.position.z;
+		position0.x = gameObject.transform.position.x;
+		position0.y = gameObject.transform.position.y;
+		position0.z = gameObject.transform.position.z;
+
+        rotation0.x = gameObject.transform.eulerAngles.x;
+         rotation0.y = gameObject.transform.eulerAngles.y;
+          rotation0.z = gameObject.transform.eulerAngles.z;
+
 
         gameManager = GlobalConfiguration.Instance.gameManager.GetComponent<GameManager>();
 
         levelManager = gameManager.levelManager;
-        levelManager.SetCamera(this);
+        
 
         if (type == CameraType.Perspective)
         {
+            levelManager.SetMainCamera(this);
              size0Persp = this.GetComponent<Camera>().fieldOfView;
         }
         else
         {
+            levelManager.SetPerspCamera(this);
             size0Main = this.GetComponent<Camera>().orthographicSize;
         }
-
-
 
 
     }
@@ -96,36 +107,52 @@ public class CamController : MonoBehaviour {
     void LateUpdate () {
 
 
+    UpdateGame();
+
+    UpdateShake();
+       
+    UpdateFX();
+
+    UpdateZoomToSide();
+       
+		
+	} 
+
+    void UpdateGame() {
         if (levelManager.isPlaying)
         {
             if (movable)
             {
-                if (isShaking == false)
+                if (isShaking == false && !isZoomingToSide)
                 {
-                    float nuSize = Mathf.Clamp((padding + Mathf.Abs(MaxDistance()) * fxMultiplier), smallestZoomSize, maxZoomSize) / zoomWeight;
+                    float nuSize = Mathf.Clamp(( Mathf.Abs((MaxDistance() * fxMultiplier)/ zoomWeight) + zoomPadding), smallestZoomSize, maxZoomSize) ;
 
                     if (type == CameraType.Perspective)
                     {
                         float sizePrev = this.GetComponent<Camera>().fieldOfView;
-                        this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(sizePrev, nuSize + size0Persp, ref zoomDamp, cameraSmoothe * fxMultiplier);
+                        this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(sizePrev, (nuSize + size0Persp)/2f, ref zoomDamp, cameraSmoothe * fxMultiplier);
                     }
                     
                     else
                     {
                         float sizePrev = this.GetComponent<Camera>().orthographicSize;
-                        this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(sizePrev , nuSize + size0Main, ref zoomDamp, cameraSmoothe * fxMultiplier);
+                        //print("size = " +  (nuSize + size0Main)/2f);
+                        this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(sizePrev , (nuSize + size0Main)/2f, ref zoomDamp, cameraSmoothe * fxMultiplier);
                     }
                 
-                    Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f) * xWeight;                                                               // blows up if there ant any balls or players
+                    Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f) * xMultiplier;                                                               // blows up if there ant any balls or players
                    // float deltaX = (average.x - transform.position.x) * xWeight;
                     float nuX = Mathf.SmoothDamp(transform.position.x, average.x, ref xDamp, cameraSmoothe);
-                    gameObject.transform.position = new Vector3(nuX, posY, posZ);
+                    nuX = Mathf.Clamp(nuX, minXpos,maxXpos);
+                    gameObject.transform.position = new Vector3(nuX, position0.y, position0.z);
 
                 }
             }
         }
+    }
 
-        if (isShaking)
+    void UpdateShake() {
+         if (isShaking)
         {
             Shake(shakeTime);
             shakeTime-= Time.deltaTime;
@@ -136,15 +163,24 @@ public class CamController : MonoBehaviour {
             isShaking = false;
 
         }
+    }
 
-        if (isGlitching)
+
+    void UpdateFX() {
+    if (isGlitching)
         {
             
         }
+    }
 
-       
-		
-	} 
+
+     void UpdateZoomToSide() {
+        if (isZoomingToSide){
+            if (levelManager.isPlaying == true) {
+                isZoomingToSide = false;
+            }
+        }
+     }
 
 	float MaxDistance(){
 		float min = 1000000.0f;
@@ -153,17 +189,34 @@ public class CamController : MonoBehaviour {
         fxMultiplier = 1f;
 
         foreach (GameObject player in levelManager.GetPlayers()) {
+            
+            Player playerComp = player.GetComponent<Player>();
+
+
 			if (player.transform.GetChild (0).position.x < min) {
 				min = player.transform.GetChild (0).position.x;
+                 if (!playerComp.hasAI)
+            {
+                min *= playerWeight;
+            }
+            else {
+                min *= aiWeight;
+            }
 
 			}
 
 			if (player.transform.GetChild (0).position.x > max) {
 				max = player.transform.GetChild (0).position.x;
+                if (!playerComp.hasAI)
+            {
+                max *= playerWeight;
+            }
+            else {
+                max *= aiWeight;
+            }
 			}
 
-            Player playerComp = player.GetComponent<Player>();
-
+            
             if (!playerComp.hasAI)
             {
                 if (playerComp.controller3DObject.GetComponent<Controller3D>().ballCaught)
@@ -200,8 +253,7 @@ public class CamController : MonoBehaviour {
         }
 
         fxMultiplier = Mathf.Clamp(fxMultiplier, 0f, 1f);
-
-		return (max - min) * fxMultiplier ;
+		return (max - min) * fxMultiplier * xMultiplier ;
 	}
 
 	public float GetAverage(){
@@ -215,11 +267,11 @@ public class CamController : MonoBehaviour {
 
             if (player.GetComponent<Player>().hasAI)
             {
-                charWeight = playerWeight * 1f;
+                charWeight = aiWeight;
             }
             else
             {
-                charWeight = playerWeight;
+                charWeight = playerWeight ;
             }
             sum += player.transform.position.x * charWeight;
 		}
@@ -235,6 +287,10 @@ public class CamController : MonoBehaviour {
 
     public void ZoomToSide(int side)
     {
+
+        isZoomingToSide = true;
+
+
         if (isShaking)
         {
             isShaking = false;
@@ -243,32 +299,51 @@ public class CamController : MonoBehaviour {
         if (side == 1)
         {
            Quaternion camRot =  gameObject.GetComponent<Camera>().transform.localRotation;
-            camRot.y = -5;
-            float nuX = Mathf.SmoothDamp(transform.position.x, posX-5, ref xDamp, cameraSmoothe);
-            gameObject.transform.position = new Vector3(nuX, posY, posZ);
-            float size0 = Camera.main.orthographicSize;
-            Camera.main.orthographicSize = Mathf.SmoothDamp(size0, 16, ref zoomDamp, cameraSmoothe);
-
+            //camRot.y = -5;
+            float nuX = Mathf.SmoothDamp(transform.position.x, GetTeamAverageDistance(side), ref xDamp, cameraSmoothe);
+            gameObject.transform.position = new Vector3(nuX, position0.y, position0.z);
+            if (type == CameraType.Main) {
+            float size0 = this.GetComponent<Camera>().orthographicSize;
+           
+            this.GetComponent<Camera>().orthographicSize  = Mathf.SmoothDamp(size0, 16, ref zoomDamp, cameraSmoothe);
+            }
+            else {
+                 float size0 = this.GetComponent<Camera>().fieldOfView;
+                this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(size0, 16, ref zoomDamp, cameraSmoothe);
+            }
         }
+
         if (side == 2)
         {
             Quaternion camRot = gameObject.GetComponent<Camera>().transform.localRotation;
-            camRot.y = 10;
-            float nuX = Mathf.SmoothDamp(transform.position.x, posX +5, ref xDamp, cameraSmoothe);
-            gameObject.transform.position = new Vector3(nuX, posY, posZ);
-            float size0 = Camera.main.orthographicSize;
-            Camera.main.orthographicSize = Mathf.SmoothDamp(size0, 16, ref zoomDamp, cameraSmoothe);
+           // camRot.y = 10;
+             float nuX = Mathf.SmoothDamp(transform.position.x, GetTeamAverageDistance(side), ref xDamp, cameraSmoothe);
+            gameObject.transform.position = new Vector3(nuX, position0.y, position0.z);
+
+           if (type == CameraType.Main) {
+            float size0 = this.GetComponent<Camera>().orthographicSize; 
+           this.GetComponent<Camera>().orthographicSize  = Mathf.SmoothDamp(size0, 16, ref zoomDamp, cameraSmoothe);
+            }
+            else {
+                 float size0 = this.GetComponent<Camera>().fieldOfView;
+                this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(size0, 16, ref zoomDamp, cameraSmoothe);
+            }
         }
-    }
+        }
 
     internal void Normal()
     {
-        gameObject.transform.position = new Vector3(posX, posY, posZ);
-        Quaternion camRot = gameObject.GetComponent<Camera>().transform.rotation;
-        camRot.x = 14;
-        camRot.x = 0;
-        camRot.x = 0;
-        gameObject.GetComponent<Camera>().orthographicSize = 20;  
+        if (type == CameraType.Main) {
+                gameObject.GetComponent<Camera>().orthographicSize = size0Main; 
+        }
+        else {
+            gameObject.GetComponent<Camera>().fieldOfView = size0Persp; 
+        }
+
+        gameObject.transform.position = position0;
+        gameObject.transform.eulerAngles = rotation0;
+         
+        
     }
 
     internal void TrigCamShake(float intensity, Transform playerTrans)
@@ -287,4 +362,26 @@ public class CamController : MonoBehaviour {
         glitchIntensity = intensity;
 
     }
+
+    float GetTeamAverageDistance(int team) {
+        float averageDistance = 0f;
+        int playerCount = 0;
+         float distance = 0f;
+
+        foreach (GameObject player in levelManager.GetPlayers()) {
+           
+            if (player.GetComponent<Player>().team == team)
+            {
+                distance += player.GetComponent<Player>().playerConfigObject.transform.position.x;
+                playerCount ++;
+            }
+		}
+         averageDistance =  distance / (playerCount);
+        // print("distance = "+ distance);
+         //print("playerCount = "+ playerCount);
+
+		return averageDistance;
+	}
+
+    
 }
