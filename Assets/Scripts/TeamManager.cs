@@ -428,13 +428,13 @@ public class TeamManager : MonoBehaviour
 
     internal void MoveToSpawnPoints(List<Vector3> spawnPoints)
     {
-        print(" team = " + number);
-        print("playerCount = " + playerCount);
-        print("spawnPoints.Count " + spawnPoints.Count);
+        //print(" team = " + number);
+      //  print("playerCount = " + playerCount);
+       // print("spawnPoints.Count " + spawnPoints.Count);
         for (int i = 0; i < playerCount; i++)
         {
-            players[i].transform.position = spawnPoints[i];
-            players[i].transform.GetChild(0).localPosition = Vector3.zero;
+            players[i].transform.localPosition =Vector3.zero;
+            players[i].transform.GetChild(0).position = spawnPoints[i];
             //NavMeshAgent.Warp(Vector3).
         }
     }

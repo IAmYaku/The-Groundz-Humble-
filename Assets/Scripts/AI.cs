@@ -1028,42 +1028,90 @@ public class AI : MonoBehaviour {
 
     public bool InBounds(){
 		inBounds = true;
-		if (gameObject.GetComponentInParent<Player>().team ==1) {
-			if ( collider.bounds.min.x < levelManager.stage.baseLineLeft) {
-                playerConfigObject.transform.position = new Vector3 (levelManager.stage.baseLineLeft + collider.bounds.extents.x + 0.01f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
-				rigidbody.velocity = new Vector3 (0f, rigidbody.velocity.y, rigidbody.velocity.z);
-				inBounds = false;
-			//	print ("Out of Bounds 1");
+        
+        float padding = 5f;
 
-			}
-			if ( collider.bounds.max.x > levelManager.stage.halfCourtLine) {
-                playerConfigObject.transform.position = new Vector3 (levelManager.stage.halfCourtLine - collider.bounds.extents.x- 0.01f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
-				rigidbody.velocity = new Vector3 (0f, rigidbody.velocity.y, rigidbody.velocity.z);
-				inBounds = false;
-			//	print ("Out of Bounds 1");
+        inBounds = true;
+        if (gameObject.GetComponentInParent<Player>().team == 1)
+        {
+            if (collider.bounds.min.x < levelManager.stage.baseLineLeft + padding)
+            {
+                playerConfigObject.transform.position = new Vector3(levelManager.stage.baseLineLeft + collider.bounds.extents.x + padding * 1.125f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
+                navMeshAgent.velocity = new Vector3(0f, navMeshAgent.velocity.y, navMeshAgent.velocity.z);
+                inBounds = false;
+                // print("Out of Bounds 1");
 
-			}
-		}
+            }
+            if (collider.bounds.max.x > levelManager.stage.halfCourtLine)
+            {
 
-		if (gameObject.GetComponentInParent<Player>().team ==2) {
-			if ( collider.bounds.min.x < levelManager.stage.halfCourtLine) {
-                playerConfigObject.transform.position = new Vector3 (levelManager.stage.halfCourtLine + collider.bounds.extents.x+ 0.01f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
-				rigidbody.velocity = new Vector3 (0f, rigidbody.velocity.y, rigidbody.velocity.z);
-				inBounds = false;
-			//	print ("Out of Bounds 2");
+                playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine - collider.bounds.extents.x, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
+                navMeshAgent.velocity = new Vector3(0f, navMeshAgent.velocity.y, navMeshAgent.velocity.z);
+                inBounds = false;
+                // print("Out of Bounds 1");
 
-			}
-			if ( collider.bounds.max.x > levelManager.stage.baseLineRight) {
-                playerConfigObject.transform.position = new Vector3 (levelManager.stage.baseLineRight - collider.bounds.extents.x- 0.01f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
-				rigidbody.velocity = new Vector3 (0f, rigidbody.velocity.y, rigidbody.velocity.z);
-				inBounds = false;
-			//	print ("Out of Bounds 2");
+            }
 
-			}
-		}
+            if (collider.bounds.max.z > levelManager.stage.farSideLine - padding)
+            {
+                playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.farSideLine - collider.bounds.extents.z - padding * 1.125f);
+                navMeshAgent.velocity = new Vector3(navMeshAgent.velocity.x, navMeshAgent.velocity.y, 0f);
+                inBounds = false;
+                //  print("Out of Bounds 1");
 
+            }
 
-		return inBounds;
+            if (collider.bounds.min.z < levelManager.stage.nearSideLine + padding)
+            {
+                playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.nearSideLine + collider.bounds.extents.z + padding * 1.125f);
+                navMeshAgent.velocity = new Vector3(navMeshAgent.velocity.x, navMeshAgent.velocity.y, 0f);
+                inBounds = false;
+                //  print("Out of Bounds 1");
+
+            }
+
+        }
+
+        if (gameObject.GetComponentInParent<Player>().team == 2)
+        {
+            if (collider.bounds.min.x < levelManager.stage.halfCourtLine)
+            {
+
+                playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine + collider.bounds.extents.x + padding * 1.125f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
+                navMeshAgent.velocity = new Vector3(0f, navMeshAgent.velocity.y, navMeshAgent.velocity.z);
+                inBounds = false;
+                    print("Out of Bounds 2");
+
+            }
+            if (collider.bounds.max.x > levelManager.stage.baseLineRight - padding)
+            {
+                playerConfigObject.transform.position = new Vector3(levelManager.stage.baseLineRight - collider.bounds.extents.x - padding * 1.125f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
+                navMeshAgent.velocity = new Vector3(0f, navMeshAgent.velocity.y, navMeshAgent.velocity.z);
+                inBounds = false;
+                   print("Out of Bounds 2");
+
+            }
+
+            if (collider.bounds.max.z > levelManager.stage.farSideLine - padding)
+            {
+                playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.farSideLine - collider.bounds.extents.z - padding * 1.125f);
+                navMeshAgent.velocity = new Vector3(navMeshAgent.velocity.x, navMeshAgent.velocity.y, 0f);
+                inBounds = false;
+                  print("Out of Bounds 2");
+
+            }
+
+            if (collider.bounds.min.z < levelManager.stage.nearSideLine + padding)
+            {
+                playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.nearSideLine + collider.bounds.extents.z + padding * 1.125f);
+                navMeshAgent.velocity = new Vector3(navMeshAgent.velocity.x, navMeshAgent.velocity.y, 0f);
+                inBounds = false;
+                   print("Out of Bounds 2");
+
+            }
+        }
+        
+        return inBounds;
 	}
 
     void SuperInput()

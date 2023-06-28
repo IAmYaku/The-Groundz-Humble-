@@ -167,6 +167,9 @@ public class LevelManager : MonoBehaviour
         {
             countDown =  (countDown - Time.deltaTime);
 
+            tm1.MoveToSpawnPoints(stage.tm1_spawnPoints);
+            tm2.MoveToSpawnPoints(stage.tm2_spawnPoints);
+
             if (countDown <= 0)
             {
                 isPlaying = true;
@@ -695,7 +698,7 @@ public class LevelManager : MonoBehaviour
 
     internal bool IsInGameBounds(Vector3 cockBackPos)
     {
-      return  stage.IsInGameBounds(cockBackPos);
+        return stage.IsInGameBounds(cockBackPos);
     }
 
     internal void SetGameMode(string v)

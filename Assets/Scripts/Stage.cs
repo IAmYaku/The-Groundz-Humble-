@@ -16,7 +16,7 @@ public class Stage : MonoBehaviour
     GameObject p3Icon;
     GameObject p4Icon;
 
-    List<Vector3> tm1_spawnPoints = new List<Vector3>();
+    public List<Vector3> tm1_spawnPoints = new List<Vector3>();
     public List<Vector3> tm2_spawnPoints = new List<Vector3>();
 
     List<Vector3> ballSpawnPoints = new List<Vector3>();
@@ -76,7 +76,6 @@ public class Stage : MonoBehaviour
         }
 
         InitBounds();
-        // CreateSpawnLocations();
         lm.LoadLevel();
         print("Stage Start");
 
@@ -146,7 +145,7 @@ public class Stage : MonoBehaviour
     private void CreateSpawnLocations(int team, int playerCount)
     {
         int zOffset = -10;
-        int yOffset = 5;                           // takes into account size of players... since floor is @ 0
+        int yOffset = 3;                           // takes into account size of players... since floor is @ 0
         int zDistMult = 8;
         float xDistMult = .8f;
 
