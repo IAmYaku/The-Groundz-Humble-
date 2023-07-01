@@ -1077,10 +1077,10 @@ public class AI : MonoBehaviour {
             if (collider.bounds.min.x < levelManager.stage.halfCourtLine)
             {
 
-                playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine + collider.bounds.extents.x + padding * 1.125f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
+                playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine + collider.bounds.extents.x , playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 navMeshAgent.velocity = new Vector3(0f, navMeshAgent.velocity.y, navMeshAgent.velocity.z);
                 inBounds = false;
-                    print("Out of Bounds 2");
+                  //  print("Out of Bounds 2");
 
             }
             if (collider.bounds.max.x > levelManager.stage.baseLineRight - padding)
@@ -1088,7 +1088,7 @@ public class AI : MonoBehaviour {
                 playerConfigObject.transform.position = new Vector3(levelManager.stage.baseLineRight - collider.bounds.extents.x - padding * 1.125f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 navMeshAgent.velocity = new Vector3(0f, navMeshAgent.velocity.y, navMeshAgent.velocity.z);
                 inBounds = false;
-                   print("Out of Bounds 2");
+                //   print("Out of Bounds 2");
 
             }
 
@@ -1097,7 +1097,7 @@ public class AI : MonoBehaviour {
                 playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.farSideLine - collider.bounds.extents.z - padding * 1.125f);
                 navMeshAgent.velocity = new Vector3(navMeshAgent.velocity.x, navMeshAgent.velocity.y, 0f);
                 inBounds = false;
-                  print("Out of Bounds 2");
+                //  print("Out of Bounds 2");
 
             }
 
@@ -1106,7 +1106,7 @@ public class AI : MonoBehaviour {
                 playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.nearSideLine + collider.bounds.extents.z + padding * 1.125f);
                 navMeshAgent.velocity = new Vector3(navMeshAgent.velocity.x, navMeshAgent.velocity.y, 0f);
                 inBounds = false;
-                   print("Out of Bounds 2");
+                  // print("Out of Bounds 2");
 
             }
         }

@@ -144,9 +144,9 @@ public class Stage : MonoBehaviour
 
     private void CreateSpawnLocations(int team, int playerCount)
     {
-        int zOffset = -10;
+        int zOffset = -15 * playerCount;
         int yOffset = 3;                           // takes into account size of players... since floor is @ 0
-        int zDistMult = 8;
+        float zDistMult = 30f;
         float xDistMult = .8f;
 
         if (team == 1)

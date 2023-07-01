@@ -181,7 +181,7 @@ public class ThrowBall : AIState
             inAction = true;
             float proximity = 50 - 10*urgency;
 
-            if (Vector3.Distance(pos, GetNearestOpp(manager, ai)) < proximity)
+            if (Vector3.Distance(pos, GetNearestOpp(manager, ai)) < proximity || IsNearHalfCourt(pos))
             {
                 FaceOpp();
                 ai.rTriggerInput = true;
@@ -200,7 +200,16 @@ public class ThrowBall : AIState
              //   Debug.Log("Moving to Player");
             }
         }
-  
+
+    private bool IsNearHalfCourt(Vector3 pos)
+    {
+       if (Math.Abs(pos.x- gameManager.levelManager.stage.halfCourtLine) < 5f)
+        {
+            return true;
+        }
+
+        return false;
+    }
 
     private void FaceOpp()
     {
