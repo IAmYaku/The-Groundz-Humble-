@@ -48,24 +48,39 @@ public class GetBall : AIState {
     public void Update(GameManager manager, AI ai)
     {
 
-        ai.EvaluateGameState();
-
-        
-        
-        if (ai.type == AI.Type.timid)
+        if (!ai.playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)
         {
-            TimidBehavior();
+            ai.EvaluateGameState();
+
+            if (ai.type == AI.Type.timid)
+            {
+                TimidBehavior();
+            }
+
+            if (ai.type == AI.Type.aggresive)
+            {
+                AggressiveBehavior();
+            }
+
+            if (ai.type == AI.Type.random)
+            {
+                RandomBehavior();
+            }
+        }
+        else
+        {
+            
+            ballTarget = GetNearestBallContacted(ai.navMeshAgent.gameObject.transform.position, manager);
+            if (ballTarget)
+            {
+                ballTarget.GetComponent<Ball>().isBeingPursued = true;
+                Debug.Log("ballContact = " + ballTarget.transform.position);
+                Action(gameManager, ai, 3, Vector3.zero);
+            }
+
         }
 
-        if (ai.type == AI.Type.aggresive)
-        {
-            AggressiveBehavior();
-        }
-
-        if (ai.type == AI.Type.random)
-        {
-            RandomBehavior();
-        }
+    
 
      //   Debug.Log("InAction = " + inAction);
     }
@@ -386,7 +401,7 @@ public class GetBall : AIState {
         if (team == 1) {
             foreach (GameObject ball in lm.balls) {
                 Ball ballScript = ball.GetComponent<Ball>();
-                if (ballScript.grounded && !ballScript.grabbed && ball.transform.position.x <= halfCourt -.5 && !ballScript.isBeingPursued) {                 // gameRule config
+                if (ballScript.grounded && !ballScript.grabbed && ball.transform.position.x <= halfCourt -.5 /* && !ballScript.isBeingPursued */) {                 // gameRule config
                     if (Vector3.Distance(pos, ball.transform.position) < min) {
                             if (!ballScript.isSupering)
                             {
@@ -404,7 +419,7 @@ public class GetBall : AIState {
             {
                 Ball ballScript = ball.GetComponent<Ball>();
 
-                    if (ballScript.grounded && !ballScript.grabbed   && ball.transform.position.x >= halfCourt + .5 && !ballScript.isBeingPursued)               // gameRule config
+                    if (ballScript.grounded && !ballScript.grabbed   && ball.transform.position.x >= halfCourt + .5 /* &&  !ballScript.isBeingPursued */)               // gameRule config
                 {
                         if (Vector3.Distance(pos, ball.transform.position) < min)
                         {
@@ -430,6 +445,63 @@ public class GetBall : AIState {
 		return move;
 	}
 
+
+    GameObject GetNearestBallContacted(Vector3 pos, GameManager manager)
+    {
+
+
+        float min = 10000000f;
+        GameObject nearestBall = null;
+        int team = gameObject.GetComponentInParent<Player>().team;
+        float halfCourt = manager.levelManager.stage.halfCourtLine;
+
+        LevelManager lm = manager.levelManager;
+
+        // Debug.Log("team :" + team);
+
+        if (team == 1)
+        {
+            foreach (GameObject ball in lm.hits.Keys)
+            {
+                Ball ballScript = ball.GetComponent<Ball>();
+                if (ball.transform.position.x <= halfCourt - .5 /*&& !ballScript.isBeingPursued */)
+                {                 // gameRule config
+                    if (Vector3.Distance(pos, ball.transform.position) < min)
+                    {
+                        if (!ballScript.isSupering)
+                        {
+                            min = Vector3.Distance(pos, ball.transform.position);
+                            nearestBall = ball;
+                            return nearestBall;
+                        }
+                    }
+                }
+            }
+        }
+        if (team == 2)
+        {
+            foreach (GameObject ball in lm.hits.Keys)
+            {
+                Ball ballScript = ball.GetComponent<Ball>();
+
+                if ( ball.transform.position.x >= halfCourt + .5 /* && !ballScript.isBeingPursued */)               // gameRule config
+                {
+                    if (Vector3.Distance(pos, ball.transform.position) < min)
+                    {
+                        if (!ballScript.isSupering)
+                        {
+                            min = Vector3.Distance(pos, ball.transform.position);
+                            nearestBall = ball;
+                            return nearestBall;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Debug.Log(" null balls");
+        return nearestBall;
+    }
     int AIState.GetNum()
     {
         return num;

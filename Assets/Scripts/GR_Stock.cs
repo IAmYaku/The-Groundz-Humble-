@@ -257,12 +257,12 @@ public class GR_Stock : GameRule
             {
                 if (player.GetComponent<Player>().hasAI)
                 {
-                    player.transform.GetChild(0).gameObject.GetComponent<AI>().ballContact = false;
+                    player.transform.GetChild(0).gameObject.GetComponent<AI>().playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
                     player.transform.GetChild(0).gameObject.GetComponent<AI>().ballHit = null;
                 }
                 else
                 {
-                    player.transform.GetChild(0).gameObject.GetComponent<Controller3D>().ballContact = false;
+                    player.transform.GetChild(0).gameObject.GetComponent<Controller3D>().playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
                     player.transform.GetChild(0).gameObject.GetComponent<Controller3D>().ballHit = null;
 
                     ParticleSystem ps = player.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
@@ -385,7 +385,7 @@ public class GR_Stock : GameRule
             }
            
             player.GetComponentInChildren<Controller3D>().isKnockedOut = false;
-            player.GetComponentInChildren<Controller3D>().ballContact = false;
+            player.GetComponentInChildren<Controller3D>().playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
             player.GetComponentInChildren<Controller3D>().enabled = false;
             ParticleSystem ps = player.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
             ParticleSystem.MainModule ring_ps = ps.main;
@@ -403,7 +403,7 @@ public class GR_Stock : GameRule
                     player.GetComponentInChildren<AI>().DropBall();
                 }
                 player.GetComponentInChildren<AI>().isKnockedOut = false;
-                player.GetComponentInChildren<AI>().ballContact = false;
+                player.GetComponentInChildren<AI>().playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
                 player.GetComponentInChildren<AI>().enabled = false;
                 player.GetComponentInChildren<UnityEngine.AI.NavMeshAgent>().enabled = false;
 

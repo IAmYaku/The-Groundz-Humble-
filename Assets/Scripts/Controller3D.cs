@@ -17,7 +17,7 @@ public class Controller3D : MonoBehaviour
 
     private LevelManager levelManager;
 
-    GameObject playerConfigObject;
+    public GameObject playerConfigObject;
 
     public SpriteRenderer spriteRenderer;
     private Animator animator;
@@ -101,7 +101,7 @@ public class Controller3D : MonoBehaviour
 
     private Vector3 throwDirection;
     private Vector3 throww;
-    public bool ballContact;
+    //public bool ballContact;
 
     private bool isBlocking;
 
@@ -901,7 +901,7 @@ public class Controller3D : MonoBehaviour
                                 Invoke("ResetCatchTrigger", 1f);
                             }
 
-                            ballContact = false;
+                            playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
                             ballCaught = true;
 
                             ballComp.playCatch();
@@ -2482,7 +2482,7 @@ public class Controller3D : MonoBehaviour
 
     private void HandleContact()    // move to player Config
     {
-        if (ballContact)
+        if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)
         {
             TriggerHitIndicators();
 

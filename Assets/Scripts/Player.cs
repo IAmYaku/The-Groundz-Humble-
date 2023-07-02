@@ -643,7 +643,7 @@ public class Player : MonoBehaviour
             }
 
             controller3D.isKnockedOut = false;
-            controller3D.ballContact = false;
+            controller3D.playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
             playerAura.gameObject.SetActive(false);
 
         }
@@ -657,7 +657,7 @@ public class Player : MonoBehaviour
                     aiScript.DropBall();
                 }
                 aiScript.isKnockedOut = false;
-                aiScript.ballContact = false;
+                aiScript.playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
                 aiScript.enabled = false;
 
                 NavMeshAgent navMeshAgent = playerConfigObject.GetComponent<NavMeshAgent>();

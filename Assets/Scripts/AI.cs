@@ -10,8 +10,9 @@ public class AI : MonoBehaviour {
     public Player playerScript;
 
     private LevelManager levelManager;
+    GameManager gameManager;
 
-    GameObject playerConfigObject;
+    public GameObject playerConfigObject;
 
     public NavMeshAgent navMeshAgent;
     public Transform target;
@@ -116,7 +117,7 @@ public class AI : MonoBehaviour {
     public float standingThrowPower;
 
 	private Vector3 throwDirection;
-	public bool ballContact;
+	//public bool ballContact;
 	public bool ballGrabbed = false;
 	public bool ballThrown;
 	public bool ballCaught;
@@ -248,7 +249,7 @@ public class AI : MonoBehaviour {
 
          */
 
-        GameManager gameManager = levelManager.gameObject.GetComponent<GameManager>();                        // todo
+         gameManager = levelManager.gameObject.GetComponent<GameManager>();                        // todo
         retreatPoint = parent.transform;  // or grab from lm 
 
 
@@ -281,18 +282,16 @@ public class AI : MonoBehaviour {
             {
                 //     print(" IsOnNAvMesh" );
 
-                GameManager gameManager = levelManager.gameObject.GetComponent<GameManager>();    // todo
+                if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)
+                {
+                    aiState = getBall_;
+                   
+                }
 
                 aiState.Update(gameManager, this);
+
+
                 aiStateDisplayString = aiState.GetName();
-
-             //   print(" aiState num = " + aiState.GetNum());
-
-                if (prevStateNum != aiState.GetNum())
-                {
-                    //  print(" aiState num = " + aiState.GetNum());
-                }
-                prevStateNum = aiState.GetNum();
 
                 MoveInput();
                 GrabInput();
@@ -340,7 +339,7 @@ public class AI : MonoBehaviour {
 
     private void HandleContact()
     {
-        if (ballContact)                // she come back to this  <---
+        if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)                // she come back to this  <---
         {
             // slow down
 
@@ -605,11 +604,11 @@ public class AI : MonoBehaviour {
                                     animator.SetTrigger("Catch");
                                 }
 
-                                ballContact = false;  // what if therre's multiple balls
+                                //ballContact = false;  // what if therre's multiple balls
                                 ballCaught = true;     // what if therre's multiple balls
 
                                 ball.GetComponent<Ball>().playCatch();
-
+                                levelManager.ClearContacts(ball);
                                 levelManager.AddCatch(ball, parent);
                                 levelManager.LastThrowerOut(ball);
                                 levelManager.GetAnotherPlayer(gameObject.GetComponentInParent<Player>().team);   // GR check
