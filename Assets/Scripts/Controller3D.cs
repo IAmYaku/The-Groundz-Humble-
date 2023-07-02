@@ -636,8 +636,8 @@ public class Controller3D : MonoBehaviour
         float xCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_x * acceleration, pow0_x + muvXcel_x)), 0.0f, clampMult_x);                       // impartial but feels good
         float zCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_z * acceleration * accMult_z, pow0_z + muvXcel_z)), 0.0f, clampMult_z);
 
-        float xMultiplier = 6f;
-        float zMultiplier = 6f;   //   < -- faulty, but feels good
+        float xMultiplier = 8f;
+        float zMultiplier = 8f;   //   < -- faulty, but feels good
         float frameMult = 0.017f;
 
         float timeMultiplier = 300f;
@@ -1157,13 +1157,12 @@ public class Controller3D : MonoBehaviour
 
         Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedVelAverage().x, 0f, chargeVelInput.GetWeightedVelAverage().y);
 
+
         if (Mathf.Abs(weightedMuvAvVec.magnitude) < 10f || float.IsNaN(weightedMuvAvVec.magnitude))  // Have to check if wasn't moving during charge
         {
             weightedMuvAvVec.x = throwDirection.x * throwPower / 100f;
 
-         if   (float.IsNaN(weightedMuvAvVec.magnitude)) {
                 weightedMuvAvVec.z = throwDirection.z * (throwPower / 100f) * move.z;
-            }
         }
 
         print("weightedMuvAvVec = " + weightedMuvAvVec);
@@ -1180,7 +1179,7 @@ public class Controller3D : MonoBehaviour
 
                 targetedOpp = nearestOpp;
 
-                 throwAidVec = GetThrowAid(weightedMuvAvVec, seekVec);
+                throwAidVec = GetThrowAid(weightedMuvAvVec, seekVec);
             }
 
         }

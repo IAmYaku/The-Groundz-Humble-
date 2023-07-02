@@ -113,6 +113,7 @@ public class FXManager : MonoBehaviour
 
     public void HitDisplay(GameObject hittee, GameObject ball)
     {
+        
         bool ballIsSupering = ball.GetComponent<Ball>().isSupering;
              GameObject hfx;
 
@@ -146,12 +147,11 @@ public class FXManager : MonoBehaviour
             // main.startColor = new ParticleSystem.MinMaxGradient(new Color(R, G, B, A));
 
             float ballVelocity = (ball.GetComponent<Rigidbody>().velocity.magnitude);
-            float bv4s = Mathf.Clamp(ballVelocity / 100f, .25f, 3f);
-           // hfx.transform.localScale = new Vector3(bv4s, bv4s, bv4s);
-            hfx.transform.localScale = new Vector3(0, 0, 0);
+            float bv4s = Mathf.Clamp(ballVelocity / 360f, .36f, 2f);
+            hfx.transform.localScale = new Vector3(bv4s, bv4s, bv4s);
             // psMain.simulationSpeed = Mathf.Clamp(20 / (ballVelocity / 40), 15, 25);
         }
-
+        
     }
 
     public void CatchDisplay(Vector3 position)

@@ -89,6 +89,7 @@ public class GetBall : AIState {
             {
                 ai.SetAgentDestination(ballTarget.transform);
                 ballTargetDistance = Vector3.Distance(ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
+                ballTarget.GetComponent<Ball>().isBeingPursued = true;
             }
         }
 
@@ -97,6 +98,7 @@ public class GetBall : AIState {
            if ( !IsBallIsStillLegal(ballTarget)) {
                 Debug.Log("Ball not legal anymore");
                 ai.EndAgentNavigation();
+                ballTarget.GetComponent<Ball>().isBeingPursued = false;
                 ballTarget = GetNearestBall(pos, manager);
 
                 if (ballTarget)
@@ -105,6 +107,7 @@ public class GetBall : AIState {
                     {
                         ai.navMeshAgent.isStopped = false;
                         ai.SetAgentDestination(ballTarget.transform);
+                        ballTarget.GetComponent<Ball>().isBeingPursued = true;
                     }
                 }
             }
@@ -127,6 +130,7 @@ public class GetBall : AIState {
 
                     if (ai.ballGrabbed)
                     {
+                    ballTarget.GetComponent<Ball>().isBeingPursued = false;
                         inAction = false;
                         ballTarget = null;
                         ballTargetDistance = 0f;
@@ -382,7 +386,7 @@ public class GetBall : AIState {
         if (team == 1) {
             foreach (GameObject ball in lm.balls) {
                 Ball ballScript = ball.GetComponent<Ball>();
-                if (ballScript.grounded && !ballScript.grabbed && ball.transform.position.x <= halfCourt -.5) {                 // gameRule config
+                if (ballScript.grounded && !ballScript.grabbed && ball.transform.position.x <= halfCourt -.5 && !ballScript.isBeingPursued) {                 // gameRule config
                     if (Vector3.Distance(pos, ball.transform.position) < min) {
                             if (!ballScript.isSupering)
                             {
@@ -400,7 +404,7 @@ public class GetBall : AIState {
             {
                 Ball ballScript = ball.GetComponent<Ball>();
 
-                    if (ballScript.grounded && !ballScript.grabbed   && ball.transform.position.x >= halfCourt + .5)               // gameRule config
+                    if (ballScript.grounded && !ballScript.grabbed   && ball.transform.position.x >= halfCourt + .5 && !ballScript.isBeingPursued)               // gameRule config
                 {
                         if (Vector3.Distance(pos, ball.transform.position) < min)
                         {

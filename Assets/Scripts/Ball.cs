@@ -71,7 +71,7 @@ public class Ball : MonoBehaviour {
     Color pColor;
 
     AI aiAware;
-
+    public bool isBeingPursued;
 
     void Start () {
 
@@ -113,20 +113,9 @@ public class Ball : MonoBehaviour {
 
 		if (!isSupering)
         {
+            CheckSquash();
+
             /*
-			if (velocity.magnitude > 2000f) {
-                float nuX = Mathf.Clamp(Mathf.Abs(velocity.magnitude) / xSquashFactor, 0f, 2f);
-                float nuY = Mathf.Clamp(Mathf.Abs(velocity.magnitude) / ySquashFactor, 0f, 2f);
-                transform.localScale = new Vector3(size.x + nuX, size.y - nuY, transform.localScale.z);
-                transform.eulerAngles = new Vector3(0f, 0f, 0f);
-                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-
-            } else {
-                transform.localScale = size;
-                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
-               
-			}
-
 			if (!isSupering && (thrownBy1 || thrownBy2) && velocity.magnitude> 75f) {
 				playWhip ();
 			}
@@ -161,6 +150,24 @@ public class Ball : MonoBehaviour {
                 IsRendering = false;
             }
         }
+    }
+
+    private void CheckSquash()
+    {
+        float squashThresh = 2000f;
+
+            if (velocity.magnitude > squashThresh) {
+                float nuX = Mathf.Clamp(Mathf.Abs(velocity.magnitude) / xSquashFactor, 0f, 2f);
+                float nuY = Mathf.Clamp(Mathf.Abs(velocity.magnitude) / ySquashFactor, 0f, 2f);
+                transform.localScale = new Vector3(size.x + nuX, size.y - nuY, transform.localScale.z);
+                transform.eulerAngles = new Vector3(0f, 0f, 0f);
+                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
+            } else {
+                transform.localScale = size;
+                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+               
+			}
     }
 
     private void Seek(float magnetism, Transform target)

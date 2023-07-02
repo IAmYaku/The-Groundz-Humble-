@@ -20,7 +20,7 @@ public class CamController : MonoBehaviour {
     private float offsetX;
 
 	private float zoomPadding= -10f;
-    private float zoomWeight = 1.25f;
+    private float zoomWeight = 5f;
     float maxZoomSize = 50.0f;
     float smallestZoomSize = 0f;
     public float xMultiplier = 2f;
