@@ -23,6 +23,12 @@ public class Player : MonoBehaviour
 
     public GameObject playerConfigObject;  // 0
     public GameObject playerAura;   // 0.1
+    SpriteRenderer healthSR;
+    SpriteRenderer staminaSR;
+    SpriteRenderer powerSR;
+    GameObject hitObject;
+    GameObject catchObject;
+    GameObject winObject;
     public GameObject shadow;   // 0.2
     public GameObject controller3DObject;  // 1
     public GameObject aiObject;  // 2
@@ -32,6 +38,7 @@ public class Player : MonoBehaviour
 
     public Sprite playerIconImage;
     public GameObject staminaBarObject;
+
     public GameObject powerBarObject;
 
     public GameObject super;
@@ -145,6 +152,36 @@ public class Player : MonoBehaviour
             aiObject = transform.GetChild(2).gameObject;
         }
 
+        if (!healthSR)
+        {
+            healthSR = playerAura.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+        }
+
+        if (!staminaSR)
+        {
+            staminaSR = playerAura.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>();
+        }
+
+        if (!powerSR)
+        {
+            powerSR = playerAura.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>();
+        }
+
+        if (!hitObject)
+        {
+            hitObject = playerAura.transform.GetChild(3).gameObject;
+        }
+
+        if (!catchObject)
+        {
+            catchObject = playerAura.transform.GetChild(4).gameObject;
+        }
+
+        if (!winObject)
+        {
+            winObject = playerAura.transform.GetChild(5).gameObject;
+        }
+
 
         controller3D = controller3DObject.GetComponent<Controller3D>();
         aiScript = aiObject.GetComponent<AI>();
@@ -199,9 +236,11 @@ public class Player : MonoBehaviour
 
             if (hasJoystick)
             {
-                staminaCool = (int)(stamina - controller3D.staminaCool);
+                staminaCool = (stamina - controller3D.staminaCool);
+                staminaSR.material.SetFloat("_Rotation", staminaCool / 300f);
                 staminaBarObject.GetComponent<Slider>().value = staminaCool;
-                powerCool = (int)(power - controller3D.superCoolDown);
+                powerCool = (power - controller3D.superCoolDown);
+                powerSR.material.SetFloat("_Rotation", powerCool / 60f);
                 powerBarObject.GetComponent<Slider>().value = powerCool;
             }
             if (hasAI)
@@ -416,6 +455,7 @@ public class Player : MonoBehaviour
 
     }
 
+
     private Action<InputUser, InputUserChange, InputDevice> DeviceChange()
     {
      //   print("Device changed!");
@@ -529,10 +569,11 @@ public class Player : MonoBehaviour
     {
         playerAura.SetActive(true);
 
-        GameObject psRoot = playerAura.transform.GetChild(0).gameObject;
+        GameObject psRoot = playerAura;
         ParticleSystem.MainModule rootPS = psRoot.GetComponent<ParticleSystem>().main;
         rootPS.startColor = new ParticleSystem.MinMaxGradient(color);
 
+        /*
         int childCount = psRoot.transform.childCount;
 
         for (int i = 0; i < childCount; ++i)
@@ -549,10 +590,8 @@ public class Player : MonoBehaviour
                 childPS.startColor = new ParticleSystem.MinMaxGradient(color);
             }
 
-
-
-
         }
+           */
 
     }
 
@@ -644,6 +683,7 @@ public class Player : MonoBehaviour
 
             controller3D.isKnockedOut = false;
             controller3D.playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
+            hitObject.SetActive(false);
             playerAura.gameObject.SetActive(false);
 
         }
@@ -792,5 +832,35 @@ public class Player : MonoBehaviour
         }
 
     }
+
+    internal void SetHitFX(bool x)
+    {
+        hitObject.SetActive(x);
+    }
+
+    internal void TriggerCatchFX()
+    {
+        catchObject.SetActive(true);
+        Invoke("DisableCatchFX", 2f);
+    }
+
+    internal void DisableCatchFX()
+    {
+        catchObject.SetActive(false);
+  
+    }
+
+    internal void TriggerWinFX()
+    {
+        winObject.SetActive(true);
+        Invoke("DisableWinFX", 2f);
+    }
+    internal void DisableWinFX()
+    {
+        winObject.SetActive(false);
+
+    }
+
+
 
 }

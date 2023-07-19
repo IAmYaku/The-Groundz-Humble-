@@ -144,7 +144,9 @@ public class PlayerConfiguration : MonoBehaviour
 
 
                         levelManager.AddHit(ballHit, parent);
+
                         levelManager.TriggerHitFX(gameObject, ballHit);
+                        player.SetHitFX(true);
 
                         float ballHitPauseWeight = 100f;
                         float hitPauseDuration = Mathf.Clamp( ballHitVelocity / ballHitPauseWeight, FXManager.min_HitPauseDuration, FXManager.max_HitPauseDuration);
@@ -315,7 +317,8 @@ public class PlayerConfiguration : MonoBehaviour
     private void DelayPause(float hitPauseDuration, float hitPausePreDelay)
     {
         levelManager.SetHitPauseDuration(hitPauseDuration);
-        Invoke("DoHitPause", hitPausePreDelay);
+        //Invoke("DoHitPause", hitPausePreDelay);
+        levelManager.HitPause();
 
     }
 

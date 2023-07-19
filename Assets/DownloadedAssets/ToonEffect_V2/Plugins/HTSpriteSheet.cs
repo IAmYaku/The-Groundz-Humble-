@@ -42,6 +42,7 @@ public class HTSpriteSheet : MonoBehaviour {
 	
 	#region public properties
 	
+
 	/// <summary>
 	/// The sprite sheet material.
 	/// </summary>
@@ -132,7 +133,7 @@ public class HTSpriteSheet : MonoBehaviour {
 	public float waittingTime;
 	public bool copy=false;
 	#endregion
-	
+
 	#region private properties
 	/// <summary>
 	/// The material with the sprite speed.
@@ -205,7 +206,8 @@ public class HTSpriteSheet : MonoBehaviour {
 	/// <summary>
 	/// Awake this instance.
 	/// </summary>
-	void Awake(){
+	 void Awake(){
+
 		
 		// Creation of the particle
 		CreateParticle();
@@ -230,16 +232,16 @@ public class HTSpriteSheet : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-	
+
 		InitSpriteSheet();
 	}
 	
 	/// <summary>
 	/// Update this instance.
 	/// </summary>
-	void Update () {
-		
-		bool end=false;
+	  void Update () {
+
+		bool end = false;
 		
 		Camera_BillboardingMode();
 		

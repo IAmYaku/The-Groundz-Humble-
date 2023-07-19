@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using TMPro;
 
-namespace Michsky.UI.Dark
+namespace Michsky.UI.ModernUIPack
 {
-    public class CustomDropdown : MonoBehaviour, IPointerExitHandler
+    public class CustomDropdown : MonoBehaviour
     {
         [Header("OBJECTS")]
         public GameObject triggerObject;
@@ -17,28 +16,20 @@ namespace Michsky.UI.Dark
         public Transform itemParent;
         public GameObject itemObject;
         public GameObject scrollbar;
-        public Transform listParent;
-        private Transform currentListParent;
         private VerticalLayoutGroup itemList;
 
         [Header("SETTINGS")]
         public bool enableIcon = true;
         public bool enableTrigger = true;
         public bool enableScrollbar = true;
-        public bool setHighPriorty = true;
-        public bool outOnPointerExit;
-        public bool isListItem;
         public bool invokeAtStart = false;
-
-        [Header("SAVING")]
-        public bool saveSelected = false;
-        [Tooltip("Note that every Dropdown should has its own unique tag.")]
-        public string dropdownTag = "Dropdown";
+        public AnimationType animationType;
 
         [Space(10)]
-        [Header("CONTENT")]
+        [SerializeField]
+        public List<Item> dropdownItems = new List<Item>();
+        private List<Item> imageList = new List<Item>();
         public int selectedItemIndex = 0;
-        [SerializeField] public List<Item> dropdownItems = new List<Item>();
         [Space(10)]
 
         private Animator dropdownAnimator;
@@ -47,11 +38,14 @@ namespace Michsky.UI.Dark
 
         Sprite imageHelper;
         string textHelper;
-        string newItemTitle;
-        Sprite newItemIcon;
         bool isOn;
-        [HideInInspector] public int index = 0;
-        [HideInInspector] public int siblingIndex = 0;
+
+        public enum AnimationType
+        {
+            FADING,
+            SLIDING,
+            STYLISH
+        }
 
         [System.Serializable]
         public class Item
@@ -63,46 +57,9 @@ namespace Michsky.UI.Dark
 
         void Start()
         {
-            dropdownAnimator = gameObject.GetComponent<Animator>();
+            dropdownAnimator = this.GetComponent<Animator>();
             itemList = itemParent.GetComponent<VerticalLayoutGroup>();
-            SetupDropdown();
-            currentListParent = transform.parent;
 
-            if (enableIcon == false)
-                selectedImage.gameObject.SetActive(false);
-            else
-                selectedImage.gameObject.SetActive(true);
-
-            if (enableScrollbar == true)
-            {
-                itemList.padding.right = 25;
-                scrollbar.SetActive(true);
-            }
-
-            else
-            {
-                itemList.padding.right = 8;
-                scrollbar.SetActive(false);
-            }
-
-            if (setHighPriorty == true)
-                transform.SetAsLastSibling();
-
-            if (saveSelected == true)
-            {
-                if (invokeAtStart == true)
-                    dropdownItems[PlayerPrefs.GetInt(dropdownTag + "Dropdown")].OnItemSelection.Invoke();
-                else
-                    ChangeDropdownInfo(PlayerPrefs.GetInt(dropdownTag + "Dropdown"));
-            }
-        }
-
-        public void SetupDropdown()
-        {
-            foreach (Transform child in itemParent)
-                GameObject.Destroy(child.gameObject);
-
-            index = 0;
             for (int i = 0; i < dropdownItems.Count; ++i)
             {
                 GameObject go = Instantiate(itemObject, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
@@ -120,26 +77,34 @@ namespace Michsky.UI.Dark
 
                 Button itemButton;
                 itemButton = go.GetComponent<Button>();
-
-                if (dropdownItems[i].OnItemSelection != null)
-                    itemButton.onClick.AddListener(dropdownItems[i].OnItemSelection.Invoke);
-
+                itemButton.onClick.AddListener(dropdownItems[i].OnItemSelection.Invoke);
                 itemButton.onClick.AddListener(Animate);
-                itemButton.onClick.AddListener(delegate
-                {
-                    ChangeDropdownInfo(index = go.transform.GetSiblingIndex());
-
-                    if (saveSelected == true)
-                        PlayerPrefs.SetInt(dropdownTag + "Dropdown", go.transform.GetSiblingIndex());
-                });
 
                 if (invokeAtStart == true)
+                {
                     dropdownItems[i].OnItemSelection.Invoke();
+                }
             }
 
             selectedText.text = dropdownItems[selectedItemIndex].itemName;
             selectedImage.sprite = dropdownItems[selectedItemIndex].itemIcon;
-            currentListParent = transform.parent;
+
+            if (enableScrollbar == true)
+            {
+                itemList.padding.right = 25;
+                scrollbar.SetActive(true);
+            }
+
+            else
+            {
+                itemList.padding.right = 8;
+                Destroy(scrollbar);
+            }
+
+            if (enableIcon == false)
+            {
+                selectedImage.enabled = false;
+            }
         }
 
         public void ChangeDropdownInfo(int itemIndex)
@@ -152,102 +117,51 @@ namespace Michsky.UI.Dark
 
         public void Animate()
         {
-            if (isOn == false)
+            if (isOn == false && animationType == AnimationType.FADING)
             {
-                dropdownAnimator.Play("Dropdown In");
+                dropdownAnimator.Play("Fading In");
                 isOn = true;
-
-                if (isListItem == true)
-                {
-                    siblingIndex = transform.GetSiblingIndex();
-                    gameObject.transform.SetParent(listParent, true);
-                }
             }
 
-            else if (isOn == true)
+            else if (isOn == true && animationType == AnimationType.FADING)
             {
-                dropdownAnimator.Play("Dropdown Out");
+                dropdownAnimator.Play("Fading Out");
                 isOn = false;
-
-                if (isListItem == true)
-                {
-                    gameObject.transform.SetParent(currentListParent, true);
-                    gameObject.transform.SetSiblingIndex(siblingIndex);
-                }
             }
 
-            if (enableTrigger == true && isOn == false)
+            else if (isOn == false && animationType == AnimationType.SLIDING)
+            {
+                dropdownAnimator.Play("Sliding In");
+                isOn = true;
+            }
+
+            else if (isOn == true && animationType == AnimationType.SLIDING)
+            {
+                dropdownAnimator.Play("Sliding Out");
+                isOn = false;
+            }
+
+            else if (isOn == false && animationType == AnimationType.STYLISH)
+            {
+                dropdownAnimator.Play("Stylish In");
+                isOn = true;
+            }
+
+            else if (isOn == true && animationType == AnimationType.STYLISH)
+            {
+                dropdownAnimator.Play("Stylish Out");
+                isOn = false;
+            }
+
+            if(enableTrigger == true && isOn == false)
+            {
                 triggerObject.SetActive(false);
+            }
 
             else if (enableTrigger == true && isOn == true)
+            {
                 triggerObject.SetActive(true);
-
-            if (outOnPointerExit == true)
-                triggerObject.SetActive(false);
-
-            if (setHighPriorty == true)
-                transform.SetAsLastSibling();
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (outOnPointerExit == true)
-            {
-                if (isOn == true)
-                {
-                    Animate();
-                    isOn = false;
-                }
-
-                if (isListItem == true)
-                    gameObject.transform.SetParent(currentListParent, true);
             }
-        }
-
-        public void UpdateValues()
-        {
-            if (enableScrollbar == true)
-            {
-                itemList.padding.right = 25;
-                scrollbar.SetActive(true);
-            }
-
-            else
-            {
-                itemList.padding.right = 8;
-                scrollbar.SetActive(false);
-            }
-
-            if (enableIcon == false)
-                selectedImage.gameObject.SetActive(false);
-            else
-                selectedImage.gameObject.SetActive(true);
-        }
-
-        public void CreateNewItem()
-        {
-            Item item = new Item();
-            item.itemName = newItemTitle;
-            item.itemIcon = newItemIcon;
-            dropdownItems.Add(item);
-            SetupDropdown();
-        }
-
-        public void CreateNewOption(string title)
-        {
-            Item item = new Item();
-            item.itemName = title;
-            dropdownItems.Add(item);
-        }
-
-        public void SetItemTitle(string title)
-        {
-            newItemTitle = title;
-        }
-
-        public void SetItemIcon(Sprite icon)
-        {
-            newItemIcon = icon;
         }
     }
 }

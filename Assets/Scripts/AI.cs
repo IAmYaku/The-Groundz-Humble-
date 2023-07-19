@@ -382,7 +382,7 @@ public class AI : MonoBehaviour {
 
                 float moveThresh = 2f;
 
-                if (rigidbody.velocity.magnitude > moveThresh || navMeshAgent.velocity.magnitude > moveThresh)          //* arbitrary nums
+                if ( navMeshAgent.velocity.magnitude > moveThresh)          //* arbitrary nums
                 {
                     if (!isDodging)
                     {
@@ -601,6 +601,7 @@ public class AI : MonoBehaviour {
                             {
                                 if (animator)
                                 {
+                                    animator.ResetTrigger("Hit");
                                     animator.SetTrigger("Catch");
                                 }
 
@@ -617,7 +618,7 @@ public class AI : MonoBehaviour {
                                 ball.GetComponent<Ball>().DeactivateThrow();
 
                                 float catchPauseDuration = Mathf.Clamp(velocityCaught.magnitude / 100f, FXManager.min_CatchPauseDuration, FXManager.max_CatchPauseDuration);
-                                float catchPausePreDelay = .5f;
+                                float catchPausePreDelay = .25f;
 
                                 DelayPause(catchPauseDuration, catchPausePreDelay);
                                 print("~!Caught!~");

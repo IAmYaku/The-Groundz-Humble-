@@ -32,7 +32,7 @@ public class FloorMarker : MonoBehaviour {
 		if (ground)
         {
             floorMarker.GetComponent<SpriteRenderer>().sprite = floorImage;
-			floorMarker.transform.localScale = transform.parent.localScale * Mathf.Clamp(GetDistance(),1,2);
+			floorMarker.transform.localScale = transform.parent.localScale * Mathf.Clamp(GetDistance(),1.5f,3f);
 			floorMarker.transform.position = new Vector3(transform.parent.position.x, ground.transform.position.y, transform.parent.position.z);
 			floorMarker.GetComponent<SpriteRenderer>().color = new Color(Random.value, Random.value, Random.value, Mathf.Clamp( GetDistance(), 0.5f, 1f));
 			floorMarker.transform.rotation = Quaternion.Euler(90,0,0);

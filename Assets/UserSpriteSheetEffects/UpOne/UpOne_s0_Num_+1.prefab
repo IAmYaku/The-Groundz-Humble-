@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7192513182809914902}
-  - component: {fileID: 5038701883360057400}
+  - component: {fileID: 3618700573292467814}
   m_Layer: 0
   m_Name: UpOne_s0_Num_+1
   m_TagString: Untagged
@@ -27,11 +27,12 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5038701883360057400
+--- !u!114 &3618700573292467814
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,26 +45,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteSheetMaterial: {fileID: 2100000, guid: 10711b7660b7a824993816dba3974aee, type: 2}
-  spriteCount: 32
-  uvAnimationTileX: 8
-  uvAnimationTileY: 4
-  framesPerSecond: 20
-  sizeStart: {x: 10, y: 10, z: 0}
-  sizeEnd: {x: 5, y: 5, z: 0}
+  spriteCount: 1
+  uvAnimationTileX: 45
+  uvAnimationTileY: 45
+  framesPerSecond: 30
+  sizeStart: {x: 25, y: 25, z: 0}
+  sizeEnd: {x: 25, y: 25, z: 0}
   randomRotation: 0
   rotationStart: 0
   rotationEnd: 0
-  isOneShot: 1
-  life: 0
+  isOneShot: 0
+  life: 5
   billboarding: 0
   addLightEffect: 0
   lightRange: 0
   lightColor: {r: 0, g: 0, b: 0, a: 0}
   lightFadeSpeed: 1
   addColorEffect: 1
-  colorStart: {r: 0.10980391, g: 0.88235295, b: 0.8225667, a: 1}
-  colorEnd: {r: 0.18882206, g: 0.92537314, b: 0.07596346, a: 1}
-  foldOut: 1
+  colorStart: {r: 0, g: 1, b: 0.045587063, a: 1}
+  colorEnd: {r: 0.11792451, g: 1, b: 0.90929055, a: 1}
+  foldOut: 0
   offset: {x: 0, y: 0, z: 0}
   waittingTime: 0
   copy: 0

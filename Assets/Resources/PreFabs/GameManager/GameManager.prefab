@@ -161,7 +161,7 @@ MonoBehaviour:
   outFX2: {fileID: 1097284123813172, guid: 57a5eddfe185e9d4cb1697d13b1a296b, type: 3}
   catchFX: {fileID: 1916310415170292, guid: 27f10276f9c41ea4085eb2f40b8b064a, type: 3}
   winFX: {fileID: 107778, guid: e6b0c8eedb7b4b148b2d830fdcf06603, type: 3}
-  plusOneFX: {fileID: 234787461402016509, guid: 4436283097829ad4d82913e0602563f0, type: 3}
+  plusOneFX: {fileID: 2577359004982115989, guid: 9abab22e7e168844cb0f41f662e8559a, type: 3}
   hitPause: {fileID: 2025593996}
 --- !u!1 &1463966462303492297
 GameObject:

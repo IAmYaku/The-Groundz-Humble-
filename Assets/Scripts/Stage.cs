@@ -215,7 +215,7 @@ public class Stage : MonoBehaviour
         walls[3] = RightPlane;
 
 
-        Bounds playingLevelBounds = playingLevelPlane.GetComponent<BoxCollider>().bounds;
+        Bounds playingLevelBounds = playingLevelPlane.GetComponent<MeshCollider>().bounds;
 
         farSideLine = BackPlane.transform.position.z;       // we overlap planes so this might not be 100 accurate
         nearSideLine = FrontPlane.transform.position.z;

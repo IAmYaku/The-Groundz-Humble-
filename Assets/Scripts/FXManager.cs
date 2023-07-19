@@ -147,7 +147,7 @@ public class FXManager : MonoBehaviour
             // main.startColor = new ParticleSystem.MinMaxGradient(new Color(R, G, B, A));
 
             float ballVelocity = (ball.GetComponent<Rigidbody>().velocity.magnitude);
-            float bv4s = Mathf.Clamp(ballVelocity / 360f, .36f, 2f);
+            float bv4s = Mathf.Clamp(ballVelocity / 420f, .36f, 2f);
             hfx.transform.localScale = new Vector3(bv4s, bv4s, bv4s);
             // psMain.simulationSpeed = Mathf.Clamp(20 / (ballVelocity / 40), 15, 25);
         }
@@ -255,13 +255,20 @@ public class FXManager : MonoBehaviour
 
     public void WinDisplay(Vector3 position)
     {
-        GameObject oneUp = Instantiate(plusOneFX);
-        oneUp.transform.position = new Vector3(position.x * 2f, position.y - 7f, position.z);
+        GameObject canvasGameGeneral = levelManager.cgg.gameObject;
+
+        GameObject oneUp = Instantiate(plusOneFX, position, Quaternion.identity, canvasGameGeneral.transform);
+        oneUp.GetComponent<RectTransform>().localPosition = new Vector3(position.x, 410);
+        /*
         if (!winFX)
-            winFX = Instantiate(winFX);
+        {
+           
+        }
+           
         winFX.SetActive(true);
         winFX.transform.position = position;
         Invoke("DestroyWinFX", 3);
+        */
     }
 
     public void DestroyWinFX()

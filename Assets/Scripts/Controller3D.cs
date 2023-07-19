@@ -897,6 +897,7 @@ public class Controller3D : MonoBehaviour
                         {
                             if (animator)
                             {
+                                animator.ResetTrigger("Hit");
                                 animator.SetTrigger("Catch");
                                 Invoke("ResetCatchTrigger", 1f);
                             }
@@ -905,6 +906,9 @@ public class Controller3D : MonoBehaviour
                             ballCaught = true;
 
                             ballComp.playCatch();
+
+                            playerScript.TriggerCatchFX();
+                            playerScript.SetHitFX(false);
 
                             levelManager.ClearContacts(ball);
                             levelManager.OutDisplay(levelManager.throws[ball].transform.GetChild(0).gameObject);
@@ -916,7 +920,7 @@ public class Controller3D : MonoBehaviour
                             ballComp.DeactivateThrow();
 
                             float hitPauseDuration = Mathf.Clamp( velocityCaught.magnitude / 100f, 0, 3f);
-                            float hitPausePreDelay = .25f;
+                            float hitPausePreDelay =0f;
 
                             DelayPause(hitPauseDuration, hitPausePreDelay);
 
@@ -2484,7 +2488,7 @@ public class Controller3D : MonoBehaviour
     {
         if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)
         {
-            TriggerHitIndicators();
+            //TriggerHitIndicators();
 
             float contactSlowDownfactor = .4f;             // should be rekative to ballHit speed
            // SlowDown(contactSlowDownfactor);

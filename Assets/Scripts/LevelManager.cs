@@ -400,6 +400,10 @@ public class LevelManager : MonoBehaviour
                 {
                     foreach (GameObject player in hits[ball])
                     {
+                        GameObject throwerObject = throws[ball];
+                        Player throwerPlayerScript = throwerObject.GetComponent<Player>();
+                        throwerPlayerScript.TriggerWinFX();
+
                         player.GetComponent<Player>().isOut = true;                          // done twixce in remove... not sure where to put
                         // OutDisplayX2 (player.transform.GetChild (0).transform,ball);
 
@@ -591,6 +595,7 @@ public class LevelManager : MonoBehaviour
             }
 
         }
+        
     }
 
     private void InstantiateBalls()
@@ -996,7 +1001,11 @@ public class LevelManager : MonoBehaviour
         fXManager.HitDisplay(hittee, ball);
 
         GameObject hitter = throws[ball].transform.GetChild(0).gameObject;
-        Color terColor = hitter.GetComponentInParent<Player>().color;
+
+        Player hitterPlayerScript = hitter.GetComponentInParent<Player>();
+
+
+        Color terColor = hitterPlayerScript.color;
 
         Color teeColor = hittee.GetComponentInParent<Player>().color;
 
@@ -1615,8 +1624,8 @@ public class LevelManager : MonoBehaviour
             {
                 team2Points++;
                 team2Scored = true;
-                float rand = UnityEngine.Random.Range(-10.0f, 10.0f);
-                WinDisplay(new Vector3(10 + rand / 5, 20, rand / 5));
+               // float rand = UnityEngine.Random.Range(-10.0f, 10.0f);
+                WinDisplay(new Vector3(100, 0, 0));
                 PlayCheer();
                 PlayWhistle();
                 print("~!!! Team 2 WiNS !!!~");
@@ -1635,8 +1644,8 @@ public class LevelManager : MonoBehaviour
             {
                 team1Points++;
                 team1Scored = true;
-                float rand = UnityEngine.Random.Range(-10.0f, 10.0f);
-                WinDisplay(new Vector3(-10 + rand / 5, 20, rand / 5));
+                //float rand = UnityEngine.Random.Range(-10.0f, 10.0f);
+                WinDisplay(new Vector3(-100, 0,0));
                 PlayCheer();
                 PlayWhistle();
                 print("~!!! Team 1 WiNS !!!~");
