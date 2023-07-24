@@ -823,7 +823,6 @@ public class LevelManager : MonoBehaviour
         }
 
         player.GetComponent<Player>().DisablePlayer();
-        player.GetComponent<Player>().DisablePlayer();
         player.GetComponent<Player>().PlayOutSound();
 
 

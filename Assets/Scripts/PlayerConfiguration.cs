@@ -29,7 +29,6 @@ public class PlayerConfiguration : MonoBehaviour
     public Material default_mat;
 
     bool onGround;
-    bool isKnowckedOut;
     bool isJumping;
 
     float pushVal = .2f;   // rename and pull to gr
@@ -138,7 +137,7 @@ public class PlayerConfiguration : MonoBehaviour
                         float stallTime = .2f;
                         float hitDelay = .0005f;
          
-                        //TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity, ballHitISupered);
+                        TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity, ballHitISupered);
                         SlowDownPlayer(hitDelay, stallTime);
 
 
@@ -281,6 +280,7 @@ public class PlayerConfiguration : MonoBehaviour
     private void TriggerKnockBack(Vector3 ballVelocity, bool ballIsSupered)                                                                    // important to revitalize
     {
 
+
         float superMultipliier = 5f;
         Vector3 knockBackForce = new Vector3(.125f, .0125f, .125f);
 
@@ -293,25 +293,16 @@ public class PlayerConfiguration : MonoBehaviour
 
         if (player.hasAI)
         {
-            
+            ai.SetKnockedOut(knockBackVec.magnitude);
             ai.SetNavVelocity(ai.navMeshAgent.velocity + knockBackVec);
 
-           // print("knockBackVec= " + knockBackVec);
-            // print(" aiNavMeshagent vel = " + ai.navMeshAgent.velocity);
         }
         else
         {
-            rigidbody.velocity += (knockBackVec);
+          controller3D.SetKnockedOut(knockBackVec.magnitude);
+            rigidbody.velocity += knockBackVec;
         }
-        
-        /*
-       knockedOutTime = 3f;
-       t_k0 = Time.realtimeSinceStartup;
-       isKnockedOut = true;
-       animator.SetTrigger("Head Hit");
-       // animator.SetTrigger("Knock Out");
-       */
-
+      
     }
 
     private void DelayPause(float hitPauseDuration, float hitPausePreDelay)

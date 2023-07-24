@@ -132,7 +132,7 @@ public class Controller3D : MonoBehaviour
     public float staminaDodgeCost = 10.0f;
     public float staminaReadyCost = 5.0f;
 
-    public float toughness = 2;   // important when taking into account how players react to getting hit.. i.e stall time
+    public float toughness = 15f;   // move to character scripts
 
     bool inBallPause;
     bool ballPauseReady = true;
@@ -153,8 +153,6 @@ public class Controller3D : MonoBehaviour
     private float t_contact0;
     private float t_contactF;
 
-    private float t_knock0;
-    private float t_knockF;
 
     private float t_s0;
     private float t_sF;
@@ -286,21 +284,29 @@ public class Controller3D : MonoBehaviour
 
         if (levelManager.isPlaying && !playerScript.isOut)
         {
-            CheckKeyInput();
-
-            MoveInput();
-            GrabInput();
-            CheckStamina();
-            CheckSuperCool();
-            HandleContact();
-            // HandlePerks(perkDur,1f);
-
+            if (!isKnockedOut)
+            {
+                CheckKeyInput();
+                GrabInput();
+                CheckStamina();
+                CheckSuperCool();
+                // HandlePerks(perkDur,1f);
+            }
+            else 
+            {
+                HandleContact();
+            }
 
         }
         else
         {
             rigidbody.velocity = Vector3.zero;  // should be a ready method
         }
+    }
+
+    private void FixedUpdate()
+    {
+        MoveInput();
     }
 
     #region Key Input Logic
@@ -316,6 +322,12 @@ public class Controller3D : MonoBehaviour
             CheckKeySuper();
 
         }
+    }
+
+    internal void SetKnockedOut(float magnitude)
+    {
+        isKnockedOut = true;
+        knockedOutTime = magnitude / toughness;
     }
 
     private void CheckKeySuper()
@@ -365,13 +377,7 @@ public class Controller3D : MonoBehaviour
 
             if (!isCharging)
             {
-                chargeVel = rigidbody.velocity;
-                chargeVelInput.Input(chargeVel.x, chargeVel.z);
-                isCharging = true;
-
-                float glide = chargeVel.magnitude/500f;
-                accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);
-                print("accelerationRate = " + accelerationRate);
+                Charge();
 
 
             }
@@ -532,8 +538,7 @@ public class Controller3D : MonoBehaviour
     {
         if (InBounds())
         {
-            if (!isKnockedOut)
-            {
+
                 if (onGround)
                 {
                     if (staminaCool < stamina - .1f)
@@ -541,23 +546,6 @@ public class Controller3D : MonoBehaviour
                         return true;
                     }
                 }
-            }
-
-
-            else
-            {
-                // knocked out                          // < ---- fix
-                t_knockF = Time.realtimeSinceStartup;
-                knockedOutTime -= t_knockF - t_knock0;
-                t_knock0 = Time.realtimeSinceStartup;
-
-                if (knockedOutTime <= 0f)
-                {
-                    isKnockedOut = false;
-                }
-            }
-
-
         }
 
         return false;
@@ -636,14 +624,14 @@ public class Controller3D : MonoBehaviour
         float xCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_x * acceleration, pow0_x + muvXcel_x)), 0.0f, clampMult_x);                       // impartial but feels good
         float zCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_z * acceleration * accMult_z, pow0_z + muvXcel_z)), 0.0f, clampMult_z);
 
-        float xMultiplier = 8f;
-        float zMultiplier = 8f;   //   < -- faulty, but feels good
-        float frameMult = 0.017f;
+        float xMultiplier = .25f;
+        float zMultiplier = .25f;   
 
-        float timeMultiplier = 300f;
+        float speedTimeMultiplier = 7f;
+        float accelerationTimeMultiplier = 250f;
 
-        float xVelocity = move.x * frameMult * xSpeed * xMultiplier * acceleration * Time.deltaTime * timeMultiplier;
-        float zVelocity = move.z * frameMult * zSpeed * zMultiplier * acceleration * Time.deltaTime * timeMultiplier;
+        float xVelocity = move.x * xSpeed * xMultiplier * acceleration;
+        float zVelocity = move.z * zSpeed * zMultiplier * acceleration;
 
 
         if (isSlowingDown || isCharging)
@@ -660,7 +648,10 @@ public class Controller3D : MonoBehaviour
 
                 Vector3 followThroughVec = (velVec + vel0) / 2;
 
-                Vector3 chargeVelVec = Vector3.Lerp(followThroughVec, Vector3.zero, accelerationRate * Time.deltaTime * timeMultiplier);
+
+                float accelerationLerpTime = accelerationRate * Time.fixedDeltaTime * accelerationTimeMultiplier;
+
+                Vector3 chargeVelVec = Vector3.Lerp(followThroughVec, Vector3.zero, accelerationLerpTime);
 
                 rigidbody.velocity = chargeVelVec;
 
@@ -674,7 +665,7 @@ public class Controller3D : MonoBehaviour
             }
             else
             {
-                rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, Vector3.zero, accelerationRate * Time.deltaTime * timeMultiplier);
+                rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, Vector3.zero, accelerationRate * Time.fixedDeltaTime * accelerationTimeMultiplier);
                
             }
         }
@@ -682,7 +673,9 @@ public class Controller3D : MonoBehaviour
         else
         {
             velVec = new Vector3(xVelocity, 0f, zVelocity);
-            rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, velVec, accelerationRate * Time.deltaTime * timeMultiplier);
+            float accelerationLerpTime = accelerationRate * Time.deltaTime * accelerationTimeMultiplier;
+            print("accelerationLerpTime = " + accelerationLerpTime);
+            rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, velVec, accelerationRate * Time.fixedDeltaTime * accelerationTimeMultiplier);
         }
 
         // clamp velcocity to max velocity
@@ -1069,6 +1062,17 @@ public class Controller3D : MonoBehaviour
     #endregion
 
     #region Throw Logic
+
+    void Charge()
+    {
+        chargeVel = rigidbody.velocity;
+        chargeVelInput.Input(chargeVel.x, chargeVel.z);
+        isCharging = true;
+        isSlowingDown = true;
+        float glide = chargeVel.magnitude/360f;
+        accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);
+    }
+
     // X ~Throw Mechanic
     public void ThrowInput(CallbackContext context)
     {
@@ -1080,11 +1084,7 @@ public class Controller3D : MonoBehaviour
             {
                 if (!isCharging)
                 {
-                    chargeVel = rigidbody.velocity;
-                    isCharging = true;
-
-                    float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
-                    accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);  //arbs
+                    Charge();
                 }
             }
 
@@ -1249,12 +1249,13 @@ public class Controller3D : MonoBehaviour
         throwCharge = 0;
         isCharging = false;
         chargeTime = 0.0f;
+        Invoke("NormalAccelerationRate", accelerationRate);
         chargeVel = Vector3.zero;
         vel0 = Vector3.zero;
         chargeVelInput.ClearVelocities();
-        Invoke("NormalAccelerationRate", .1f);
+        
 
-
+        
         if (animator)
         {
             animator.SetBool("hasBall", false);
@@ -2342,6 +2343,7 @@ public class Controller3D : MonoBehaviour
 
     private void TriggerKnockBack(Vector3 ballVelocity)
     {
+        /*
         rigidbody.AddExplosionForce(ballVelocity.magnitude, ballVelocity, ballVelocity.magnitude / 10);
         knockedOutTime = 3f;
         t_knock0 = Time.realtimeSinceStartup;
@@ -2349,7 +2351,7 @@ public class Controller3D : MonoBehaviour
         // animator.SetTrigger("Knock Out");
         animator.SetTrigger("Head Hit");
 
-
+        */
     }
 
     public bool InBounds()
@@ -2486,18 +2488,14 @@ public class Controller3D : MonoBehaviour
 
     private void HandleContact()    // move to player Config
     {
-        if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)
+        if (isKnockedOut)
         {
-            //TriggerHitIndicators();
+            knockedOutTime -= Time.deltaTime;
 
-            float contactSlowDownfactor = .4f;             // should be rekative to ballHit speed
-           // SlowDown(contactSlowDownfactor);
-
-            float deltaT = t_contactF - t_contact0;                                        // < -- iffy, prolly should bbe t_c0 for "c"ontact
-            if (deltaT <= 5 / toughness)  // *arbitrary num
+            if (knockedOutTime <= 0 )
             {
-                t_contactF += Time.realtimeSinceStartup;
-                //  velocity = new Vector3(velocity.x / 2, velocity.y / 2, velocity.z / 2);
+                isKnockedOut = false;
+                knockedOutTime = 0f;
             }
 
 

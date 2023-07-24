@@ -77,12 +77,12 @@ public class GetBall : AIState {
                 Debug.Log("ballContact = " + ballTarget.transform.position);
                 Action(gameManager, ai, 3, Vector3.zero);
             }
-
+            
         }
 
-    
 
-     //   Debug.Log("InAction = " + inAction);
+
+        //   Debug.Log("InAction = " + inAction);
     }
 
     public void Action(GameManager manager, AI ai, float urgency, Vector3 tar)                  // Make better

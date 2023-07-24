@@ -95,28 +95,30 @@ public class Panic : AIState {
           //  Debug.Log("panickTime = " + panickTime);
             ai.isPanicking = true;
 
+            ai.FaceOpp();                                          // <-- this may not be working lol; 
+
+            aiLevel = ai.GetLevel();
+
+            aiCatchProb = ai.GetCatchProb();
+
+            if (DodgeProb())
+            {
+                ai.jumpInput = true;
+            }
+
+            // aiLevel stuff here
+
         }
         
 
             if (sec < panickTime)
             {
-              //  Debug.Log("PANICKING");
-                inAction = true;
+            //  Debug.Log("PANICKING");
 
-                ai.FaceOpp();                                          // <-- this may not be working lol; 
+            ranVelVec = Random.Range(-1f, 1f) * (intensity / 25f);
 
-                aiLevel = ai.GetLevel();
+            inAction = true;
 
-                aiCatchProb = ai.GetCatchProb();
-
-
-
-          //  if (sec % .25f < 0.001f ) 
-                {
-                    ranVelVec = Random.Range(-1f, 1f) * (intensity/25f );               // aiLevel stuff here
-                }
-
-           
             ai.vertInput = Mathf.Lerp(ranVelVec, ai.vertInput, .0125f);
 
             if (!ai.ballGrabbed)
@@ -128,10 +130,7 @@ public class Panic : AIState {
                 }
                 }
 
-                if (DodgeProb() )
-            {
-                ai.jumpInput = true;
-            }
+          
 
             //Debug.Log("ai.vertInput = "  + ai.vertInput);
             // ai.vertInput = Mathf.Clamp(ai.vertInput, -1.0f, 1.0f);
@@ -314,10 +313,11 @@ public class Panic : AIState {
 
     bool DodgeProb()
     {
-        float ran = Random.Range(0, 1);
-        if (ran < ai.GetLevel() * .25f)
-        {
+        float ran = Random.Range(0f, 1f);
+        float dodgeProb = ai.GetLevel() * .25f;
 
+        if (ran <dodgeProb)
+        {
             return true;
         }
         else

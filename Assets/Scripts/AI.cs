@@ -96,7 +96,7 @@ public class AI : MonoBehaviour {
     public float catchStaminaCost;
     public float pickUpStaminaCost;
 
-    public float toughness =1;
+    public float toughness =5f;
 
 	private bool isFacingRight;
     private bool onGround = true;
@@ -278,26 +278,35 @@ public class AI : MonoBehaviour {
     void Update () {
 
         if (levelManager.isPlaying) {
-            if (navMeshAgent.isOnNavMesh)
+            if (navMeshAgent.isOnNavMesh )
             {
                 //     print(" IsOnNAvMesh" );
 
-                if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)
+
+                if (!isKnockedOut)
                 {
-                    aiState = getBall_;
-                   
+
+                    if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)
+                    {
+                        aiState = getBall_;
+
+                    }
+
+                    aiState.Update(gameManager, this);
+
+                    aiStateDisplayString = aiState.GetName();
+
+                    MoveInput();
+                    GrabInput();
+                    SuperInput();
+                    BlockInput();
+                }
+                else
+                {
+                    HandleContact();
+  
                 }
 
-                aiState.Update(gameManager, this);
-
-
-                aiStateDisplayString = aiState.GetName();
-
-                MoveInput();
-                GrabInput();
-                SuperInput();
-                BlockInput();
-                HandleContact();
 
             }
 
@@ -309,16 +318,19 @@ public class AI : MonoBehaviour {
         }
         else
         {
-           playerConfigObject.transform.LookAt(Camera.main.transform.position, Vector3.up);
-            playerConfigObject.transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, transform.localEulerAngles.z);     // Stay 2D for me please lol
-                                                                                                                                            
-            //rigidbody.velocity = Vector3.zero;                                                                                                                               
+                                                                                                                                                                                                                                                            
              EndAgentNavigation();                          // place onStandby
         }
 
-		
-	}
+        playerConfigObject.transform.LookAt(Camera.main.transform.position, Vector3.up);
+        playerConfigObject.transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, transform.localEulerAngles.z);     // Stay 2D for me please lol
+    }
 
+    internal void SetKnockedOut(float magnitude)
+    {
+        isKnockedOut = true;
+        knockedOutTime = magnitude / toughness;
+    }
 
     internal void EndAgentNavigation()
     {
@@ -339,29 +351,14 @@ public class AI : MonoBehaviour {
 
     private void HandleContact()
     {
-        if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)                // she come back to this  <---
+        if (isKnockedOut)                  
         {
-            // slow down
-
-            float deltaT = t_kF - t_k0;
-            if (deltaT <= 5 / toughness)
-            {
-                t_cF += Time.realtimeSinceStartup;
-              // velocity = new Vector3(velocity.x / 2, velocity.y / 2, velocity.z / 2);
-              
-            }
-
-        }
-
-        if (isKnockedOut)                    // You got knockedTF-
-        {
-            t_kF = Time.realtimeSinceStartup;
-            knockedOutTime -= t_kF - t_k0;
-            t_k0 = Time.realtimeSinceStartup;
+            knockedOutTime -= Time.deltaTime;
 
             if (knockedOutTime <= 0f)
             {
                 isKnockedOut = false;
+                knockedOutTime = 0;
             }
         }
     }
@@ -471,9 +468,6 @@ public class AI : MonoBehaviour {
                  
 				}
 		}
-
-        playerConfigObject.transform.LookAt(Camera.main.transform.position, Vector3.up);   
-        playerConfigObject.transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, transform.localEulerAngles.z);     // Stay 2D for me please lol
 
         if (navMeshAgent.velocity.x > 3.0f)    // *arbitray nums
         {
@@ -1475,7 +1469,7 @@ public class AI : MonoBehaviour {
                         if (opp.GetComponentInChildren<Controller3D>().ballGrabbed)
                         {
                             returnMe--;
-                            returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                            returnMe -= (int)(350 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
                         }
                         else
                         {
@@ -1509,7 +1503,7 @@ public class AI : MonoBehaviour {
                         if (opp.GetComponentInChildren<Controller3D>().ballGrabbed)
                         {
                             returnMe--;
-                            returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                            returnMe -= (int)(350 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
                         }
                         else
                         {
@@ -1699,6 +1693,7 @@ public class AI : MonoBehaviour {
         //IncreaseDodgeProb
         DecreaseCatchLag(x);
         DecreasePanickDelayTime(x);
+        toughness += 5f;
 
     }
 
