@@ -276,7 +276,11 @@ public class Controller3D : MonoBehaviour
         playerInput.ActivateInput();
     }
 
-
+    internal void SetKnockedOut(float magnitude)
+    {
+        isKnockedOut = true;
+        knockedOutTime = magnitude / toughness;
+    }
 
     void Update()
     {
@@ -322,12 +326,6 @@ public class Controller3D : MonoBehaviour
             CheckKeySuper();
 
         }
-    }
-
-    internal void SetKnockedOut(float magnitude)
-    {
-        isKnockedOut = true;
-        knockedOutTime = magnitude / toughness;
     }
 
     private void CheckKeySuper()
@@ -628,7 +626,7 @@ public class Controller3D : MonoBehaviour
         float zMultiplier = .25f;   
 
         float speedTimeMultiplier = 7f;
-        float accelerationTimeMultiplier = 250f;
+        float accelerationTimeMultiplier = 75f;
 
         float xVelocity = move.x * xSpeed * xMultiplier * acceleration;
         float zVelocity = move.z * zSpeed * zMultiplier * acceleration;
@@ -673,8 +671,7 @@ public class Controller3D : MonoBehaviour
         else
         {
             velVec = new Vector3(xVelocity, 0f, zVelocity);
-            float accelerationLerpTime = accelerationRate * Time.deltaTime * accelerationTimeMultiplier;
-            print("accelerationLerpTime = " + accelerationLerpTime);
+            float accelerationLerpTime = accelerationRate * Time.fixedDeltaTime * accelerationTimeMultiplier;
             rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, velVec, accelerationRate * Time.fixedDeltaTime * accelerationTimeMultiplier);
         }
 
@@ -1472,7 +1469,7 @@ public class Controller3D : MonoBehaviour
 
     #endregion
 
-    #region Doddge Logic
+    #region Dodge Logic
     public void DodgeInput(CallbackContext context)
     {
         if (levelManager.isPlaying && !playerScript.isOut)
@@ -2305,7 +2302,6 @@ public class Controller3D : MonoBehaviour
         }
         return nearestBall;
     }
-
     private void CheckStamina()
     {
         if (rigidbody.velocity.magnitude < 3f)             // *arb = moveThresh
@@ -2357,7 +2353,7 @@ public class Controller3D : MonoBehaviour
     public bool InBounds()
     {
         
-        float padding = 5f;
+        float padding = 1.125f;
 
         inBounds = true;
         if (gameObject.GetComponentInParent<Player>().team == 1)
@@ -2367,18 +2363,20 @@ public class Controller3D : MonoBehaviour
                 playerConfigObject.transform.position = new Vector3(levelManager.stage.baseLineLeft + collider.bounds.extents.x + padding * 1.125f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
                 rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
                 inBounds = false;
-                print("collider.bounds.min.x = "+ collider.bounds.min.x);
-                print("levelManager.stage.baseLineLeft + padding = " + levelManager.stage.baseLineLeft + padding);
+              //  print("collider.bounds.min.x = "+ collider.bounds.min.x);
+              //  print("levelManager.stage.baseLineLeft + padding = " + levelManager.stage.baseLineLeft + padding);
 
             }
             if (collider.bounds.max.x > levelManager.stage.halfCourtLine)
             {
-                
-                playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine - collider.bounds.extents.x , playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
-                rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
+                if (move.x >0)
+                {
+                    move.x = 0;
+                }
+
                 inBounds = false;
-                print("collider.bounds.max.x = " + collider.bounds.max.x);
-                print("levelManager.stage.halfCourtLine = " + levelManager.stage.halfCourtLine);
+              //  print("collider.bounds.max.x = " + collider.bounds.max.x);
+              //  print("levelManager.stage.halfCourtLine = " + levelManager.stage.halfCourtLine);
 
             }
 
@@ -2387,8 +2385,8 @@ public class Controller3D : MonoBehaviour
                 playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.farSideLine - collider.bounds.extents.z - padding * 1.125f);
                 rigidbody.velocity = new Vector3( rigidbody.velocity.x, rigidbody.velocity.y,0f);
                 inBounds = false;
-                print("collider.bounds.max.z = " + collider.bounds.max.z);
-                print("levelManager.stage.farSideLine - padding = " + (levelManager.stage.farSideLine - padding));
+              //  print("collider.bounds.max.z = " + collider.bounds.max.z);
+              //  print("levelManager.stage.farSideLine - padding = " + (levelManager.stage.farSideLine - padding));
 
             }
 
@@ -2397,8 +2395,8 @@ public class Controller3D : MonoBehaviour
                 playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.nearSideLine + collider.bounds.extents.z + padding * 1.125f);
                 rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y,0f);
                 inBounds = false;
-                print("collider.bounds.min.z = " + collider.bounds.min.z);
-                print("levelManager.stage.nearSideLine + padding = " + levelManager.stage.nearSideLine + padding);
+              //  print("collider.bounds.min.z = " + collider.bounds.min.z);
+             //   print("levelManager.stage.nearSideLine + padding = " + levelManager.stage.nearSideLine + padding);
 
             }
 
@@ -2408,8 +2406,10 @@ public class Controller3D : MonoBehaviour
         {
             if (collider.bounds.min.x < levelManager.stage.halfCourtLine)
             {
-                playerConfigObject.transform.position = new Vector3(levelManager.stage.halfCourtLine + collider.bounds.extents.x + padding * 1.125f, playerConfigObject.transform.position.y, playerConfigObject.transform.position.z);
-                rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
+                if (move.x < 0)
+                {
+                    move.x = 0;
+                }
                 inBounds = false;
             //    print("Out of Bounds 2");
                 

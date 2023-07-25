@@ -58,8 +58,8 @@ public class Ball : MonoBehaviour {
     public GameObject shadow;
     public GameObject floorMarker;
 
-    public float xSquashFactor = 1000f;
-    public float ySquashFactor = 2000f;
+     float xSquashFactor = 750f;
+     float ySquashFactor = 1500f;
 
     public GameObject superPackage;
 
@@ -108,8 +108,7 @@ public class Ball : MonoBehaviour {
 
 	void Update () {
 
-		//squash
-	//	velocity = gameObject.GetComponent<Rigidbody>().velocity;
+	
 
 		if (!isSupering)
         {
@@ -154,18 +153,41 @@ public class Ball : MonoBehaviour {
 
     private void CheckSquash()
     {
-        float squashThresh = 2000f;
 
-            if (velocity.magnitude > squashThresh) {
-                float nuX = Mathf.Clamp(Mathf.Abs(velocity.magnitude) / xSquashFactor, 0f, 2f);
-                float nuY = Mathf.Clamp(Mathf.Abs(velocity.magnitude) / ySquashFactor, 0f, 2f);
-                transform.localScale = new Vector3(size.x + nuX, size.y - nuY, transform.localScale.z);
-                transform.eulerAngles = new Vector3(0f, 0f, 0f);
-                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
-            } else {
-                transform.localScale = size;
-                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+        velocity = gameObject.GetComponent<Rigidbody>().velocity;
+
+        float squashThresh = 150f;
+
+        //squash
+
+        if (velocity.magnitude > squashThresh) {
+            if (velocity.x > velocity.y)
+            {
+            }
+            float nuX = Mathf.Clamp(Mathf.Abs(velocity.magnitude) / xSquashFactor, 0f, 2f);
+            float nuY = Mathf.Clamp(Mathf.Abs(velocity.magnitude) / ySquashFactor, 0f, 2f);
+            transform.localScale = new Vector3(size.x + nuX, size.y - nuY, transform.localScale.z);
+            transform.eulerAngles = new Vector3(0f, 0f, 0f);
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
+
+        } else {
+
+
+            transform.localScale = Vector3.Lerp(transform.localScale, size, .5f);
+            if (transform.localScale != size)
+            {
+              
+
+                if (Vector3.Distance(transform.localScale, size) < .1)
+                {
+                    transform.localScale = size;
+                }
+
+               // GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+            }
+
                
 			}
     }
@@ -226,16 +248,17 @@ public class Ball : MonoBehaviour {
         {
             if (collision.gameObject.tag == "Player Sprite" && collision.collider.GetType() == typeof(SphereCollider))     // move to AI/Controller side
             {
-             //   print("Head Collision");
-
+              print("Head Collision");
+             /*
                 if (!isSupering)
                 {
                     if (velocity.magnitude > 80f)
                     {
                         levelManager.PlayDamn();
+
                         if (collision.gameObject.GetComponent<Controller3D>().enabled == true)
                         {
-                            collision.gameObject.GetComponent<Controller3D>().TriggerHeadHit();
+                          //  collision.gameObject.GetComponent<Controller3D>().TriggerHeadHit();
                         }
                         else
                         {
@@ -254,6 +277,7 @@ public class Ball : MonoBehaviour {
                         levelManager.PlayDamn(); // or crowd reaction
                     }
                 }
+             */
             }
             if (collision.gameObject.tag == "Player Sprite" && collision.collider.GetType() == typeof(CapsuleCollider))
             {

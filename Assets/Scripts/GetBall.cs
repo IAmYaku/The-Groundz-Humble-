@@ -74,8 +74,7 @@ public class GetBall : AIState {
             if (ballTarget)
             {
                 ballTarget.GetComponent<Ball>().isBeingPursued = true;
-                Debug.Log("ballContact = " + ballTarget.transform.position);
-                Action(gameManager, ai, 3, Vector3.zero);
+                MoveTowardsTarget(ballTarget.transform.position);
             }
             
         }
@@ -516,6 +515,25 @@ public class GetBall : AIState {
     public void SetInAction(bool x)
     {
         inAction = x;
+    }
+
+
+    private void MoveTowardsTarget(Vector3 target)
+    {
+   
+        Vector3 pos = ai.navMeshAgent.gameObject.transform.position;
+        float aiXVelocity;
+        aiXVelocity = (target.x - pos.x) * ai.xSpeed;    //  * Mathf.Clamp(ai.navSpeed,1f,12f)
+        float aiZVelocity;
+        aiZVelocity = (target.z - pos.z) * ai.zSpeed;
+
+
+        ai.SetNavVelocity(new Vector3(aiXVelocity / 1000, 0f, aiZVelocity / 1000));           // *arbitrary nums
+
+        // Debug.Log("aiVelocity= " + ai.navMeshAgent.velocity);
+        // Debug.Log("aiXVelocity= " + aiXVelocity);
+        //Debug.Log("aiZVelocity= " + aiZVelocity);
+
     }
 }
 
