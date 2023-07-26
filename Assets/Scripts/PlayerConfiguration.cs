@@ -281,8 +281,9 @@ public class PlayerConfiguration : MonoBehaviour
     {
 
 
-        float superMultipliier = 5f;
-        Vector3 knockBackForce = new Vector3(.125f, .0125f, .125f);
+        float superMultipliier = 2f;
+        Vector3 knockBackForce = new Vector3(.025f, .0125f, .025f);
+        float knockBackTimeMult =  .925f;
 
         if (ballIsSupered)
         {
@@ -293,13 +294,13 @@ public class PlayerConfiguration : MonoBehaviour
 
         if (player.hasAI)
         {
-            ai.SetKnockedOut(knockBackVec.magnitude);
+            ai.SetKnockedOut(knockBackVec.magnitude * knockBackTimeMult);
             ai.SetNavVelocity(ai.navMeshAgent.velocity + knockBackVec);
 
         }
         else
         {
-          controller3D.SetKnockedOut(knockBackVec.magnitude);
+          controller3D.SetKnockedOut(knockBackVec.magnitude * knockBackTimeMult);
             rigidbody.velocity += knockBackVec;
         }
       

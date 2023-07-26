@@ -69,7 +69,7 @@ public class AI : MonoBehaviour {
     public bool isPanicking;
 
 
-    public float xSpeed = 0.0f;
+    public float xSpeed = 0f;
     public float zSpeed = 0f;
     public float acceleration; 
 
@@ -368,8 +368,6 @@ public class AI : MonoBehaviour {
 
         if (InBounds())
         {
-            if (!isKnockedOut)
-            {
 
                 if (onGround && !isDodging)
                 {
@@ -412,7 +410,6 @@ public class AI : MonoBehaviour {
                         }
                     }
                 }
-            }
         }
 
 

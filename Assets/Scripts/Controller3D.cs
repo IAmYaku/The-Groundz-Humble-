@@ -2491,6 +2491,7 @@ public class Controller3D : MonoBehaviour
         if (isKnockedOut)
         {
             knockedOutTime -= Time.deltaTime;
+            print("knockedouTIme = " + knockedOutTime);
 
             if (knockedOutTime <= 0 )
             {

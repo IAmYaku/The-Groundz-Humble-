@@ -522,15 +522,17 @@ public class GetBall : AIState {
     {
    
         Vector3 pos = ai.navMeshAgent.gameObject.transform.position;
+        Vector3 move = (target - pos).normalized;
         float aiXVelocity;
-        aiXVelocity = (target.x - pos.x) * ai.xSpeed;    //  * Mathf.Clamp(ai.navSpeed,1f,12f)
+        aiXVelocity = move.x * ai.xSpeed;    //  * Mathf.Clamp(ai.navSpeed,1f,12f)
         float aiZVelocity;
-        aiZVelocity = (target.z - pos.z) * ai.zSpeed;
+        aiZVelocity = move.z * ai.zSpeed;
 
 
-        ai.SetNavVelocity(new Vector3(aiXVelocity / 1000, 0f, aiZVelocity / 1000));           // *arbitrary nums
+        ai.SetNavVelocity(new Vector3(aiXVelocity, 0f, aiZVelocity));           // *arbitrary nums
 
-        // Debug.Log("aiVelocity= " + ai.navMeshAgent.velocity);
+
+        Debug.Log("aiVelocity towards contact ball= " + ai.navMeshAgent.velocity);
         // Debug.Log("aiXVelocity= " + aiXVelocity);
         //Debug.Log("aiZVelocity= " + aiZVelocity);
 
