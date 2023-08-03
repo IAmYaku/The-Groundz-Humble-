@@ -48,7 +48,7 @@ public class GetBall : AIState {
     public void Update(GameManager manager, AI ai)
     {
 
-        if (!ai.playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)
+       // if (!ai.playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)
         {
             ai.EvaluateGameState();
 
@@ -67,19 +67,42 @@ public class GetBall : AIState {
                 RandomBehavior();
             }
         }
+        /*
         else
         {
             
             ballTarget = GetNearestBallContacted(ai.navMeshAgent.gameObject.transform.position, manager);
             if (ballTarget)
             {
-                ballTarget.GetComponent<Ball>().isBeingPursued = true;
-                MoveTowardsTarget(ballTarget.transform.position);
+
+                float currentBallTargetDistance = Vector3.Distance(ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
+
+                if (currentBallTargetDistance <= ai.grabRadius)
+                {
+                    //  Debug.Log("ActionInput");
+                    ai.action1Input = true;
+
+
+                    if (ai.ballGrabbed)
+                    {
+                        ballTarget.GetComponent<Ball>().isBeingPursued = false;
+                        ballTarget = null;
+                        ballTargetDistance = 0f;
+                    }
+                }
+
+                else
+                {
+                    ballTarget.GetComponent<Ball>().isBeingPursued = true;
+                    MoveTowardsTarget(ballTarget.transform.position);
+                }
+
             }
+       
             
         }
 
-
+         */
 
         //   Debug.Log("InAction = " + inAction);
     }
@@ -528,11 +551,13 @@ public class GetBall : AIState {
         float aiZVelocity;
         aiZVelocity = move.z * ai.zSpeed;
 
+      //  Debug.Log("aiXVelocity= " + aiXVelocity);
+      //  Debug.Log("aiZVelocity= " + aiZVelocity);
 
-        ai.SetNavVelocity(new Vector3(aiXVelocity, 0f, aiZVelocity));           // *arbitrary nums
+        ai.SetNavVelocity(new Vector3(aiXVelocity, aiZVelocity));           // *arbitrary nums
 
 
-        Debug.Log("aiVelocity towards contact ball= " + ai.navMeshAgent.velocity);
+      //  Debug.Log("aiVelocity towards contact ball= " + ai.navMeshAgent.velocity);
         // Debug.Log("aiXVelocity= " + aiXVelocity);
         //Debug.Log("aiZVelocity= " + aiZVelocity);
 

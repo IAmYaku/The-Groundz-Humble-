@@ -297,6 +297,7 @@ public class PlayerConfiguration : MonoBehaviour
             ai.SetKnockedOut(knockBackVec.magnitude * knockBackTimeMult);
             ai.SetNavVelocity(ai.navMeshAgent.velocity + knockBackVec);
 
+
         }
         else
         {

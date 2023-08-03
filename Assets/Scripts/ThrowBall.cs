@@ -270,7 +270,7 @@ public class ThrowBall : AIState
         aiZVelocity = (nearestOppPos.z -pos.z) * ai.zSpeed;
 
         
-        ai.SetNavVelocity(new Vector3(aiXVelocity/1000 , 0f, aiZVelocity/1000 ));           // *arbitrary nums
+        ai.SetNavVelocity(new Vector3(aiXVelocity , 0f, aiZVelocity ));           // *arbitrary nums
 
        // Debug.Log("aiVelocity= " + ai.navMeshAgent.velocity);
        // Debug.Log("aiXVelocity= " + aiXVelocity);

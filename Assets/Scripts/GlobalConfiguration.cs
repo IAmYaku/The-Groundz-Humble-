@@ -462,6 +462,7 @@ public class GlobalConfiguration : MonoBehaviour
         playerScript.SetisSet(true);
 
         float aiDodgeWeight = 36f;
+        float aiSpeedWeight = 1000f;
 
         if (type == "Nina")
         {
@@ -488,8 +489,8 @@ public class GlobalConfiguration : MonoBehaviour
             controller3D.toughness = Nina.toughness;
             controller3D.catchLagTime = Nina.catchLagTime;
 
-            aiScript.xSpeed = Nina.xSpeed;
-            aiScript.zSpeed = Nina.zSpeed;
+            aiScript.xSpeed = Nina.xSpeed/ aiSpeedWeight;
+            aiScript.zSpeed = Nina.zSpeed/ aiSpeedWeight;
 
             aiScript.navSpeed = ((Nina.xSpeed + Nina.zSpeed) / 2) * navSpeedScale;
             aiScript.navMeshAgent.speed = aiScript.navSpeed;
@@ -584,8 +585,8 @@ public class GlobalConfiguration : MonoBehaviour
             controller3D.staminaCoolRate = Mack.staminaCoolRate;
             controller3D.toughness = Mack.toughness;
 
-            aiScript.xSpeed = Mack.xSpeed;
-            aiScript.zSpeed = Mack.zSpeed;
+            aiScript.xSpeed = Mack.xSpeed/aiSpeedWeight;
+            aiScript.zSpeed = Mack.zSpeed/aiSpeedWeight;
 
             aiScript.navSpeed = ((Mack.xSpeed + Mack.zSpeed) / 2) * navSpeedScale;
             aiScript.navMeshAgent.speed = aiScript.navSpeed;
@@ -675,8 +676,8 @@ public class GlobalConfiguration : MonoBehaviour
             controller3D.staminaCoolRate = King.staminaCoolRate;
             controller3D.toughness = King.toughness;
 
-            aiScript.xSpeed = King.xSpeed;
-            aiScript.zSpeed = King.zSpeed;
+            aiScript.xSpeed = King.xSpeed/aiSpeedWeight;
+            aiScript.zSpeed = King.zSpeed/aiSpeedWeight;
 
 
             aiScript.navSpeed = ((King.xSpeed + King.zSpeed) / 2) * navSpeedScale;

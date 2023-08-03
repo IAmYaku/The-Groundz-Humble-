@@ -288,7 +288,7 @@ public class AI : MonoBehaviour {
 
                     if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)
                     {
-                        aiState = getBall_;
+                     //   aiState = getBall_;
 
                     }
 
@@ -330,6 +330,7 @@ public class AI : MonoBehaviour {
     {
         isKnockedOut = true;
         knockedOutTime = magnitude / toughness;
+        print("KnockedOutTime " +knockedOutTime);
     }
 
     internal void EndAgentNavigation()
@@ -495,7 +496,7 @@ public class AI : MonoBehaviour {
         move.x = horzInput;
         move.z = vertInput;
 
-        if (Vector3.SqrMagnitude(move) > 0.0f || playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)    // aka if we want to overide navMesh
+        if (Vector3.SqrMagnitude(move) > 0.0f)    // aka if we want to overide navMesh
         {
             Vector3 agentVelocity = new Vector3(move.x * xSpeed, 0.0f, move.z * zSpeed);
             SetNavVelocity(agentVelocity);
@@ -511,13 +512,15 @@ public class AI : MonoBehaviour {
         {
            // navMeshAgent.velocity = Vector3.Lerp(navMeshAgent.velocity, vector3, accelerationRate);
             navMeshAgent.velocity = vector3;
-
-          //  print("vector3 = " + vector3);
-          //  print("navMeshAgent.velocity = " + navMeshAgent.velocity);
+           // print("vector3 " + vector3);
+           // print(" navMeshAgent.velocity = " + navMeshAgent.velocity);
+            //  print("vector3 = " + vector3);
+            //  print("navMeshAgent.velocity = " + navMeshAgent.velocity);
 
         }
         else
         {
+           // print("slowing down");
             navMeshAgent.velocity = Vector3.Lerp(navMeshAgent.velocity, Vector3.zero, accelerationRate);
            
         }
@@ -1614,6 +1617,8 @@ public class AI : MonoBehaviour {
     }
     public void AddNavSpeed(float s)
     {
+         xSpeed += s/100f;
+         zSpeed += s/100f;
         navMeshAgent.speed += s * 1.5f;
         navMeshAgent.acceleration += s *1.5f;
     }

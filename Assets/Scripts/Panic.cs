@@ -35,6 +35,8 @@ public class Panic : AIState {
     float panicked0;
 
     float aiCatchProb =.25f;
+    bool rolledCatch;
+
     int aiLevel;
 
     int num = 4;
@@ -91,6 +93,8 @@ public class Panic : AIState {
     {
         if ( panickTime == 0.0f)
         {
+            Debug.Log("intensity = " + intensity);
+
             panickTime = Mathf.Abs(intensity * panick0);
           //  Debug.Log("panickTime = " + panickTime);
             ai.isPanicking = true;
@@ -121,7 +125,7 @@ public class Panic : AIState {
 
             ai.vertInput = Mathf.Lerp(ranVelVec, ai.vertInput, .0125f);
 
-            if (!ai.ballGrabbed)
+            if (!ai.ballGrabbed && !rolledCatch)
                 {
                     if (CatchProb(aiCatchProb))
                     {
@@ -149,6 +153,7 @@ public class Panic : AIState {
                 panicked = true;
                 panicked0 = Time.realtimeSinceStartup;
                 ai.isPanicking = false;
+                rolledCatch = false;
             }
             }
     }
@@ -299,9 +304,11 @@ public class Panic : AIState {
     bool CatchProb( float prob)
     {
         float ran = UnityEngine.Random.Range(0.0f, 1.0f);
-
+        rolledCatch = true;
          if (ran < prob) {
 
+            Debug.Log("Catch prob = " + prob);
+            Debug.Log("Catch ran = " + ran);
 
             return true;
         }

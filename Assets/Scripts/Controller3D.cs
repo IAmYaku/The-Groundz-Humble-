@@ -622,10 +622,10 @@ public class Controller3D : MonoBehaviour
         float xCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_x * acceleration, pow0_x + muvXcel_x)), 0.0f, clampMult_x);                       // impartial but feels good
         float zCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_z * acceleration * accMult_z, pow0_z + muvXcel_z)), 0.0f, clampMult_z);
 
-        float xMultiplier = .25f;
-        float zMultiplier = .25f;   
+        float xMultiplier = .175f;
+        float zMultiplier = .175f;   
 
-        float speedTimeMultiplier = 7f;
+        float speedTimeMultiplier = 5f;
         float accelerationTimeMultiplier = 75f;
 
         float xVelocity = move.x * xSpeed * xMultiplier * acceleration;
