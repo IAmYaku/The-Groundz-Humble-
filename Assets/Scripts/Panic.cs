@@ -36,6 +36,7 @@ public class Panic : AIState {
 
     float aiCatchProb =.25f;
     bool rolledCatch;
+    bool isCatchAware;
 
     int aiLevel;
 
@@ -93,7 +94,7 @@ public class Panic : AIState {
     {
         if ( panickTime == 0.0f)
         {
-            Debug.Log("intensity = " + intensity);
+            Debug.Log("initial panic intensity = " + intensity);
 
             panickTime = Mathf.Abs(intensity * panick0);
           //  Debug.Log("panickTime = " + panickTime);
@@ -117,7 +118,8 @@ public class Panic : AIState {
 
             if (sec < panickTime)
             {
-            //  Debug.Log("PANICKING");
+             // Debug.Log("PANICKING");
+           // Debug.Log("panick intensity = " + intensity);
 
             ranVelVec = Random.Range(-1f, 1f) * (intensity / 25f);
 
@@ -125,13 +127,27 @@ public class Panic : AIState {
 
             ai.vertInput = Mathf.Lerp(ranVelVec, ai.vertInput, .0125f);
 
-            if (!ai.ballGrabbed && !rolledCatch)
+            if (!ai.ballGrabbed && intensity < -15 )
+                {
+                if ( !rolledCatch)
                 {
                     if (CatchProb(aiCatchProb))
                     {
                         ai.action1Input = true;
+                        Debug.Log("ActionInput");
 
+                    }
                 }
+                else
+                    {
+                        if (isCatchAware)
+                        {
+                            ai.action1Input = true;
+                            Debug.Log("ActionInput");
+                        }
+                    }
+               
+ 
                 }
 
           
@@ -154,6 +170,7 @@ public class Panic : AIState {
                 panicked0 = Time.realtimeSinceStartup;
                 ai.isPanicking = false;
                 rolledCatch = false;
+                isCatchAware = false;
             }
             }
     }
@@ -305,15 +322,20 @@ public class Panic : AIState {
     {
         float ran = UnityEngine.Random.Range(0.0f, 1.0f);
         rolledCatch = true;
-         if (ran < prob) {
 
-            Debug.Log("Catch prob = " + prob);
-            Debug.Log("Catch ran = " + ran);
+        Debug.Log("Catch prob = " + prob);
+        Debug.Log("Catch ran = " + ran);
 
+
+        if (ran < prob) {
+
+             isCatchAware = true;
+            
             return true;
         }
          else
         {
+            isCatchAware = false;
             return false;
         }
     }

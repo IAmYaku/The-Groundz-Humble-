@@ -462,7 +462,7 @@ public class GlobalConfiguration : MonoBehaviour
         playerScript.SetisSet(true);
 
         float aiDodgeWeight = 36f;
-        float aiSpeedWeight = 1000f;
+        float aiSpeedWeight = 10f;
 
         if (type == "Nina")
         {

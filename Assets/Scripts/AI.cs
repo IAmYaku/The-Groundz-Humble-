@@ -179,6 +179,7 @@ public class AI : MonoBehaviour {
 
     float awareness = 1f;
     bool didAwarenessRoll;
+    bool isAware;
 
 
     private void Awake()
@@ -288,24 +289,28 @@ public class AI : MonoBehaviour {
 
                     if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)
                     {
-                     //   aiState = getBall_;
+                        aiState = getBall_;
 
                     }
 
+                   // print(" ");
+                   // print("aiState = " + aiState.GetName());
                     aiState.Update(gameManager, this);
-
+             
                     aiStateDisplayString = aiState.GetName();
 
-                    MoveInput();
-                    GrabInput();
-                    SuperInput();
-                    BlockInput();
                 }
                 else
                 {
                     HandleContact();
   
                 }
+
+
+                MoveInput();
+                GrabInput();
+                SuperInput();
+                BlockInput();
 
 
             }
@@ -331,6 +336,8 @@ public class AI : MonoBehaviour {
         isKnockedOut = true;
         knockedOutTime = magnitude / toughness;
         print("KnockedOutTime " +knockedOutTime);
+        print("aiState= " + aiState.GetName());
+        print("ai.gameState= " + gameState);
     }
 
     internal void EndAgentNavigation()
@@ -361,6 +368,7 @@ public class AI : MonoBehaviour {
                 isKnockedOut = false;
                 knockedOutTime = 0;
             }
+
         }
     }
 
@@ -681,8 +689,8 @@ public class AI : MonoBehaviour {
 
                 if (catchReady)       // and catchframecount <= 0
                 {
-                    catchReady = false;
-                    catchCoolDown = catchLagTime;
+                   // catchReady = false;
+                  //  catchCoolDown = catchLagTime;
                 }
 
 
@@ -1333,14 +1341,14 @@ public class AI : MonoBehaviour {
 
         float ballThrownMult = 1f;
 
-        float ballThrownAwareness;
+        float ballThrownAwareness = 0;
 
 
         if (team == 1)
         {
             foreach (GameObject ball in levelManager.balls)
             {
-                if (ball.transform.position.x <= halfCourt && ball.GetComponent<Ball>().thrownBy2)
+                if (ball.transform.position.x <= halfCourt && !ball.GetComponent<Ball>().thrownBy2)
                 {
                     count++;
                     if (Vector3.Distance(playerConfigObject.transform.position, ball.transform.position) < grabRadius*2)        // *arb
@@ -1361,26 +1369,35 @@ public class AI : MonoBehaviour {
 
                     if (ball.GetComponent<Ball>().thrownBy2)
                     {
-                        if (didAwarenessRoll)
+                        if (didAwarenessRoll && isAware)
                         {
-                            count -= (int) (awareness * level);
+                            float proximity = Vector3.Distance(navMeshAgent.transform.position, ball.transform.position);
+                            float maxAwareness = 30f;
+                            float minAwareness = 1f;
+                            awareness = Mathf.Clamp(awareness / proximity, minAwareness, maxAwareness);
+                            ballThrownAwareness = (int)(awareness * level);
                         }
+
                         else
                         {
-                            didAwarenessRoll = true;
+                            if (!didAwarenessRoll)
+                            {
+                                didAwarenessRoll = true;
+                                ball.GetComponent<Ball>().SetAwareAI(this); //inefficceint
 
-                            if (IsAware())
-                            {
-                                // print("~~Yikes~~!");
-                                ball.GetComponent<Ball>().SetAwareAI(this);
-                                awareness = 10f;
-                            }
-                            else
-                            {
-                                awareness = 2f;
+                                if (DoIsAware())
+                                {
+                                    awareness = 100f;
+                                    print("Is Awaareree!");
+                                }
+
+                                else
+                                {
+                                    awareness = 1f;
+                                }
                             }
                         }
-                   
+
                     }
 
                 }
@@ -1409,25 +1426,39 @@ public class AI : MonoBehaviour {
 
                     if (ball.GetComponent<Ball>().thrownBy1)
                     {
-                        if (didAwarenessRoll)
+                        if (didAwarenessRoll && isAware)
                         {
-                            count -= (int)(awareness * level);   // *distance                         
+                            float proximity = Vector3.Distance(navMeshAgent.transform.position, ball.transform.position);
+                            float maxAwareness = 30f;
+                            float minAwareness = 1f;
+                           // print("awareness = " + awareness);
+                          //  print("proximity = " + proximity);
+                            ballThrownAwareness = Mathf.Clamp(awareness / proximity, minAwareness,maxAwareness);
+                            ballThrownAwareness  *= level;
+
+                    
+                            
+                         //   print("Ball thrown intensity = "+(int)(count - ballThrownAwareness));
                         }
 
                         else
                         {
-                            didAwarenessRoll = true;
-
-                            if (IsAware())
+                            if (!didAwarenessRoll)
                             {
-                                awareness = 10f;
-                                ball.GetComponent<Ball>().SetAwareAI(this);
-                                print("Is Awaareree!");
-                            }
+                                didAwarenessRoll = true;
+                                ball.GetComponent<Ball>().SetAwareAI(this); //inefficient
 
-                            else
-                            {
-                                awareness = 2f;
+                                if (DoIsAware())
+                                {
+                                    awareness = 100f;
+                                    
+                                    print("Is Awaareree!");
+                                }
+
+                                else
+                                {
+                                    awareness = 1f;
+                                }
                             }
                         }
                     }
@@ -1435,7 +1466,7 @@ public class AI : MonoBehaviour {
             }
         }
 
-        return count;
+        return (int) (count - ballThrownAwareness);
 
     }
 
@@ -1516,28 +1547,33 @@ public class AI : MonoBehaviour {
         return returnMe;
     }
 
-    bool IsAware()
+    bool DoIsAware()
     {
         float ran = UnityEngine.Random.Range(0, 1f);
 
-        float prob = level / 5f;
+        float prob = (level / 4f) + .25f ;
 
-        print("ran = " + ran);
-        print("prob = " + prob);
+
 
         if (ran < prob)
         {
-            return true;
+            isAware = true;
         }
         else
         {
-            return false;
+            print("ran = " + ran);
+            print("prob = " + prob);
+            isAware = false;
         }
+        return isAware;
+
     }
 
     public void NormalAwareness()
     {
         didAwarenessRoll = false;
+        isAware = false;
+
     }
 
     internal void TriggerHeadHitAnimation()
@@ -1619,7 +1655,7 @@ public class AI : MonoBehaviour {
     {
          xSpeed += s/100f;
          zSpeed += s/100f;
-        navMeshAgent.speed += s * 1.5f;
+        navMeshAgent.speed += s * 2f;
         navMeshAgent.acceleration += s *1.5f;
     }
 
@@ -1711,7 +1747,7 @@ public class AI : MonoBehaviour {
 
     private void IncreaseCatchProb(float x)
     {
-        catchProb = Mathf.Clamp(catchProb + (x / 1000.0f), 0, .89f);                        // 
+        catchProb = Mathf.Clamp(catchProb + (x / 50.0f), 0, .89f);                        // 
     }
 
     internal float GetPanickDelayTime()

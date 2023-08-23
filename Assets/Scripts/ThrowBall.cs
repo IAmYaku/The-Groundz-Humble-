@@ -27,6 +27,8 @@ public class ThrowBall : AIState
     int num = 2;
     string name = "ThrowBall";
 
+    float completionPercentage;
+
 
     public void Start(GameManager manager, AI ai_)
     {
@@ -103,7 +105,7 @@ public class ThrowBall : AIState
 
             if (ai.gameState == AI.GameState.mildly_dangerous)
             {
-            if (inAction)
+            if (inAction && completionPercentage < .25f)
             {
                 Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too 
             }
@@ -116,7 +118,7 @@ public class ThrowBall : AIState
 
             if (ai.gameState == AI.GameState.dangerous)
             {
-            if (inAction)
+            if (inAction && completionPercentage < .125f)
             {
                 Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too 
             }
@@ -180,11 +182,15 @@ public class ThrowBall : AIState
 
             inAction = true;
             float proximity = 50 - 10*urgency;
+        float distanceFromNearestOpp = Vector3.Distance(pos, GetNearestOpp(manager, ai));
 
-            if (Vector3.Distance(pos, GetNearestOpp(manager, ai)) < proximity || IsNearHalfCourt(pos))
+        completionPercentage = proximity / distanceFromNearestOpp;
+
+            if (distanceFromNearestOpp < proximity || IsNearHalfCourt(pos))
             {
                 FaceOpp();
                 ai.rTriggerInput = true;
+            completionPercentage = 0;
            // Debug.Log("AI Throwing");
 
             if (ai.ballGrabbed == false)
@@ -264,10 +270,11 @@ public class ThrowBall : AIState
         ai = _ai;
         Vector3 pos = ai.navMeshAgent.gameObject.transform.position;
         Vector3 nearestOppPos = GetNearestOpp( manager, ai);
+        Vector3 distanceVec = (nearestOppPos - pos).normalized;
         float aiXVelocity;
-        aiXVelocity = ( nearestOppPos.x -pos.x ) * ai.xSpeed;    //  * Mathf.Clamp(ai.navSpeed,1f,12f)
+        aiXVelocity = distanceVec.x * ai.xSpeed;    //  * Mathf.Clamp(ai.navSpeed,1f,12f)
         float aiZVelocity;
-        aiZVelocity = (nearestOppPos.z -pos.z) * ai.zSpeed;
+        aiZVelocity = distanceVec.z * ai.zSpeed;
 
         
         ai.SetNavVelocity(new Vector3(aiXVelocity , 0f, aiZVelocity ));           // *arbitrary nums

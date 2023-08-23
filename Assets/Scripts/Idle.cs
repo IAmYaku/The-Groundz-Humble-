@@ -21,6 +21,7 @@ public class Idle : AIState {
     string name = "Idle";
     GameManager gameManager;
 
+    float completionPercentage;
 
     public void Start(GameManager manager, AI ai_){
         ai = ai_;
@@ -77,12 +78,14 @@ public class Idle : AIState {
         {
              tF = Time.realtimeSinceStartup;
              idle_time = tF - t0;
-               
+            completionPercentage = idle_time / dur;
+
             if (idle_time >= dur)
             {
                 ai.navMeshAgent.isStopped = false;
                 inAction = false;
                 t0 = 0;
+                completionPercentage = 0;
             }
         }
 	}
@@ -177,7 +180,7 @@ public class Idle : AIState {
 
         if (ai.gameState == AI.GameState.mildly_dangerous)
         {
-            if (inAction)
+            if (inAction && completionPercentage < .25f)
             {
                 Action(gameManager, ai, 1.0f, Vector3.zero);
             }
@@ -196,7 +199,7 @@ public class Idle : AIState {
 
         if (ai.gameState == AI.GameState.dangerous)
         {
-            if (inAction)
+            if (inAction && completionPercentage < .125f)
             {
                 Action(gameManager, ai, 0.0f, Vector3.zero);
             }
