@@ -133,8 +133,8 @@ public class Panic : AIState {
                 {
                     if (CatchProb(aiCatchProb))
                     {
-                        ai.action1Input = true;
-                        Debug.Log("ActionInput");
+                      
+                    
 
                     }
                 }
@@ -142,8 +142,16 @@ public class Panic : AIState {
                     {
                         if (isCatchAware)
                         {
-                            ai.action1Input = true;
-                            Debug.Log("ActionInput");
+                         Ball nearestBall = ai.GetNearestBall().GetComponent<Ball>();
+                        if ((ai.GetTeam() ==2 && nearestBall.thrownBy1) || (ai.GetTeam() == 1 && nearestBall.thrownBy2))
+                        {
+                          if( nearestBall.GetComponent<Rigidbody>().velocity.magnitude/100f < Mathf.Clamp(ai.level,1f,3.125f))
+                            {
+                                ai.action1Input = true;
+                                Debug.Log("ActionInput");
+                               // Debug.Log("Ball speed = " + nearestBall.GetComponent<Rigidbody>().velocity.magnitude/100f);
+                            }
+                        }
                         }
                     }
                

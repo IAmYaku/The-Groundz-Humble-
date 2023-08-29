@@ -48,7 +48,7 @@ public class GetBall : AIState {
     public void Update(GameManager manager, AI ai)
     {
 
-       // if (!ai.playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)
+        if (!ai.playerConfigObject.GetComponent<PlayerConfiguration>().ballContact)
         {
             ai.EvaluateGameState();
 
@@ -67,7 +67,7 @@ public class GetBall : AIState {
                 RandomBehavior();
             }
         }
-        /*
+        
         else
         {
             
@@ -102,7 +102,7 @@ public class GetBall : AIState {
             
         }
 
-         */
+         
 
         //   Debug.Log("InAction = " + inAction);
     }
