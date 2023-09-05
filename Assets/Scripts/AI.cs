@@ -181,6 +181,7 @@ public class AI : MonoBehaviour {
     bool didAwarenessRoll;
     bool isAware;
 
+    bool isPausing;  // Gives a sense of realism between actions
 
     private void Awake()
     {
@@ -284,7 +285,7 @@ public class AI : MonoBehaviour {
                 //     print(" IsOnNAvMesh" );
 
 
-                if (!isKnockedOut)
+                if (!isKnockedOut && !isPausing)
                 {
 
                     if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)
@@ -299,20 +300,18 @@ public class AI : MonoBehaviour {
              
                     aiStateDisplayString = aiState.GetName();
 
+
+                    MoveInput();
+                    GrabInput();
+                    SuperInput();
+                    BlockInput();
+
                 }
                 else
                 {
                     HandleContact();
   
                 }
-
-
-                MoveInput();
-                GrabInput();
-                SuperInput();
-                BlockInput();
-
-
             }
 
             else
@@ -609,6 +608,7 @@ public class AI : MonoBehaviour {
 
                                 //ballContact = false;  // what if therre's multiple balls
                                 ballCaught = true;     // what if therre's multiple balls
+                                ResetBallCaught(.5f);
 
                                 ball.GetComponent<Ball>().playCatch();
                                 levelManager.ClearContacts(ball);
@@ -619,10 +619,13 @@ public class AI : MonoBehaviour {
                                 levelManager.CatchDisplay(playerConfigObject.transform.position);
                                 ball.GetComponent<Ball>().DeactivateThrow();
 
+                                Pause(.25f);
+
                                 float catchPauseDuration = Mathf.Clamp(velocityCaught.magnitude / 100f, FXManager.min_CatchPauseDuration, FXManager.max_CatchPauseDuration);
                                 float catchPausePreDelay = .25f;
 
                                 DelayPause(catchPauseDuration, catchPausePreDelay);
+
                                 print("~!Caught!~");
 
 
@@ -716,9 +719,9 @@ public class AI : MonoBehaviour {
                              chargeVel = navMeshAgent.velocity;
                             throwCharge += chargeVel.magnitude / 100f;
                             isCharging = true;
-
-                          //  float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
-                          //  accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);  //arbs
+                            ball.GetComponent<Ball>().isCharging = true;
+                            //  float glide = .01f - chargeVel.magnitude / 100000f;     //arbs
+                            //  accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);  //arbs
 
 
                             animator.SetTrigger("Charge");
@@ -811,6 +814,7 @@ public class AI : MonoBehaviour {
                             throwCharge = 0;
                             chargeTime = 0;
                             isCharging = false;
+                            ball.GetComponent<Ball>().isCharging = false;
                         }
                     }
                  
@@ -840,6 +844,25 @@ public class AI : MonoBehaviour {
 		//
 
 	}
+
+    private void ResetBallCaught(float v)
+    {
+        Invoke("ResetBallCaught", v);
+    }
+    private void ResetBallCaught()
+    {
+        ballCaught = false;
+    }
+    private void Pause(float time)
+    {
+        isPausing = true;
+        Invoke("ResetIsPausing", time);
+    }
+
+    private void ResetIsPausing()
+    {
+        isPausing = false;
+    }
 
     private void CheckHasBallAnim()
     {

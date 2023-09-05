@@ -73,6 +73,9 @@ public class Ball : MonoBehaviour {
     AI aiAware;
     public bool isBeingPursued;
 
+    public bool isCharging;
+
+
     void Start () {
 
         type = "Normal";

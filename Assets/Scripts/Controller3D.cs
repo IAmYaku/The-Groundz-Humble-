@@ -894,6 +894,7 @@ public class Controller3D : MonoBehaviour
 
                             playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
                             ballCaught = true;
+                            ResetBallCaught(.5f);
 
                             ballComp.playCatch();
 
@@ -975,6 +976,15 @@ public class Controller3D : MonoBehaviour
         }
     }
 
+    private void ResetBallCaught(float v)
+    {
+        Invoke("ResetBallCaught", v);
+    }
+    private void ResetBallCaught()
+    {
+        ballCaught = false;
+    }
+
     private void CheckCatchCool()
     {
         if (!catchReady)
@@ -1042,6 +1052,7 @@ public class Controller3D : MonoBehaviour
             isCharging = false;
             ballGrabbed = false;
             ballCaught = false;
+            ball.GetComponent<Ball>().isCharging = false;
             ball.GetComponent<Ball>().grabbed = false;
             ball.GetComponent<SphereCollider>().enabled = true;
             ball.GetComponent<Rigidbody>().useGravity = true;
@@ -1062,6 +1073,7 @@ public class Controller3D : MonoBehaviour
 
     void Charge()
     {
+        ball.GetComponent<Ball>().isCharging = true;
         chargeVel = rigidbody.velocity;
         chargeVelInput.Input(chargeVel.x, chargeVel.z);
         isCharging = true;
@@ -1244,6 +1256,7 @@ public class Controller3D : MonoBehaviour
         ballGrabbed = false;
         ballCaught = false;
         throwCharge = 0;
+        ball.GetComponent<Ball>().isCharging = false;
         isCharging = false;
         chargeTime = 0.0f;
         Invoke("NormalAccelerationRate", accelerationRate);
@@ -1320,6 +1333,7 @@ public class Controller3D : MonoBehaviour
         throwPower = gameObject.GetComponentInParent<Player>().GetThrowPower0();
         throwCharge = 0;
         isCharging = false;
+        ball.GetComponent<Ball>().isCharging = false;
         chargeVel = Vector3.zero; throwCharge = 0;
         isCharging = false;
         chargeVel = Vector3.zero;
@@ -1421,6 +1435,7 @@ public class Controller3D : MonoBehaviour
         ballCaught = false;
         throwCharge = 0;
         isCharging = false;
+        ball.GetComponent<Ball>().isCharging = false;
         chargeVel = Vector3.zero;
         vel0 = Vector3.zero;
         Invoke("NormalAccelerationRate", .1f);
@@ -1906,7 +1921,7 @@ public class Controller3D : MonoBehaviour
             chargeVel = rigidbody.velocity;
             chargeVelInput.Input(chargeVel.x, chargeVel.z);
             isCharging = true;
-
+            ball.GetComponent<Ball>().isCharging = true;
             float glide = .01f - chargeVel.magnitude / 100000f;
             accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);
             velVec = chargeVel;

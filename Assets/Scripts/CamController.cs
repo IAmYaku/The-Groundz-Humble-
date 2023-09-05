@@ -25,7 +25,8 @@ public class CamController : MonoBehaviour {
     float smallestZoomSize = 0f;
     public float xMultiplier = 2f;
 
-    float fxMultiplier = 1f;
+    float fxMultiplier = 1.125f;
+    float fxZoom = 1f;
 
     private float xDamp;
     private float zoomDamp;
@@ -124,29 +125,27 @@ public class CamController : MonoBehaviour {
             if (movable)
             {
                 if (isShaking == false && !isZoomingToSide)
-                {
-                    float nuSize = Mathf.Clamp(( Mathf.Abs((MaxDistance() * fxMultiplier)/ zoomWeight) + zoomPadding), smallestZoomSize, maxZoomSize) ;
-
-                    if (type == CameraType.Perspective)
-                    {
-                        float sizePrev = this.GetComponent<Camera>().fieldOfView;
-                        this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(sizePrev, (nuSize + size0Persp)/2f, ref zoomDamp, cameraSmoothe * fxMultiplier);
-                    }
-                    
-                    else
-                    {
-                        float sizePrev = this.GetComponent<Camera>().orthographicSize;
-                        //print("size = " +  (nuSize + size0Main)/2f);
-                        this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(sizePrev , (nuSize + size0Main)/2f, ref zoomDamp, cameraSmoothe * fxMultiplier);
-                    }
-                
+                {          
                     Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f) * xMultiplier;                                                               // blows up if there ant any balls or players
                    // float deltaX = (average.x - transform.position.x) * xWeight;
-                    float nuX = Mathf.SmoothDamp(transform.position.x, average.x, ref xDamp, cameraSmoothe);
+                    float nuX = Mathf.SmoothDamp(transform.position.x, average.x, ref xDamp, cameraSmoothe/ (fxZoom));
                     nuX = Mathf.Clamp(nuX, minXpos,maxXpos);
                     gameObject.transform.position = new Vector3(nuX, position0.y, position0.z);
-
                 }
+
+                float nuSize = Mathf.Clamp((Mathf.Abs((MaxDistance() / (zoomWeight /* * fxZoom   << -- Lets come back to this idea */))) + zoomPadding), smallestZoomSize, maxZoomSize);
+                if (type == CameraType.Perspective)
+                {
+                    float sizePrev = this.GetComponent<Camera>().fieldOfView;
+                    this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(sizePrev, (nuSize + size0Persp) / 2f, ref zoomDamp, cameraSmoothe / (fxZoom * fxZoom));
+                }
+                else
+                {
+                    float sizePrev = this.GetComponent<Camera>().orthographicSize;
+                    //print("size = " +  (nuSize + size0Main)/2f);
+                    this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(sizePrev, (nuSize + size0Main) / 2f, ref zoomDamp, cameraSmoothe / (fxZoom * fxZoom));
+                }
+
             }
         }
     }
@@ -182,11 +181,11 @@ public class CamController : MonoBehaviour {
         }
      }
 
-	float MaxDistance(){
+	float MaxDistance() {
 		float min = 1000000.0f;
 		float max = -1000000.0f;
 
-        fxMultiplier = 1f;
+        float fxCount = 0;
 
         foreach (GameObject player in levelManager.GetPlayers()) {
             
@@ -221,20 +220,20 @@ public class CamController : MonoBehaviour {
             {
                 if (playerComp.controller3DObject.GetComponent<Controller3D>().ballCaught)
                 {
-                    fxMultiplier -= .25f;
+                    fxCount += 2;
                    // print("fxMultiplier = " + fxMultiplier);
                 }
                 else
                 {
                   if(  playerComp.aiObject.GetComponent<AI>().ballCaught)
                     {
-                        fxMultiplier -= .25f;
-                       // print("fxMultiplier = " + fxMultiplier);
+                        fxCount += 2;
+                        // print("fxMultiplier = " + fxMultiplier);
                     }
                 }
             }
-
         }
+
 		foreach (GameObject ball in gameManager.levelManager.balls) {
 			if (ball.transform.position.x < min) {
 				min = ball.transform.position.x;
@@ -244,25 +243,39 @@ public class CamController : MonoBehaviour {
 			}
 
             Ball ballComp = ball.GetComponent<Ball>();
-            if (ballComp.contact)
+            if (ballComp.contact || ballComp.isSupering)
             {
-                fxMultiplier -= .250f;
-               // print("fxMultiplier = " + fxMultiplier);
+                fxCount += 1;   
+                // print("fxMultiplier = " + fxMultiplier);
             }
 
         }
 
-        fxMultiplier = Mathf.Clamp(fxMultiplier, 0f, 1f);
-		return (max - min) * fxMultiplier * xMultiplier ;
+        fxZoom = (fxCount * fxMultiplier) + 1;
+
+     //   print("fxZoom = " + fxCount * fxMultiplier);
+
+		return ((max - min) * xMultiplier);
 	}
 
 	public float GetAverage(){
 		float sum = 0.0f;
         float charWeight;
 		float objectsCount = gameManager.levelManager.balls.Count +  levelManager.GetPlayers().Count;
+
+        List<float> contactedBallsX = new List<float>();
+
 		foreach (GameObject ball in gameManager.levelManager.balls) {
             sum += ball.transform.position.x;
-		}
+
+            Ball ballComp = ball.GetComponent<Ball>();
+
+            if (ballComp.contact || (ballComp.isSupering && ballComp.isCharging))
+            {
+                contactedBallsX.Add(ball.transform.position.x);
+            }
+
+        }
 		foreach (GameObject player in levelManager.GetPlayers()) {
 
             if (player.GetComponent<Player>().hasAI)
@@ -275,8 +288,20 @@ public class CamController : MonoBehaviour {
             }
             sum += player.transform.position.x * charWeight;
 		}
-		return sum / (objectsCount);
-	}
+
+        float averageXPosition = sum / (objectsCount);
+        
+        if (contactedBallsX.Count > 0)
+        {
+            foreach (float ballPositionX in contactedBallsX)
+            {
+                averageXPosition = (averageXPosition + ballPositionX) / 2;
+            }
+        }
+
+        return averageXPosition;
+
+    }
 
     public void Shake( float time) 
     {

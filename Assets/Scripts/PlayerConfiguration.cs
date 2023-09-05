@@ -147,7 +147,7 @@ public class PlayerConfiguration : MonoBehaviour
                         levelManager.TriggerHitFX(gameObject, ballHit);
                         player.SetHitFX(true);
 
-                        float ballHitPauseWeight = 100f;
+                        float ballHitPauseWeight = 50f;
                         float hitPauseDuration = Mathf.Clamp( ballHitVelocity / ballHitPauseWeight, FXManager.min_HitPauseDuration, FXManager.max_HitPauseDuration);
                         float hitPausePreDelay = .0125f;
 
@@ -283,7 +283,7 @@ public class PlayerConfiguration : MonoBehaviour
 
         float superMultipliier = 2f;
         Vector3 knockBackForce = new Vector3(.025f, .0125f, .025f);
-        float knockBackTimeMult =  .925f;
+        float knockBackTimeMult =  1f;
 
         if (ballIsSupered)
         {

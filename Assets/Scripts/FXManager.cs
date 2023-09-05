@@ -41,7 +41,7 @@ public class FXManager : MonoBehaviour
     public HitPause hitPause;
     private float hitPauseDuration;
 
-    public static float min_HitPauseDuration = 0.1f;
+    public static float min_HitPauseDuration = 0.25f;
     public static float max_HitPauseDuration = 2f;
 
     public static float min_CatchPauseDuration = 0.25f;

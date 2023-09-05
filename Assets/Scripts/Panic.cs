@@ -149,7 +149,7 @@ public class Panic : AIState {
                             {
                                 ai.action1Input = true;
                                 Debug.Log("ActionInput");
-                               // Debug.Log("Ball speed = " + nearestBall.GetComponent<Rigidbody>().velocity.magnitude/100f);
+                                Debug.Log("Ball speed = " + nearestBall.GetComponent<Rigidbody>().velocity.magnitude/100f);
                             }
                         }
                         }
