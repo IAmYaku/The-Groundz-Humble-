@@ -477,6 +477,7 @@ public class AI : MonoBehaviour {
         if (navMeshAgent.velocity.x > 3.0f)    // *arbitray nums
         {
             isFacingRight = true;
+           // Pivot();
             spriteRenderer.flipX = false;
             throwDirection.x = 1;              // hmm? lol
         }
@@ -484,6 +485,7 @@ public class AI : MonoBehaviour {
         if (navMeshAgent.velocity.x < -3.0f)
         {
             isFacingRight = false;
+          //  Pivot();
             spriteRenderer.flipX = true;
             throwDirection.x = -1;
         }
@@ -495,6 +497,16 @@ public class AI : MonoBehaviour {
         if (navMeshAgent.velocity.z < 0)
         {
             throwDirection.z = -1;
+        }
+    }
+
+    private void Pivot()
+    {
+        //spriteRenderer.flipX = false;
+
+        if (animator)
+        {
+            animator.SetTrigger("Pivot");
         }
     }
 

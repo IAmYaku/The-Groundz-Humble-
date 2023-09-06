@@ -292,17 +292,20 @@ public class PlayerConfiguration : MonoBehaviour
 
         Vector3 knockBackVec = Vector3.Scale(ballVelocity, knockBackForce);
 
+
+        // Gotta revisit knockedOut and knockback
+
         if (player.hasAI)
         {
             ai.SetKnockedOut(knockBackVec.magnitude * knockBackTimeMult);
-            ai.SetNavVelocity(ai.navMeshAgent.velocity + knockBackVec);
+           // ai.SetNavVelocity(ai.navMeshAgent.velocity + knockBackVec);
 
 
         }
         else
         {
           controller3D.SetKnockedOut(knockBackVec.magnitude * knockBackTimeMult);
-            rigidbody.velocity += knockBackVec;
+          //  rigidbody.velocity += knockBackVec;
         }
       
     }

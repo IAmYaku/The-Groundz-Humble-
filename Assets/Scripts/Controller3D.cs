@@ -763,9 +763,10 @@ public class Controller3D : MonoBehaviour
                     if (!isFacingRight)
                     {
                         isFacingRight = true;
+                      //  Pivot();
                         spriteRenderer.flipX = false;
-                        float pivotTime = .1f;
-
+           
+                        
                     }
 
                     throwDirection.x = 1;
@@ -776,8 +777,10 @@ public class Controller3D : MonoBehaviour
                     if (isFacingRight)
                     {
                         isFacingRight = false;
+                      //  Pivot();
                         spriteRenderer.flipX = true;
-                        float pivotTime = .1f;
+                
+                       
                     }
                     throwDirection.x = -1;
                 }
@@ -1628,15 +1631,16 @@ public class Controller3D : MonoBehaviour
     }
 
     #endregion
-    private void FlipRight()
+    private void Pivot()
     {
-        spriteRenderer.flipX = false;
+        //spriteRenderer.flipX = false;
+
+        if (animator)
+        {
+            animator.SetTrigger("Pivot");
+        }
     }
 
-    private void FlipLeft()
-    {
-        spriteRenderer.flipX = true;
-    }
 
 
     public void SlowDownByVelocity( float decelerationRate, float decelerationTime)
