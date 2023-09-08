@@ -1524,7 +1524,7 @@ public class Controller3D : MonoBehaviour
                         rigidbody.velocity += new Vector3(0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed);  //*arb
                         playerScript.PlayDodgeSound();
 
-                        float dodgeCool = .5f + (rigidbody.velocity.magnitude / 1000f);
+                        float dodgeCool = .25f +  (rigidbody.velocity.magnitude / 1000f);
                         float dodgeThrowDelayCool = 1f + (rigidbody.velocity.magnitude / 1000f);
                         Invoke("SetDodgingF", dodgeCool);
                         Invoke("SetDodgeThrowDelayF", dodgeThrowDelayCool);
