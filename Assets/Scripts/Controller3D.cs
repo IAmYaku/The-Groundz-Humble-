@@ -951,7 +951,7 @@ public class Controller3D : MonoBehaviour
             }
 
             //  print("vel mag = " + (rigidbody.velocity.magnitude) / 100f);
-            float action1SlowDownfactor = Mathf.Clamp(.0002f - (rigidbody.velocity.magnitude) / 10000f, .0001f, 100f);     //split to ready pickUp catch and character attribute specific
+            float action1SlowDownfactor = Mathf.Clamp(.0002f - (rigidbody.velocity.magnitude) / 10000f, .001f, 100f);     //split to ready pickUp catch and character attribute specific
             float stallTime = .2f;
             SlowDownByVelocity(action1SlowDownfactor, stallTime);
 
@@ -1174,7 +1174,7 @@ public class Controller3D : MonoBehaviour
         Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedVelAverage().x, 0f, chargeVelInput.GetWeightedVelAverage().y);
 
 
-        if (Mathf.Abs(weightedMuvAvVec.magnitude) < 10f || float.IsNaN(weightedMuvAvVec.magnitude))  // Have to check if wasn't moving during charge
+        if (Mathf.Abs(weightedMuvAvVec.magnitude) < 5f ||  float.IsNaN(weightedMuvAvVec.magnitude))  // Have to check if wasn't moving during charge, arbs
         {
             weightedMuvAvVec.x = throwDirection.x * throwPower / 100f;
 
@@ -1395,7 +1395,9 @@ public class Controller3D : MonoBehaviour
 
         print("Dodge Throw");
        // Vector3 dodgeThrowVec = new Vector3((dodgeSpeed * 2f + throwCharge) * move.x, 5f, move.z * (dodgeSpeed + throwCharge) * .5f);
-        Vector3 dodgeThrowVec = new Vector3(dodgeSpeed * throwCharge /100f, 5f,0f);
+        Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedVelAverage().x, 0f, chargeVelInput.GetWeightedVelAverage().y);
+        Vector3 dodgeThrowVec = (weightedMuvAvVec.normalized + move.normalized)/2f;
+        dodgeThrowVec *= throwCharge + dodgeSpeed;
 
         throww = dodgeThrowVec;
 
@@ -1471,12 +1473,12 @@ public class Controller3D : MonoBehaviour
         if (ballGrabbed && isCharging)
         {
 
-            throwCharge += (chargeRate * Time.deltaTime) + chargeVel.magnitude / 100f;
+            throwCharge += (chargeRate * Time.deltaTime) + chargeVel.magnitude / 100f;          //arb
             chargeTime += Time.deltaTime;
             // throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
 
             chargeVelInput.Input(rigidbody.velocity.x, rigidbody.velocity.z);
-
+             
             DepleteStamina(chargeCost);
 
             animator.SetTrigger("Charge");
@@ -1501,10 +1503,11 @@ public class Controller3D : MonoBehaviour
 
     private void Dodge()
     {
-        float dodgeStaminaThresh = stamina / 2f;
+        float dodgeStaminaThresh =  staminaDodgeCost;
+        ;
 
         {
-            if (InBounds() && staminaCool <= dodgeStaminaThresh)
+            if (InBounds() && staminaCool < (stamina - dodgeStaminaThresh))
             {
                 //Dodge
                 if (IsInDodgeRange() && !isDodging)
@@ -1524,7 +1527,7 @@ public class Controller3D : MonoBehaviour
                         rigidbody.velocity += new Vector3(0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed);  //*arb
                         playerScript.PlayDodgeSound();
 
-                        float dodgeCool = .25f +  (rigidbody.velocity.magnitude / 1000f);
+                        float dodgeCool = (rigidbody.velocity.magnitude / 1000f);
                         float dodgeThrowDelayCool = 1f + (rigidbody.velocity.magnitude / 1000f);
                         Invoke("SetDodgingF", dodgeCool);
                         Invoke("SetDodgeThrowDelayF", dodgeThrowDelayCool);
@@ -2101,6 +2104,7 @@ public class Controller3D : MonoBehaviour
         }
 
         Throw(throww, "Super", throwMag);
+
     }
 
 

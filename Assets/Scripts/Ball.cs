@@ -75,6 +75,8 @@ public class Ball : MonoBehaviour {
 
     public bool isCharging;
 
+    bool didWindFX;
+
 
     void Start () {
 
@@ -122,7 +124,21 @@ public class Ball : MonoBehaviour {
 				playWhip ();
 			}
         */
-        }	
+        }
+        
+        else
+        {
+            if (this.GetComponent<Rigidbody>().velocity.magnitude > 0 && !didWindFX)
+            {
+                float ballSuperVelocity = this.GetComponent<Rigidbody>().velocity.magnitude;
+
+                print("ballSupered velocity = " + ballSuperVelocity);
+
+               superPackage.GetComponentInChildren<SuperBall>().InstantiateSmokeFX();
+                didWindFX = true;
+            }
+        }
+
         if (isInPickUpRange)
         {
          Check4PlayerProx();

@@ -20,6 +20,7 @@ public class SuperBall : MonoBehaviour {
     public float superMagnetism = 0f;
     public float damage = 60f;
     public float throwPowerMult = 2f;
+    public GameObject smokeFX;
 
     void Start () {
         if (type == 2)
@@ -32,4 +33,15 @@ public class SuperBall : MonoBehaviour {
 	void Update () {
            
 	}
+
+    public void InstantiateSmokeFX( /* speed */)
+    {
+        float ground = GlobalConfiguration.Instance.gameManager.levelManager.stage.floor;
+        
+        Vector3 position = new Vector3(this.transform.parent.position.x, ground, this.transform.parent.position.z);
+        if (smokeFX)
+        {
+            Instantiate(smokeFX, position, Quaternion.identity);
+        }
+    }
 }

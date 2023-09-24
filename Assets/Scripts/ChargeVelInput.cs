@@ -77,12 +77,14 @@ public class ChargeVelInput : MonoBehaviour
     {
         Vector2 addMe = Vector2.zero;
 
-        for (int i = velocities.Count-1; i>=0; i--)
+        for (int i = velocities.Count-1; i>0; i--)
         {
-            // addMe += velocities[i]/(i+1);
-            addMe += velocities[i];
+            float bias = 100f;
+            float weight = ((i + 1) / velocities.Count) * bias;
+            addMe += velocities[i] * weight;
 
         }
+
         return (addMe / velocities.Count);
     }
 
