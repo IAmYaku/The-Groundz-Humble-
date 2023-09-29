@@ -143,7 +143,7 @@ public class Controller3D : MonoBehaviour
     private bool isJumping;
     private bool canDodge;
     private bool isDodging;
-    bool dodgeThrowDelay;
+     bool dodgeThrowDelay;
     public float dodgeSpeed = 20f;
 
 
@@ -376,7 +376,6 @@ public class Controller3D : MonoBehaviour
             if (!isCharging)
             {
                 Charge();
-
 
             }
 
@@ -1266,6 +1265,7 @@ public class Controller3D : MonoBehaviour
         chargeVel = Vector3.zero;
         vel0 = Vector3.zero;
         chargeVelInput.ClearVelocities();
+        dodgeThrowDelay = false;
         
 
         
@@ -1397,7 +1397,7 @@ public class Controller3D : MonoBehaviour
        // Vector3 dodgeThrowVec = new Vector3((dodgeSpeed * 2f + throwCharge) * move.x, 5f, move.z * (dodgeSpeed + throwCharge) * .5f);
         Vector3 weightedMuvAvVec = new Vector3(chargeVelInput.GetWeightedVelAverage().x, 0f, chargeVelInput.GetWeightedVelAverage().y);
         Vector3 dodgeThrowVec = (weightedMuvAvVec.normalized + move.normalized)/2f;
-        dodgeThrowVec *= throwCharge + dodgeSpeed;
+        dodgeThrowVec *= throwCharge * dodgeSpeed;
 
         throww = dodgeThrowVec;
 
@@ -1444,6 +1444,7 @@ public class Controller3D : MonoBehaviour
         chargeVel = Vector3.zero;
         vel0 = Vector3.zero;
         Invoke("NormalAccelerationRate", .1f);
+        dodgeThrowDelay = false;
 
 
         if (animator)
@@ -1507,12 +1508,12 @@ public class Controller3D : MonoBehaviour
         ;
 
         {
-            if (InBounds() && staminaCool < (stamina - dodgeStaminaThresh))
+            if (InBounds() && staminaCool < (stamina - dodgeStaminaThresh) && onGround)
             {
                 //Dodge
                 if (IsInDodgeRange() && !isDodging)
                 {
-                    if (Mathf.Abs(move.z) > Mathf.Abs(move.x))
+                  //  if (Mathf.Abs(move.z) > Mathf.Abs(move.x))
                     {
                         print("Dodge!");
                         isDodging = true;
@@ -1524,36 +1525,19 @@ public class Controller3D : MonoBehaviour
                         }
 
                         staminaCool += staminaDodgeCost;
-                        rigidbody.velocity += new Vector3(0f, 0f, Mathf.Sign(rigidbody.velocity.z) * dodgeSpeed);  //*arb
+                        Vector3 velNorm = rigidbody.velocity.normalized;
+                        Vector3 dodgeVec = (velNorm + new Vector3(move.x, 0f, move.z))/2f;
+                        rigidbody.velocity += new Vector3(dodgeVec.x * dodgeSpeed*.5f , 0f,dodgeVec.z * dodgeSpeed);  //*arb
                         playerScript.PlayDodgeSound();
 
-                        float dodgeCool = (rigidbody.velocity.magnitude / 1000f);
-                        float dodgeThrowDelayCool = 1f + (rigidbody.velocity.magnitude / 1000f);
+                        float dodgeCool = .25f+ (rigidbody.velocity.magnitude / 1000f);
                         Invoke("SetDodgingF", dodgeCool);
-                        Invoke("SetDodgeThrowDelayF", dodgeThrowDelayCool);
 
 
                     }
-                    else
-                    {
-                        print("Dodge!");
-                        isDodging = true;
-
-                        if (animator)
-                        {
-                            animator.SetTrigger("Dodge");
-                        }
-
-                        staminaCool += staminaDodgeCost;
-                        rigidbody.velocity += new Vector3(0f, 0f, GetDodgeDirection() * dodgeSpeed);  //*arb
-                        playerScript.PlayDodgeSound();
-
-                        float dodgeCool = .5f + (rigidbody.velocity.magnitude / 1000f);
-                        float dodgeThrowDelayCool = 1f + (rigidbody.velocity.magnitude / 1000f);
-                        Invoke("SetDodgingF", dodgeCool);
-                        Invoke("SetDodgeThrowDelayF", dodgeThrowDelayCool);
-                    }
+       
                 }
+
 
 
                 //jump throw init
