@@ -1531,9 +1531,9 @@ public class Controller3D : MonoBehaviour
                         rigidbody.velocity += new Vector3(dodgeVec.x * dodgeSpeed*.5f , 0f,dodgeVec.z * dodgeSpeed);  //*arb
                         playerScript.PlayDodgeSound();
 
-                        float dodgeCool = .25f+ (rigidbody.velocity.magnitude / 1000f); // arbs
+                        float dodgeCool = .2f + (rigidbody.velocity.magnitude / 1000f); // arbs
                         print("dodgeCool = " + dodgeCool);
-                        SlowDownByVelocity(dodgeCool/9f, dodgeCool);  // arbs
+                        SlowDownByVelocity(dodgeCool/8f, dodgeCool);  // arbs
                         Invoke("SetDodgingF", dodgeCool);
 
 
