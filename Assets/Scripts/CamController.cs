@@ -19,7 +19,7 @@ public class CamController : MonoBehaviour {
     
     private float offsetX;
 
-	private float zoomPadding= -10f;
+	private float zoomPadding= -12f;
     private float zoomWeight = 5f;
     float maxZoomSize = 50.0f;
     float smallestZoomSize = 0f;
@@ -33,7 +33,7 @@ public class CamController : MonoBehaviour {
 	private float cameraSmoothe = 1.5f;
 
     public float playerWeight = 5f;
-
+    public float ballWeight = 1f;
      public float aiWeight = 1f;
 
     public bool movable = false;
@@ -133,17 +133,17 @@ public class CamController : MonoBehaviour {
                     gameObject.transform.position = new Vector3(nuX, position0.y, position0.z);
                 }
 
-                float nuSize = Mathf.Clamp((Mathf.Abs((MaxDistance() / (zoomWeight /* * fxZoom   << -- Lets come back to this idea */))) + zoomPadding), smallestZoomSize, maxZoomSize);
+                float nuSize = Mathf.Clamp((Mathf.Abs((MaxDistance() / (zoomWeight * fxZoom ))) + zoomPadding), smallestZoomSize, maxZoomSize);
                 if (type == CameraType.Perspective)
                 {
                     float sizePrev = this.GetComponent<Camera>().fieldOfView;
-                    this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(sizePrev, (nuSize + size0Persp) / 2f, ref zoomDamp, cameraSmoothe / (fxZoom * fxZoom));
+                    this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(sizePrev, (nuSize + size0Persp) / 2f, ref zoomDamp, cameraSmoothe / Mathf.Pow(fxZoom,fxZoom));
                 }
                 else
                 {
                     float sizePrev = this.GetComponent<Camera>().orthographicSize;
                     //print("size = " +  (nuSize + size0Main)/2f);
-                    this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(sizePrev, (nuSize + size0Main) / 2f, ref zoomDamp, cameraSmoothe / (fxZoom * fxZoom));
+                    this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(sizePrev, (nuSize + size0Main) / 2f, ref zoomDamp, cameraSmoothe / Mathf.Pow(fxZoom, fxZoom));
                 }
 
             }
@@ -253,9 +253,13 @@ public class CamController : MonoBehaviour {
 
         fxZoom = (fxCount * fxMultiplier) + 1;
 
-     //   print("fxZoom = " + fxCount * fxMultiplier);
+        //print("fxZoom = " + fxZoom);
 
-		return ((max - min) * xMultiplier);
+
+        float maxDistance = (max - min) * xMultiplier;
+       // print("maxDistance = " + maxDistance);
+
+        return (maxDistance);
 	}
 
 	public float GetAverage(){
@@ -266,14 +270,20 @@ public class CamController : MonoBehaviour {
         List<float> contactedBallsX = new List<float>();
 
 		foreach (GameObject ball in gameManager.levelManager.balls) {
-            sum += ball.transform.position.x;
 
             Ball ballComp = ball.GetComponent<Ball>();
 
             if (ballComp.contact || (ballComp.isSupering && ballComp.isCharging))
             {
                 contactedBallsX.Add(ball.transform.position.x);
+                sum += ball.transform.position.x * ballWeight *2f;
             }
+            else
+            {
+                sum += ball.transform.position.x * ballWeight;
+            }
+
+            
 
         }
 		foreach (GameObject player in levelManager.GetPlayers()) {
