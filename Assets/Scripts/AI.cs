@@ -631,10 +631,10 @@ public class AI : MonoBehaviour {
                                 levelManager.CatchDisplay(playerConfigObject.transform.position);
                                 ball.GetComponent<Ball>().DeactivateThrow();
 
-                                Pause(.25f);
+                                Pause(.5f);
 
                                 float catchPauseDuration = Mathf.Clamp(velocityCaught.magnitude / 100f, FXManager.min_CatchPauseDuration, FXManager.max_CatchPauseDuration);
-                                float catchPausePreDelay = .25f;
+                                float catchPausePreDelay = .36f;
 
                                 DelayPause(catchPauseDuration, catchPausePreDelay);
 

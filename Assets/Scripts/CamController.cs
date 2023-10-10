@@ -245,7 +245,7 @@ public class CamController : MonoBehaviour {
             Ball ballComp = ball.GetComponent<Ball>();
             if (ballComp.contact || ballComp.isSupering)
             {
-                fxCount += 1;   
+                //fxCount += 1;   
                 // print("fxMultiplier = " + fxMultiplier);
             }
 

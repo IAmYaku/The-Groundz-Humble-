@@ -914,7 +914,7 @@ public class Controller3D : MonoBehaviour
                             ballComp.DeactivateThrow();
 
                             float hitPauseDuration = Mathf.Clamp( velocityCaught.magnitude / 100f, 0, 3f);
-                            float hitPausePreDelay =0f;
+                            float hitPausePreDelay = .36f;
 
                             DelayPause(hitPauseDuration, hitPausePreDelay);
 
