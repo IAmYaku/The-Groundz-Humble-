@@ -895,14 +895,12 @@ public class Controller3D : MonoBehaviour
                                 Invoke("ResetCatchTrigger", 1f);
                             }
 
-                            playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
                             ballCaught = true;
                             ResetBallCaught(.5f);
 
                             ballComp.playCatch();
 
                             playerScript.TriggerCatchFX();
-                            playerScript.SetHitFX(false);
 
                             levelManager.ClearContacts(ball);
                             levelManager.OutDisplay(levelManager.throws[ball].transform.GetChild(0).gameObject);

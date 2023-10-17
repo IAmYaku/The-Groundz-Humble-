@@ -36,6 +36,8 @@ public class Ball : MonoBehaviour {
     public bool grounded =true;
 
     public bool contact;
+   // GameObject playerHit;
+
     private bool hasMag;
     private float magnetism;
     private Transform target;
@@ -690,8 +692,11 @@ public class Ball : MonoBehaviour {
     {
         aiAware = aI;
     }
+
+
 }
         
-    
+   
+
 
 

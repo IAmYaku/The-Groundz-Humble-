@@ -120,7 +120,7 @@ public class AI : MonoBehaviour {
 	//public bool ballContact;
 	public bool ballGrabbed = false;
 	public bool ballThrown;
-	public bool ballCaught;
+    public bool ballCaught;
 
     public bool isBlocking;
 
@@ -622,6 +622,7 @@ public class AI : MonoBehaviour {
                                 ballCaught = true;     // what if therre's multiple balls
                                 ResetBallCaught(.5f);
 
+                                playerScript.SetHitFX(false);
                                 ball.GetComponent<Ball>().playCatch();
                                 levelManager.ClearContacts(ball);
                                 levelManager.AddCatch(ball, parent);
@@ -804,7 +805,6 @@ public class AI : MonoBehaviour {
                             staminaCool += 5f;
 
                             ballGrabbed = false;
-                            ballCaught = false;
                             // Debug.Log("AI Standing Throw");
 
                             if (playerScript.team == 1)
@@ -1264,7 +1264,6 @@ public class AI : MonoBehaviour {
         ball.GetComponent<Ball>().Throw(throww, playerScript.color, true, magnetism,targetedOpp,renderLength, 1f);
         levelManager.AddThrow(ball, parent);
         ballGrabbed = false;
-        ballCaught = false;
         throwPower = gameObject.GetComponentInParent<Player>().GetThrowPower0();
 
         if (animator)
@@ -1631,7 +1630,6 @@ public class AI : MonoBehaviour {
     public void DropBall()
     {
         ballGrabbed = false;
-        ballCaught = false;
         ball.GetComponent<Ball>().grabbed = false;
         ball.GetComponent<Rigidbody>().useGravity = true;
         ball.GetComponent<SphereCollider>().enabled = true;

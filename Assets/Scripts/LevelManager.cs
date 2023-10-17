@@ -948,8 +948,11 @@ public class LevelManager : MonoBehaviour
         {
             foreach (GameObject player in hits[ball])
             {
-                PlayerConfiguration pConfig = player.GetComponent<Player>().playerConfigObject.GetComponent<PlayerConfiguration>();
+                Player playerComp = player.GetComponent<Player>();
+                PlayerConfiguration pConfig = playerComp.playerConfigObject.GetComponent<PlayerConfiguration>();
                 pConfig.RemoveContact();
+
+                playerComp.SetHitFX(false);
 
                     /*
                     ParticleSystem ps = player.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();                    //gr land ... I dont even think this gets unnormalized
@@ -1190,6 +1193,7 @@ public class LevelManager : MonoBehaviour
             player.GetComponentInChildren<SphereCollider>().enabled = true;
             player.GetComponentInChildren<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
             player.GetComponentInChildren<Rigidbody>().useGravity = true;
+            player.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
 
             if (player.GetComponent<Player>().hasAI)
             {
@@ -1204,7 +1208,7 @@ public class LevelManager : MonoBehaviour
                 player.GetComponentInChildren<Rigidbody>().isKinematic = false;
                 player.GetComponentInChildren<Controller3D>().enabled = true;
                 Controller3D.throwMagnetism = throwMag;
-                player.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
+              
 
             }
 
@@ -1420,7 +1424,8 @@ public class LevelManager : MonoBehaviour
             playerconfigObject.GetComponent<Rigidbody>().useGravity = true;
             playerconfigObject.GetComponent<Rigidbody>().isKinematic = false;
             player.GetComponent<Player>().shadow.SetActive(true);
-        
+            player.GetComponent<Player>().playerAura.SetActive(true);  //aura
+
 
             if (player.GetComponent<Player>().hasAI)
             {
@@ -1452,7 +1457,6 @@ public class LevelManager : MonoBehaviour
             //    player.GetComponentInChildren<Controller3D>().SetTouch0FXActivate(false);
 
                 //   player.GetComponentInChildren<Controller3D>().animator.runtimeAnimatorController = player.GetComponentInChildren<Controller3D>().play;
-                player.GetComponent<Player>().playerAura.SetActive(true);  //aura
                 player.GetComponentInChildren<Controller3D>().FaceOpp();
             }
 

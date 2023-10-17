@@ -223,14 +223,13 @@ public class CamController : MonoBehaviour {
                     fxCount += 2;
                    // print("fxMultiplier = " + fxMultiplier);
                 }
-                else
+            }
+            else
                 {
-                  if(  playerComp.aiObject.GetComponent<AI>().ballCaught)
+                    if (playerComp.aiObject.GetComponent<AI>().ballCaught)
                     {
                         fxCount += 2;
-                        // print("fxMultiplier = " + fxMultiplier);
                     }
-                }
             }
         }
 
@@ -268,8 +267,9 @@ public class CamController : MonoBehaviour {
 		float objectsCount = gameManager.levelManager.balls.Count +  levelManager.GetPlayers().Count;
 
         List<float> contactedBallsX = new List<float>();
+        List<float> ballCaughtPos = new List<float>();
 
-		foreach (GameObject ball in gameManager.levelManager.balls) {
+        foreach (GameObject ball in gameManager.levelManager.balls) {
 
             Ball ballComp = ball.GetComponent<Ball>();
 
@@ -288,19 +288,45 @@ public class CamController : MonoBehaviour {
         }
 		foreach (GameObject player in levelManager.GetPlayers()) {
 
-            if (player.GetComponent<Player>().hasAI)
+            float fxWeight = 2f;
+
+            Player playerComp = player.GetComponent<Player>();
+
+            if (playerComp.hasAI)
             {
                 charWeight = aiWeight;
+                if (playerComp.aiObject.GetComponent<AI>().ballCaught)
+                {
+
+                    ballCaughtPos.Add(playerComp.playerConfigObject.transform.position.x);
+                    charWeight += fxWeight;
+                }
             }
             else
             {
+              
                 charWeight = playerWeight ;
+                if (playerComp.controller3DObject.GetComponent<Controller3D>().ballCaught)
+                {
+                    ballCaughtPos.Add(playerComp.playerConfigObject.transform.position.x);
+                    charWeight += fxWeight;
+                }
             }
-            sum += player.transform.position.x * charWeight;
+            sum += playerComp.playerConfigObject.transform.position.x * charWeight;
 		}
 
         float averageXPosition = sum / (objectsCount);
-        
+
+
+        if (ballCaughtPos.Count > 0)
+        {
+            foreach (float ballPositionX in ballCaughtPos)
+            {
+                averageXPosition = (averageXPosition + ballPositionX) / 2;
+            }
+        }
+
+
         if (contactedBallsX.Count > 0)
         {
             foreach (float ballPositionX in contactedBallsX)
@@ -308,6 +334,8 @@ public class CamController : MonoBehaviour {
                 averageXPosition = (averageXPosition + ballPositionX) / 2;
             }
         }
+
+
 
         return averageXPosition;
 

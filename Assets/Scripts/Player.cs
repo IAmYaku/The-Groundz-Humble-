@@ -699,6 +699,7 @@ public class Player : MonoBehaviour
                 aiScript.isKnockedOut = false;
                 aiScript.playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
                 aiScript.enabled = false;
+                hitObject.SetActive(false);
 
                 NavMeshAgent navMeshAgent = playerConfigObject.GetComponent<NavMeshAgent>();
                 navMeshAgent.enabled = false;
