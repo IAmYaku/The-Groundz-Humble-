@@ -163,6 +163,8 @@ MonoBehaviour:
   winFX: {fileID: 107778, guid: e6b0c8eedb7b4b148b2d830fdcf06603, type: 3}
   plusOneFX: {fileID: 2577359004982115989, guid: 9abab22e7e168844cb0f41f662e8559a, type: 3}
   hitPause: {fileID: 2025593996}
+  reboundPlayerFX: {fileID: 4773915452555913023, guid: 193234780a809eb4a98990a5b3204ef9, type: 3}
+  reboundBallFX: {fileID: 4773915452555913023, guid: 409f70e04d6b84a40837e4e906b2ef16, type: 3}
 --- !u!1 &1463966462303492297
 GameObject:
   m_ObjectHideFlags: 0

@@ -410,6 +410,7 @@ public class LevelManager : MonoBehaviour
                         String outType = "h";
                         Remove(player, outType, ball);
                         PlayOuts();
+                        fXManager.InstantiateReboundFX(ball, throwerObject);
 
                     }
                     if (hits.ContainsKey(ball))

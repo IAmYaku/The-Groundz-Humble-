@@ -47,6 +47,11 @@ public class FXManager : MonoBehaviour
     public static float min_CatchPauseDuration = 0.25f;
     public static float max_CatchPauseDuration = 2f;
 
+    public GameObject reboundPlayerFX;
+    public GameObject reboundBallFX;
+
+
+
 
     void Start()
     {
@@ -291,6 +296,17 @@ public class FXManager : MonoBehaviour
     {
         hitPauseDuration = hitPauseDur;
     }
+
+    internal void InstantiateReboundFX(GameObject ball, GameObject player)
+    {
+        GameObject curentBallPlayerFX = Instantiate(reboundBallFX, ball.transform.position, Quaternion.identity);
+        GameObject curentReboundPlayerFX = Instantiate(reboundPlayerFX, player.transform.GetChild(0));
+         curentReboundPlayerFX.transform.position = new Vector3(curentReboundPlayerFX.transform.position.x, 0, curentReboundPlayerFX.transform.position.z);
+
+
+    }
+
+
 
 
     /*
