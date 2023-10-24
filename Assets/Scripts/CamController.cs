@@ -128,7 +128,7 @@ public class CamController : MonoBehaviour {
                 {          
                     Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f) * xMultiplier;                                                               // blows up if there ant any balls or players
                    // float deltaX = (average.x - transform.position.x) * xWeight;
-                    float nuX = Mathf.SmoothDamp(transform.position.x, average.x, ref xDamp, cameraSmoothe/ (fxZoom));
+                    float nuX = Mathf.SmoothDamp(transform.position.x, average.x, ref xDamp, cameraSmoothe/ (fxZoom * fxZoom));
                     nuX = Mathf.Clamp(nuX, minXpos,maxXpos);
                     gameObject.transform.position = new Vector3(nuX, position0.y, position0.z);
                 }

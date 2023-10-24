@@ -165,6 +165,7 @@ MonoBehaviour:
   hitPause: {fileID: 2025593996}
   reboundPlayerFX: {fileID: 4773915452555913023, guid: 193234780a809eb4a98990a5b3204ef9, type: 3}
   reboundBallFX: {fileID: 4773915452555913023, guid: 409f70e04d6b84a40837e4e906b2ef16, type: 3}
+  reboundTrackFX: {fileID: 2723875804276846448, guid: 3f34fdac359934f7c962022fb9e00d67, type: 3}
 --- !u!1 &1463966462303492297
 GameObject:
   m_ObjectHideFlags: 0

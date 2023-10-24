@@ -49,7 +49,7 @@ public class FXManager : MonoBehaviour
 
     public GameObject reboundPlayerFX;
     public GameObject reboundBallFX;
-
+    public GameObject reboundTrackFX;
 
 
 
@@ -299,9 +299,11 @@ public class FXManager : MonoBehaviour
 
     internal void InstantiateReboundFX(GameObject ball, GameObject player)
     {
-        GameObject curentBallPlayerFX = Instantiate(reboundBallFX, ball.transform.position, Quaternion.identity);
-        GameObject curentReboundPlayerFX = Instantiate(reboundPlayerFX, player.transform.GetChild(0));
-         curentReboundPlayerFX.transform.position = new Vector3(curentReboundPlayerFX.transform.position.x, 0, curentReboundPlayerFX.transform.position.z);
+        GameObject currentBallPlayerFX = Instantiate(reboundBallFX, ball.transform.position, Quaternion.identity);
+        GameObject currentReboundPlayerFX = Instantiate(reboundPlayerFX, player.transform.GetChild(0));
+         currentReboundPlayerFX.transform.position = new Vector3(currentReboundPlayerFX.transform.position.x, 0, currentReboundPlayerFX.transform.position.z);
+        GameObject linkFx = Instantiate(reboundTrackFX, ball.transform.position, Quaternion.identity);
+        linkFx.GetComponent<ReboundLinkFX>().Track(currentReboundPlayerFX.transform.GetChild(0).transform.position, currentBallPlayerFX.transform.position);
 
 
     }
