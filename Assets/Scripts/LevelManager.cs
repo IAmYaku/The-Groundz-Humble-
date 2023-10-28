@@ -1273,7 +1273,7 @@ public class LevelManager : MonoBehaviour
         
         if (team1Scored)
         {
-            // DecreaseThrowMag(difficultyScaler);
+         
             if (tm2.GetPlayerCount() < GlobalConfiguration.Instance.maxTeamCount)
             {
                 AddAI(2,arcadeScript.GetCurrentOppName());
@@ -1288,7 +1288,19 @@ public class LevelManager : MonoBehaviour
                         }
                     }
                 }
-            
+
+            foreach (GameObject player in tm1.players)
+            {
+                if (!player.GetComponent<Player>().hasAI)
+                {
+                    {
+                        // DecreaseThrowMag(difficultyScaler);
+                        DecreaseControllerHelp(player.GetComponentInChildren<Controller3D>(), difficultyScaler/10f);
+                    }
+                }
+            }
+
+
         }
 /*
         else
@@ -1308,6 +1320,11 @@ public class LevelManager : MonoBehaviour
         }
 */
         
+    }
+
+    private void DecreaseControllerHelp(Controller3D controller3D, float difficultyScaler)
+    {
+       // controller3D.DecreaseHelps(difficultyScaler);
     }
 
     private void AddAI(int team,string charName)

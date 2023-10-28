@@ -76,7 +76,8 @@ public class Controller3D : MonoBehaviour
     public Vector3 handSize = new Vector3(3f, 3f, 3f);
     public float grabRadius = 5f;
     public static float grabHelpMultiplier = 1f; // gr or diff
-    Vector3 cockBackPos;
+    public static float catchHelpMultiplier = 2f;
+   Vector3 cockBackPos;
 
     public GameObject nearestBall;
     public GameObject ball;                 // esentially ballGrabbed
@@ -562,7 +563,7 @@ public class Controller3D : MonoBehaviour
         if (nearestBall)
         {
 
-            if (!ballGrabbed && IsInGrabDistance(nearestBall, "ball") && (velMag > slowDownThresh))
+            if (!ballGrabbed && ObjectIsInPickUpDistance(nearestBall) && (velMag > slowDownThresh))
             {
                 if (!nearestBall.GetComponent<Ball>().thrown && IsFacingObj(nearestBall))
                 {
@@ -854,6 +855,7 @@ public class Controller3D : MonoBehaviour
 
     void CheckGrab()
     {
+
         if (!ballGrabbed)                                       // ~ pick up /catch              
         {
             float action1Cost = 5f;
@@ -863,7 +865,8 @@ public class Controller3D : MonoBehaviour
             {
                 nearestBall = GetNearestBall();                                         // set in PickupActivate but whatevs
 
-                if (ObjectIsInGrabDistance(nearestBall))
+                if ((ObjectIsInCatchDistance(nearestBall) && (ThrownByOpp(nearestBall, 2) || ThrownByOpp(nearestBall, 1))) 
+                    || (ObjectIsInPickUpDistance(nearestBall) && nearestBall.GetComponent<Ball>().grounded))
                 {
 
                     ball = nearestBall;
@@ -899,6 +902,7 @@ public class Controller3D : MonoBehaviour
                             ResetBallCaught(.5f);
 
                             ballComp.playCatch();
+                            ballComp.ResetThrowns();
 
                             playerScript.TriggerCatchFX();
 
@@ -1007,7 +1011,7 @@ public class Controller3D : MonoBehaviour
             nearestBall = GetNearestBall();
             if (nearestBall)
             {
-                if (ObjectIsInGrabDistance(nearestBall) && nearestBall.GetComponent<Ball>().grounded)
+                if (ObjectIsInPickUpDistance(nearestBall) && nearestBall.GetComponent<Ball>().grounded)
                 {
                     nearestBall.GetComponent<Ball>().PickUpActivate(playerScript.color);
                 }
@@ -1149,7 +1153,7 @@ public class Controller3D : MonoBehaviour
 
 
         //Tag
-        if (IsInGrabDistance(GetTargetedOpp().gameObject, "ball") && GetTargetedOpp())
+        if (IsInGrabDistance(GetTargetedOpp().gameObject) && GetTargetedOpp())
         {
             cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
             cockBackPos = (cockBackPos + GetTargetedOpp().position) / 2;      // tag pos  
@@ -1344,6 +1348,11 @@ public class Controller3D : MonoBehaviour
         {
             animator.SetBool("hasBall", false);
         }
+    }
+
+    internal void DecreaseHelps(float difficultyScaler)
+    {
+        catchHelpMultiplier = Mathf.Clamp(catchHelpMultiplier- difficultyScaler, 1, 100f);
     }
 
     private void DodgeThrow()   // button throw
@@ -1664,14 +1673,14 @@ public class Controller3D : MonoBehaviour
     {
         if (rigidbody.velocity.z > 0)
         {
-            if (ObjectIsInGrabDistance(levelManager.stage.BackPlane))
+            if (IsInGrabDistance(levelManager.stage.BackPlane))
             {
                 return false;
             }
         }
         else
         {
-            if (ObjectIsInGrabDistance(levelManager.stage.FrontPlane))
+            if (IsInGrabDistance(levelManager.stage.FrontPlane))
             {
                 return false;
             }
@@ -1686,7 +1695,7 @@ public class Controller3D : MonoBehaviour
         foreach (GameObject wall in walls)
         {
 
-            return (ObjectIsInGrabDistance(wall));
+            return (IsInGrabDistance(wall));
         }
         return false;
     }
@@ -1705,7 +1714,7 @@ public class Controller3D : MonoBehaviour
 
             if (otherNum != number)
             {
-                if (ObjectIsInGrabDistance(otherConfig) && !oCIsOut)
+                if (IsInGrabDistance(otherConfig) && !oCIsOut)
                 {
                    // print("Player Near");
                     return true;
@@ -2178,7 +2187,7 @@ public class Controller3D : MonoBehaviour
         {
             if (ball.GetComponent<Ball>().thrownBy1 && gameObject.GetComponentInParent<Player>().team == 2)
             {
-                ball.GetComponent<Ball>().thrownBy1 = false;
+              
                 return true;
             }
 
@@ -2187,7 +2196,7 @@ public class Controller3D : MonoBehaviour
         {
             if (ball.GetComponent<Ball>().thrownBy2 && gameObject.GetComponentInParent<Player>().team == 1)
             {
-                ball.GetComponent<Ball>().thrownBy2 = false;
+
                 return true;
             }
 
@@ -2195,16 +2204,17 @@ public class Controller3D : MonoBehaviour
         return false;
     }
 
-    public bool ObjectIsInGrabDistance(GameObject nearest)
+
+    public bool ObjectIsInCatchDistance(GameObject nearest)
     {
-        if (playerConfigObject.transform.position.x + grabRadius > nearest.transform.position.x &&
-                 playerConfigObject.transform.position.x - grabRadius < nearest.transform.position.x)
+        if (playerConfigObject.transform.position.x + grabRadius * catchHelpMultiplier > nearest.transform.position.x &&
+                 playerConfigObject.transform.position.x - grabRadius * catchHelpMultiplier < nearest.transform.position.x)
         {
-            if (playerConfigObject.transform.position.y + grabRadius > nearest.transform.position.y &&
-                playerConfigObject.transform.position.y - grabRadius < nearest.transform.position.y)
+            if (playerConfigObject.transform.position.y + grabRadius * catchHelpMultiplier > nearest.transform.position.y &&
+                playerConfigObject.transform.position.y - grabRadius * catchHelpMultiplier < nearest.transform.position.y)
             {
-                if (playerConfigObject.transform.position.z + grabRadius > nearest.transform.position.z &&
-                    playerConfigObject.transform.position.z - grabRadius < nearest.transform.position.z)
+                if (playerConfigObject.transform.position.z + grabRadius * catchHelpMultiplier > nearest.transform.position.z &&
+                    playerConfigObject.transform.position.z - grabRadius * catchHelpMultiplier < nearest.transform.position.z)
                 {
                     float angle = 180f;
                     //  if (Vector3.Angle(playerConfigObject.transform.forward, nearest.transform.position - playerConfigObject.transform.position) < angle)
@@ -2217,10 +2227,11 @@ public class Controller3D : MonoBehaviour
         return false;
     }
 
-    private bool IsInGrabDistance(GameObject objectToCheck, string type)
+
+    public bool ObjectIsInPickUpDistance(GameObject objectToCheck)
     {
         if (playerConfigObject.transform.position.x + grabRadius * grabHelpMultiplier > objectToCheck.transform.position.x &&
-                   playerConfigObject.transform.position.x - grabRadius * grabHelpMultiplier < objectToCheck.transform.position.x)
+                 playerConfigObject.transform.position.x - grabRadius * grabHelpMultiplier < objectToCheck.transform.position.x)
         {
             if (playerConfigObject.transform.position.y + grabRadius * grabHelpMultiplier > objectToCheck.transform.position.y &&
                 playerConfigObject.transform.position.y - grabRadius * grabHelpMultiplier < objectToCheck.transform.position.y)
@@ -2228,7 +2239,7 @@ public class Controller3D : MonoBehaviour
                 if (playerConfigObject.transform.position.z + grabRadius * grabHelpMultiplier > objectToCheck.transform.position.z &&
                     playerConfigObject.transform.position.z - grabRadius * grabHelpMultiplier < objectToCheck.transform.position.z)
                 {
-                    if ( type == "ball")
+                  //  if (type == "ball")
                     {
                         if ((IsAboutToCollideWBall(objectToCheck) && objectToCheck.GetComponent<Ball>().thrown == false) && !inBallPause && ballPauseReady)
                         {
@@ -2247,7 +2258,28 @@ public class Controller3D : MonoBehaviour
                     }
                 }
             }
+            
         }
+        return false;
+    }
+
+    private bool IsInGrabDistance(GameObject objectToCheck)
+    {
+        if (playerConfigObject.transform.position.x + grabRadius * grabHelpMultiplier > objectToCheck.transform.position.x &&
+                   playerConfigObject.transform.position.x - grabRadius * grabHelpMultiplier < objectToCheck.transform.position.x) 
+        {
+            if (playerConfigObject.transform.position.y + grabRadius * grabHelpMultiplier > objectToCheck.transform.position.y &&
+                playerConfigObject.transform.position.y - grabRadius * grabHelpMultiplier < objectToCheck.transform.position.y)
+            {
+                if (playerConfigObject.transform.position.z + grabRadius * grabHelpMultiplier > objectToCheck.transform.position.z &&
+                    playerConfigObject.transform.position.z - grabRadius * grabHelpMultiplier < objectToCheck.transform.position.z)
+                {
+                    return true;
+                }
+
+                }
+        }
+        
         return false;
     }
 

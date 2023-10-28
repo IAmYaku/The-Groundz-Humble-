@@ -249,7 +249,7 @@ public class Ball : MonoBehaviour {
             {
                 Controller3D playerController = player.transform.GetChild(1).gameObject.GetComponent<Controller3D>();
 
-                if ( playerController.ObjectIsInGrabDistance(this.gameObject))
+                if ( playerController.ObjectIsInPickUpDistance(this.gameObject))
                 {
                     isInPickUpRange = true;
                     break;
@@ -693,7 +693,11 @@ public class Ball : MonoBehaviour {
         aiAware = aI;
     }
 
-
+    internal void ResetThrowns()
+    {
+       thrownBy1 = false;
+        thrownBy2 = false;
+    }
 }
         
    
