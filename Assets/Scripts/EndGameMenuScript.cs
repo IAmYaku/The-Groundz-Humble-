@@ -102,7 +102,7 @@ public class EndGameMenuScript : MonoBehaviour {
         {
             postgameUI.transform.GetChild(i).gameObject.SetActive(false);
         }
-        postgameUI.SetActive(false);
+ 
     }
 
     public void LoadControls()

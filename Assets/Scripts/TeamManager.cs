@@ -384,6 +384,15 @@ public class TeamManager : MonoBehaviour
         return (int)(UnityEngine.Random.Range(0f, 3.99f));
     }
 
+    public void ResetCharCounts()
+    {
+        ninaCount = 0;
+        kingCount = 0;
+        mackCount = 0;
+
+
+    }
+
     internal void SetInitAICount(int count)
     {
         aiCount = count;

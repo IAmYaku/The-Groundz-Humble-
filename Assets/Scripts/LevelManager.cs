@@ -43,10 +43,6 @@ public class LevelManager : MonoBehaviour
     public List<GameObject> balls = new List<GameObject>();
     List<Vector3> ballSpwanLocations;
 
-    List<GameObject> tm1UIs;
-    List<GameObject> tm2UIs;
-
-
     GameObject logFeed;
 
     GameObject timerObj;
@@ -1222,6 +1218,8 @@ public class LevelManager : MonoBehaviour
             GlobalConfiguration.Instance.ClearPlayers(2, clearAdded);
             tm2.ClearAdded();
             stage.ClearSpawnpoints(2);
+            DeactivatePlayerUI();
+            tm2.ResetCharCounts();
             SetPlayerUI(2, tm2.GetPlayerCount());
             
             
@@ -1255,6 +1253,18 @@ public class LevelManager : MonoBehaviour
         }
 
         PlayWhistle();
+    }
+
+    private void DeactivatePlayerUI()
+    {
+
+        List<GameObject> playerUIs = cgg.GetPlayerUIs(2);
+
+        foreach (GameObject playerUI in playerUIs)
+        {
+            playerUI.SetActive(false);
+        }
+
     }
 
     private void RemoveAI(GameObject player)
