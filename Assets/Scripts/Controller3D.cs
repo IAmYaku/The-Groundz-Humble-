@@ -905,6 +905,7 @@ public class Controller3D : MonoBehaviour
                             ballComp.ResetThrowns();
 
                             playerScript.TriggerCatchFX();
+                            playerScript.TriggerWinFX();
 
                             levelManager.ClearContacts(ball);
                             levelManager.OutDisplay(levelManager.throws[ball].transform.GetChild(0).gameObject);

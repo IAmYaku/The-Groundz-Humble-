@@ -45,7 +45,7 @@ public class FXManager : MonoBehaviour
     public static float max_HitPauseDuration = 2f;
 
     public static float min_CatchPauseDuration = 0.25f;
-    public static float max_CatchPauseDuration = 2f;
+    public static float max_CatchPauseDuration = 1.5f;
 
     public GameObject reboundPlayerFX;
     public GameObject reboundBallFX;

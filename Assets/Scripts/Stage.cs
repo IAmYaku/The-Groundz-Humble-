@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AI;
 
 public class Stage : MonoBehaviour
 {
@@ -276,5 +277,40 @@ public class Stage : MonoBehaviour
         {
             tm1_spawnPoints.Clear();
         }
+    }
+
+    internal void IncreaseSize(float difficultyScaler)
+    {
+
+        BackPlane.transform.localScale +=  Vector3.one * (difficultyScaler / 10f);
+        FrontPlane.transform.localScale += Vector3.one * (difficultyScaler / 10f);
+        LeftPlane.transform.localScale += Vector3.one * (difficultyScaler / 10f);
+        RightPlane.transform.localScale += Vector3.one * (difficultyScaler / 10f);
+        TopPlane.transform.localScale += Vector3.one * (difficultyScaler / 10f);
+        BottomPlane.transform.localScale += Vector3.one * (difficultyScaler / 10f);
+
+        BackPlane.transform.localPosition = new Vector3(BackPlane.transform.localPosition.x, BackPlane.transform.localPosition.y + 1.5f, BackPlane.transform.localPosition.z + 1.5f);
+        FrontPlane.transform.localPosition = new Vector3(FrontPlane.transform.localPosition.x, FrontPlane.transform.localPosition.y + 1.5f, FrontPlane.transform.localPosition.z - 1.5f);
+
+        RightPlane.transform.localPosition = new Vector3(RightPlane.transform.localPosition.x + 1.5f, RightPlane.transform.localPosition.y + 1.5f, RightPlane.transform.localPosition.z);
+        LeftPlane.transform.localPosition = new Vector3(LeftPlane.transform.localPosition.x - 1.5f, LeftPlane.transform.localPosition.y + 1.5f, LeftPlane.transform.localPosition.z);
+
+        TopPlane.transform.localPosition = new Vector3(TopPlane.transform.localPosition.x, TopPlane.transform.localPosition.y, TopPlane.transform.localPosition.z);
+        BottomPlane.transform.localPosition = new Vector3(BottomPlane.transform.localPosition.x, BottomPlane.transform.localPosition.y, BottomPlane.transform.localPosition.z);
+
+
+        GameObject navMeshBottomObject = BottomPlane.transform.GetChild(0).gameObject;
+        NavMeshSurface navMeshSurface = navMeshBottomObject.GetComponent<NavMeshSurface>();
+       
+        navMeshSurface.BuildNavMesh();
+
+        farSideLine = BackPlane.transform.position.z;       // we overlap planes so this might not be 100 accurate
+        nearSideLine = FrontPlane.transform.position.z;
+        halfCourtLine = halfCourtBox.transform.position.x;
+        baseLineLeft = LeftPlane.transform.position.x;
+        baseLineRight = RightPlane.transform.position.x;
+        floor = playingLevelPlane.transform.position.y;
+        roof = TopPlane.transform.position.y;
+
     }
 }

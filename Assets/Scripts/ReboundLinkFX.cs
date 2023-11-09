@@ -7,7 +7,7 @@ public class ReboundLinkFX : MonoBehaviour
     Vector3 reboundPlayerFXPos;
     Vector3 reboundBallFXPos;
 
-     float trackSpeed = .5f;
+     float trackSpeed = 1f;
 
     bool isTracking;
 

@@ -622,7 +622,10 @@ public class AI : MonoBehaviour {
                                 ballCaught = true;     // what if therre's multiple balls
                                 ResetBallCaught(.5f);
 
-                                playerScript.SetHitFX(false);
+                               // playerScript.SetHitFX(false);
+                                playerScript.TriggerCatchFX();
+                                playerScript.TriggerWinFX();
+
                                 ball.GetComponent<Ball>().playCatch();
                                 levelManager.ClearContacts(ball);
                                 levelManager.AddCatch(ball, parent);

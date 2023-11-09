@@ -1280,6 +1280,7 @@ public class LevelManager : MonoBehaviour
 
         // GR check 
 
+     //   stage.IncreaseSize(difficultyScaler);
         
         if (team1Scored)
         {
