@@ -109,9 +109,9 @@ public class LevelManager : MonoBehaviour
     PostGameScreen postGameScript;
 
 
-    void Start()
+    void Awake()
     {
-        print("LevelManager start");
+        print("LevelManager awake");
 
         {
             gameManager = GlobalConfiguration.Instance.gameManager.GetComponent<GameManager>();
@@ -706,6 +706,12 @@ public class LevelManager : MonoBehaviour
     internal void SetGameMode(string v)
     {
         gameMode = v;
+
+        if (gameMode == "test")
+        {
+            CreateGameRule("basic");
+            print("test");
+        }
 
         if (gameMode == "arcade")
         {

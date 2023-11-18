@@ -45,7 +45,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     public static LoadPoint loadPoint;
 
-    public enum GameMode { none, arcade, multiplayer, story };
+    public enum GameMode { none, arcade, multiplayer, story, test };
     public GameMode gameMode = GameMode.none;
 
     List<MyJoystick> myJoysticks;
@@ -332,11 +332,19 @@ public class GlobalConfiguration : MonoBehaviour
 
     public void SetGameMode(string x)
     {
+        LevelManager lm = gameManager.levelManager;
+
         switch (x)
         {
+            case "test":
+                gameMode = GameMode.test;
+              
+                lm.SetGameMode("test");
+                break;
+
             case "arcade":                                         
                 gameMode = GameMode.arcade;
-                LevelManager lm = gameManager.levelManager;
+                lm = gameManager.levelManager;
                 lm.SetGameMode("arcade");         
                
 
