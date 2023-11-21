@@ -28,6 +28,8 @@ public class PlayerConfiguration : MonoBehaviour
     public Material out_mat;
     public Material default_mat;
 
+    public GameObject shieldObject;
+
     bool onGround;
     bool isJumping;
 
@@ -139,12 +141,13 @@ public class PlayerConfiguration : MonoBehaviour
          
                         TriggerKnockBack(ballHit.GetComponent<Rigidbody>().velocity, ballHitISupered);
                         SlowDownPlayer(hitDelay, stallTime);
+                        //BlockRelease();
 
 
-
-                        levelManager.AddHit(ballHit, parent);
+                        
 
                         levelManager.TriggerHitFX(gameObject, ballHit);
+                        levelManager.AddHit(ballHit, parent);
                         player.SetHitFX(true);
 
                         float ballHitPauseWeight = 50f;
@@ -212,6 +215,11 @@ public class PlayerConfiguration : MonoBehaviour
 
         }   
     }
+
+    private void BlockRelease()
+    {
+     
+        }
 
     private void SlowDownPlayer(float delayTime, float stallTime )
     {

@@ -755,6 +755,21 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+
+    public bool GetWasHitAlready(GameObject ball, GameObject player)
+    {
+        if (hits.ContainsKey(ball)) {
+            if (hits[ball].Contains(player))
+            {
+                print("Combo");
+                return true;
+            }
+        }
+
+
+        return false;
+    }
+
     public void AddThrow(GameObject ball, GameObject player)
     {
         if (!throws.ContainsKey(ball))

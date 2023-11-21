@@ -29,7 +29,7 @@ public class ReboundLinkFX : MonoBehaviour
             else
             {
                 isTracking = false;
-                print("Destroy track linkFX");
+                //print("Destroy track FX");
                 Destroy(this.gameObject);
             }
         }

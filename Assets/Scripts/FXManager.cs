@@ -50,6 +50,7 @@ public class FXManager : MonoBehaviour
     public GameObject reboundPlayerFX;
     public GameObject reboundBallFX;
     public GameObject reboundTrackFX;
+    public GameObject linkFX;
 
 
 
@@ -156,6 +157,18 @@ public class FXManager : MonoBehaviour
             hfx.transform.localScale = new Vector3(bv4s, bv4s, bv4s);
             // psMain.simulationSpeed = Mathf.Clamp(20 / (ballVelocity / 40), 15, 25);
         }
+        
+            if (!levelManager.GetWasHitAlready(ball,hittee.transform.parent.gameObject))
+        {
+            /*
+            print("linkFX");
+            GameObject linkObject = Instantiate(linkFX);
+            linkObject.GetComponent<ElectricLinkFX>().SetLink(ball, hittee);
+            */
+        }
+
+
+
         
     }
 

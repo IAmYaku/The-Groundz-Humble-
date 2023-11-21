@@ -440,6 +440,7 @@ public class TeamSelect : MonoBehaviour
     {
 
         LevelManager lm = GlobalConfiguration.Instance.gameManager.levelManager;
+
         TeamManager tm1 = lm.tm1;
         TeamManager tm2 = lm.tm2;
 

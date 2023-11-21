@@ -167,6 +167,7 @@ Transform:
   m_Children:
   - {fileID: 8661784757317650788}
   - {fileID: 4633801284461090}
+  - {fileID: 280910623821650279}
   m_Father: {fileID: 4518627636568236}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -192,6 +193,7 @@ MonoBehaviour:
   win: {fileID: 0}
   out_mat: {fileID: 0}
   default_mat: {fileID: 0}
+  shieldObject: {fileID: 625488069205001181}
   ballContact: 0
 --- !u!212 &212815806061031320
 SpriteRenderer:
@@ -586,6 +588,7 @@ MonoBehaviour:
   randomizing: 0
   debugMode: 0
   addedAtStage: 0
+  isPausing: 0
 --- !u!1 &3800021833339991587
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,8 +668,6 @@ MonoBehaviour:
   moveStaminaCost: 0
   catchStaminaCost: 0
   pickUpStaminaCost: 0
-  staminaDodgeCost: 10
-  staminaReadyCost: 25
   toughness: 2
   dodgeSpeed: 50
   isAudioReactive: 0
@@ -795,6 +796,38 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 706785f1-7e81-441d-8607-ce274c939985
     m_ActionName: Menu Controls/Start[/DualShock4GamepadHID/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cc506239-dbc2-4710-9146-0ee603340efd
+    m_ActionName: Menu Controls (Gamepad)/Movement[/DualSenseGamepadHID/leftStick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 07ea39db-52b0-4056-8479-7d75af95dd82
+    m_ActionName: Menu Controls (Gamepad)/Select[/DualSenseGamepadHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eb54b6e7-948b-4c38-a281-9450974daf57
+    m_ActionName: Menu Controls (Gamepad)/Cancel[/DualSenseGamepadHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 21e59408-ba04-4537-b44f-cb798f723b54
+    m_ActionName: Menu Controls (Keyboard)/Start[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 86b876f4-2d69-49a8-96f7-2b0600da4698
+    m_ActionName: Menu Controls (Keyboard)/Movement[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8c4cf9a9-8339-452f-911d-3f4d9359a2a0
+    m_ActionName: Menu Controls (Keyboard)/Select[/Mouse/leftButton,/Pen/tip]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ed411d0d-ad22-4b92-a97a-3421dbc434a9
+    m_ActionName: Menu Controls (Keyboard)/Cancel
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d0fd2246-36db-4223-aa69-61aae2aba107
+    m_ActionName: Menu Controls (Keyboard)/Point[/Mouse/position,/Pen/position]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player Controls A
@@ -5854,6 +5887,113 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1001 &3192713869484532447
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4792130470477374}
+    m_Modifications:
+    - target: {fileID: 2657372600424145154, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_Name
+      value: Block Shield
+      objectReference: {fileID: 0}
+    - target: {fileID: 2657372600424145154, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2891745943496587636, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 49f306c47d0064999ba7d1fe7d89a5e3, type: 2}
+    - target: {fileID: 2891745943496587636, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2891745943496587639, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2891745943496587639, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+--- !u!4 &280910623821650279 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3434895080175139768, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+  m_PrefabInstance: {fileID: 3192713869484532447}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &625488069205001181 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2657372600424145154, guid: 64d49a26f57ad8d4e909e87c83aeb57f, type: 3}
+  m_PrefabInstance: {fileID: 3192713869484532447}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6938025298965594141
 PrefabInstance:
   m_ObjectHideFlags: 0

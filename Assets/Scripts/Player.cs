@@ -678,6 +678,7 @@ public class Player : MonoBehaviour
         {
             if (controller3D.ballGrabbed)
             {
+                controller3D.BlockRelease();
                 controller3D.DropBall();
             }
 

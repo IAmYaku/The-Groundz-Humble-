@@ -26,6 +26,8 @@ public class MyJoystick
     public string altAction1Input;
     public string altSuper1Input;
     public string altDodge1Input;
+    public string altBlock1Input;
+
     public string altLeft1Input = "a";
     public string altRight1Input = "d";
     public string altUp1Input = "w";
@@ -130,7 +132,7 @@ public class MyJoystick
     private void InitPlayStation()                      // * initOther
     {
 
-        Debug.Log("Other controller detected @ myJoystick");
+        Debug.Log("InitPlaystaion");
 
         if (number == 0  || number == -1)
         {
@@ -147,10 +149,13 @@ public class MyJoystick
             altAction1Input = "h";
             altSuper1Input = "j";
             altDodge1Input = "k";
+            altBlock1Input = "u";
+
             altLeft1Input = "a";
             altRight1Input = "d";
             altUp1Input = "w";
             altDown1Input = "s";
+
 
 
             if (mode == "Basic")
@@ -177,6 +182,7 @@ public class MyJoystick
             altAction1Input = "u";
             altSuper1Input = "i";
             altDodge1Input = "o";
+
 
         }
         if (number == 2)

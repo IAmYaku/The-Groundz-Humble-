@@ -181,7 +181,7 @@ public class AI : MonoBehaviour {
     bool didAwarenessRoll;
     bool isAware;
 
-    bool isPausing;  // Gives a sense of realism between actions
+    public bool isPausing;  // Gives a sense of realism between actions
 
     private void Awake()
     {

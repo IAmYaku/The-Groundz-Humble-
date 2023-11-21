@@ -130,8 +130,11 @@ public class Controller3D : MonoBehaviour
     public float moveStaminaCost;
     public float catchStaminaCost;
     public float pickUpStaminaCost;
-    public float staminaDodgeCost = 10.0f;
-    public float staminaReadyCost = 5.0f;
+    float staminaDodgeCost = 40.0f;
+     float staminaReadyCost = 5.0f;
+     float staminaBlockCost = 40.0f;
+    bool blockCool = false;
+
 
     public float toughness = 15f;   // move to character scripts
 
@@ -325,6 +328,7 @@ public class Controller3D : MonoBehaviour
             CheckKeyGrab();
             CheckKeyDodge();
             CheckKeySuper();
+            CheckKeyBlock();
 
         }
     }
@@ -357,6 +361,20 @@ public class Controller3D : MonoBehaviour
         if ((Input.GetKeyDown(playerScript.joystick.altDodge1Input)))
         {
             Dodge();
+        }
+    }
+
+    private void CheckKeyBlock()
+    {
+        if (Input.GetKey(playerScript.joystick.altBlock1Input) && ballGrabbed)
+        {
+            Block();
+
+        }
+
+        if (Input.GetKeyUp(playerScript.joystick.altBlock1Input) && ballGrabbed)
+        {
+            BlockRelease();
         }
     }
 
@@ -1514,7 +1532,7 @@ public class Controller3D : MonoBehaviour
     private void Dodge()
     {
         float dodgeStaminaThresh =  staminaDodgeCost;
-        ;
+        
 
         {
             if (InBounds() && staminaCool < (stamina - dodgeStaminaThresh) && onGround)
@@ -1758,17 +1776,21 @@ public class Controller3D : MonoBehaviour
 
     private void CheckHasBallAnim()
     {
-        if (!ballGrabbed)
+        if (!isBlocking)
         {
+            if (!ballGrabbed)
+            {
 
-            if (animator.GetBool("hasBall") == true)
-                animator.SetBool("hasBall", false);
+                if (animator.GetBool("hasBall") == true)
+                    animator.SetBool("hasBall", false);
+            }
+            else
+            {
+                if (animator.GetBool("hasBall") == false)
+                    animator.SetBool("hasBall", true);
+            }
         }
-        else
-        {
-            if (animator.GetBool("hasBall") == false)
-                animator.SetBool("hasBall", true);
-        }
+   
     }
 
     private void ResetThrowAnimations()
@@ -2157,12 +2179,15 @@ public class Controller3D : MonoBehaviour
 
     void BlockInput()
     {
+        print("Block Input");
 
         if (staminaCool < playerScript.stamina - 40 && isBlocking)                   // important feature to revitalize and take into account which involves tag and blocking
         {
             isBlocking = false;
             ball.GetComponent<SpriteRenderer>().enabled = false;
         }
+
+
 
         if (Input.GetButtonDown(playerScript.joystick.blockInput) && staminaCool <= 0 && ballGrabbed)
         {
@@ -2179,7 +2204,72 @@ public class Controller3D : MonoBehaviour
             float nuBallZ = transform.position.z;
             ball.GetComponent<Rigidbody>().useGravity = false;
             ball.transform.position = new Vector3(nuBallX, nuBallY, nuBallZ);
+
         }
+    }
+
+    void Block()
+    {
+        print("Blocking");
+
+        float blockStaminaThresh = staminaBlockCost;
+
+
+        Vector3 blockPosition = new  Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z);
+
+        if (levelManager.IsInGameBounds(blockPosition)  && (staminaCool < (stamina - blockStaminaThresh)) && !blockCool)
+        {
+          
+            isBlocking = true;
+            ball.GetComponent<SpriteRenderer>().enabled = true;
+
+           
+            //left handed or right handed
+           
+            ball.GetComponent<Rigidbody>().useGravity = false;
+            ball.transform.position = blockPosition;
+
+            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(true);
+            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.transform.position = ball.transform.position;
+
+            float blockCost = .15f;
+            DepleteStamina(blockCost);
+            animator.SetBool("hasBall", false);
+
+        }
+        
+       
+        else
+        {
+            if (isBlocking)
+            {
+                if (staminaCool >= (stamina - blockStaminaThresh)){
+                    blockCool = true;
+                    Invoke("SetBlockCoolFalse", 2f);
+                }
+
+                BlockRelease();
+            }
+
+
+        }
+       
+
+    }
+
+    public void BlockRelease()
+    {
+        isBlocking = false;
+        ball.GetComponent<SpriteRenderer>().enabled = false;
+        playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(false);
+        animator.SetBool("hasBall", true);
+        print("Block Release");
+
+    }
+
+    void SetBlockCoolFalse()
+    {
+        blockCool = false;
     }
 
     private bool ThrownByOpp(GameObject ball, int team)
@@ -2345,7 +2435,7 @@ public class Controller3D : MonoBehaviour
     }
     private void CheckStamina()
     {
-        if (rigidbody.velocity.magnitude < 3f)             // *arb = moveThresh
+        if (rigidbody.velocity.magnitude < 3f && !isDodging && !isBlocking)             // *arb = moveThresh
         {
 
             if (staminaCool > 0.0f)      // should invert ... i.e - cost, as opposed to + cost
