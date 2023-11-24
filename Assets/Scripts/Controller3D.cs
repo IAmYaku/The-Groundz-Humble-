@@ -44,7 +44,7 @@ public class Controller3D : MonoBehaviour
     float moveThresh = .2f;
 
 
-    public float maxSpeed = 40f;
+    public float maxSpeed = 60f;
     public float xSpeed = 40.0f;
     public float zSpeed = 40.0f;
     private float xCeleration = 0;
@@ -150,6 +150,8 @@ public class Controller3D : MonoBehaviour
      bool dodgeThrowDelay;
     public float dodgeSpeed = 20f;
 
+    float sprintMult = 1f;
+
 
     private float t_catch0;
     private float t_catchF;
@@ -166,18 +168,6 @@ public class Controller3D : MonoBehaviour
 
     private bool hasPerks;
     private float perkDur;
-
-    private string vertInput = "Vertical_P1";               // shouldnt these liv in MyJoystick
-    private string horzInput = "Horizontal_P1";
-    private string jumpInput = "Jump_P1";
-    private string action1Input = "joystick 1 button 1";
-    private string rTriggerInput = "Fire_P1";
-    private string superInput = "Super_P1";
-    private string blockInput = "Block_P1";
-    private string pauseInput = "joystick 1 button 9";
-    private string altAction1Input = "h";
-    private string altSuper1Input = "j";
-    private string altDodge1Input = "k";
 
     bool IsKeyPickUp;
 
@@ -325,6 +315,7 @@ public class Controller3D : MonoBehaviour
         if (playerIndex == -1)
         {
             CheckKeyMove();
+            CheckKeySprint();
             CheckKeyGrab();
             CheckKeyDodge();
             CheckKeySuper();
@@ -505,6 +496,37 @@ public class Controller3D : MonoBehaviour
         }
     }
 
+    private void CheckKeySprint()
+    {
+
+        if (Input.GetKey(playerScript.joystick.altSprint1Input))
+        {
+            float sprintThresh = 10f;
+
+            if (staminaCool < (stamina - sprintThresh) && ((xSpeed + zSpeed)/2f < maxSpeed))
+            {
+                float sprintCost = .5f;
+                DepleteStamina(sprintCost);
+
+                sprintMult =1.5f;
+                sprintMult =1.5f;
+
+                print("sprinting");
+            }
+            else
+            {
+                sprintMult = 1f;
+            }
+
+
+
+        }
+        else
+        {
+            sprintMult = 1f;
+        }
+        }
+
     private void CheckKeyPickUp()
     {
         if (Input.GetKeyDown(playerScript.joystick.altAction1Input) && !IsKeyPickUp)
@@ -647,8 +669,8 @@ public class Controller3D : MonoBehaviour
         float speedTimeMultiplier = 5f;
         float accelerationTimeMultiplier = 75f;
 
-        float xVelocity = move.x * xSpeed * xMultiplier * acceleration;
-        float zVelocity = move.z * zSpeed * zMultiplier * acceleration;
+        float xVelocity = move.x * xSpeed * xMultiplier * acceleration * sprintMult;
+        float zVelocity = move.z * zSpeed * zMultiplier * acceleration * sprintMult;
 
 
         if (isSlowingDown || isCharging)
@@ -695,7 +717,7 @@ public class Controller3D : MonoBehaviour
         }
 
         // clamp velcocity to max velocity
-        if (rigidbody.velocity.magnitude > maxSpeed)
+        if (rigidbody.velocity.magnitude > 40f)
         {
             //rigidbody.velocity /= 1.5f;
             // print("rigidbody.velocity.mag = " + rigidbody.velocity.magnitude);
@@ -1197,10 +1219,12 @@ public class Controller3D : MonoBehaviour
 
         if (Mathf.Abs(weightedMuvAvVec.magnitude) < 5f ||  float.IsNaN(weightedMuvAvVec.magnitude))  // Have to check if wasn't moving during charge, arbs
         {
-            weightedMuvAvVec.x = throwDirection.x * throwPower / 100f;
+            weightedMuvAvVec.x = throwDirection.x;
 
-                weightedMuvAvVec.z = throwDirection.z * (throwPower / 100f) * move.z;
+            weightedMuvAvVec.z =  move.z  ;
         }
+
+         weightedMuvAvVec = weightedMuvAvVec.normalized;
 
         print("weightedMuvAvVec = " + weightedMuvAvVec);
 
@@ -1218,13 +1242,17 @@ public class Controller3D : MonoBehaviour
 
                 throwAidVec = GetThrowAid(weightedMuvAvVec, seekVec);
             }
-
+            print("throwAidVec = " + throwAidVec);
         }
 
 
-        print("throwAidVec = " + throwAidVec);
+        Vector3 chargeVelBias = ((weightedMuvAvVec + chargeVel) / 2f).normalized;
 
-        Vector3 throwVec = new Vector3((throwPower + throwCharge) * throwAidVec.x * weightedMuvAvVec.x, 5f, throwAidVec.z * (throwPower + throwCharge) * weightedMuvAvVec.z);
+        print("chargeVel = " + chargeVel);
+        print("chargeTime = " + chargeTime);
+        print("chargeVelBias = " + chargeVelBias);
+
+        Vector3 throwVec = new Vector3((throwPower + throwCharge + chargeVel.magnitude ) * ((weightedMuvAvVec.x + chargeVelBias.x)/2f), 5f, (throwPower + throwCharge + chargeVel.magnitude) * ((weightedMuvAvVec.z + chargeVelBias.z)/2f));
 
 
 
@@ -1505,7 +1533,15 @@ public class Controller3D : MonoBehaviour
             chargeTime += Time.deltaTime;
             // throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
 
-            chargeVelInput.Input(rigidbody.velocity.x, rigidbody.velocity.z);
+            Vector3 chargeVelInputVec = new Vector3(rigidbody.velocity.x, 0f, rigidbody.velocity.z);
+
+            int playerIndex = playerScript.GetJoystick().number;
+            if (playerIndex == -1)
+            {
+               // chargeVelInputVec.z /= 1.25f;
+            }
+
+                chargeVelInput.Input(chargeVelInputVec.x, chargeVelInputVec.z);
              
             DepleteStamina(chargeCost);
 
@@ -2232,7 +2268,7 @@ public class Controller3D : MonoBehaviour
             playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(true);
             playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.transform.position = ball.transform.position;
 
-            float blockCost = .15f;
+            float blockCost = .25f;
             DepleteStamina(blockCost);
             animator.SetBool("hasBall", false);
 

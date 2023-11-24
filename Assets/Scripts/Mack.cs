@@ -8,15 +8,15 @@ public class Mack : Character
     static public string name = "Mack";
     public static bool isLocked;
 
-    public static float maxSpeed = 45f;
+    public static float maxSpeed = 280f;
     public static float xSpeed = 240f;
     public  static float zSpeed = 260f;
     public static float acceleration = 1;
 
     public static float dodgeSpeed = 120f;
     public static float jumpSpeed = 10.0f;
-    public static float throwPower0 = 150f;
-    public static float standingThrowPower = 900;
+    public static float throwPower0 = 18000f;
+    public static float standingThrowPower = 19000;
     public static float maxThrowPower = 500f;
     public static float maxStandingThrowPower = 2400f;
     public static float superCoolDown = 30.0f;

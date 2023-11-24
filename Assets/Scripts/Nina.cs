@@ -8,7 +8,7 @@ public class Nina : Character
     static public string name = "Nina";
     public static bool isLocked = true;
 
-    public static float maxSpeed = 42f;
+    public static float maxSpeed = 280f;
     public static float xSpeed = 240f;
     public static float zSpeed = 245f;
     public static float acceleration = 6f;
@@ -16,7 +16,7 @@ public class Nina : Character
     public static float dodgeSpeed = 1600f;
     public static float jumpSpeed = 10.0f;
 
-    public static float throwPower0 = 150f;
+    public static float throwPower0 = 180f;
     public static float standingThrowPower = 900;
     public static float maxThrowPower = 500f;
     public static float maxStandingThrowPower = 2400f;
@@ -27,7 +27,7 @@ public class Nina : Character
     public static float catchLagTime = .35f;
 
     public static int stamina = 150;
-    public static float staminaCoolRate = .5f;
+    public static float staminaCoolRate = 1.0f;
     public static float toughness = 2;
     public static int power = 30;
     public static int mass = 1000;

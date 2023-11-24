@@ -28,10 +28,13 @@ public class MyJoystick
     public string altDodge1Input;
     public string altBlock1Input;
 
+    public string altSprint1Input;
+
     public string altLeft1Input = "a";
     public string altRight1Input = "d";
     public string altUp1Input = "w";
     public string altDown1Input = "s";
+
 
 
     public bool trainingWheels = false;
@@ -150,6 +153,8 @@ public class MyJoystick
             altSuper1Input = "j";
             altDodge1Input = "k";
             altBlock1Input = "u";
+
+            altSprint1Input = "left shift";
 
             altLeft1Input = "a";
             altRight1Input = "d";
