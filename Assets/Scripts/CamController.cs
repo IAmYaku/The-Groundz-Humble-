@@ -19,11 +19,10 @@ public class CamController : MonoBehaviour {
     
     private float offsetX;
 
-	private float zoomPadding= -12f;
-    private float zoomWeight = 5f;
-    float maxZoomSize = 50.0f;
+	public float zoomPadding= -12f;
+    public float zoomWeight = 5f;
+    float maxZoomSize = 100.0f;
     float smallestZoomSize = 0f;
-    public float xMultiplier = 2f;
 
     float fxMultiplier = 1.125f;
     float fxZoom = 1f;
@@ -126,7 +125,7 @@ public class CamController : MonoBehaviour {
             {
                 if (isShaking == false && !isZoomingToSide)
                 {          
-                    Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f) * xMultiplier;                                                               // blows up if there ant any balls or players
+                    Vector3 average = new Vector3(GetAverage(), 0.0f, 0.0f);                                                               // blows up if there ant any balls or players
                    // float deltaX = (average.x - transform.position.x) * xWeight;
                     float nuX = Mathf.SmoothDamp(transform.position.x, average.x, ref xDamp, cameraSmoothe/ (fxZoom * fxZoom));
                     nuX = Mathf.Clamp(nuX, minXpos,maxXpos);
@@ -255,7 +254,7 @@ public class CamController : MonoBehaviour {
         //print("fxZoom = " + fxZoom);
 
 
-        float maxDistance = (max - min) * xMultiplier;
+        float maxDistance = (max - min);
        // print("maxDistance = " + maxDistance);
 
         return (maxDistance);

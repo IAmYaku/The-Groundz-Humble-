@@ -304,7 +304,11 @@ public class Controller3D : MonoBehaviour
 
     private void FixedUpdate()
     {
-        MoveInput();
+
+        if (levelManager.isPlaying)
+        {
+            MoveInput();
+        }
     }
 
     #region Key Input Logic
@@ -549,28 +553,29 @@ public class Controller3D : MonoBehaviour
     void MoveInput()
     {
         if (CheckVelocity())
-
+        {
             ApplyMovePadding();
 
-        if (!inBallPause)
-        {
-            if (move.magnitude > moveThresh && onGround)
+            if (!inBallPause)
             {
-                ApplyVelocity(move);
-               // UpdateAcceleration(move);
+                if (move.magnitude > moveThresh && onGround)
+                {
+                    ApplyVelocity(move);
+                    // UpdateAcceleration(move);
+                }
+
             }
-          
         }
-  
 
         AnimateMovement();
 
-        if (rigidbody.velocity.magnitude > 10f)        // *arb
-        {
-            playerScript.playFootsteps();
-            float action1Cost = .0125f;
-            DepleteStamina(action1Cost);
-        }
+            if (rigidbody.velocity.magnitude > 10f)        // *arb
+            {
+                playerScript.playFootsteps();
+                float action1Cost = .0125f;
+                DepleteStamina(action1Cost);
+            }
+
     }
 
     bool CheckVelocity()
@@ -2534,8 +2539,14 @@ public class Controller3D : MonoBehaviour
               //  print("levelManager.stage.baseLineLeft + padding = " + levelManager.stage.baseLineLeft + padding);
 
             }
-            if (collider.bounds.max.x > levelManager.stage.halfCourtLine)
+            if (collider.bounds.max.x > levelManager.stage.halfCourtLine - padding)
             {
+                rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
+                playerConfigObject.transform.position = new Vector3(
+                    playerConfigObject.transform.position.x - .05f, 
+                    playerConfigObject.transform.position.y, 
+                    playerConfigObject.transform.position.z);
+
                 if (move.x >0)
                 {
                     move.x = 0;
@@ -2549,11 +2560,14 @@ public class Controller3D : MonoBehaviour
 
             if (collider.bounds.max.z > levelManager.stage.farSideLine - padding)
             {
-                playerConfigObject.transform.position = new Vector3(playerConfigObject.transform.position.x, playerConfigObject.transform.position.y, levelManager.stage.farSideLine - collider.bounds.extents.z - padding * 1.125f);
+                playerConfigObject.transform.position = new Vector3(
+                    playerConfigObject.transform.position.x, 
+                    playerConfigObject.transform.position.y,
+                    playerConfigObject.transform.position.z - .05f);
                 rigidbody.velocity = new Vector3( rigidbody.velocity.x, rigidbody.velocity.y,0f);
                 inBounds = false;
-              //  print("collider.bounds.max.z = " + collider.bounds.max.z);
-              //  print("levelManager.stage.farSideLine - padding = " + (levelManager.stage.farSideLine - padding));
+                print("collider.bounds.max.z = " + collider.bounds.max.z);
+                print("levelManager.stage.farSideLine - padding = " + (levelManager.stage.farSideLine - padding));
 
             }
 
@@ -2571,8 +2585,9 @@ public class Controller3D : MonoBehaviour
 
         if (gameObject.GetComponentInParent<Player>().team == 2)
         {
-            if (collider.bounds.min.x < levelManager.stage.halfCourtLine)
+            if (collider.bounds.min.x < levelManager.stage.halfCourtLine + padding)
             {
+                rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
                 if (move.x < 0)
                 {
                     move.x = 0;

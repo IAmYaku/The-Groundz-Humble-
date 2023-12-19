@@ -412,6 +412,7 @@ public class TeamSelect : MonoBehaviour
         GlobalConfiguration.Instance.SetIsAtQuickCharacterSelect(false);       // needed because controllerObject instantiates when p1Object instantiates for what is only keyboard commmand...   and technically we're not tho lol
 
         readyCount = Mathf.Clamp(GlobalConfiguration.gamepadStarts, 0,1);
+        print("readyCount = " + readyCount);
         ModuleDataToPlayers();
 
         string firstOppChar = GetOppPlayerType(charSelected);
@@ -694,6 +695,7 @@ public class TeamSelect : MonoBehaviour
 
     public void LoadGameLevel(string sceneName)
     {
+        print("Loading: " + sceneName);
         if (!isLoading)
         {
             DestroyThemeMusic();
