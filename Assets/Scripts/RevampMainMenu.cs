@@ -5,18 +5,29 @@ using UnityEngine.SceneManagement;
 
 public class RevampMainMenu : MonoBehaviour
 {
-
-    public bool SettingsIsOpen = false;
-
-    public GameObject settingsMenuUI;
-
     public GameObject image;
+
+    public GameObject buttonList;
 
     private void Start()
     {
         GlobalConfiguration.loadPoint = GlobalConfiguration.LoadPoint.gameMode;
+
+        if (GlobalConfiguration.Instance.gameMode == GlobalConfiguration.GameMode.test)
+        {
+            buttonList.transform.GetChild(0).gameObject.SetActive(true);
+            buttonList.transform.GetChild(1).gameObject.SetActive(false);
+            buttonList.transform.GetChild(2).gameObject.SetActive(false);
+        }
     }
 
+
+    public void PlayTest()
+    {
+        GlobalConfiguration.Instance.SetGameMode("test");
+        SceneManager.LoadScene("Test Groundz");
+        print("Local");
+    }
 
     public void PlayLocal()
     {

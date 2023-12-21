@@ -780,7 +780,7 @@ public class AI : MonoBehaviour {
                             Transform targetedOpp = GetTargetedOpp();
                             float renderLength = GetRenderLength();
 
-                            throww = ((seekVec + rigidbody.velocity) / 2) * (throwPower + throwCharge);
+                            throww = ((seekVec + rigidbody.velocity) / 2) * (throwPower + throwCharge)/50f;
 
                             throww = new Vector3(throww.x, 2.5f, throww.z);
 

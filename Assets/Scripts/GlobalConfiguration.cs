@@ -46,7 +46,7 @@ public class GlobalConfiguration : MonoBehaviour
     public static LoadPoint loadPoint;
 
     public enum GameMode { none, arcade, multiplayer, story, test };
-    public GameMode gameMode = GameMode.none;
+    public GameMode gameMode = GameMode.test;
 
     List<MyJoystick> myJoysticks;
     public static string[] joysticks;
@@ -467,10 +467,10 @@ public class GlobalConfiguration : MonoBehaviour
 
         float navSpeedScale = .1f;
 
-        playerScript.SetisSet(true);
-
         float aiDodgeWeight = 36f;
         float aiSpeedWeight = 10f;
+
+        playerScript.SetisSet(true);
 
         if (type == "Nina")
         {
@@ -486,9 +486,9 @@ public class GlobalConfiguration : MonoBehaviour
 
             controller3D.handSize = Nina.handSize;
             controller3D.throwPower = Nina.throwPower0;
-           // controller3D.standingThrowPower = Nina.standingThrowPower;
-            controller3D.maxThrowPower = Nina.maxThrowPower;
-            controller3D.maxStandingThrowPower = Nina.maxStandingThrowPower;
+            controller3D.standingThrowPower = Nina.standingThrowPower;
+            //controller3D.maxThrowPower = Nina.maxThrowPower;
+            //controller3D.maxStandingThrowPower = Nina.maxStandingThrowPower;
 
             controller3D.grabRadius = Nina.grabRadius;
 
@@ -583,9 +583,9 @@ public class GlobalConfiguration : MonoBehaviour
             controller3D.handSize = Mack.handSize;
 
             controller3D.throwPower = Mack.throwPower0;
-            //controller3D.standingThrowPower = Mack.standingThrowPower;
-            controller3D.maxThrowPower = Mack.maxThrowPower;
-            controller3D.maxStandingThrowPower = Mack.maxStandingThrowPower;
+            controller3D.standingThrowPower = Mack.standingThrowPower;
+            // controller3D.maxThrowPower = Mack.maxThrowPower;
+            // controller3D.maxStandingThrowPower = Mack.maxStandingThrowPower;
 
             controller3D.grabRadius = Mack.grabRadius;
             controller3D.catchLagTime = Mack.catchLagTime;
@@ -676,9 +676,9 @@ public class GlobalConfiguration : MonoBehaviour
             controller3D.grabRadius = King.grabRadius;
 
             controller3D.throwPower = King.throwPower0;
-            //controller3D.standingThrowPower = King.standingThrowPower;
-            controller3D.maxThrowPower = King.maxThrowPower;
-            controller3D.maxStandingThrowPower = King.maxStandingThrowPower;
+            controller3D.standingThrowPower = King.standingThrowPower;
+            //controller3D.maxThrowPower = King.maxThrowPower;
+            //controller3D.maxStandingThrowPower = King.maxStandingThrowPower;
 
             controller3D.stamina = King.stamina;
             controller3D.staminaCoolRate = King.staminaCoolRate;
@@ -691,12 +691,12 @@ public class GlobalConfiguration : MonoBehaviour
             aiScript.navSpeed = ((King.xSpeed + King.zSpeed) / 2) * navSpeedScale;
             aiScript.navMeshAgent.speed = aiScript.navSpeed;
             aiScript.navMeshAgent.acceleration = aiScript.navSpeed;
-
+            aiScript.throwPower = King.throwPower0;
+            aiScript.standingThrowPower = King.standingThrowPower;
             aiScript.acceleration = King.acceleration;
             aiScript.jumpSpeed = King.jumpSpeed;
             aiScript.dodgeSpeed = King.dodgeSpeed / aiDodgeWeight;
             aiScript.handSize = King.handSize;
-            aiScript.standingThrowPower = King.standingThrowPower;
             aiScript.grabRadius = King.grabRadius;
             aiScript.catchLagTime = King.catchLagTime;
             aiScript.stamina = King.stamina;

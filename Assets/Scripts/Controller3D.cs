@@ -64,10 +64,11 @@ public class Controller3D : MonoBehaviour
     Vector3 chargeVel;
 
     public float throwPower = 200f;
+    public float standingThrowPower = 200f;
     float standingThrowThresh = 20f;
 
-    public float maxThrowPower = 240f;
-    public float maxStandingThrowPower = 1600;
+   // public float maxThrowPower = 240f;
+   // public float maxStandingThrowPower = 1600;
 
     float throwCharge;
     bool isCharging;
@@ -1210,7 +1211,7 @@ public class Controller3D : MonoBehaviour
 
         if (rigidbody.velocity.magnitude <= standingThrowThresh)
         {
-            throwPower = playerScript.standingThrowPower;
+            throwPower = standingThrowPower;
         }
         else
         {

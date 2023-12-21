@@ -69,7 +69,7 @@ public class Stage : MonoBehaviour
 
     void Start()
     {
-         if (GlobalConfiguration.Instance.gameMode == GlobalConfiguration.GameMode.none)
+         if (GlobalConfiguration.Instance.gameMode == GlobalConfiguration.GameMode.none || GlobalConfiguration.Instance.gameMode == GlobalConfiguration.GameMode.test)
         {
             loadedFromStage = true;
             GlobalConfiguration.Instance.LoadDefaultGame();
