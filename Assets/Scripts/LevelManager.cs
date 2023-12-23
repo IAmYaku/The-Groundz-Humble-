@@ -377,7 +377,7 @@ public class LevelManager : MonoBehaviour
 
         if (Gamepad.all.Count <= 1)    // doesn't take into account reconnectivity
         {
-            CheckTeamHasPlayer();
+            //CheckTeamHasPlayer();
         }
    
 
@@ -1584,7 +1584,7 @@ public class LevelManager : MonoBehaviour
         roundLevel = 0;
         isAtScene = false;
 
-        Controller3D.hasGrabMag = false;
+        Controller3D.hasGrabMag = false;   //gr
         Controller3D.grabMag = 10f;
         Controller3D.hasThrowMag = false;
         Controller3D.hasSeekVec = false;

@@ -181,10 +181,13 @@ public class TeamSelect : MonoBehaviour
     public virtual void Update()
     {
 
+
+
         if (ready)
         {
 
             GlobalConfiguration.Instance.SetIsAtQuickCharacterSelect(false);
+            GlobalConfiguration.Instance.SetIsAtRevampTeamSelect(false);
             tF = Time.realtimeSinceStartup;
             deltaT = tF - t0;
             if (deltaT >= 3)
@@ -426,6 +429,8 @@ public class TeamSelect : MonoBehaviour
 
         string arcadeSceneName = lm.GetArcadeSceneName();
         int arcadeSceneIndex = lm.GetArcadeSceneIndex();
+
+        GlobalConfiguration.Instance.ResetGamepadStarts();
 
         if (!Stage.loadedFromStage)
         {

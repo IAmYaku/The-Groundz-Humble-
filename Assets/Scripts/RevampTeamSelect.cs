@@ -61,7 +61,7 @@ public class RevampTeamSelect : MonoBehaviour
     int selected;
     int selectCount; // obsolete
 
-    public static int starts;
+    public static int starts = 0;
 
 
     public virtual void Start()
@@ -71,9 +71,11 @@ public class RevampTeamSelect : MonoBehaviour
         GlobalConfiguration.Instance.GetJoysticks();
 
        GlobalConfiguration.Instance.SetRevampTeamSelect(this);
-       GlobalConfiguration.Instance.SetIsAtRevampTeamSelect(true);
 
-        if (GlobalConfiguration.Instance.gameMode != GlobalConfiguration.GameMode.multiplayer)
+       GlobalConfiguration.Instance.SetIsAtRevampTeamSelect(true);
+        GlobalConfiguration.Instance.SetIsAtQuickCharacterSelect(false);
+
+        if (GlobalConfiguration.Instance.gameMode != GlobalConfiguration.GameMode.multiplayer)   //if loaded from quickCharSel stage
         {
             GlobalConfiguration.Instance.SetGameMode("multiplayer");
             print("Setting game mode = " + GlobalConfiguration.Instance.gameMode);
@@ -95,6 +97,9 @@ public class RevampTeamSelect : MonoBehaviour
         modules.Add(module4);
 
         // CheckCharLocks();
+
+        starts = 0;
+
 
     }
 
@@ -635,6 +640,7 @@ public class RevampTeamSelect : MonoBehaviour
 
 
         GlobalConfiguration.Instance.SetIsAtRevampTeamSelect(false);
+        GlobalConfiguration.Instance.ResetGamepadStarts();
         SceneManager.LoadScene("StageSelect");
     }
 

@@ -135,7 +135,7 @@ public class MyJoystick
     private void InitPlayStation()                      // * initOther
     {
 
-        Debug.Log("InitPlaystaion");
+        Debug.Log("InitPlaystation");
 
         if (number == 0  || number == -1)
         {

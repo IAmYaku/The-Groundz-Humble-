@@ -56,7 +56,7 @@ public class GlobalConfiguration : MonoBehaviour
     [SerializeField]
     int deviceCount;
 
-    public static int gamepadStarts;
+    public static int gamepadStarts = 0;
 
     public GameObject MackObject;
     public GameObject KingObject;
@@ -127,10 +127,9 @@ public class GlobalConfiguration : MonoBehaviour
         return revampTeamSelect;
     }
 
-    internal void LoadDefaultGame()
+    internal void LoadDefaultGame(/* first char */)
     {
         quickCharacterSelect = new QuickCharacterSelect();
-        quickCharacterSelect.QuickCharacterSelectInit();
         quickCharacterSelect.PickMack();
     }
 
@@ -262,20 +261,17 @@ public class GlobalConfiguration : MonoBehaviour
 
             if (isAtRevampTeamSelect)
             {
-                RevampTeamSelect.starts++;
-                revampTeamSelect.EnableModule(pi.playerIndex);
+              RevampTeamSelect.starts++;
 
-         
+             revampTeamSelect.EnableModule(pi.playerIndex);        
              GameObject multiplayerEventSystemGamepadGameObject = revampTeamSelect.GetMultiplayerEventSystem(pi.playerIndex +1);
-                multiplayerEventSystemGamepadGameObject.SetActive(true);
+              multiplayerEventSystemGamepadGameObject.SetActive(true);
 
 
                 if (multiplayerEventSystemGamepadGameObject)
-         { 
+                { 
                     InputSystemUIInputModule inputSystemUIInputModule = multiplayerEventSystemGamepadGameObject.GetComponent<InputSystemUIInputModule>();
-
                      pi.uiInputModule = inputSystemUIInputModule;
-
                     Debug.Log("Multiplayer Event System" + " " + (pi.playerIndex + 1));
                 }
    
@@ -284,6 +280,7 @@ public class GlobalConfiguration : MonoBehaviour
 
             if (isAtQuickCharacterSelect)
             {
+                QuickCharacterSelect.starts++;
                 quickCharacterSelect.SetStartText(false);
 
               //  InputSystemUIInputModule inputSystemUIInputModule = quickCharacterSelect.multiplayerEventSystem.gameObject.GetComponent<InputSystemUIInputModule>();
@@ -320,13 +317,16 @@ public class GlobalConfiguration : MonoBehaviour
 
         if (isAtQuickCharacterSelect)
         {
-            quickCharacterSelect.SetReadyCount(deviceCount);
-            //remove ui stick
+            QuickCharacterSelect.starts--;
+
         }
 
-        RevampTeamSelect.starts--;
+        if (isAtRevampTeamSelect)
+        {
 
-        //
+            RevampTeamSelect.starts--;
+        }
+
     }
 
 
@@ -436,24 +436,30 @@ public class GlobalConfiguration : MonoBehaviour
     {
         return deviceCount;
     }
-    /*
-    internal void AddSelectedPlayer(string name, int team, int playerIndex)         // obsolete
+
+    internal void ResetGamepadStarts()
     {
-      foreach (GameObject player in players)
-        {
-            if (player.GetComponent<Player>().GetPlayerIndex() == playerIndex)
-            {
-                Player playerScript = player.GetComponent<Player>();
-                playerScript.team = team;
-                playerScript.type = name;
-
-                SetPlayerType(player, name);
-
-
-            }
-        }
+        gamepadStarts = 0;
     }
-    */
+
+    /*
+internal void AddSelectedPlayer(string name, int team, int playerIndex)         // obsolete
+{
+ foreach (GameObject player in players)
+   {
+       if (player.GetComponent<Player>().GetPlayerIndex() == playerIndex)
+       {
+           Player playerScript = player.GetComponent<Player>();
+           playerScript.team = team;
+           playerScript.type = name;
+
+           SetPlayerType(player, name);
+
+
+       }
+   }
+}
+*/
 
     public void SetPlayerType(GameObject player, string type , int skinNum)
     {
@@ -761,11 +767,13 @@ public class GlobalConfiguration : MonoBehaviour
         {
             pim.EnableJoining();
             pim.enabled = true;
+
         }
         else
         {
             pim.DisableJoining();
             pim.enabled = false;
+
         }
     }
 
@@ -1061,12 +1069,14 @@ public class GlobalConfiguration : MonoBehaviour
 
     internal void ClearPlayers()
     {
+
         foreach (GameObject player in players)
         {
             Destroy(player);
         }
 
         players.Clear();
+
     }
 
     internal void ClearPlayers(int team)
@@ -1158,6 +1168,19 @@ public class GlobalConfiguration : MonoBehaviour
     internal bool GetIsThemeOff()
     {
         return gameManager.audioManager.GetComponent<LobbyMusicScript>().GetIsThemeOff();
+    }
+
+
+    public void Reset()
+    {
+        ClearPlayers();
+        // empty teams
+        // delete all players
+
+        //set all starts to 0
+
+        // set all isAts to false
+        // set gamemode to none or test
     }
 
     #region Singleton

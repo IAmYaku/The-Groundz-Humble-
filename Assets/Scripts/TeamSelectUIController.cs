@@ -80,6 +80,8 @@ public class TeamSelectUIController : MonoBehaviour
         }
 
 
+        Debug.Log("RevampTeamSelect.starts = " + RevampTeamSelect.starts);
+
         if (RevampTeamSelect.starts > 0 )
         {
             RevampTeamSelect revampTeamSelect = GlobalConfiguration.Instance.GetRevampTeamSelect();

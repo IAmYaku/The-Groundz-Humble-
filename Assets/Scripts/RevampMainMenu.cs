@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class RevampMainMenu : MonoBehaviour
@@ -18,15 +19,20 @@ public class RevampMainMenu : MonoBehaviour
             buttonList.transform.GetChild(0).gameObject.SetActive(true);
             buttonList.transform.GetChild(1).gameObject.SetActive(false);
             buttonList.transform.GetChild(2).gameObject.SetActive(false);
+
+            EventSystem m_EventSystem = EventSystem.current;
+            m_EventSystem.SetSelectedGameObject(buttonList.transform.GetChild(0).gameObject);
         }
     }
 
 
     public void PlayTest()
     {
+
+
         GlobalConfiguration.Instance.SetGameMode("test");
         SceneManager.LoadScene("Test Groundz");
-        print("Local");
+        print("Test");
     }
 
     public void PlayLocal()
