@@ -646,6 +646,7 @@ public class RevampTeamSelect : MonoBehaviour
 
     public void BackButton()
     {
+        GlobalConfiguration.Instance.Reset();
         SceneManager.LoadScene("GamemodeMenu");
     }
 

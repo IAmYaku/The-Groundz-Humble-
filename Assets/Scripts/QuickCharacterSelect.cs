@@ -80,7 +80,34 @@ public class QuickCharacterSelect : MonoBehaviour
 
         starts = 0;
 
+    }
 
+    public  QuickCharacterSelect()   // If not called from start
+    {
+        print(" Init QuickCharacterSelect");
+
+
+        if (GlobalConfiguration.Instance.gameMode != GlobalConfiguration.GameMode.test)    //if loaded from quickCharSel stage
+        {
+            GlobalConfiguration.Instance.SetGameMode("arcade");
+            print("Setting game mode = " + GlobalConfiguration.Instance.gameMode);
+        }
+
+        //  print("Game mode == " + GlobalConfiguration.Instance.gameMode);
+
+        GlobalConfiguration.Instance.GetJoysticks();
+
+
+        module1 = new PlayerModule(1);
+
+
+        // CheckCharLocks();
+
+        GlobalConfiguration.Instance.SetQuickCharacterSelect(this);
+        GlobalConfiguration.Instance.SetIsAtQuickCharacterSelect(true);
+        GlobalConfiguration.Instance.SetIsAtRevampTeamSelect(false);
+
+        starts = 0;
     }
 
 
@@ -192,6 +219,7 @@ public class QuickCharacterSelect : MonoBehaviour
     }
     public void BackButton()
     {
+        GlobalConfiguration.Instance.Reset();
         SceneManager.LoadScene("GamemodeMenu");
     }
 
@@ -249,16 +277,20 @@ public class QuickCharacterSelect : MonoBehaviour
         TeamManager tm1 = lm.tm1;
         TeamManager tm2 = lm.tm2;
 
-        GameObject player1;
+        GameObject player1 = null ;
 
             if (starts == 0)
         {
              player1 = GlobalConfiguration.Instance.CreatePlayer1();
         }
+
             else
         {
-            player1  = GlobalConfiguration.Instance.GetPlayerAtIndex(0);
+      
+                player1 = GlobalConfiguration.Instance.GetPlayerAtIndex(0);
+
         }
+           
           
 
             int team = module1.team;

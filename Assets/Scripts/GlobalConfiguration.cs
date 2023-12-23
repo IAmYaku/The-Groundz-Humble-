@@ -79,6 +79,8 @@ public class GlobalConfiguration : MonoBehaviour
 
     public MultiplayerEventSystem currentMultiplayerEventSystem;
 
+    bool isTesting = true;
+
 
     void Awake()
     {
@@ -120,6 +122,11 @@ public class GlobalConfiguration : MonoBehaviour
 
         tm1.SetNumber(1);
         tm2.SetNumber(2);
+
+        if (isTesting)
+        {
+            gameMode = GameMode.test;
+        }
     }
 
     internal RevampTeamSelect GetRevampTeamSelect()
@@ -156,11 +163,27 @@ public class GlobalConfiguration : MonoBehaviour
 
         print("Creating Player 1");
 
-        GameObject playerObject = InstantiatePlayer1KeyPrefab();                 // if you instantiate w pi enabled then you get handleJoin
-        Player playerScript = playerObject.GetComponent<Player>();
+        GameObject playerObject = null;
 
-        playerScript.CreateJoystick(-1);
-        myJoysticks.Add(playerScript.GetJoystick());
+        if (gameMode == GameMode.test)
+            {
+            playerObject = InstantiatePlayerPrefab();
+            Player playerScript = playerObject.GetComponent<Player>();
+
+            playerScript.CreateJoystick(0, GetJoystickAt(0));  // should be obsolete
+            myJoysticks.Add(playerScript.GetJoystick());
+        }
+         else
+        {
+            playerObject = InstantiatePlayer1KeyPrefab();                 // if you instantiate w pi enabled then you get handleJoin
+            Player playerScript = playerObject.GetComponent<Player>();
+
+            playerScript.CreateJoystick(-1);
+            myJoysticks.Add(playerScript.GetJoystick());
+        }
+
+
+
 
         AddNewPlayer(playerObject);
 
@@ -337,9 +360,8 @@ public class GlobalConfiguration : MonoBehaviour
         switch (x)
         {
             case "test":
-                gameMode = GameMode.test;
-              
-                lm.SetGameMode("test");
+                gameMode = GameMode.test;      
+                lm.SetGameMode("arcade");
                 break;
 
             case "arcade":                                         
@@ -1173,14 +1195,23 @@ internal void AddSelectedPlayer(string name, int team, int playerIndex)         
 
     public void Reset()
     {
+        team1Object.GetComponent<TeamManager>().Clear();
+        team2Object.GetComponent<TeamManager>().Clear();
         ClearPlayers();
-        // empty teams
-        // delete all players
+        RevampTeamSelect.starts = 0;
+        QuickCharacterSelect.starts = 0;
 
-        //set all starts to 0
+        isAtQuickCharacterSelect = false;
+        isAtRevampTeamSelect = false;
 
-        // set all isAts to false
-        // set gamemode to none or test
+        if (isTesting)
+        {
+            gameMode = GameMode.test;
+        }
+        else
+        {
+            gameMode = GameMode.none;
+        }
     }
 
     #region Singleton
