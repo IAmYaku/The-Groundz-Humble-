@@ -80,6 +80,24 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""7929e5ac-cf49-44f5-88f6-1f49ccd38f57"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Block"",
+                    ""type"": ""Button"",
+                    ""id"": ""38f18885-fb2c-469b-91fe-5302e2e58b37"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -146,6 +164,28 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""af920cc2-bf31-4cb2-83da-6ab7572df61d"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""82aa681c-1799-4ab2-a933-cfd333846979"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -518,6 +558,8 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
         m_PlayerControlsA_Dodge = m_PlayerControlsA.FindAction("Dodge", throwIfNotFound: true);
         m_PlayerControlsA_Super = m_PlayerControlsA.FindAction("Super", throwIfNotFound: true);
         m_PlayerControlsA_Pause = m_PlayerControlsA.FindAction("Pause", throwIfNotFound: true);
+        m_PlayerControlsA_Sprint = m_PlayerControlsA.FindAction("Sprint", throwIfNotFound: true);
+        m_PlayerControlsA_Block = m_PlayerControlsA.FindAction("Block", throwIfNotFound: true);
         // Menu Controls (Gamepad)
         m_MenuControlsGamepad = asset.FindActionMap("Menu Controls (Gamepad)", throwIfNotFound: true);
         m_MenuControlsGamepad_Start = m_MenuControlsGamepad.FindAction("Start", throwIfNotFound: true);
@@ -596,6 +638,8 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerControlsA_Dodge;
     private readonly InputAction m_PlayerControlsA_Super;
     private readonly InputAction m_PlayerControlsA_Pause;
+    private readonly InputAction m_PlayerControlsA_Sprint;
+    private readonly InputAction m_PlayerControlsA_Block;
     public struct PlayerControlsAActions
     {
         private @PlayerContols m_Wrapper;
@@ -606,6 +650,8 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
         public InputAction @Dodge => m_Wrapper.m_PlayerControlsA_Dodge;
         public InputAction @Super => m_Wrapper.m_PlayerControlsA_Super;
         public InputAction @Pause => m_Wrapper.m_PlayerControlsA_Pause;
+        public InputAction @Sprint => m_Wrapper.m_PlayerControlsA_Sprint;
+        public InputAction @Block => m_Wrapper.m_PlayerControlsA_Block;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControlsA; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -633,6 +679,12 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
                 @Pause.started -= m_Wrapper.m_PlayerControlsAActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_PlayerControlsAActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_PlayerControlsAActionsCallbackInterface.OnPause;
+                @Sprint.started -= m_Wrapper.m_PlayerControlsAActionsCallbackInterface.OnSprint;
+                @Sprint.performed -= m_Wrapper.m_PlayerControlsAActionsCallbackInterface.OnSprint;
+                @Sprint.canceled -= m_Wrapper.m_PlayerControlsAActionsCallbackInterface.OnSprint;
+                @Block.started -= m_Wrapper.m_PlayerControlsAActionsCallbackInterface.OnBlock;
+                @Block.performed -= m_Wrapper.m_PlayerControlsAActionsCallbackInterface.OnBlock;
+                @Block.canceled -= m_Wrapper.m_PlayerControlsAActionsCallbackInterface.OnBlock;
             }
             m_Wrapper.m_PlayerControlsAActionsCallbackInterface = instance;
             if (instance != null)
@@ -655,6 +707,12 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @Sprint.started += instance.OnSprint;
+                @Sprint.performed += instance.OnSprint;
+                @Sprint.canceled += instance.OnSprint;
+                @Block.started += instance.OnBlock;
+                @Block.performed += instance.OnBlock;
+                @Block.canceled += instance.OnBlock;
             }
         }
     }
@@ -807,6 +865,8 @@ public partial class @PlayerContols : IInputActionCollection2, IDisposable
         void OnDodge(InputAction.CallbackContext context);
         void OnSuper(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
+        void OnBlock(InputAction.CallbackContext context);
     }
     public interface IMenuControlsGamepadActions
     {

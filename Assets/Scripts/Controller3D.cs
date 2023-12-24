@@ -289,6 +289,7 @@ public class Controller3D : MonoBehaviour
                 GrabInput();
                 CheckStamina();
                 CheckSuperCool();
+                BlockInput();
                 // HandlePerks(perkDur,1f);
             }
             else 
@@ -745,6 +746,34 @@ public class Controller3D : MonoBehaviour
 
                 //print("JoyInput = " + ctxValue);
             }
+        }
+    }
+
+    public void SprintInput(CallbackContext context)
+    {
+        if (context.started)
+        {
+            float sprintThresh = 10f;
+
+            if (staminaCool < (stamina - sprintThresh) && ((xSpeed + zSpeed) / 2f < maxSpeed))
+            {
+                float sprintCost = .5f;
+                DepleteStamina(sprintCost);
+
+                sprintMult = 1.5f;
+                sprintMult = 1.5f;
+
+                print("sprinting");
+            }
+            else
+            {
+                sprintMult = 1f;
+            }
+        }
+
+        if (context.canceled)
+        {
+            sprintMult = 1f;
         }
     }
 
@@ -1915,7 +1944,7 @@ public class Controller3D : MonoBehaviour
     }
 
 
-
+    #region Super Logic
     public void SuperInput(CallbackContext context)
     {
         if (levelManager.isPlaying && !playerScript.isOut)
@@ -2219,34 +2248,21 @@ public class Controller3D : MonoBehaviour
         }
     }
 
+    #endregion
+
+
+
+    #region Block Logic 
     void BlockInput()
     {
-        print("Block Input");
-
-        if (staminaCool < playerScript.stamina - 40 && isBlocking)                   // important feature to revitalize and take into account which involves tag and blocking
+       if (isBlocking)
         {
-            isBlocking = false;
-            ball.GetComponent<SpriteRenderer>().enabled = false;
+            Block();   // struggling w hold input logic
         }
 
-
-
-        if (Input.GetButtonDown(playerScript.joystick.blockInput) && staminaCool <= 0 && ballGrabbed)
+       else
         {
-            isBlocking = true;
-            staminaCool = playerScript.stamina;
-            ball.GetComponent<SpriteRenderer>().enabled = true;
-        }
-
-        if (isBlocking)
-        {
-            float nuBallX = transform.position.x + throwDirection.x * handSize.x * 1.25f;
-            float nuBallY = transform.position.y;
-            //left handed or right handed
-            float nuBallZ = transform.position.z;
-            ball.GetComponent<Rigidbody>().useGravity = false;
-            ball.transform.position = new Vector3(nuBallX, nuBallY, nuBallZ);
-
+            BlockRelease();
         }
     }
 
@@ -2301,11 +2317,14 @@ public class Controller3D : MonoBehaviour
 
     public void BlockRelease()
     {
-        isBlocking = false;
-        ball.GetComponent<SpriteRenderer>().enabled = false;
-        playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(false);
-        animator.SetBool("hasBall", true);
-        print("Block Release");
+        if (isBlocking)
+        {
+            isBlocking = false;
+            ball.GetComponent<SpriteRenderer>().enabled = false;
+            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(false);
+            animator.SetBool("hasBall", true);
+            print("Block Release");
+        }
 
     }
 
@@ -2313,6 +2332,30 @@ public class Controller3D : MonoBehaviour
     {
         blockCool = false;
     }
+
+    public void BlocktInput(CallbackContext context)
+    {
+    
+        if (ballGrabbed)
+        {
+            if (context.performed)
+            {
+                isBlocking = true;
+            
+            }
+
+
+            if (context.canceled)
+            {
+                isBlocking = false;
+                BlockRelease();
+            }
+        }
+
+
+    }
+
+    #endregion
 
     private bool ThrownByOpp(GameObject ball, int team)
     {

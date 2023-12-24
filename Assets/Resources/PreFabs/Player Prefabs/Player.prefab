@@ -730,8 +730,7 @@ MonoBehaviour:
   maxCeleration: 4
   jumpSpeed: 800
   throwPower: 40
-  maxThrowPower: 240
-  maxStandingThrowPower: 1600
+  standingThrowPower: 200
   handSize: {x: 3, y: 3, z: 3}
   grabRadius: 8
   nearestBall: {fileID: 0}
@@ -880,6 +879,70 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 706785f1-7e81-441d-8607-ce274c939985
     m_ActionName: Menu Controls/Start[/DualShock4GamepadHID/start]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8477696456025001330}
+        m_TargetAssemblyTypeName: Controller3D, Assembly-CSharp
+        m_MethodName: SprintInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7929e5ac-cf49-44f5-88f6-1f49ccd38f57
+    m_ActionName: Player Controls A/Sprint[/DualSenseGamepadHID/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8477696456025001330}
+        m_TargetAssemblyTypeName: Controller3D, Assembly-CSharp
+        m_MethodName: BlocktInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 38f18885-fb2c-469b-91fe-5302e2e58b37
+    m_ActionName: Player Controls A/Block[/DualSenseGamepadHID/leftTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cc506239-dbc2-4710-9146-0ee603340efd
+    m_ActionName: Menu Controls (Gamepad)/Movement[/DualSenseGamepadHID/leftStick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 07ea39db-52b0-4056-8479-7d75af95dd82
+    m_ActionName: Menu Controls (Gamepad)/Select[/DualSenseGamepadHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eb54b6e7-948b-4c38-a281-9450974daf57
+    m_ActionName: Menu Controls (Gamepad)/Cancel[/DualSenseGamepadHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 21e59408-ba04-4537-b44f-cb798f723b54
+    m_ActionName: Menu Controls (Keyboard)/Start[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 86b876f4-2d69-49a8-96f7-2b0600da4698
+    m_ActionName: Menu Controls (Keyboard)/Movement[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8c4cf9a9-8339-452f-911d-3f4d9359a2a0
+    m_ActionName: Menu Controls (Keyboard)/Select[/Mouse/leftButton,/Pen/tip]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ed411d0d-ad22-4b92-a97a-3421dbc434a9
+    m_ActionName: Menu Controls (Keyboard)/Cancel
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d0fd2246-36db-4223-aa69-61aae2aba107
+    m_ActionName: Menu Controls (Keyboard)/Point[/Mouse/position,/Pen/position]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player Controls A

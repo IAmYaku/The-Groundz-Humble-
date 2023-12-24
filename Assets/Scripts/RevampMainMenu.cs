@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class RevampMainMenu : MonoBehaviour
 {
-    public GameObject image;
+    public GameObject loadingObject;
 
     public GameObject buttonList;
 
@@ -31,7 +32,7 @@ public class RevampMainMenu : MonoBehaviour
 
 
         GlobalConfiguration.Instance.SetGameMode("test");
-        SceneManager.LoadScene("Test Groundz");
+        LoadLevel("Test Groundz");
         print("Test");
     }
 
@@ -77,18 +78,23 @@ public class RevampMainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void LoadLevel(int sceneIndex)
+    public void LoadLevel(string sceneName)
     {
-        StartCoroutine(LoadAsynchrously(sceneIndex));
+        StartCoroutine(LoadAsynchrously( sceneName));
     }
 
-    IEnumerator LoadAsynchrously(int sceneIndex)
+    IEnumerator LoadAsynchrously(string sceneName)
     {
-        image.SetActive(true);
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
+        loadingObject.SetActive(true);
+        Slider slider = loadingObject.transform.GetChild(0).gameObject.GetComponent<Slider>();
+        Text progressText = loadingObject.transform.GetChild(0).GetChild(3).GetChild(0).GetComponent<Text>();
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         while (!operation.isDone)
         {
-            Debug.Log(operation.progress);
+            float progress = Mathf.Clamp01(operation.progress / .9f);
+
+            slider.value = progress;
+            progressText.text = (int)(progress * 100f) + "%";
             yield return null;
         }
     }
