@@ -2259,11 +2259,6 @@ public class Controller3D : MonoBehaviour
         {
             Block();   // struggling w hold input logic
         }
-
-       else
-        {
-            BlockRelease();
-        }
     }
 
     void Block()
@@ -2317,7 +2312,7 @@ public class Controller3D : MonoBehaviour
 
     public void BlockRelease()
     {
-        if (isBlocking)
+     
         {
             isBlocking = false;
             ball.GetComponent<SpriteRenderer>().enabled = false;
@@ -2340,8 +2335,7 @@ public class Controller3D : MonoBehaviour
         {
             if (context.performed)
             {
-                isBlocking = true;
-            
+                isBlocking = true;     
             }
 
 
@@ -2351,8 +2345,6 @@ public class Controller3D : MonoBehaviour
                 BlockRelease();
             }
         }
-
-
     }
 
     #endregion
