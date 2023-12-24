@@ -152,6 +152,7 @@ public class Controller3D : MonoBehaviour
     public float dodgeSpeed = 20f;
 
     float sprintMult = 1f;
+    bool isSprinting;
 
 
     private float t_catch0;
@@ -290,6 +291,7 @@ public class Controller3D : MonoBehaviour
                 CheckStamina();
                 CheckSuperCool();
                 BlockInput();
+                SprintInput();
                 // HandlePerks(perkDur,1f);
             }
             else 
@@ -670,8 +672,8 @@ public class Controller3D : MonoBehaviour
         float xCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_x * acceleration, pow0_x + muvXcel_x)), 0.0f, clampMult_x);                       // impartial but feels good
         float zCelerate = Mathf.Clamp((Mathf.Pow(muvXcel_z * acceleration * accMult_z, pow0_z + muvXcel_z)), 0.0f, clampMult_z);
 
-        float xMultiplier = .175f;
-        float zMultiplier = .175f;   
+        float xMultiplier = .15f;
+        float zMultiplier = .15f;   
 
         float speedTimeMultiplier = 5f;
         float accelerationTimeMultiplier = 75f;
@@ -761,8 +763,7 @@ public class Controller3D : MonoBehaviour
                 DepleteStamina(sprintCost);
 
                 sprintMult = 1.5f;
-                sprintMult = 1.5f;
-
+                isSprinting = true;
                 print("sprinting");
             }
             else
@@ -774,7 +775,18 @@ public class Controller3D : MonoBehaviour
         if (context.canceled)
         {
             sprintMult = 1f;
+            isSprinting = false;
         }
+    }
+
+    public void SprintInput()   // struggling w getting callback every frame pressed
+    {
+        if (isSprinting)
+        {
+            float sprintCost = .5f;
+            DepleteStamina(sprintCost);
+        }
+
     }
 
     private void UpdateAcceleration(Vector3 move)
@@ -1718,6 +1730,410 @@ public class Controller3D : MonoBehaviour
     }
 
     #endregion
+
+    #region Super Logic
+    public void SuperInput(CallbackContext context)
+    {
+        if (levelManager.isPlaying && !playerScript.isOut)
+        {
+            //if mode is basic or advanced
+            //  if (GameManager.mode == "Basic")
+
+
+
+            int superType = playerScript.super.GetComponent<SuperScript>().type;
+
+            if (context.started && superCoolDown <= 0 && ballGrabbed && !isDodging)   // super activate
+            {
+                SuperActivate();
+            }
+
+            if (context.started && ballGrabbed && isSupering)                   // super charge   ... iffy when conisdering if isSupering finishes before SuperAutoRelease
+            {
+                SuperCharge(superType);
+            }
+
+            if (context.canceled && ballGrabbed && isSupering)                        // superRelease
+            {
+                SuperRelease(chargeVel.magnitude, superType);
+            }
+        }
+    }
+
+    private void CheckSuperCool()
+    {
+
+        if (superCoolDown > 0)
+        {
+
+            t_sF = Time.realtimeSinceStartup;
+            superCoolDown -= Time.deltaTime;
+
+            float superTime = 0f;
+
+            if (playerScript.super.GetComponent<SuperScript>().type == 1 || playerScript.super.GetComponent<SuperScript>().type == 2)
+            {
+
+                if (superPackage)
+                {
+                    superTime = superPackage.GetComponent<SuperBall>().superTime;
+                }
+            }
+            else
+            {
+                if (playerScript.super.GetComponent<SuperScript>().type == 3)
+                {
+                    superTime = playerScript.super.GetComponent<SuperSpeed>().superTime;
+                }
+            }
+
+            if (t_sF - t_s0 >= superTime && isSupering)
+            {
+                SuperDeactivate();
+            }
+        }
+    }
+
+    private void SuperCharge(int superType)
+    {
+        float chargeCost = .25f;
+
+        if (!isCharging)
+        {
+            chargeVel = rigidbody.velocity;
+            chargeVelInput.Input(chargeVel.x, chargeVel.z);
+            isCharging = true;
+            ball.GetComponent<Ball>().isCharging = true;
+            float glide = .01f - chargeVel.magnitude / 100000f;
+            accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);
+            velVec = chargeVel;
+        }
+
+
+
+        float chargeThrowSlowDownfactor = 1f;
+
+        // if ((throwCharge) < maxStandingThrowPower)     // 
+        {
+            print("Super Charge");
+            print("Charge @ " + throwCharge);
+            float chargeRate = 50;
+            throwCharge += chargeRate * Time.deltaTime * 100.0f;
+            //  throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower + 1);
+
+            chargeThrowSlowDownfactor = .025f * Time.deltaTime * 100.0f;
+            float stallTime = .1f;
+            // SlowDownByVelocity(chargeThrowSlowDownfactor,stallTime);
+
+            accelerationRate = .25f;
+            Invoke("NormalAccelerationRate", 1f);
+
+            DepleteStamina(chargeCost);
+
+            //  animator.SetTrigger("Charge");
+
+        }
+
+        //  else
+        {
+            //      SuperRelease(chargeVel.magnitude, superType);
+        }
+
+
+    }
+
+    private bool CheckSuperInput()
+    {
+        if ((Input.GetButton(playerScript.joystick.superInput) || Input.GetKey(playerScript.joystick.altSuper1Input) || (playerScript.joystick.number == 1 && superButton && superButton.Pressed)))
+        {
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private bool CheckSuperInputDown()
+    {
+        if (Input.GetKeyDown(playerScript.joystick.altSuper1Input))
+        {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool CheckSuperInputRelease()
+    {
+        if (Input.GetKeyUp(playerScript.joystick.altSuper1Input))
+        {
+
+            return true;
+
+        }
+
+        return false;
+    }
+
+    private void SuperDeactivate()
+    {
+        isSupering = false;
+        animator.SetBool("Supering", false);
+
+
+        if (playerScript.super.GetComponent<SuperScript>().type == 1 || playerScript.super.GetComponent<SuperScript>().type == 2)
+        {
+            foreach (Transform t in ballSupered.transform.GetComponentInChildren<Transform>()) //assumes there is only one ball supered at a time
+            {
+                ballSupered.GetComponent<Ball>().Normalize();
+                if (t.gameObject.tag == "SuperBall")
+                    Destroy(t.gameObject);
+            }
+
+        }
+        else
+        {
+            if (playerScript.super.GetComponent<SuperScript>().type == 3)     //Nina
+            {
+                xSpeed = playerScript.GetComponent<Player>().xspeed;
+                zSpeed = playerScript.GetComponent<Player>().zspeed;
+            }
+        }
+    }
+
+    private void SuperActivate()
+    {
+        t_s0 = Time.realtimeSinceStartup;
+        isSupering = true;
+        superCoolDown = playerScript.power;
+        Color playerColor = playerScript.color;
+
+        int superType = playerScript.super.GetComponent<SuperScript>().type;
+
+        float throwMag = 0;
+
+        if (superType == 1 || superType == 2)
+        {
+
+            ballSupered = ball;
+            superPackage = Instantiate(playerScript.super);
+            ballSupered.GetComponent<Ball>().SuperInit(superPackage);
+            superPackage.transform.parent = ballSupered.transform;
+            superPackage.transform.localPosition = Vector3.zero;
+            SetSuperColor(playerColor, superPackage);
+
+            if (superType == 2)
+            {
+                if (throwDirection.x == 1)
+                {
+                    superPackage.transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+                }
+                else
+                {
+                    superPackage.transform.rotation = new Quaternion(0f, -180f, 0f, 0f);
+                }
+
+            }
+
+            animator.SetTrigger("Charge");
+
+        }
+
+        else
+        {
+            if (superType == 3)  // Nina 
+            {
+                float superTime = playerScript.super.GetComponent<SuperSpeed>().superTime;
+                float superBoost = playerScript.super.GetComponent<SuperSpeed>().speedBoost;
+                SpeedBoost(superTime, superBoost);
+            }
+        }
+
+    }
+
+    private void SuperRelease(float magnitude, int superType)
+    {
+        float throwMag = 0.0f;
+
+        if (superType == 1) // Mack (Ball Expansion)
+        {
+            Transform nearestOpp = GetTargetedOpp();
+            Vector3 seekVec = nearestOpp.transform.position - ball.transform.position;
+
+            print("ball = " + ball.transform.position);
+            print("nearestOpp transfrom = " + nearestOpp.transform.position);
+            print("seekVec = " + seekVec);
+
+            // throww = seekVec * throwPower * superPackage.GetComponent<SuperBall>().throwPowerMult;
+            throww = seekVec.normalized * 5f * throwCharge;
+            //  throww = new Vector3(throww.x, 5f, throww.z);
+        }
+
+        if (superType == 2)  // King (Super Tech Ball) 
+        {
+
+            throww = new Vector3(throwPower * rigidbody.velocity.x, 4f, throwPower * rigidbody.velocity.z);
+
+        }
+
+        Throw(throww, "Super", throwMag);
+
+    }
+
+
+    public void SetSuperColor(Color color, GameObject superPackage)
+    {
+        // 1 SuperBallFX
+
+        int child0Count = superPackage.transform.childCount;
+
+        for (int i = 0; i < child0Count; i++)
+        {
+            GameObject super0Child = superPackage.transform.GetChild(i).gameObject;
+            ParticleSystem s0CPS = super0Child.GetComponent<ParticleSystem>();
+            var s0CPSmain = s0CPS.main;
+
+            if (i == 1)
+            {
+                s0CPSmain.startColor = new Color(color.r, color.g, color.b, .2f);
+            }
+            else
+            {
+                s0CPSmain.startColor = color;
+            }
+
+            int child1Count = super0Child.transform.childCount;
+
+            for (int j = 0; j < child1Count; j++)
+            {
+                GameObject super1Child = super0Child.transform.GetChild(j).gameObject;
+                ParticleSystem s1CPS = super1Child.GetComponent<ParticleSystem>();
+                var s1CPSmain = s1CPS.main;
+
+                if ((i == 0 && j == 0) || (i == 0 && j == 1) || (i == 1 && j == 2))
+                {
+                    s1CPSmain.startColor = new Color(color.r, color.g, color.b, .2f);
+                }
+                else
+                {
+                    s1CPSmain.startColor = color;
+                }
+
+                int child2Count = super1Child.transform.childCount;
+
+                for (int k = 0; k < child2Count; k++)
+                {
+                    GameObject super2Child = super1Child.transform.GetChild(k).gameObject;
+                    ParticleSystem s2CPS = super1Child.GetComponent<ParticleSystem>();
+                    var s2CPSmain = s2CPS.main;
+                    s2CPSmain.startColor = color;
+
+                }
+            }
+        }
+    }
+
+    #endregion
+
+    #region Block Logic 
+    void BlockInput()
+    {
+        if (isBlocking)
+        {
+            Block();   // struggling w hold input logic
+        }
+    }
+
+    void Block()
+    {
+        print("Blocking");
+
+        float blockStaminaThresh = staminaBlockCost;
+
+
+        Vector3 blockPosition = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z);
+
+        if (levelManager.IsInGameBounds(blockPosition) && (staminaCool < (stamina - blockStaminaThresh)) && !blockCool)
+        {
+
+            isBlocking = true;
+            ball.GetComponent<SpriteRenderer>().enabled = true;
+
+
+            //left handed or right handed
+
+            ball.GetComponent<Rigidbody>().useGravity = false;
+            ball.transform.position = blockPosition;
+
+            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(true);
+            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.transform.position = ball.transform.position;
+
+            float blockCost = .25f;
+            DepleteStamina(blockCost);
+            animator.SetBool("hasBall", false);
+
+        }
+
+
+        else
+        {
+            if (isBlocking)
+            {
+                if (staminaCool >= (stamina - blockStaminaThresh))
+                {
+                    blockCool = true;
+                    Invoke("SetBlockCoolFalse", 2f);
+                }
+
+                BlockRelease();
+            }
+
+
+        }
+
+
+    }
+
+    public void BlockRelease()
+    {
+
+        {
+            isBlocking = false;
+            ball.GetComponent<SpriteRenderer>().enabled = false;
+            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(false);
+            animator.SetBool("hasBall", true);
+            print("Block Release");
+        }
+
+    }
+
+    void SetBlockCoolFalse()
+    {
+        blockCool = false;
+    }
+
+    public void BlocktInput(CallbackContext context)
+    {
+
+        if (ballGrabbed)
+        {
+            if (context.performed)
+            {
+                isBlocking = true;
+            }
+
+
+            if (context.canceled)
+            {
+                isBlocking = false;
+                BlockRelease();
+            }
+        }
+    }
+
+    #endregion
     private void Pivot()
     {
         //spriteRenderer.flipX = false;
@@ -1944,411 +2360,6 @@ public class Controller3D : MonoBehaviour
     }
 
 
-    #region Super Logic
-    public void SuperInput(CallbackContext context)
-    {
-        if (levelManager.isPlaying && !playerScript.isOut)
-        {
-            //if mode is basic or advanced
-            //  if (GameManager.mode == "Basic")
-
-
-
-            int superType = playerScript.super.GetComponent<SuperScript>().type;
-
-            if (context.started && superCoolDown <= 0 && ballGrabbed && !isDodging)   // super activate
-            {
-                SuperActivate();
-            }
-
-            if (context.started && ballGrabbed && isSupering)                   // super charge   ... iffy when conisdering if isSupering finishes before SuperAutoRelease
-            {
-                SuperCharge(superType);
-            }
-
-            if (context.canceled && ballGrabbed && isSupering)                        // superRelease
-            {
-                SuperRelease(chargeVel.magnitude, superType);
-            }
-        }
-    }
-
-    private void CheckSuperCool()
-    {
-
-        if (superCoolDown > 0)
-        {
-
-            t_sF = Time.realtimeSinceStartup;
-            superCoolDown -= Time.deltaTime;
-
-            float superTime = 0f;
-
-            if (playerScript.super.GetComponent<SuperScript>().type == 1 || playerScript.super.GetComponent<SuperScript>().type == 2)
-            {
-
-                if (superPackage)
-                {
-                    superTime = superPackage.GetComponent<SuperBall>().superTime;
-                }
-            }
-            else
-            {
-                if (playerScript.super.GetComponent<SuperScript>().type == 3)
-                {
-                    superTime = playerScript.super.GetComponent<SuperSpeed>().superTime;
-                }
-            }
-
-            if (t_sF - t_s0 >= superTime && isSupering)
-            {
-                SuperDeactivate();
-            }
-        }
-    }
-
-    private void SuperCharge(int superType)
-    {
-        float chargeCost = .25f;
-
-        if (!isCharging)
-        {
-            chargeVel = rigidbody.velocity;
-            chargeVelInput.Input(chargeVel.x, chargeVel.z);
-            isCharging = true;
-            ball.GetComponent<Ball>().isCharging = true;
-            float glide = .01f - chargeVel.magnitude / 100000f;
-            accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);
-            velVec = chargeVel;
-        }
-
-
-
-        float chargeThrowSlowDownfactor = 1f;
-
-       // if ((throwCharge) < maxStandingThrowPower)     // 
-        {
-            print("Super Charge");
-            print("Charge @ " + throwCharge);
-            float chargeRate = 50;
-            throwCharge += chargeRate * Time.deltaTime * 100.0f;
-          //  throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower + 1);
-
-            chargeThrowSlowDownfactor = .025f * Time.deltaTime * 100.0f;
-            float stallTime = .1f;
-           // SlowDownByVelocity(chargeThrowSlowDownfactor,stallTime);
-
-            accelerationRate = .25f;
-            Invoke("NormalAccelerationRate", 1f);
-
-            DepleteStamina(chargeCost);
-
-            //  animator.SetTrigger("Charge");
-
-        }
-
-      //  else
-        {
-      //      SuperRelease(chargeVel.magnitude, superType);
-        }
-
-
-    }
-
-    private bool CheckSuperInput()
-    {
-        if ((Input.GetButton(playerScript.joystick.superInput) || Input.GetKey(playerScript.joystick.altSuper1Input) || (playerScript.joystick.number == 1 && superButton && superButton.Pressed)))
-        {
-
-            return true;
-        }
-
-        return false;
-    }
-
-
-    private bool CheckSuperInputDown()
-    {
-        if (Input.GetKeyDown(playerScript.joystick.altSuper1Input))
-        {
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool CheckSuperInputRelease()
-    {
-        if (Input.GetKeyUp(playerScript.joystick.altSuper1Input))
-        {
-
-            return true;
-
-        }
-
-        return false;
-    }
-
-    private void SuperDeactivate()
-    {
-        isSupering = false;
-        animator.SetBool("Supering", false);
-
-
-        if (playerScript.super.GetComponent<SuperScript>().type == 1 || playerScript.super.GetComponent<SuperScript>().type == 2)
-        {
-            foreach (Transform t in ballSupered.transform.GetComponentInChildren<Transform>()) //assumes there is only one ball supered at a time
-            {
-                ballSupered.GetComponent<Ball>().Normalize();
-                if (t.gameObject.tag == "SuperBall")
-                    Destroy(t.gameObject);
-            }
-
-        }
-        else
-        {
-            if (playerScript.super.GetComponent<SuperScript>().type == 3)     //Nina
-            {
-                xSpeed = playerScript.GetComponent<Player>().xspeed;
-                zSpeed = playerScript.GetComponent<Player>().zspeed;
-            }
-        }
-    }
-
-    private void SuperActivate()
-    {
-        t_s0 = Time.realtimeSinceStartup;
-        isSupering = true;
-        superCoolDown = playerScript.power;
-        Color playerColor = playerScript.color;
-
-        int superType = playerScript.super.GetComponent<SuperScript>().type;
-
-        float throwMag = 0;
-
-        if (superType == 1 || superType == 2)
-        {
-
-            ballSupered = ball;
-            superPackage = Instantiate(playerScript.super);
-            ballSupered.GetComponent<Ball>().SuperInit(superPackage);
-            superPackage.transform.parent = ballSupered.transform;
-            superPackage.transform.localPosition = Vector3.zero;
-            SetSuperColor(playerColor, superPackage);
-
-            if (superType == 2)
-            {
-                if (throwDirection.x == 1)
-                {
-                    superPackage.transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
-                }
-                else
-                {
-                    superPackage.transform.rotation = new Quaternion(0f, -180f, 0f, 0f);
-                }
-
-            }
-
-            animator.SetTrigger("Charge");
-
-        }
-
-        else
-        {
-            if (superType == 3)  // Nina 
-            {
-                float superTime = playerScript.super.GetComponent<SuperSpeed>().superTime;
-                float superBoost = playerScript.super.GetComponent<SuperSpeed>().speedBoost;
-                SpeedBoost(superTime, superBoost);
-            }
-        }
-
-    }
-
-    private void SuperRelease(float magnitude, int superType)
-    {
-        float throwMag = 0.0f;
-
-        if (superType == 1) // Mack (Ball Expansion)
-        {
-            Transform nearestOpp = GetTargetedOpp();
-            Vector3 seekVec = nearestOpp.transform.position - ball.transform.position;
-
-            print("ball = " + ball.transform.position);
-            print("nearestOpp transfrom = " + nearestOpp.transform.position);
-            print("seekVec = " + seekVec);
-
-            // throww = seekVec * throwPower * superPackage.GetComponent<SuperBall>().throwPowerMult;
-            throww = seekVec.normalized * 5f * throwCharge;
-            //  throww = new Vector3(throww.x, 5f, throww.z);
-        }
-
-        if (superType == 2)  // King (Super Tech Ball) 
-        { 
-
-            throww = new Vector3(throwPower * rigidbody.velocity.x, 4f, throwPower * rigidbody.velocity.z);
-
-        }
-
-        Throw(throww, "Super", throwMag);
-
-    }
-
-
-    public void SetSuperColor(Color color, GameObject superPackage)
-    {
-        // 1 SuperBallFX
-
-        int child0Count = superPackage.transform.childCount;
-
-        for (int i =0; i< child0Count; i++)
-        {
-            GameObject super0Child = superPackage.transform.GetChild(i).gameObject;
-            ParticleSystem s0CPS = super0Child.GetComponent<ParticleSystem>();
-            var s0CPSmain = s0CPS.main;
-
-            if (i == 1)
-            {
-                s0CPSmain.startColor = new Color(color.r, color.g, color.b, .2f);
-            }
-            else
-            {
-                s0CPSmain.startColor = color;
-            }
-
-            int child1Count = super0Child.transform.childCount;
-
-            for (int j = 0; j < child1Count; j++)
-            {
-                GameObject super1Child = super0Child.transform.GetChild(j).gameObject;
-                ParticleSystem s1CPS = super1Child.GetComponent<ParticleSystem>();
-                var s1CPSmain = s1CPS.main;
-
-                if ((i==0 && j==0) || (i == 0 && j == 1) || (i==1 && j==2))
-                {
-                    s1CPSmain.startColor = new Color(color.r, color.g, color.b, .2f);
-                }
-                else
-                {
-                    s1CPSmain.startColor = color;
-                }
-
-                int child2Count = super1Child.transform.childCount;
-
-                for (int k = 0; k < child2Count; k++)
-                {
-                    GameObject super2Child = super1Child.transform.GetChild(k).gameObject;
-                    ParticleSystem s2CPS = super1Child.GetComponent<ParticleSystem>();
-                    var s2CPSmain = s2CPS.main;
-                    s2CPSmain.startColor = color;
-
-                }
-            }
-        }
-    }
-
-    #endregion
-
-
-
-    #region Block Logic 
-    void BlockInput()
-    {
-       if (isBlocking)
-        {
-            Block();   // struggling w hold input logic
-        }
-    }
-
-    void Block()
-    {
-        print("Blocking");
-
-        float blockStaminaThresh = staminaBlockCost;
-
-
-        Vector3 blockPosition = new  Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z);
-
-        if (levelManager.IsInGameBounds(blockPosition)  && (staminaCool < (stamina - blockStaminaThresh)) && !blockCool)
-        {
-          
-            isBlocking = true;
-            ball.GetComponent<SpriteRenderer>().enabled = true;
-
-           
-            //left handed or right handed
-           
-            ball.GetComponent<Rigidbody>().useGravity = false;
-            ball.transform.position = blockPosition;
-
-            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(true);
-            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.transform.position = ball.transform.position;
-
-            float blockCost = .25f;
-            DepleteStamina(blockCost);
-            animator.SetBool("hasBall", false);
-
-        }
-        
-       
-        else
-        {
-            if (isBlocking)
-            {
-                if (staminaCool >= (stamina - blockStaminaThresh)){
-                    blockCool = true;
-                    Invoke("SetBlockCoolFalse", 2f);
-                }
-
-                BlockRelease();
-            }
-
-
-        }
-       
-
-    }
-
-    public void BlockRelease()
-    {
-     
-        {
-            isBlocking = false;
-            ball.GetComponent<SpriteRenderer>().enabled = false;
-            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(false);
-            animator.SetBool("hasBall", true);
-            print("Block Release");
-        }
-
-    }
-
-    void SetBlockCoolFalse()
-    {
-        blockCool = false;
-    }
-
-    public void BlocktInput(CallbackContext context)
-    {
-    
-        if (ballGrabbed)
-        {
-            if (context.performed)
-            {
-                isBlocking = true;     
-            }
-
-
-            if (context.canceled)
-            {
-                isBlocking = false;
-                BlockRelease();
-            }
-        }
-    }
-
-    #endregion
-
     private bool ThrownByOpp(GameObject ball, int team)
     {
         if (team == 2)
@@ -2512,7 +2523,7 @@ public class Controller3D : MonoBehaviour
     }
     private void CheckStamina()
     {
-        if (rigidbody.velocity.magnitude < 3f && !isDodging && !isBlocking)             // *arb = moveThresh
+        if (!isSprinting && !isDodging && !isBlocking)             // *arb = moveThresh gr
         {
 
             if (staminaCool > 0.0f)      // should invert ... i.e - cost, as opposed to + cost
