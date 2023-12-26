@@ -100,6 +100,13 @@ public class StageCycleController : MonoBehaviour
 
         }
 
+        if (stageList[selectedStageIndex].StageName == "TEST")
+        {
+            Debug.Log(string.Format("Stage {0}:{1} was selected", selectedStageIndex, stageList[selectedStageIndex].StageName));
+            LoadGameLevel("Test Groundz");
+
+        }
+
     }
 
     private void UpdateStageSelectionUI()

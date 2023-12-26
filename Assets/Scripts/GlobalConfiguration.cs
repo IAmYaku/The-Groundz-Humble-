@@ -79,7 +79,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     public MultiplayerEventSystem currentMultiplayerEventSystem;
 
-    bool isTesting = true;
+    bool isTesting = false;
 
 
     void Awake()

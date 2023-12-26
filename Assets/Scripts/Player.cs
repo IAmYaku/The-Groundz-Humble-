@@ -85,10 +85,10 @@ public class Player : MonoBehaviour
     private float fxSpeed = 1f;
 
     public List<RuntimeAnimatorController> runtimeControlllers = new List<RuntimeAnimatorController>();
- //   public RuntimeAnimatorController main; 0
-  //  public RuntimeAnimatorController alt1;
-  //  public RuntimeAnimatorController alt2;
- //   public RuntimeAnimatorController alt3;
+    //   public RuntimeAnimatorController main; 0
+    //  public RuntimeAnimatorController alt1;
+    //  public RuntimeAnimatorController alt2;
+    //   public RuntimeAnimatorController alt3;
 
 
     public AudioSource playerAudioSource;
@@ -106,7 +106,7 @@ public class Player : MonoBehaviour
     private float drC_tF;
 
     public static event Action<InputUser, InputUserChange, InputDevice> onChange;
-    
+
 
 
     private void Awake()
@@ -372,20 +372,22 @@ public class Player : MonoBehaviour
     }
 
 
-        
+
 
     public void ControlSwap(GameObject pSwap)
     {
         /// Gotta check keyboard 
-        
-      
 
-            Player pScript = pSwap.GetComponent<Player>();
-            Color pColor = pScript.color;
-            int pIndex = pScript.joystick.number;
+
+
+        Player pScript = pSwap.GetComponent<Player>();
+        Color pColor = pScript.color;
+        int pIndex = pScript.joystick.number;
+
+        disableAI();
 
         if (pIndex != -1)
-            {
+        {
             print("pjoyNum " + pIndex);
 
             PlayerInput pInput = PlayerInput.all[pIndex];
@@ -399,7 +401,7 @@ public class Player : MonoBehaviour
             print(" InputSystem.devices.count " + pInput.devices.Count);
             */
 
-            disableAI();
+
 
             hasJoystick = true;
 
@@ -423,7 +425,8 @@ public class Player : MonoBehaviour
 
             print("Gamepad.all.Count " + Gamepad.all.Count);
 
-            CheckDevices();
+           // CheckDevices();
+            MoveDevice(pSwap.GetComponent<Player>().controller3D.playerInput);
 
             /*
             print(" InputUser.all " + InputUser.all.Count);
@@ -433,14 +436,12 @@ public class Player : MonoBehaviour
             print("myPlayerInput.devices.count " + myPlayerInput.devices.Count);
             print("myPlayerInputUser.index " + myPlayerInputUser.index);
             */
-                // PlayerInput.all[
+            // PlayerInput.all[
         }
 
         else
         {
             print("Key Control Swap");
-            disableAI();
-
             hasJoystick = true;
 
             joystick = pScript.joystick;
@@ -458,7 +459,7 @@ public class Player : MonoBehaviour
 
     private Action<InputUser, InputUserChange, InputDevice> DeviceChange()
     {
-     //   print("Device changed!");
+        //   print("Device changed!");
         /*
         if (Gamepad.all.Count >= 1)
         {
@@ -494,14 +495,30 @@ public class Player : MonoBehaviour
                     Gamepad g = Gamepad.all[pScript.joystick.number];
                     InputUser.PerformPairingWithDevice(g, pUser, InputUserPairingOptions.UnpairCurrentDevicesFromUser);
                 }
-                 }
             }
         }
+    }
+
+    void MoveDevice(PlayerInput pSwap)
+    {
+        // Give control form player 1 to player 2
+        
+        var player1 = PlayerInput.all[pSwap.playerIndex];
+        var player2 = PlayerInput.all[controller3D.playerInput.playerIndex];
+        player2.SwitchCurrentControlScheme(
+            player1.currentControlScheme,
+            player1.devices.ToArray());
+
+        // Silence player1's input for now while we use player #2's input.
+        player1.DeactivateInput();
+        
+    }
 
     private void enableController()
     {
         controller3DObject.SetActive(true);
         controller3D.enabled = true;
+
         PlayerInput playerInput = controller3DObject.GetComponent<PlayerInput>();
         if (playerInput)
         {
@@ -562,12 +579,14 @@ public class Player : MonoBehaviour
         navMeshAgent.enabled = false;
 
         playerAura.SetActive(false);
+        playerAura.GetComponent<ParticleSystemRenderer>().enabled = false;
     }
 
     private void SetAuraColor(Color color)
     
     {
         playerAura.SetActive(true);
+        playerAura.GetComponent<ParticleSystemRenderer>().enabled = true;
 
         GameObject psRoot = playerAura;
         ParticleSystem.MainModule rootPS = psRoot.GetComponent<ParticleSystem>().main;

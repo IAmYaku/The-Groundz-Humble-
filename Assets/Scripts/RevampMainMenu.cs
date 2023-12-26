@@ -11,6 +11,8 @@ public class RevampMainMenu : MonoBehaviour
 
     public GameObject buttonList;
 
+    public GameObject eventSystemObject;
+
     private void Start()
     {
         GlobalConfiguration.loadPoint = GlobalConfiguration.LoadPoint.gameMode;
@@ -33,6 +35,8 @@ public class RevampMainMenu : MonoBehaviour
 
         GlobalConfiguration.Instance.SetGameMode("test");
         LoadLevel("Test Groundz");
+        eventSystemObject.SetActive(false);
+        GlobalConfiguration.Instance.SetDefaultJoin(false);
         print("Test");
     }
 

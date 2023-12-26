@@ -374,11 +374,7 @@ public class LevelManager : MonoBehaviour
     private void Referee()
     {
       	CheckHits();
-
-        if (Gamepad.all.Count <= 1)    // doesn't take into account reconnectivity
-        {
-            //CheckTeamHasPlayer();
-        }
+        CheckTeamHasPlayer();
    
 
 
