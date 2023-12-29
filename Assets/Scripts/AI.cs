@@ -183,6 +183,9 @@ public class AI : MonoBehaviour {
 
     public bool isPausing;  // Gives a sense of realism between actions
 
+    bool isSynching;
+    Vector3 spawnPos;
+
     private void Awake()
     {
 
@@ -284,9 +287,14 @@ public class AI : MonoBehaviour {
             {
                 //     print(" IsOnNAvMesh" );
 
-
                 if (!isKnockedOut && !isPausing)
                 {
+
+                    if (!navMeshAgent.updatePosition && !isSynching)
+                    {
+                        StartCoroutine("ReEnableNavMeshAgent");
+                    }
+
 
                     if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)
                     {
@@ -328,6 +336,42 @@ public class AI : MonoBehaviour {
 
         playerConfigObject.transform.LookAt(Camera.main.transform.position, Vector3.up);
         playerConfigObject.transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, transform.localEulerAngles.z);     // Stay 2D for me please lol
+    }
+
+    IEnumerator ReEnableNavMeshAgent()
+    {
+
+            isSynching = true;
+
+        navMeshAgent.enabled = false;
+
+            spawnPos = playerConfigObject.transform.position;
+
+            navMeshAgent.nextPosition = spawnPos;
+
+            print("~ playerConfigObject.transform.position = " + playerConfigObject.transform.position);
+            print("~ navMeshAgent.nextPosition = " + navMeshAgent.nextPosition);
+
+       
+
+        while (navMeshAgent.nextPosition != spawnPos)
+        {
+            print(" Wrong : navMeshAgent.nextPosition = " + navMeshAgent.nextPosition);
+            navMeshAgent.nextPosition = spawnPos;
+            yield return new WaitForSeconds(.1f);
+        }
+   
+            print(" ");
+            print("ready ");
+            isSynching = false;
+        navMeshAgent.enabled = true;
+        navMeshAgent.updatePosition = true;
+
+
+        // navMeshAgent.Warp(new Vector3(-24, 5, -5f));
+        //   print("Warp Position = " + playerConfigObject.transform.position);
+
+
     }
 
     internal void SetKnockedOut(float magnitude)
@@ -1150,6 +1194,7 @@ public class AI : MonoBehaviour {
 
             }
         }
+        
         
         return inBounds;
 	}

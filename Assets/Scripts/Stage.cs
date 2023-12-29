@@ -145,16 +145,16 @@ public class Stage : MonoBehaviour
 
     private void CreateSpawnLocations(int team, int playerCount)
     {
-        int zOffset = -15 * playerCount;
-        int yOffset = 3;                           // takes into account size of players... since floor is @ 0
-        float zDistMult = 30f;
+        int zOffset = -10 * playerCount;
+        int yOffset = 4;                           // takes into account size of players... since floor is @ 0
+        float zDistMult = 20f;
         float xDistMult = .8f;
 
         if (team == 1)
         {
             for (int i=0; i< playerCount; i++)
             {
-                Vector3 location = new Vector3(baseLineLeft * xDistMult, floor + yOffset, zOffset + i * zDistMult);
+                Vector3 location = new Vector3(baseLineLeft * xDistMult, floor + yOffset, zOffset + i * zDistMult);         //add clamps
                 print("tm1 location  (" + i + ") = " + location);
                 tm1_spawnPoints.Add(location);
 
@@ -165,7 +165,7 @@ public class Stage : MonoBehaviour
         {
             for (int i = 0; i < playerCount; i++)
             {
-                Vector3 location = new Vector3(baseLineRight * xDistMult, floor + yOffset, zOffset + i * zDistMult);
+                Vector3 location = new Vector3(baseLineRight * xDistMult, floor + yOffset, zOffset + i * zDistMult);         //add clamps
                 print("tm2 location  (" + i + ") = " + location);
                 tm2_spawnPoints.Add(location);
             }

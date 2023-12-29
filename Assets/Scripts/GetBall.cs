@@ -133,7 +133,7 @@ public class GetBall : AIState {
         else
         {
            if ( !IsBallIsStillLegal(ballTarget)) {
-                Debug.Log("Ball not legal anymore");
+              //  Debug.Log("Ball not legal anymore");
                 ai.EndAgentNavigation();
                 ballTarget.GetComponent<Ball>().isBeingPursued = false;
                 ballTarget = GetNearestBall(pos, manager);
@@ -204,7 +204,7 @@ public class GetBall : AIState {
 
             else
             {
-              //    Debug.Log("No Ball found");
+             //  Debug.Log("Ball not found");
                 inAction = false;
             ai.navMeshAgent.velocity = Vector3.zero;
             ai.EndAgentNavigation();
@@ -218,14 +218,14 @@ public class GetBall : AIState {
     {
         if (ai.GetTeam() == 2)
         {
-            if (thisBallTarget.transform.position.x > gameManager.levelManager.stage.halfCourtLine)
+            if (thisBallTarget.transform.position.x >= gameManager.levelManager.stage.halfCourtLine)
             {
                 return true;
             }
         }
         else
         {
-            if (thisBallTarget.transform.position.x < gameManager.levelManager.stage.halfCourtLine)
+            if (thisBallTarget.transform.position.x <= gameManager.levelManager.stage.halfCourtLine)
             {
                 return true;
             }

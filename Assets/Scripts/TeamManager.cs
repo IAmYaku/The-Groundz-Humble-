@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TeamManager : MonoBehaviour
 {
@@ -444,7 +445,8 @@ public class TeamManager : MonoBehaviour
         {
             players[i].transform.localPosition =Vector3.zero;
             players[i].transform.GetChild(0).position = spawnPoints[i];
-            //NavMeshAgent.Warp(Vector3).
+           // players[i].GetComponent<Player>().playerConfigObject.GetComponent<NavMeshAgent>().updatePosition = true;
+           // players[i].GetComponent<Player>().playerConfigObject.GetComponent<NavMeshAgent>().nextPosition = spawnPoints[i]; ;
         }
     }
 

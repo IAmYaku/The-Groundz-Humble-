@@ -317,7 +317,7 @@ public class Player : MonoBehaviour
             playerConfigObject.GetComponent<Rigidbody>().isKinematic = true;
             playerConfigObject.GetComponent<Rigidbody>().useGravity = false;
 
-            playerConfigObject.transform.position = transform.position;   //?    +
+           // playerConfigObject.transform.position = transform.position;   //?    +
 
             playerConfigObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);  // +
 
@@ -364,6 +364,7 @@ public class Player : MonoBehaviour
 
         NavMeshAgent navMeshAgent = playerConfigObject.GetComponent<NavMeshAgent>();
         navMeshAgent.enabled = true;
+        aiScript.EndAgentNavigation();
 
         playerAura.SetActive(false);
 
@@ -689,7 +690,7 @@ public class Player : MonoBehaviour
     }
 
 
-    public void DisablePlayer()
+    public void PlayerOut()
     {
         isOut = true;
        
@@ -718,6 +719,7 @@ public class Player : MonoBehaviour
                 }
                 aiScript.isKnockedOut = false;
                 aiScript.playerConfigObject.GetComponent<PlayerConfiguration>().ballContact = false;
+                aiScript.EndAgentNavigation();
                 aiScript.enabled = false;
                 hitObject.SetActive(false);
 

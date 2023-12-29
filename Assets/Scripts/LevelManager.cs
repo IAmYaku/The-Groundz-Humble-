@@ -836,7 +836,7 @@ public class LevelManager : MonoBehaviour
             LogOuts();
         }
 
-        player.GetComponent<Player>().DisablePlayer();
+        player.GetComponent<Player>().PlayerOut();
         player.GetComponent<Player>().PlayOutSound();
 
 
@@ -912,7 +912,7 @@ public class LevelManager : MonoBehaviour
             }
 
             tm1.players[index].transform.GetChild(1).gameObject.SetActive(true);
-            tm1.players[index].transform.GetChild(0).transform.position = tm1.players[index].GetComponent<Player>().childPos0;
+            tm1.players[index].transform.GetChild(0).transform.position = stage.tm1_spawnPoints[0]; // if player is not near
             tm1.players[index].GetComponentInChildren<SpriteRenderer>().enabled = true;
             tm1.players[index].GetComponentInChildren<CapsuleCollider>().enabled = true;
             tm1.players[index].GetComponentInChildren<SphereCollider>().enabled = true;
@@ -945,7 +945,7 @@ public class LevelManager : MonoBehaviour
             }
 
             tm2.players[index].transform.GetChild(1).gameObject.SetActive(true);
-            tm2.players[index].transform.GetChild(0).transform.position = tm2.players[index].GetComponent<Player>().childPos0;
+            tm2.players[index].transform.GetChild(0).transform.position = stage.tm2_spawnPoints[0]; // if player is not near
             tm2.players[index].GetComponentInChildren<SpriteRenderer>().enabled = true;
             tm2.players[index].GetComponentInChildren<CapsuleCollider>().enabled = true;
             tm2.players[index].GetComponentInChildren<SphereCollider>().enabled = true;
@@ -1480,9 +1480,12 @@ public class LevelManager : MonoBehaviour
                     player.GetComponentInChildren<AI>().DropBall();
                 }
 
-                player.GetComponentInChildren<AI>().enabled = true;
                 player.GetComponentInChildren<NavMeshAgent>().enabled = true;
-                player.GetComponentInChildren<Rigidbody>().isKinematic = true;
+
+                player.GetComponentInChildren<AI>().enabled = true;
+
+
+                //player.GetComponentInChildren<NavMeshAgent>().nextPosition = playerconfigObject.transform.position;
                 //     player.GetComponentInChildren<AI>().animator.runtimeAnimatorController = player.GetComponentInChildren<AI>().play;  
                 player.GetComponentInChildren<AI>().FaceOpp();
             }
@@ -1754,13 +1757,17 @@ public class LevelManager : MonoBehaviour
                 {
                     if (other.GetComponent<Player>().hasAI && other.GetComponent<Player>().isOut == false)
                     {
+                        print("Control Swap");
+
                         if (GlobalConfiguration.Instance.GetMyJoysticks().Count >= 1)
                         {
                             other.GetComponent<Player>().ControlSwap(player);
                         }
 
+
                         player.GetComponent<Player>().enableAI();
-                        player.GetComponent<Player>().DisablePlayer();
+                        player.GetComponent<Player>().aiObject.GetComponent<AI>().navMeshAgent.updatePosition = false;
+                        player.GetComponent<Player>().PlayerOut();
 
                         break;
                     }
@@ -1776,6 +1783,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if (other.GetComponent<Player>().hasAI && other.GetComponent<Player>().isOut == false)
                     {
+                        print("Control Swap");
 
                         if (GlobalConfiguration.Instance.GetMyJoysticks().Count >= 1)
                         {
@@ -1783,8 +1791,7 @@ public class LevelManager : MonoBehaviour
                         }
 
                         player.GetComponent<Player>().enableAI();
-                        player.GetComponent<Player>().DisablePlayer();
-
+                        
                         break;
                     }
                 }
