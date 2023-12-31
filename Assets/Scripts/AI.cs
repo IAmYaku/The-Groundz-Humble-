@@ -56,7 +56,7 @@ public class AI : MonoBehaviour {
     private float randomThrowFactor = 30f;
     public float randomThrowFactor0 = 30f;
     public int level = 1;
-    float throwScale = 30f;                   
+    float throwScale = 1000f;                   
     float speedScale = 2f;
     float catchProb = .2f;
 
@@ -113,7 +113,7 @@ public class AI : MonoBehaviour {
 	public float grabRadius = 5f;
 
 
-	public float throwPower = 200f;
+    public float throwPower;
     public float standingThrowPower;
 
 	private Vector3 throwDirection;
@@ -1044,6 +1044,11 @@ public class AI : MonoBehaviour {
             }
         }
         return false;
+    }
+
+    internal void SetThrowScale(float x)
+    {
+        throwScale = x;
     }
 
     public GameObject GetNearestBall()               //reg ball
