@@ -828,18 +828,18 @@ internal void AddSelectedPlayer(string name, int team, int playerIndex)         
         return myJoysticks;
     }
 
-    internal void PopulateAIRevamp(int p1team, int ai1Count, int ai2Count)
+    internal void PopulateAIRevamp(int p1team, int ai1Count, int ai2Count, int ai1Level, int ai2Level)
     {
         if (p1team == 1)
         {
-            PopulateAITeamRevamp(2, ai2Count);   //orders important to get opposite char type
-            PopulateAITeamRevamp(1, ai1Count);
+            PopulateAITeamRevamp(2, ai2Count, ai2Level);   //orders important to get opposite char type
+            PopulateAITeamRevamp(1, ai1Count, ai1Level);
         }
 
         if (p1team == 2)
         {
-            PopulateAITeamRevamp(1, ai1Count);
-            PopulateAITeamRevamp(2, ai2Count);
+            PopulateAITeamRevamp(1, ai1Count, ai1Level);
+            PopulateAITeamRevamp(2, ai2Count, ai2Level);
 
         }
     }
@@ -942,7 +942,7 @@ internal void AddSelectedPlayer(string name, int team, int playerIndex)         
             }
         }
     }
-    void PopulateAITeamRevamp(int team, int count)
+    void PopulateAITeamRevamp(int team, int count, int aiLevel)
     {
 
         if (team == 1)
@@ -951,14 +951,16 @@ internal void AddSelectedPlayer(string name, int team, int playerIndex)         
 
                 List<GameObject> ai1_new = tm1.PopulateAIRevamp(1, count);
                 int i = 0;
-                foreach (GameObject ai1_ in ai1_new)
-                {
-                    i++;
-                    Player pScript = ai1_.GetComponent<Player>();
-                    AddNewPlayer(ai1_);
-                    AddPlayerToTeamManager(ai1_, 1, false);
-                    pScript.SetColor(GetPlayerColor(i, pScript));
-                }
+            foreach (GameObject ai1_ in ai1_new)
+            {
+                i++;
+                Player pScript = ai1_.GetComponent<Player>();
+                AddNewPlayer(ai1_);
+                AddPlayerToTeamManager(ai1_, 1, false);
+                pScript.SetColor(GetPlayerColor(i, pScript));
+                pScript.aiObject.GetComponent<AI>().level = aiLevel;
+                pScript.aiObject.GetComponent<AI>().LevelIncrease(LevelManager.difficultyScalar);
+            }
         }
 
         if (team == 2)
@@ -974,7 +976,9 @@ internal void AddSelectedPlayer(string name, int team, int playerIndex)         
                     AddNewPlayer(ai2_);
                     AddPlayerToTeamManager(ai2_, 2, false);
                     pScript.SetColor(GetPlayerColor(j, pScript));
-                }
+                pScript.aiObject.GetComponent<AI>().level = aiLevel;
+                pScript.aiObject.GetComponent<AI>().LevelIncrease(LevelManager.difficultyScalar);
+            }
             }
     }
 

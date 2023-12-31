@@ -56,7 +56,7 @@ public class AI : MonoBehaviour {
     private float randomThrowFactor = 30f;
     public float randomThrowFactor0 = 30f;
     public int level = 1;
-    float throwScale = 25f;                   
+    float throwScale = 30f;                   
     float speedScale = 2f;
     float catchProb = .2f;
 

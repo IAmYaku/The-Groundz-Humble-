@@ -81,7 +81,7 @@ public class LevelManager : MonoBehaviour
     ArcadeMode arcadeScript;
     public int roundLevel;
 
-    float difficultyScaler = 3f;
+    public static float difficultyScalar = 3f;
     int throwMag;
     int throwDecScalar;
 
@@ -270,7 +270,7 @@ public class LevelManager : MonoBehaviour
                                 if (!arcadeScript.GetCompleted())
                                 {
                                     arcadeScript.levelUp();
-                                    difficultyScaler += arcadeScript.diffFactor;
+                                    difficultyScalar += arcadeScript.diffFactor;
                                     string nextOpp = arcadeScript.GetCurrentOppName();
                                     AddOppsFaced(nextOpp);
                                     GlobalConfiguration.Instance.PopulateArcadeAI(2, nextOpp);
@@ -1163,6 +1163,7 @@ public class LevelManager : MonoBehaviour
         throws.Clear();
         team1Scored = false;
         team2Scored = false;
+        difficultyScalar = 3f;
 
 
         // List<GameObject> players = new List<GameObject>();
@@ -1213,6 +1214,7 @@ public class LevelManager : MonoBehaviour
             {
 
                 player.GetComponentInChildren<AI>().enabled = true;
+                player.GetComponentInChildren<AI>().level = 1;
                 player.GetComponentInChildren<UnityEngine.AI.NavMeshAgent>().enabled = true;
             }
 
@@ -1312,7 +1314,7 @@ public class LevelManager : MonoBehaviour
                 if (player.GetComponent<Player>().hasAI)
                 {
                         {
-                            IncreaseAIIntensity(player.GetComponentInChildren<AI>(), difficultyScaler);
+                            IncreaseAIIntensity(player.GetComponentInChildren<AI>(), difficultyScalar);
                         }
                     }
                 }
@@ -1323,7 +1325,7 @@ public class LevelManager : MonoBehaviour
                 {
                     {
                         // DecreaseThrowMag(difficultyScaler);
-                        DecreaseControllerHelp(player.GetComponentInChildren<Controller3D>(), difficultyScaler/10f);
+                        DecreaseControllerHelp(player.GetComponentInChildren<Controller3D>(), difficultyScalar/10f);
                     }
                 }
             }
@@ -1583,6 +1585,8 @@ public class LevelManager : MonoBehaviour
         roundLevel = 0;
         isAtScene = false;
 
+        difficultyScalar = 3f;
+
         Controller3D.hasGrabMag = false;   //gr
         Controller3D.grabMag = 10f;
         Controller3D.hasThrowMag = false;
@@ -1724,6 +1728,7 @@ public class LevelManager : MonoBehaviour
         team1Scored = false;
         team2Scored = false;
         roundLevel = 0;
+        difficultyScalar = 3f;
         GameRestart("reset");
 
      //   GameRestart();
@@ -1811,7 +1816,7 @@ public class LevelManager : MonoBehaviour
 
     public void IncreaseDifficultyScalar(float x)
     {
-        difficultyScaler += x;
+        difficultyScalar += x;
     }
 
     public void AddOppsFaced(string x)

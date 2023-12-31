@@ -17,6 +17,9 @@ public class RevampTeamSelect : MonoBehaviour
     int ai1Count = 0;
     int ai2Count = 1;
 
+    int ai1Level = 1;
+    int ai2Level = 1;
+
     public class PlayerModule
     {
         public int number = 0;
@@ -173,6 +176,21 @@ public class RevampTeamSelect : MonoBehaviour
             //   GlobalConfiguration.instance.SetTeamInitAICount(1, ai1Count); // will add once created
         }
     }
+
+
+
+    public void SetAITeam1Level(float level)
+    {
+        ai1Level = (int) level;
+
+    }
+
+    public void SetAITeam2Level(float level)
+    {
+        ai2Level = (int) level;
+
+    }
+
 
     public void SetAITeam2Count(int count)
     {
@@ -635,7 +653,7 @@ public class RevampTeamSelect : MonoBehaviour
         //foreach tm foreach aiCount - > create AI
         int p1team = modules[0].team;
 
-        GlobalConfiguration.Instance.PopulateAIRevamp(p1team,ai1Count,ai2Count);
+        GlobalConfiguration.Instance.PopulateAIRevamp(p1team,ai1Count,ai2Count, ai1Level, ai2Level);
         GlobalConfiguration.Instance.SetDefaultJoin(false);
 
 
