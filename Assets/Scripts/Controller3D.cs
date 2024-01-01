@@ -41,7 +41,12 @@ public class Controller3D : MonoBehaviour
     private Vector3 move;
     private Vector3 move0;
 
-    float moveThresh = .2f;
+    //[SerializeField]
+     AnimationCurve moveCurve;
+    float moveCurveTime;
+
+
+    float moveThresh = .1f;
 
 
     public float maxSpeed = 60f;
@@ -258,8 +263,15 @@ public class Controller3D : MonoBehaviour
         sizeZ = collider.bounds.max.z - collider.bounds.min.z;
         color = gameObject.GetComponentInParent<Player>().color;
 
-       // cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * (collider.bounds.size.magnitude + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
-      //  Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
+        moveCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
+        moveCurve.keys[0].outTangent = 5f;
+
+
+      //  moveCurve.preWrapMode = WrapMode.Default;
+      //  moveCurve.postWrapMode = WrapMode.Clamp;
+
+        // cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * collider.bounds.size.magnitude + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
+        //  Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
 
     }
 
@@ -292,6 +304,7 @@ public class Controller3D : MonoBehaviour
                 CheckSuperCool();
                 BlockInput();
                 SprintInput();
+                CheckMoveCurve();
                 // HandlePerks(perkDur,1f);
             }
             else 
@@ -554,21 +567,26 @@ public class Controller3D : MonoBehaviour
 
     #region Move Logic
 
+    private void CheckMoveCurve()
+    {
+        if (move.magnitude <= moveThresh)
+        {
+            moveCurve.Evaluate(0);
+            moveCurveTime = 0f;
+        }
+    }
+
     void MoveInput()
     {
-        if (CheckVelocity())
-        {
             ApplyMovePadding();
 
             if (!inBallPause)
             {
-                if (move.magnitude > moveThresh && onGround)
+                if (move.magnitude > moveThresh && onGround && InBounds())
                 {
                     ApplyVelocity(move);
                     // UpdateAcceleration(move);
                 }
-
-            }
         }
 
         AnimateMovement();
@@ -652,6 +670,7 @@ public class Controller3D : MonoBehaviour
 
     private void ApplyVelocity(Vector3 move)
     {
+
         float maxKoJVel = 4f;
 
         float muvXcel_x = Mathf.Abs(joyInput.GetMuvDelta().x);
@@ -720,9 +739,25 @@ public class Controller3D : MonoBehaviour
         
         else
         {
+
+            float sprintBoost = Mathf.Clamp((sprintMult - 1.25f), 0f, 1f);
+            sprintBoost = 0;
+            float timeBias = 2f;
+           // timeBias = 1f;
+
+            if (!isDodging)
+            {
+                moveCurveTime = Mathf.Clamp(moveCurveTime + (Time.deltaTime * sprintMult * timeBias) + sprintBoost, 0f, 1f);
+            }
+            else
+            {
+                moveCurveTime = 1f;
+            }
+
+
             velVec = new Vector3(xVelocity, 0f, zVelocity);
             float accelerationLerpTime = accelerationRate * Time.fixedDeltaTime * accelerationTimeMultiplier;
-            rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, velVec, accelerationRate * Time.fixedDeltaTime * accelerationTimeMultiplier);
+            rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, velVec, accelerationRate * Time.fixedDeltaTime * accelerationTimeMultiplier) * moveCurve.Evaluate(moveCurveTime); ;
         }
 
         // clamp velcocity to max velocity
@@ -757,7 +792,7 @@ public class Controller3D : MonoBehaviour
         {
             float sprintThresh = 10f;
 
-            if (staminaCool < (stamina - sprintThresh) && ((xSpeed + zSpeed) / 2f < maxSpeed))
+            if (staminaCool < (stamina - sprintThresh) && ((xSpeed + zSpeed) / 2f < maxSpeed)) // TODO - check maxSpeed logic
             {
                 float sprintCost = .5f;
                 DepleteStamina(sprintCost);
@@ -769,6 +804,7 @@ public class Controller3D : MonoBehaviour
             else
             {
                 sprintMult = 1f;
+                isSprinting = false;
             }
         }
 
@@ -785,7 +821,16 @@ public class Controller3D : MonoBehaviour
         {
             float sprintCost = .5f;
             DepleteStamina(sprintCost);
+
+            float sprintThresh = 10f;
+
+            if ( (stamina - staminaCool) <  sprintThresh)
+            {
+                sprintMult = 1f;
+                isSprinting = false;
+            }
         }
+
 
     }
 
@@ -1629,16 +1674,28 @@ public class Controller3D : MonoBehaviour
                         isDodging = true;
                         dodgeThrowDelay = true;
 
-                        if (animator)
+                        Vector3 dodgeMove;
+
+                        if (move.magnitude < moveThresh)
                         {
-                            animator.SetTrigger("Dodge");
+                            dodgeMove = new Vector3(0f, 0f, GetDodgeDirection());
+                        }
+                        else
+                        {
+                            dodgeMove = move;
                         }
 
                         staminaCool += staminaDodgeCost;
                         Vector3 velNorm = rigidbody.velocity.normalized;
-                        Vector3 dodgeVec = (velNorm + new Vector3(move.x, 0f, move.z))/2f;
+                        Vector3 dodgeVec = (velNorm + new Vector3(dodgeMove.x, 0f, dodgeMove.z))/2f;
                         rigidbody.velocity += new Vector3(dodgeVec.x * dodgeSpeed*.5f , 0f,dodgeVec.z * dodgeSpeed);  //*arb
+
                         playerScript.PlayDodgeSound();
+
+                        if (animator)
+                        {
+                            animator.SetTrigger("Dodge");
+                        }
 
                         float dodgeCool =  (rigidbody.velocity.magnitude / 1000f); // arbs
                         print("dodgeCool = " + dodgeCool);

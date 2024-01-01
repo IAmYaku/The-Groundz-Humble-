@@ -44,7 +44,7 @@ public class Stage : MonoBehaviour
 
     public GameObject playingLevelPlane;
 
-    public static bool loadedFromStage;
+    public static bool loadedFromStage = false;
 
     private void Awake()
     {
