@@ -257,7 +257,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 3bdb93305d22a0f489c55e0cc6c20f85, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 86d0943e363847846b347d2ab9e1b491, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -358,6 +358,7 @@ MonoBehaviour:
   themeAudioSource: {fileID: 8299842510432949960}
   shuffle: 0
   lobbyMusicList:
+  - {fileID: 8300000, guid: b027709cc5c36416e91e9038215a0726, type: 3}
   - {fileID: 8300000, guid: 3bdb93305d22a0f489c55e0cc6c20f85, type: 3}
   - {fileID: 8300000, guid: 76f7c401e6dccd746ad990e2bcfb1e27, type: 3}
   - {fileID: 8300000, guid: b027709cc5c36416e91e9038215a0726, type: 3}
