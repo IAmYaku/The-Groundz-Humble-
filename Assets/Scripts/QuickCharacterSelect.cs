@@ -82,7 +82,7 @@ public class QuickCharacterSelect : MonoBehaviour
 
     }
 
-    public  QuickCharacterSelect()   // If not called from start
+    public void Init()   // If not called from start
     {
         print(" Init QuickCharacterSelect");
 

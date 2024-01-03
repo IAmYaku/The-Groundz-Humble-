@@ -137,6 +137,7 @@ public class GlobalConfiguration : MonoBehaviour
     internal void LoadDefaultGame(/* first char */)
     {
         quickCharacterSelect = new QuickCharacterSelect();
+        quickCharacterSelect.Init();
         quickCharacterSelect.PickMack();
     }
 

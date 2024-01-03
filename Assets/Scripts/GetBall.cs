@@ -204,7 +204,7 @@ public class GetBall : AIState {
 
             else
             {
-             //  Debug.Log("Ball not found");
+               //Debug.Log("Ball not found");
                 inAction = false;
             ai.navMeshAgent.velocity = Vector3.zero;
             ai.EndAgentNavigation();
@@ -423,7 +423,7 @@ public class GetBall : AIState {
         if (team == 1) {
             foreach (GameObject ball in lm.balls) {
                 Ball ballScript = ball.GetComponent<Ball>();
-                if (ballScript.grounded && !ballScript.grabbed && ball.transform.position.x <= halfCourt -.5 /* && !ballScript.isBeingPursued */) {                 // gameRule config
+                if (ballScript.grounded && !ballScript.grabbed && ball.transform.position.x <= halfCourt /* && !ballScript.isBeingPursued */) {                 // gameRule config
                     if (Vector3.Distance(pos, ball.transform.position) < min) {
                             if (!ballScript.isSupering)
                             {
@@ -441,7 +441,7 @@ public class GetBall : AIState {
             {
                 Ball ballScript = ball.GetComponent<Ball>();
 
-                    if (ballScript.grounded && !ballScript.grabbed   && ball.transform.position.x >= halfCourt + .5 /* &&  !ballScript.isBeingPursued */)               // gameRule config
+                    if (ballScript.grounded && !ballScript.grabbed   && ball.transform.position.x >= halfCourt /* &&  !ballScript.isBeingPursued */)               // gameRule config
                 {
                         if (Vector3.Distance(pos, ball.transform.position) < min)
                         {
