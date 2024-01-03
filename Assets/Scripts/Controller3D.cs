@@ -264,7 +264,7 @@ public class Controller3D : MonoBehaviour
         color = gameObject.GetComponentInParent<Player>().color;
 
         moveCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
-        moveCurve.keys[0].outTangent = 5f;
+        moveCurve.keys[0].outTangent = 20f;
 
 
       //  moveCurve.preWrapMode = WrapMode.Default;
@@ -522,31 +522,37 @@ public class Controller3D : MonoBehaviour
 
         if (Input.GetKey(playerScript.joystick.altSprint1Input))
         {
+            
             float sprintThresh = 10f;
 
-            if (staminaCool < (stamina - sprintThresh) && ((xSpeed + zSpeed)/2f < maxSpeed))
+            if (staminaCool < (stamina - sprintThresh) && ((xSpeed + zSpeed) / 2f < maxSpeed)) // TODO - check maxSpeed logic
             {
                 float sprintCost = .5f;
                 DepleteStamina(sprintCost);
 
-                sprintMult =1.5f;
-                sprintMult =1.5f;
-
+                sprintMult = 1.5f;
+                isSprinting = true;
                 print("sprinting");
             }
             else
             {
                 sprintMult = 1f;
+                isSprinting = false;
             }
-
-
-
         }
         else
         {
-            sprintMult = 1f;
+            if (isSprinting)
+            {
+                sprintMult = 1f;
+                isSprinting = false;
+            }
+
         }
-        }
+
+
+
+    }
 
     private void CheckKeyPickUp()
     {
@@ -740,9 +746,9 @@ public class Controller3D : MonoBehaviour
         else
         {
 
-            float sprintBoost = Mathf.Clamp((sprintMult - 1.25f), 0f, 1f);
+            float sprintBoost = Mathf.Clamp((sprintMult - 1.3f), 0f, 1f);
             sprintBoost = 0;
-            float timeBias = 2f;
+            float timeBias = 10f;
            // timeBias = 1f;
 
             if (!isDodging)
