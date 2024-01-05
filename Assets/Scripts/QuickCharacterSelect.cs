@@ -70,10 +70,11 @@ public class QuickCharacterSelect : MonoBehaviour
 
 
         module1 = new PlayerModule(1);
-  
+
 
         // CheckCharLocks();
 
+        GlobalConfiguration.Instance.SetDefaultJoin(true);
         GlobalConfiguration.Instance.SetQuickCharacterSelect(this);
         GlobalConfiguration.Instance.SetIsAtQuickCharacterSelect(true);
         GlobalConfiguration.Instance.SetIsAtRevampTeamSelect(false);

@@ -121,7 +121,7 @@ public class Panic : AIState {
              // Debug.Log("PANICKING");
            // Debug.Log("panick intensity = " + intensity);
 
-            ranVelVec = Random.Range(-1f, 1f) * (intensity / 25f);
+            ranVelVec = Random.Range(-1f, 1f) * (intensity / 10f);
 
             inAction = true;
 

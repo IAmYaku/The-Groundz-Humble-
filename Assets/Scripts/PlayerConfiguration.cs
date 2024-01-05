@@ -336,4 +336,23 @@ public class PlayerConfiguration : MonoBehaviour
     {
         animator.SetBool("isOut", v);
     }
+
+    public void ResetAnimator()
+    {
+        {
+            foreach (var param in animator.parameters)
+            {
+                if (param.type == AnimatorControllerParameterType.Trigger)
+                {
+                    animator.ResetTrigger(param.name);
+                }
+
+                if (param.type == AnimatorControllerParameterType.Bool)
+                {
+                    animator.SetBool(param.name, false);
+                }
+            }
+        }
+
+    }
 }

@@ -26,6 +26,8 @@ public class RevampMainMenu : MonoBehaviour
             EventSystem m_EventSystem = EventSystem.current;
             m_EventSystem.SetSelectedGameObject(buttonList.transform.GetChild(0).gameObject);
         }
+
+        GlobalConfiguration.Instance.SetDefaultJoin(false);
     }
 
 

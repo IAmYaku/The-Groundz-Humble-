@@ -71,6 +71,7 @@ public class RevampTeamSelect : MonoBehaviour
     {
         //do checks... references, if doesnt have gm
 
+        GlobalConfiguration.Instance.SetDefaultJoin(true);
         GlobalConfiguration.Instance.GetJoysticks();
 
        GlobalConfiguration.Instance.SetRevampTeamSelect(this);

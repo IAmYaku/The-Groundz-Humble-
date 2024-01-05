@@ -1833,7 +1833,7 @@ public class AI : MonoBehaviour {
 
     private void IncreaseCatchProb(float x)
     {
-        catchProb = Mathf.Clamp(catchProb + (x / 50.0f), 0, .89f);                        // 
+        catchProb = Mathf.Clamp(catchProb + (x / 75.0f), 0, .89f);                        // 
     }
 
     internal float GetPanickDelayTime()
@@ -1986,4 +1986,7 @@ public class AI : MonoBehaviour {
             animator.ResetTrigger("Dodge");
         }
     }
+
+
+
 }

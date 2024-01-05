@@ -26,7 +26,8 @@ public class Player : MonoBehaviour
     SpriteRenderer healthSR;
     SpriteRenderer staminaSR;
     SpriteRenderer powerSR;
-    GameObject hitObject;
+    [SerializeField]
+    public GameObject hitObject;
     GameObject catchObject;
     GameObject winObject;
     public GameObject shadow;   // 0.2

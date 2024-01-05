@@ -1182,27 +1182,44 @@ public class LevelManager : MonoBehaviour
 
             if (player.GetComponent<Player>().hasJoystick)
             {
+                player.GetComponentInChildren<Controller3D>().enabled = true;
 
                 if (player.GetComponentInChildren<Controller3D>().ballGrabbed == true)
                 {
                     player.GetComponentInChildren<Controller3D>().DropBall();
                     player.GetComponentInChildren<Controller3D>().NormalAccelerationRate();
                 }
+
+                if (gameMode == "arcade")
+                {
+                    Controller3D.throwMagnetism = throwMag;
+                }
+                    
             }
             else
             {
                 if (player.GetComponentInChildren<AI>())
                 {
+                    player.GetComponentInChildren<AI>().enabled = true;
+                    player.GetComponentInChildren<UnityEngine.AI.NavMeshAgent>().enabled = true;
+
                     if (player.GetComponentInChildren<AI>().ballGrabbed)
                     {
                         player.GetComponentInChildren<AI>().DropBall();
+                    }
+
+                    if (gameMode == "arcade")
+                    {
+                        player.GetComponentInChildren<AI>().level = 1;
                     }
                 }
             }
 
             player.transform.GetChild(1).gameObject.SetActive(true);
             player.transform.GetChild(0).transform.position = Vector3.zero;
+            player.GetComponentInChildren<PlayerConfiguration>().ResetAnimator();
             player.GetComponent<Player>().isOut = false;
+            player.GetComponent<Player>().hitObject.SetActive(false);
             player.GetComponentInChildren<SpriteRenderer>().enabled = true;
             player.GetComponentInChildren<CapsuleCollider>().enabled = true;
             player.GetComponentInChildren<SphereCollider>().enabled = true;
@@ -1210,23 +1227,6 @@ public class LevelManager : MonoBehaviour
             player.GetComponentInChildren<Rigidbody>().useGravity = true;
             player.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
 
-            if (player.GetComponent<Player>().hasAI)
-            {
-
-                player.GetComponentInChildren<AI>().enabled = true;
-                player.GetComponentInChildren<AI>().level = 1;
-                player.GetComponentInChildren<UnityEngine.AI.NavMeshAgent>().enabled = true;
-            }
-
-            else
-            {
-                  player.GetComponentInChildren<Animator>().runtimeAnimatorController = player.GetComponentInChildren<PlayerConfiguration>().play;
-                player.GetComponentInChildren<Rigidbody>().isKinematic = false;
-                player.GetComponentInChildren<Controller3D>().enabled = true;
-                Controller3D.throwMagnetism = throwMag;
-              
-
-            }
 
         }
 
@@ -1264,11 +1264,6 @@ public class LevelManager : MonoBehaviour
 
             i++;
 
-        }
-
-        if (round == 1)
-        {
-            // InstantiateSpeedBall();
         }
 
         PlayWhistle();
@@ -1458,13 +1453,8 @@ public class LevelManager : MonoBehaviour
 
             playerconfigObject.SetActive(true);
             player.GetComponent<Player>().isOut = false;
-
-            Animator playerAnim = playerconfigObject.GetComponent<PlayerConfiguration>().animator;
-
-             playerAnim.Rebind();
-             playerAnim.Update(0f);
-         //   print("ReEnabling player");
-
+            player.GetComponent<Player>().hitObject.SetActive(false);
+            playerconfigObject.GetComponent<PlayerConfiguration>().ResetAnimator();
             playerconfigObject.GetComponent<SpriteRenderer>().enabled = true;                  
             playerconfigObject.GetComponent<CapsuleCollider>().enabled = true;
             playerconfigObject.GetComponent<SphereCollider>().enabled = true;
@@ -1473,42 +1463,35 @@ public class LevelManager : MonoBehaviour
             playerconfigObject.GetComponent<Rigidbody>().isKinematic = false;
             player.GetComponent<Player>().shadow.SetActive(true);
             player.GetComponent<Player>().playerAura.SetActive(true);  //aura
+    
 
 
             if (player.GetComponent<Player>().hasAI)
             {
+
+                player.GetComponentInChildren<NavMeshAgent>().enabled = true;
+                player.GetComponentInChildren<AI>().enabled = true;
+
                 if (player.GetComponentInChildren<AI>().ballGrabbed)
                 {
                     player.GetComponentInChildren<AI>().DropBall();
                 }
-
-                player.GetComponentInChildren<NavMeshAgent>().enabled = true;
-
-                player.GetComponentInChildren<AI>().enabled = true;
-
-
-                //player.GetComponentInChildren<NavMeshAgent>().nextPosition = playerconfigObject.transform.position;
-                //     player.GetComponentInChildren<AI>().animator.runtimeAnimatorController = player.GetComponentInChildren<AI>().play;  
+ 
                 player.GetComponentInChildren<AI>().FaceOpp();
             }
+
             else
             {
+
+                player.GetComponentInChildren<Rigidbody>().isKinematic = false;
+                player.GetComponentInChildren<Controller3D>().enabled = true;
+                player.GetComponentInChildren<Controller3D>().FaceOpp();
+
                 if (player.GetComponentInChildren<Controller3D>().ballGrabbed == true)
                 {
                     player.GetComponentInChildren<Controller3D>().DropBall();
                     player.GetComponentInChildren<Controller3D>().NormalAccelerationRate();
                 }
-
-                player.GetComponentInChildren<Rigidbody>().isKinematic = false;
-                player.GetComponentInChildren<Controller3D>().enabled = true;
-
-                // if mode == virtual joystick
-             //   player.GetComponentInChildren<Controller3D>().SetTapThrowReadyToFalse();
-             //   player.GetComponentInChildren<Controller3D>().ResetTouch1PhasePrev();
-            //    player.GetComponentInChildren<Controller3D>().SetTouch0FXActivate(false);
-
-                //   player.GetComponentInChildren<Controller3D>().animator.runtimeAnimatorController = player.GetComponentInChildren<Controller3D>().play;
-                player.GetComponentInChildren<Controller3D>().FaceOpp();
             }
 
         }
@@ -1545,12 +1528,6 @@ public class LevelManager : MonoBehaviour
 
             i++;
 
-        }
-
-
-        if (round == 1)
-        {
-            // InstantiateSpeedBall();
         }
 
         PlayWhistle();
