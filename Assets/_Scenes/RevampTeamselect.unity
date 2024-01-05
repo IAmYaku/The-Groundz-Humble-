@@ -1802,7 +1802,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 969084601}
         m_TargetAssemblyTypeName: RevampTeamSelect, Assembly-CSharp
         m_MethodName: BackButton
         m_Mode: 1

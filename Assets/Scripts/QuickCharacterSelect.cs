@@ -169,6 +169,7 @@ public class QuickCharacterSelect : MonoBehaviour
         if (!isLoading)
         {
             DestroyThemeMusic();
+            loadingScreen.SetActive(true);
             StartCoroutine(LoadAsynchronously(sceneName));
             isLoading = true;
         }
@@ -194,7 +195,6 @@ public class QuickCharacterSelect : MonoBehaviour
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
 
-        loadingScreen.SetActive(true);
 
         while (!operation.isDone)
         {
@@ -256,6 +256,7 @@ public class QuickCharacterSelect : MonoBehaviour
         GlobalConfiguration.Instance.SetDefaultJoin(false);
 
         string arcadeSceneName = lm.GetArcadeSceneName();
+         arcadeSceneName = "Test Groundz";
         int arcadeSceneIndex = lm.GetArcadeSceneIndex();
 
         GlobalConfiguration.Instance.ResetGamepadStarts();

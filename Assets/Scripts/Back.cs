@@ -16,12 +16,14 @@ public class Back : MonoBehaviour {
 
     public void BackToMenu()
     {
+        GlobalConfiguration.Instance.Reset();
         SceneManager.LoadScene("GamemodeMenu");
     }
 
     public void BackToCharSelect()
     {
-        SceneManager.LoadScene("TeamSelect");
+        GlobalConfiguration.Instance.Reset();
+        SceneManager.LoadScene("RevampTeamSelect");
     }
 
 }

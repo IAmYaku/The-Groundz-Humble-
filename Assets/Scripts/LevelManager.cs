@@ -275,9 +275,10 @@ public class LevelManager : MonoBehaviour
                                     AddOppsFaced(nextOpp);
                                     GlobalConfiguration.Instance.PopulateArcadeAI(2, nextOpp);
                                     Invoke("PostGameWinScreen", 1f);
-                                    Invoke("LoadNextArcadeScene", 3f);
+                                    // Invoke("LoadNextArcadeScene", 3f);
+                                    Invoke("EndGameMenu", 3f);
 
-                                   
+
                                 }
                                 else
                                 {
@@ -1177,11 +1178,12 @@ public class LevelManager : MonoBehaviour
         {
 
 
-            player.GetComponentInChildren<Rigidbody>().isKinematic = true;
-            player.GetComponentInChildren<Animator>().runtimeAnimatorController = player.GetComponentInChildren<PlayerConfiguration>().play;
+           
+          //  player.GetComponentInChildren<Animator>().runtimeAnimatorController = player.GetComponentInChildren<PlayerConfiguration>().play;
 
             if (player.GetComponent<Player>().hasJoystick)
             {
+                player.GetComponentInChildren<Rigidbody>().isKinematic = false;
                 player.GetComponentInChildren<Controller3D>().enabled = true;
 
                 if (player.GetComponentInChildren<Controller3D>().ballGrabbed == true)
@@ -1200,6 +1202,7 @@ public class LevelManager : MonoBehaviour
             {
                 if (player.GetComponentInChildren<AI>())
                 {
+                    player.GetComponentInChildren<Rigidbody>().isKinematic = true;
                     player.GetComponentInChildren<AI>().enabled = true;
                     player.GetComponentInChildren<UnityEngine.AI.NavMeshAgent>().enabled = true;
 
@@ -1574,7 +1577,7 @@ public class LevelManager : MonoBehaviour
         tm1.Clear();
         tm2.Clear();
         GlobalConfiguration.Instance.ClearPlayers();
-        GlobalConfiguration.Instance.SetDefaultJoin(true);
+       // GlobalConfiguration.Instance.SetDefaultJoin(true);
     }
 
     internal void EndGameArcade()

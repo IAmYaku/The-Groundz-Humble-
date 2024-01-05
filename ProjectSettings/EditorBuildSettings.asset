@@ -26,10 +26,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Stages/Test Groundz.unity
     guid: a8eec5ca91b2ede42ac232eea0dc3bfb
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Stages/TheGroundzEast.unity
     guid: 8c51042e38ffe4d3cbee596da3fa0a9e
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Stages/TheGroundzWest.unity
     guid: 23c6c09fe6f3231459b2fed792598d65
   - enabled: 0
@@ -38,7 +38,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/Stages/TheLibrary.unity
     guid: 3759b94752695c6449ced7734bb8151d
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Stages/TheBlock.unity
     guid: bdb7422a46f36484e8173c1a13152aa8
   - enabled: 0
@@ -53,7 +53,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Controls.unity
     guid: 7fb5040354ad5ee4fa59fbd921726a41
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/CreditsRolling.unity
     guid: 3a8bd209d6de3a04392d71acc8b9f209
   m_configObjects:

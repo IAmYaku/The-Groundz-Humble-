@@ -142,9 +142,9 @@ public class FXManager : MonoBehaviour
                 hfx = Instantiate(HitSmallFX, teePosition, Quaternion.identity);
             }
 
-            ParticleSystem ps = hfx.GetComponent<ParticleSystem>();
-            ParticleSystem.MainModule psMain = ps.main;
-            ParticleSystem.ColorOverLifetimeModule pscol = ps.colorOverLifetime;
+          //  ParticleSystem ps = hfx.GetComponent<ParticleSystem>();
+          //  ParticleSystem.MainModule psMain = ps.main;
+           // ParticleSystem.ColorOverLifetimeModule pscol = ps.colorOverLifetime;
 
          //   Gradient grad = new Gradient();
            // grad.SetKeys(new GradientColorKey[] { new GradientColorKey(teeColor, 0.0f), new GradientColorKey(terColor, 1.0f) }, new GradientAlphaKey[] { new GradientAlphaKey(1.0f, 1.0f), new GradientAlphaKey(.5f, 0.0f) });
