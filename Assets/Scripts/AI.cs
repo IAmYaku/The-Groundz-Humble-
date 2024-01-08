@@ -1830,7 +1830,7 @@ public class AI : MonoBehaviour {
         //IncreaseDodgeProb
         DecreaseCatchLag(x);
         DecreasePanickDelayTime(x);
-        toughness += 5f;
+        toughness += 1f;
 
     }
 
