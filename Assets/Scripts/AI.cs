@@ -317,6 +317,10 @@ public class AI : MonoBehaviour {
                 }
                 else
                 {
+                    navMeshAgent.velocity = Vector3.zero;
+                    navMeshAgent.ResetPath();
+                    horzInput = 0f;
+                    vertInput = 0f;
                     HandleContact();
   
                 }
@@ -376,11 +380,20 @@ public class AI : MonoBehaviour {
 
     internal void SetKnockedOut(float magnitude)
     {
-        isKnockedOut = true;
-        knockedOutTime = magnitude / toughness;
-        print("KnockedOutTime " +knockedOutTime);
-        print("aiState= " + aiState.GetName());
-        print("ai.gameState= " + gameState);
+        if (!isKnockedOut)
+        {
+            isKnockedOut = true;
+            knockedOutTime = magnitude / toughness;
+            print("magnitude = " + magnitude);
+            print("KnockedOutTime " + knockedOutTime);
+            print("aiState= " + aiState.GetName());
+            print("ai.gameState= " + gameState);
+        }
+        else
+        {
+            knockedOutTime += magnitude / toughness;
+        }
+
     }
 
     internal void EndAgentNavigation()

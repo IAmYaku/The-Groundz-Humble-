@@ -28,7 +28,7 @@ public class Nina : Character
 
     public static int stamina = 150;
     public static float staminaCoolRate = 1.0f;
-    public static float toughness = 2;
+    public static float toughness = 4;
     public static int power = 30;
     public static int mass = 1000;
 

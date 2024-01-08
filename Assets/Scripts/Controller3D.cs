@@ -532,7 +532,7 @@ public class Controller3D : MonoBehaviour
 
                 sprintMult = 1.5f;
                 isSprinting = true;
-                print("sprinting");
+               // print("sprinting");
             }
             else
             {
@@ -1496,8 +1496,22 @@ public class Controller3D : MonoBehaviour
     }
 
     internal void DecreaseHelps(float difficultyScaler)
-    {
-        catchHelpMultiplier = Mathf.Clamp(catchHelpMultiplier- difficultyScaler, 1, 100f);
+    { 
+        float catchHelpBias = 10f;
+        float maxSeekVecBias = 10f;
+        float throwMagnetismBias = (2f / 3f);
+
+
+        catchHelpMultiplier = Mathf.Clamp(catchHelpMultiplier- difficultyScaler/ catchHelpBias, 1, 100f);
+        throwMagnetism -= difficultyScaler * throwMagnetismBias;
+        maxSeekVec -= difficultyScaler * maxSeekVecBias;
+
+        print("Decreasing helps");
+
+        print("catchHelpMultiplier = " + catchHelpMultiplier);
+        print("throwMagnetism = " + throwMagnetism);
+        print("maxSeekVec = " + maxSeekVec);
+
     }
 
     private void DodgeThrow()   // button throw
@@ -1506,7 +1520,6 @@ public class Controller3D : MonoBehaviour
 
         Vector3 throwStandVec = Vector3.zero;
         Vector3 throwMovVec = Vector3.zero;
-        bool hasSeekVec = false;
 
         /*
         if (GameManager.mode == "Basic" && GameManager.gameMode == "Solo")

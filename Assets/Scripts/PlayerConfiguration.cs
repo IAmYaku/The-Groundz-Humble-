@@ -291,7 +291,7 @@ public class PlayerConfiguration : MonoBehaviour
 
         float superMultipliier = 2f;
         Vector3 knockBackForce = new Vector3(.025f, .0125f, .025f);
-        float knockBackTimeMult =  1f;
+        float knockBackTimeMult =  1f;     //gr
 
         if (ballIsSupered)
         {

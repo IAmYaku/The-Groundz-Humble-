@@ -82,9 +82,6 @@ public class LevelManager : MonoBehaviour
     public int roundLevel;
 
     public static float difficultyScalar = 3f;
-    int throwMag;
-    int throwDecScalar;
-
 
     public Dictionary<GameObject, GameObject> throws = new Dictionary<GameObject, GameObject>();
     public Dictionary<GameObject, HashSet<GameObject>> hits = new Dictionary<GameObject, HashSet<GameObject>>();
@@ -1194,7 +1191,12 @@ public class LevelManager : MonoBehaviour
 
                 if (gameMode == "arcade")
                 {
-                    Controller3D.throwMagnetism = throwMag;
+                    // Controller3D.hasGrabMag = false;
+                    // Controller3D.grabMag = 10f;
+                    Controller3D.hasThrowMag = true;
+                    Controller3D.hasSeekVec = true;
+                    Controller3D.throwMagnetism = ArcadeMode.throwMag;
+                    Controller3D.maxSeekVec = ArcadeMode.seekVec;
                 }
                     
             }
@@ -1322,8 +1324,17 @@ public class LevelManager : MonoBehaviour
                 if (!player.GetComponent<Player>().hasAI)
                 {
                     {
-                        // DecreaseThrowMag(difficultyScaler);
-                        DecreaseControllerHelp(player.GetComponentInChildren<Controller3D>(), difficultyScalar/10f);
+                        if (round < 3)
+                        {
+                            player.GetComponentInChildren<Controller3D>().DecreaseHelps(difficultyScalar);
+                        }
+                       else
+                        {
+                            Controller3D.hasGrabMag = false;
+                            Controller3D.hasSeekVec = false;
+                            Controller3D.hasThrowMag = false;
+                        }
+
                     }
                 }
             }
@@ -1348,11 +1359,6 @@ public class LevelManager : MonoBehaviour
         }
 */
         
-    }
-
-    private void DecreaseControllerHelp(Controller3D controller3D, float difficultyScaler)
-    {
-       // controller3D.DecreaseHelps(difficultyScaler);
     }
 
     private void AddAI(int team,string charName)
@@ -1405,16 +1411,6 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    private void DecreaseThrowMag(float difficultyScaler)
-    {
-        // GR check
-
-       // if (mode == "Basic" && (Controller3D.throwMagnetism - throwDecScalar) >= 0.0)
-        {
-            Controller3D.throwMagnetism -= throwDecScalar;
-        }
-
-    }
 
 
     public void CamShake(float intensity, Transform playerT)
@@ -1571,8 +1567,8 @@ public class LevelManager : MonoBehaviour
         Controller3D.grabMag = 10f;
         Controller3D.hasThrowMag = false;
         Controller3D.hasSeekVec = false;
-        Controller3D.throwMagnetism = 5.65f;
-        Controller3D.maxSeekVec = 100f;
+        Controller3D.throwMagnetism = ArcadeMode.throwMag;
+        Controller3D.maxSeekVec = ArcadeMode.seekVec;
 
         tm1.Clear();
         tm2.Clear();

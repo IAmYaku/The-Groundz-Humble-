@@ -16,6 +16,9 @@ public class ArcadeMode : MonoBehaviour
 
     string currentOppName;
 
+    public static float throwMag = 6f;
+    public static float seekVec = 100f;
+
     void Start()
     {
         
@@ -25,14 +28,14 @@ public class ArcadeMode : MonoBehaviour
     {
         lm = x;
         GameRule gr = lm.GetGameRule();
-        gr.ballCount = Mathf.Clamp(3 + level,3, 6);
-        gr.roundsToWin = Mathf.Clamp(3 + level, 3, 6);
+        gr.ballCount = 3;
+        gr.roundsToWin = 5;
         // Controller3D.hasGrabMag = false;
        // Controller3D.grabMag = 10f;
-        Controller3D.hasThrowMag = false;
-        Controller3D.hasSeekVec = false;
-       // Controller3D.throwMagnetism = 5.65f;
-        Controller3D.maxSeekVec = 100f;
+        Controller3D.hasThrowMag = true;
+        Controller3D.hasSeekVec = true;
+       Controller3D.throwMagnetism = throwMag;
+        Controller3D.maxSeekVec = seekVec;
 }
     void Update()
     {
