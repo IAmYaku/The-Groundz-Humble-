@@ -142,7 +142,7 @@ public class Controller3D : MonoBehaviour
     bool blockCool = false;
 
 
-    public float toughness = 15f;   // move to character scripts
+    public float toughness;   // move to character scripts
 
     bool inBallPause;
     bool ballPauseReady = true;
@@ -1326,6 +1326,9 @@ public class Controller3D : MonoBehaviour
 
         print("weightedMuvAvVec = " + weightedMuvAvVec);
 
+
+        Vector3 chargeVelBias = ((weightedMuvAvVec + chargeVel) / 2f).normalized;
+
         if (hasThrowMag)
         {
             Transform nearestOpp = GetTargetedOpp();
@@ -1333,24 +1336,27 @@ public class Controller3D : MonoBehaviour
             if (nearestOpp && throwDirection.x > 0)
             {
                 Vector3 seekVec = nearestOpp.transform.position - ball.transform.position;
-                seekVec = new Vector3(Mathf.Clamp(seekVec.x, -maxSeekVec, maxSeekVec), seekVec.y, Mathf.Clamp(seekVec.z, -maxSeekVec, maxSeekVec));
                 seekVec = seekVec.normalized;
 
                 targetedOpp = nearestOpp;
 
-                throwAidVec = GetThrowAid(weightedMuvAvVec, seekVec);
+                throwAidVec = seekVec;
+
+                weightedMuvAvVec = GetThrowAid(weightedMuvAvVec, throwAidVec);
+
+                weightedMuvAvVec = seekVec;
             }
+
             print("throwAidVec = " + throwAidVec);
         }
-
-
-        Vector3 chargeVelBias = ((weightedMuvAvVec + chargeVel) / 2f).normalized;
 
         print("chargeVel = " + chargeVel);
         print("chargeTime = " + chargeTime);
         print("chargeVelBias = " + chargeVelBias);
 
-        Vector3 throwVec = new Vector3((throwPower + throwCharge + chargeVel.magnitude ) * ((weightedMuvAvVec.x + chargeVelBias.x)/2f), 5f, (throwPower + throwCharge + chargeVel.magnitude) * ((weightedMuvAvVec.z + chargeVelBias.z)/2f));
+        // ((weightedMuvAvVec.x + chargeVelBias.x) / 2f)
+
+        Vector3 throwVec = new Vector3((throwPower + throwCharge + chargeVel.magnitude ) * throwAidVec.x, 5f, (throwPower + throwCharge + chargeVel.magnitude) * throwAidVec.z);
 
 
 
@@ -1389,7 +1395,7 @@ public class Controller3D : MonoBehaviour
         //   print("hasThrowMag = " + hasThrowMag);
         // print("throw Magnetism = "+throwMagnetism);
 
-        ball.GetComponent<Ball>().Throw(throwVec, playerScript.color, hasSeekVec, throwMagnetism, targetedOpp, renderLength, ChargePowerAlpha);
+        ball.GetComponent<Ball>().Throw(throwVec, playerScript.color, false, throwMagnetism, targetedOpp, renderLength, ChargePowerAlpha);
 
         //For hit purposes
         if (gameObject.GetComponentInParent<Player>().team == 1)
@@ -1621,6 +1627,7 @@ public class Controller3D : MonoBehaviour
 
     private Vector3 GetThrowAid(Vector3 throww, Vector3 seekVec)
     {
+
         Vector3 returnMe = (throww + seekVec) / 2;
 
         for (int i = 0; i < levelManager.roundLevel; i++)

@@ -96,7 +96,7 @@ public class AI : MonoBehaviour {
     public float catchStaminaCost;
     public float pickUpStaminaCost;
 
-    public float toughness =5f;
+    public float toughness = .4f;
 
 	private bool isFacingRight;
     private bool onGround = true;
