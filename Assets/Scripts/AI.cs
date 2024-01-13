@@ -322,6 +322,7 @@ public class AI : MonoBehaviour {
                     horzInput = 0f;
                     vertInput = 0f;
                     HandleContact();
+                    animator.SetBool("Running", false);
   
                 }
             }
@@ -692,7 +693,7 @@ public class AI : MonoBehaviour {
                                 levelManager.CatchDisplay(playerConfigObject.transform.position);
                                 ball.GetComponent<Ball>().DeactivateThrow();
 
-                                Pause(.5f);
+                                Pause(3/level);
 
                                 float catchPauseDuration = Mathf.Clamp(velocityCaught.magnitude / 100f, FXManager.min_CatchPauseDuration, FXManager.max_CatchPauseDuration);
                                 float catchPausePreDelay = .36f;
@@ -882,6 +883,7 @@ public class AI : MonoBehaviour {
 
                             }
 
+                            Pause(3 / level);
                             chargeVel = Vector3.zero;
                             throwCharge = 0;
                             chargeTime = 0;

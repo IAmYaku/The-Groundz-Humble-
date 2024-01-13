@@ -1324,7 +1324,7 @@ public class LevelManager : MonoBehaviour
                 if (!player.GetComponent<Player>().hasAI)
                 {
                     {
-                        if (round < 3)
+                        if (roundLevel < 3)
                         {
                             player.GetComponentInChildren<Controller3D>().DecreaseHelps(difficultyScalar);
                         }
@@ -1438,7 +1438,7 @@ public class LevelManager : MonoBehaviour
         hits.Clear();
         throws.Clear();
 
-        if (gameMode == "arcade")
+        if (gameMode == "arcade" && team1Scored)
         {
             IncreaseLevelDifficulty();
         } 

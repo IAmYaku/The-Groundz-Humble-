@@ -823,7 +823,7 @@ public class Controller3D : MonoBehaviour
 
     public void SprintInput()   // struggling w getting callback every frame pressed
     {
-        if (isSprinting)
+        if (isSprinting && move.magnitude > moveThresh)
         {
             float sprintCost = .5f;
             DepleteStamina(sprintCost);
@@ -1325,9 +1325,7 @@ public class Controller3D : MonoBehaviour
          weightedMuvAvVec = weightedMuvAvVec.normalized;
 
         print("weightedMuvAvVec = " + weightedMuvAvVec);
-
-
-        Vector3 chargeVelBias = ((weightedMuvAvVec + chargeVel) / 2f).normalized;
+        
 
         if (hasThrowMag)
         {
@@ -1344,19 +1342,21 @@ public class Controller3D : MonoBehaviour
 
                 weightedMuvAvVec = GetThrowAid(weightedMuvAvVec, throwAidVec);
 
-                weightedMuvAvVec = seekVec;
+
+
             }
 
             print("throwAidVec = " + throwAidVec);
         }
 
+        Vector3 chargeVelBias = ((weightedMuvAvVec + chargeVel) / 2f).normalized;
+
         print("chargeVel = " + chargeVel);
         print("chargeTime = " + chargeTime);
         print("chargeVelBias = " + chargeVelBias);
 
-        // ((weightedMuvAvVec.x + chargeVelBias.x) / 2f)
 
-        Vector3 throwVec = new Vector3((throwPower + throwCharge + chargeVel.magnitude ) * throwAidVec.x, 5f, (throwPower + throwCharge + chargeVel.magnitude) * throwAidVec.z);
+        Vector3 throwVec = new Vector3((throwPower + throwCharge + chargeVel.magnitude ) * ((weightedMuvAvVec.x + chargeVelBias.x) / 2f), 5f, (throwPower + throwCharge + chargeVel.magnitude) * ((weightedMuvAvVec.z + chargeVelBias.z) / 2f));
 
 
 
@@ -1628,7 +1628,7 @@ public class Controller3D : MonoBehaviour
     private Vector3 GetThrowAid(Vector3 throww, Vector3 seekVec)
     {
 
-        Vector3 returnMe = (throww + seekVec) / 2;
+        Vector3 returnMe = seekVec; 
 
         for (int i = 0; i < levelManager.roundLevel; i++)
         {
