@@ -528,7 +528,7 @@ public class Controller3D : MonoBehaviour
             if (staminaCool < (stamina - sprintThresh) && ((xSpeed + zSpeed) / 2f < maxSpeed)) // TODO - check maxSpeed logic
             {
                 float sprintCost = .5f;
-                DepleteStamina(sprintCost);
+                //DepleteStamina(sprintCost);
 
                 sprintMult = 1.5f;
                 isSprinting = true;

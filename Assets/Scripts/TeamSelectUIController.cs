@@ -61,6 +61,9 @@ public class TeamSelectUIController : MonoBehaviour
 
     public void Confirm()
     {
+        RevampTeamSelect revampTeamSelect = GlobalConfiguration.Instance.GetRevampTeamSelect();
+
+
         Debug.Log(string.Format("Character {0}:{1} was selected", selectedCharacterIndex, characterList[selectedCharacterIndex].characterName));
        if (controllerNumber == 1)
         {
@@ -84,11 +87,11 @@ public class TeamSelectUIController : MonoBehaviour
 
         if (RevampTeamSelect.starts > 0 )
         {
-            RevampTeamSelect revampTeamSelect = GlobalConfiguration.Instance.GetRevampTeamSelect();
             revampTeamSelect.multiplayerEventSystemMainGamepad.SetActive(true);
             GlobalConfiguration.Instance.SetInputModule(controllerNumber - 1, revampTeamSelect.multiplayerEventSystemMainGamepad.GetComponent<InputSystemUIInputModule>());
+           
         }
-        
+        revampTeamSelect.confirms++;
 
     }
 

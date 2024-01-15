@@ -66,6 +66,12 @@ public class RevampTeamSelect : MonoBehaviour
 
     public static int starts = 0;
 
+    [SerializeField]
+    public int confirms;
+
+    [SerializeField]
+    public int readys;
+
 
     public virtual void Start()
     {
@@ -138,7 +144,7 @@ public class RevampTeamSelect : MonoBehaviour
 
             if (NinaIsLocked)
             {
-                //   currentModule.DisableChar("Nina");
+                   // currentModule.DisableChar("Nina");
             }
 
             i++;
@@ -242,7 +248,8 @@ public class RevampTeamSelect : MonoBehaviour
 
     public void Player2TeamSelect(int team)
     {
-        module2.team = team + 1;
+        module2.team = team + 1;  
+
     }
 
     public void Player3TeamSelect(int team)
@@ -256,71 +263,6 @@ public class RevampTeamSelect : MonoBehaviour
     }
 
 
-
-    public void SetTeam1Modules(int team, int x)
-    {
-        /*
-        if (team == 1)
-        {
-            if (team1Modules.Count == 0)    // init
-            {
-                for (int i = 0; i < x; i++)
-                {
-                 //   team1Modules.Add(new PlayerModule());
-                }
-            }
-            else
-            {
-                if (team1Modules.Count > x)
-                {
-                    while (team1Modules.Count > x)
-                    {
-                        team1Modules.RemoveAt(team1Modules.Count - 1);
-                    }
-                }
-
-                if (team1Modules.Count < x)
-                {
-                    while (team1Modules.Count < x)
-                    {
-                       // team1Modules.Add(new PlayerModule());
-                    }
-                }
-            }
-        }
-
-        if (team == 2)
-        {
-            if (team2Modules.Count == 0)    // init
-            {
-                for (int i = 0; i < x; i++)
-                {
-                 //   team2Modules.Add(new PlayerModule());
-                }
-            }
-            else
-            {
-                if (team2Modules.Count > x)
-                {
-                    while (team2Modules.Count > x)
-                    {
-                        team2Modules.RemoveAt(team2Modules.Count - 1);
-                    }
-                }
-
-                if (team2Modules.Count < x)
-                {
-                    while (team2Modules.Count < x)
-                    {
-                     //   team2Modules.Add(new PlayerModule());
-                    }
-                }
-            }
-        }
-
-        */
-        //update ui
-    }
 
     internal GameObject GetMultiplayerEventSystem(int playerIndex)
     {
@@ -348,30 +290,6 @@ public class RevampTeamSelect : MonoBehaviour
         starts++;
     }
 
-    public void PlayerReady(int playerIndex)
-    {
-        /*
-        readys++;
-
-
-        //   print("Player Readdy!!!");
-        if ((readyCount == readys || readyCount == 0) && !ready)
-        {
-            GlobalConfiguration.instance.SetIsAtRevampTeamSelect(false);       // needed because controllerObject instantiates when p1Object instantiates for what is only keyboard commmand...   and technically we're not tho lol
-
-            ModuleDataToPlayers();
-
-            int p1team = modules[0].team;
-
-            GlobalConfiguration.instance.PopulateAI(p1team);
-            GlobalConfiguration.instance.SetDefaultJoin(false);
-            ready = true;
-
-            Invoke("TriggerUIAnimation", .5f);
-            t0 = Time.realtimeSinceStartup;
-        }
-        */
-    }
 
 
     private void ModuleDataToPlayers()
@@ -646,21 +564,30 @@ public class RevampTeamSelect : MonoBehaviour
 
     public void ReadyButton()
     {
+        readys++;
 
-        print("Ready button");
-        //check modules
-        ModuleDataToPlayers();
+        if (starts ==0 )
+        {
+            starts = 1;
+        }
+        if (starts == readys)   // multiplayer event system issues
+        {
 
-        //foreach tm foreach aiCount - > create AI
-        int p1team = modules[0].team;
+            print("Ready button");
+            //check modules
+            ModuleDataToPlayers();
 
-        GlobalConfiguration.Instance.PopulateAIRevamp(p1team,ai1Count,ai2Count, ai1Level, ai2Level);
-        GlobalConfiguration.Instance.SetDefaultJoin(false);
+            //foreach tm foreach aiCount - > create AI
+            int p1team = modules[0].team;
+
+            GlobalConfiguration.Instance.PopulateAIRevamp(p1team, ai1Count, ai2Count, ai1Level, ai2Level);
+            GlobalConfiguration.Instance.SetDefaultJoin(false);
 
 
-        GlobalConfiguration.Instance.SetIsAtRevampTeamSelect(false);
-        GlobalConfiguration.Instance.ResetGamepadStarts();
-        SceneManager.LoadScene("StageSelect");
+            GlobalConfiguration.Instance.SetIsAtRevampTeamSelect(false);
+            GlobalConfiguration.Instance.ResetGamepadStarts();
+            SceneManager.LoadScene("StageSelect");
+        }
     }
 
     public void BackButton()
