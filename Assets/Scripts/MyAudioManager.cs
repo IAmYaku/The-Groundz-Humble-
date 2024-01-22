@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MyAudioManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public LobbyMusicScript lobbyMusicScript;
     void Start()
     {
         
@@ -27,5 +27,7 @@ public class MyAudioManager : MonoBehaviour
     {
 
     }
+
+
 
 }

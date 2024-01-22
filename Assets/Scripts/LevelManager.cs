@@ -35,7 +35,7 @@ public class LevelManager : MonoBehaviour
     int sceneIndex = 0;
 
     Dictionary<int, bool> scenesVisited = new Dictionary<int,bool>();    // populate w indexes initialized w false values
-
+    
 
    public TeamManager tm1;
    public TeamManager tm2;

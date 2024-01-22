@@ -17,6 +17,8 @@ public class AI : MonoBehaviour {
     public NavMeshAgent navMeshAgent;
     public Transform target;
 
+    GameObject superPackage;
+
     int [,] board; //   <-- interesting
 	//public Board boardManager;
 	public enum Type {aggresive,timid,random};
@@ -52,12 +54,13 @@ public class AI : MonoBehaviour {
     float chargeTime;
     Vector3 chargeVel;
     float maxCharge = 10f;
+    public float ChargePowerAlpha => Mathf.Clamp01(throwCharge / gameObject.GetComponentInParent<Player>().maxThrowPower);
 
     private float randomThrowFactor = 30f;
     public float randomThrowFactor0 = 30f;
     public int level = 1;
     float throwScale = 1000f;                   
-    float speedScale = 2f;
+    float speedScale = 2.5f;
     float catchProb = .2f;
 
     bool catchReady = true;
@@ -95,6 +98,9 @@ public class AI : MonoBehaviour {
     public float moveStaminaCost;
     public float catchStaminaCost;
     public float pickUpStaminaCost;
+    float staminaDodgeCost = 40.0f;
+    float staminaReadyCost = 5.0f;
+    float staminaBlockCost = 40.0f;
 
     public float toughness = .4f;
 
@@ -123,6 +129,25 @@ public class AI : MonoBehaviour {
     public bool ballCaught;
 
     public bool isBlocking;
+    private bool blockCool;
+
+    public enum BlockButton
+    {
+        pressed,
+        canceled
+    }
+
+    public enum SuperButton
+    {
+        started,
+        canceled
+    }
+
+    [SerializeField]
+    public BlockButton blockButton;
+
+    [SerializeField]
+    public SuperButton superButton;
 
     private float t_c0;
     private float t_cF;
@@ -311,7 +336,7 @@ public class AI : MonoBehaviour {
 
                     MoveInput();
                     GrabInput();
-                    SuperInput();
+                    CheckSuperCool();
                     BlockInput();
 
                 }
@@ -780,7 +805,6 @@ public class AI : MonoBehaviour {
 
             else     // throw  = terrible coding        <-- ... whatever bitch           .   . . ...~ X  "Gentlemen!" lol 
             {
-
                 Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * (collider.bounds.size.magnitude + handSize.x), playerConfigObject.transform.position.y + 1, playerConfigObject.transform.position.z);     // *might not even be a ball to cockback
 
                 if (levelManager.IsInGameBounds(cockBackPos))
@@ -900,7 +924,7 @@ public class AI : MonoBehaviour {
 
         
 		// move ball
-		if (ballGrabbed && !isBlocking){
+		if (ballGrabbed && !isBlocking) {
             Vector3 cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
             if (levelManager.IsInGameBounds(cockBackPos))
             {
@@ -1219,124 +1243,334 @@ public class AI : MonoBehaviour {
         return inBounds;
 	}
 
-    void SuperInput()
+    public void SuperInput(float chargeTme)
     {
+        print("AI Super!");
 
-        if (level == 3)
+        if (levelManager.isPlaying && !playerScript.isOut)
         {
-            if (superCoolDown > 0)
+            //if mode is basic or advanced
+            //  if (GameManager.mode == "Basic")
+
+            superButton = SuperButton.started;
+
+            int superType = playerScript.super.GetComponent<SuperScript>().type;
+
+            if (superButton == SuperButton.started && superCoolDown <= 0 && ballGrabbed && !isDodging && !isSupering)   // super activate
             {
-
-                t_sF = Time.realtimeSinceStartup;
-                superCoolDown -= Time.deltaTime;
-
-                float superTime = 0f;
-                if (playerScript.super.GetComponent<SuperScript>().type == 1 || playerScript.super.GetComponent<SuperScript>().type == 2)
-                {
-
-                    if (ballSuperPackage)
-                    {
-                        superTime = ballSuperPackage.GetComponent<SuperBall>().superTime;
-                    }
-                }
-                else
-                {
-                    if (playerScript.super.GetComponent<SuperScript>().type == 3)
-                    {
-                        superTime = playerScript.super.GetComponent<SuperSpeed>().superTime;
-                    }
-                }
-
-                if (t_sF - t_s0 >= superTime && isSupering)
-                {
-                    isSupering = false;
-                    animator.SetBool("Supering", false);
-
-                    if (playerScript.super.GetComponent<SuperScript>().type == 1 || playerScript.super.GetComponent<SuperScript>().type == 2)
-                    {
-                        foreach (Transform t in ballSupered.transform.GetComponentInChildren<Transform>()) //assumes there is only one ball supered at a time
-                        {
-                            ballSupered.GetComponent<Ball>().Normalize();
-                            if (t.gameObject.tag == "SuperBall")
-                                Destroy(t.gameObject);
-                        }
-
-                    }
-                    else
-                    {
-                        if (playerScript.super.GetComponent<SuperScript>().type == 3)     //Nina
-                        {
-                          //  xSpeed = player.GetComponent<Player>().xspeed;
-                          //  zSpeed = player.GetComponent<Player>().zspeed;
-                        }
-                    }
-                }
+                SuperActivate();
             }
 
-            if (superInput && superCoolDown <= 0 && ballGrabbed)   // super activate
+            if (superButton == SuperButton.started && ballGrabbed && isSupering)                   // super charge   ... iffy when conisdering if isSupering finishes before SuperAutoRelease
             {
-                t_s0 = Time.realtimeSinceStartup;
-                isSupering = true;
-                animator.SetBool("Supering", true);
-                superCoolDown = transform.parent.gameObject.GetComponent<Player>().power;
-
-                if (playerScript.super.GetComponent<SuperScript>().type == 1 || playerScript.super.GetComponent<SuperScript>().type == 2)
-                {
-                    ballSupered = ball;
-                    ballSuperPackage = Instantiate(playerScript.super);
-                    ballSupered.GetComponent<Ball>().SuperInit(ballSuperPackage);
-                    ballSuperPackage.transform.parent = ballSupered.transform;
-                    ballSuperPackage.transform.localPosition = Vector3.zero;
-                    float scale = 2f;
-                    if (playerScript.super.GetComponent<SuperBall>().type == 1)
-                    {
-                        scale = 5f;
-                    }
-
-                    throww = new Vector3(throwPower * rigidbody.velocity.x * scale, 1f, throwPower * rigidbody.velocity.z * scale);
-                    SuperThrow(throww, "Super");
-                }
-                else
-                {
-                    if (playerScript.super.GetComponent<SuperScript>().type == 3)
-                    {
-                        float superTime = playerScript.super.GetComponent<SuperSpeed>().superTime;
-                        float superBoost = playerScript.super.GetComponent<SuperSpeed>().speedBoost;
-                        SpeedBoost(superTime, superBoost);
-                    }
-                }
-
+                SuperCharge(superType);
             }
+
+            Invoke("SuperRelease", chargeTime);
         }
     }
 
-    private void SuperThrow(Vector3 throww, string type)
+    private void SuperActivate()
     {
-        float magnetism =0f;
-        if (ballSuperPackage || type == "Super")
+        t_s0 = Time.realtimeSinceStartup;
+        isSupering = true;
+        superCoolDown = playerScript.power;
+        Color playerColor = playerScript.color;
+
+        int superType = playerScript.super.GetComponent<SuperScript>().type;
+
+        float throwMag = 0;
+
+        if (superType == 1 || superType == 2)
         {
-            if (ballSuperPackage.GetComponent<SuperBall>().type == 1)
+
+            ballSupered = ball;
+            superPackage = Instantiate(playerScript.super);
+            ballSupered.GetComponent<Ball>().SuperInit(superPackage);
+            superPackage.transform.parent = ballSupered.transform;
+            superPackage.transform.localPosition = Vector3.zero;
+            SetSuperColor(playerColor, superPackage);
+
+            if (superType == 2)
             {
-                magnetism = ballSuperPackage.GetComponent<SuperBall>().superMagnetism;
+                if (throwDirection.x == 1)
+                {
+                    superPackage.transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+                }
+                else
+                {
+                    superPackage.transform.rotation = new Quaternion(0f, -180f, 0f, 0f);
+                }
+
+            }
+
+            animator.SetTrigger("Charge");
+
+        }
+
+        else
+        {
+            if (superType == 3)  // Nina 
+            {
+                float superTime = playerScript.super.GetComponent<SuperSpeed>().superTime;
+                float superBoost = playerScript.super.GetComponent<SuperSpeed>().speedBoost;
+                SpeedBoost(superTime, superBoost);
+            }
+        }
+
+    }
+
+    private void SuperCharge(int superType)
+    {
+        float chargeCost = .25f;
+
+        if (!isCharging)
+        {
+            chargeVel = rigidbody.velocity;
+            isCharging = true;
+            ball.GetComponent<Ball>().isCharging = true;
+            float glide = .01f - chargeVel.magnitude / 100000f;
+            accelerationRate = Mathf.Clamp(glide, 0.000001f, 1.0f);
+        }
+
+
+
+        float chargeThrowSlowDownfactor = 1f;
+
+        // if ((throwCharge) < maxStandingThrowPower)     // 
+        {
+            print("Super Charge");
+            print("Charge @ " + throwCharge);
+            float chargeRate = 50;
+            throwCharge += chargeRate * Time.deltaTime * 100.0f;
+            //  throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower + 1);
+
+            chargeThrowSlowDownfactor = .025f * Time.deltaTime * 100.0f;
+            float stallTime = .1f;
+            // SlowDownByVelocity(chargeThrowSlowDownfactor,stallTime);
+
+            accelerationRate = .25f;
+            Invoke("NormalAccelerationRate", 1f);
+
+            DepleteStamina(chargeCost);
+
+            //  animator.SetTrigger("Charge");
+
+        }
+
+        //  else
+        {
+            //      SuperRelease(chargeVel.magnitude, superType);
+        }
+
+
+    }
+
+    private void SuperRelease()
+    {
+        float throwMag = 0.0f;
+
+        if (true) // Mack (Ball Expansion)
+        {
+            Transform nearestOpp = GetTargetedOpp();
+            Vector3 seekVec = nearestOpp.transform.position - ball.transform.position;
+
+            print("ball = " + ball.transform.position);
+            print("nearestOpp transfrom = " + nearestOpp.transform.position);
+            print("seekVec = " + seekVec);
+
+            // throww = seekVec * throwPower * superPackage.GetComponent<SuperBall>().throwPowerMult;
+            throww = seekVec.normalized * 5f * throwCharge;
+            //  throww = new Vector3(throww.x, 5f, throww.z);
+        }
+
+        superButton = SuperButton.canceled;
+        Throw(throww, "Super", throwMag);
+
+    }
+
+    private void Throw(Vector3 throww, String type, float mag)
+    {
+        if (playerScript.team == 1)
+        {
+            ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 1);
+        }
+
+        if (playerScript.team == 2)
+        {
+            ball.GetComponent<Ball>().SetThrown(gameObject.transform.parent.gameObject, 2);
+        }
+
+       Vector3  cockBackPos = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z + handSize.z);
+
+        ball.transform.position = cockBackPos;
+        //print("cockBackPos = " + cockBackPos);
+
+
+
+        if (animator)
+        {
+
+            float throwMag = Vector3.Magnitude(throww);
+            float throwSpeedThresh = 300f;
+
+            float throwAnimSpeed = Mathf.Clamp(throwMag / throwSpeedThresh, 2f, 3f);
+            animator.SetFloat("ThrowSpeed", throwAnimSpeed);
+
+            animator.SetTrigger("Release");
+            animator.ResetTrigger("Charge");
+        }
+
+        float magnetism = mag;
+
+        if (superPackage || type == "Super")
+        {
+            if (superPackage.GetComponent<SuperBall>().type == 1)
+            {
+                magnetism = superPackage.GetComponent<SuperBall>().superMagnetism;
             }
             else
             {
-                if (ballSuperPackage.GetComponent<SuperBall>().type == 2)
-                    magnetism = ballSuperPackage.GetComponent<SuperTechBall>().seekMagnetism;
+                if (superPackage.GetComponent<SuperBall>().type == 2)
+                {
+                    magnetism = superPackage.GetComponent<SuperTechBall>().seekMagnetism;
+                }
+
             }
         }
 
         Transform targetedOpp = GetTargetedOpp();
         float renderLength = GetRenderLength();
 
-        ball.GetComponent<Ball>().Throw(throww, playerScript.color, true, magnetism,targetedOpp,renderLength, 1f);
+        ball.GetComponent<Ball>().Throw(throww, playerScript.color, true, magnetism, targetedOpp, renderLength, ChargePowerAlpha);
+
         levelManager.AddThrow(ball, parent);
         ballGrabbed = false;
+        ballCaught = false;
         throwPower = gameObject.GetComponentInParent<Player>().GetThrowPower0();
+        throwCharge = 0;
+        isCharging = false;
+        ball.GetComponent<Ball>().isCharging = false;
+        chargeVel = Vector3.zero; throwCharge = 0;
+        isCharging = false;
+        chargeVel = Vector3.zero;
 
         if (animator)
         {
             animator.SetBool("hasBall", false);
+        }
+    }
+
+
+    public void SetSuperColor(Color color, GameObject superPackage)
+    {
+        // 1 SuperBallFX
+
+        int child0Count = superPackage.transform.childCount;
+
+        for (int i = 0; i < child0Count; i++)
+        {
+            GameObject super0Child = superPackage.transform.GetChild(i).gameObject;
+            ParticleSystem s0CPS = super0Child.GetComponent<ParticleSystem>();
+            var s0CPSmain = s0CPS.main;
+
+            if (i == 1)
+            {
+                s0CPSmain.startColor = new Color(color.r, color.g, color.b, .2f);
+            }
+            else
+            {
+                s0CPSmain.startColor = color;
+            }
+
+            int child1Count = super0Child.transform.childCount;
+
+            for (int j = 0; j < child1Count; j++)
+            {
+                GameObject super1Child = super0Child.transform.GetChild(j).gameObject;
+                ParticleSystem s1CPS = super1Child.GetComponent<ParticleSystem>();
+                var s1CPSmain = s1CPS.main;
+
+                if ((i == 0 && j == 0) || (i == 0 && j == 1) || (i == 1 && j == 2))
+                {
+                    s1CPSmain.startColor = new Color(color.r, color.g, color.b, .2f);
+                }
+                else
+                {
+                    s1CPSmain.startColor = color;
+                }
+
+                int child2Count = super1Child.transform.childCount;
+
+                for (int k = 0; k < child2Count; k++)
+                {
+                    GameObject super2Child = super1Child.transform.GetChild(k).gameObject;
+                    ParticleSystem s2CPS = super1Child.GetComponent<ParticleSystem>();
+                    var s2CPSmain = s2CPS.main;
+                    s2CPSmain.startColor = color;
+
+                }
+            }
+        }
+    }
+
+    private void CheckSuperCool()
+    {
+
+        if (superCoolDown > 0)
+        {
+
+            t_sF = Time.realtimeSinceStartup;
+            superCoolDown -= Time.deltaTime;
+
+            float superTime = 0f;
+
+            if (playerScript.super.GetComponent<SuperScript>().type == 1 || playerScript.super.GetComponent<SuperScript>().type == 2)
+            {
+
+                if (superPackage)
+                {
+                    superTime = superPackage.GetComponent<SuperBall>().superTime;
+                }
+            }
+            else
+            {
+                if (playerScript.super.GetComponent<SuperScript>().type == 3)
+                {
+                    superTime = playerScript.super.GetComponent<SuperSpeed>().superTime;
+                }
+            }
+
+            if (t_sF - t_s0 >= superTime && isSupering)
+            {
+                SuperDeactivate();
+            }
+        }
+    }
+
+    private void SuperDeactivate()
+    {
+        isSupering = false;
+        animator.SetBool("Supering", false);
+
+
+        if (playerScript.super.GetComponent<SuperScript>().type == 1 || playerScript.super.GetComponent<SuperScript>().type == 2)
+        {
+            foreach (Transform t in ballSupered.transform.GetComponentInChildren<Transform>()) //assumes there is only one ball supered at a time
+            {
+                ballSupered.GetComponent<Ball>().Normalize();
+                if (t.gameObject.tag == "SuperBall")
+                    Destroy(t.gameObject);
+            }
+
+        }
+        else
+        {
+            if (playerScript.super.GetComponent<SuperScript>().type == 3)     //Nina
+            {
+                xSpeed = playerScript.GetComponent<Player>().xspeed;
+                zSpeed = playerScript.GetComponent<Player>().zspeed;
+            }
         }
     }
 
@@ -1363,34 +1597,104 @@ public class AI : MonoBehaviour {
         return clipLength;
     }
 
-    void BlockInput() {
-		if (superCoolDown>0) {
-			superCoolDown--;
-		}
+    void BlockInput()
+    {
+        if (isBlocking)
+        {
+            Block();   // struggling w hold input logic
+        }
+    }
 
-		if (superCoolDown < 40) {
-			isBlocking = false;
-		}
+    void Block()
+    {
+        print("Blocking");
 
-		if ((blockInput) && superCoolDown <=0 && ballGrabbed) {
-			isBlocking = true;;
-			superCoolDown = 50f;
-		}
+        float blockStaminaThresh = staminaBlockCost;
 
-		if (isBlocking) {
-			float nuBallX = playerConfigObject.transform.position.x + throwDirection.x*handSize.x*2;
-			float nuBallY = playerConfigObject.transform.position.y;
-			//left handed or right handed
-			float nuBallZ = playerConfigObject.transform.position.z;
-			ball.GetComponent<Rigidbody> ().useGravity = false;
-			ball.transform.position = new Vector3 (nuBallX,nuBallY,nuBallZ);
-		}
-	}
-    public void SetState(AIState nuState) {
+
+        Vector3 blockPosition = new Vector3(playerConfigObject.transform.position.x + throwDirection.x * ((collider.bounds.size.magnitude / 1.5f) + handSize.x), playerConfigObject.transform.position.y + handSize.y, playerConfigObject.transform.position.z);
+
+        if (levelManager.IsInGameBounds(blockPosition) && (staminaCool < (stamina - blockStaminaThresh)) && !blockCool)
+        {
+
+            isBlocking = true;
+            ball.GetComponent<SpriteRenderer>().enabled = true;
+
+
+            //left handed or right handed
+
+            ball.GetComponent<Rigidbody>().useGravity = false;
+            ball.transform.position = blockPosition;
+
+            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(true);
+            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.transform.position = ball.transform.position;
+
+            float blockCost = .25f;
+            DepleteStamina(blockCost);
+            animator.SetBool("hasBall", false);
+
+        }
+
+
+        else
+        {
+            if (isBlocking)
+            {
+                if (staminaCool >= (stamina - blockStaminaThresh))
+                {
+                    blockCool = true;
+                    Invoke("SetBlockCoolFalse", 2f);
+                }
+
+                BlockRelease();
+            }
+
+
+        }
+
+
+    }
+
+    public void BlockRelease()
+    {
+            blockButton = BlockButton.canceled;
+            isBlocking = false;
+            ball.GetComponent<SpriteRenderer>().enabled = false;
+            playerConfigObject.GetComponent<PlayerConfiguration>().shieldObject.SetActive(false);
+            animator.SetBool("hasBall", true);
+            print("Block Release");
+
+    }
+
+    void SetBlockCoolFalse()
+    {
+        blockCool = false;
+    }
+
+    public void BlockInput(float x)
+    {
+        print("AI Block!");
+
+        blockButton = BlockButton.pressed;
+
+        if (ballGrabbed)
+        {
+            if (blockButton == BlockButton.pressed)
+            {
+                isBlocking = true;
+            }
+        }
+
+        Invoke("BlockRelease", x);
+    }
+
+
+public void SetState(AIState nuState) {
 
 		aiState = nuState;
         aiState.SetInAction(true);
 	}
+
    public void EvaluateGameState()
     {
         intensity = GetIntensity();
@@ -1499,9 +1803,7 @@ public class AI : MonoBehaviour {
                                 }
                             }
                         }
-
                     }
-
                 }
             }
         }

@@ -194,6 +194,7 @@ public class Panic : AIState {
                 }
                 else
                 {
+
                     if (!ai.ballGrabbed)
                     {
                         ai.SetState(ai.getBall_);
@@ -203,14 +204,15 @@ public class Panic : AIState {
                         ai.SetState(ai.throwBall_);
                     }
                 }
-  
             }
+
             if (ai.gameState == AI.GameState.mildly_safe)
             {
                 if (inAction)
                 {
                     Action(ai.intensity / 4f, ai);
                 }
+
                 else
                 {
                     if (!ai.ballGrabbed)
@@ -234,7 +236,18 @@ public class Panic : AIState {
                 }
                 else
                 {
-                    ai.SetState(ai.idle_);
+                    if (ai.level >= 3 && ai.ballGrabbed)
+                    {
+                        if (!ai.isBlocking)
+                        {
+                            ai.BlockInput(1f);
+                        }
+                    }
+                    else
+                    {
+                        ai.SetState(ai.idle_);
+                    }
+
                 }
             }
 
@@ -246,14 +259,24 @@ public class Panic : AIState {
                 }
                 else
                 {
-                    if (panicked)
+                    if (ai.level >= 3 && ai.ballGrabbed)
                     {
-
-                        ai.SetState(ai.retreat_);
+                        if (!ai.isBlocking)
+                        {
+                            ai.BlockInput(2f);
+                        }
                     }
+
                     else
                     {
-                        Action(ai.intensity, ai);
+                        if (panicked)
+                        {
+                            ai.SetState(ai.retreat_);
+                        }
+                        else
+                        {
+                            Action(ai.intensity, ai);
+                        }
                     }
                 }
             }
@@ -267,14 +290,24 @@ public class Panic : AIState {
 
                 else
                 {
-                    if (panicked)
+                    if (ai.level >= 3 && ai.ballGrabbed)
                     {
-
-                        ai.SetState(ai.retreat_);
+                        if (!ai.isBlocking)
+                        {
+                            ai.BlockInput(3f);
+                        }
                     }
+
                     else
                     {
-                        Action(ai.intensity, ai);
+                        if (panicked)
+                        {
+                            ai.SetState(ai.retreat_);
+                        }
+                        else
+                        {
+                            Action(ai.intensity, ai);
+                        }
                     }
                 }
             }

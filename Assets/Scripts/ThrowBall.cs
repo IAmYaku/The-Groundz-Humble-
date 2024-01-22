@@ -111,20 +111,37 @@ public class ThrowBall : AIState
             }
             else
             {
-                ai.SetState(ai.panic_);
-            }
+                if (ai.level >= 3 && ai.superCoolDown <= 0 && ai.ballGrabbed)
+                {
+                    ai.SuperInput(2f);
+                }
+                else
+                {
+                    ai.SetState(ai.panic_);
+                }
 
             }
+
+        }
 
             if (ai.gameState == AI.GameState.dangerous)
             {
             if (inAction && completionPercentage < .125f)
             {
                 Action(manager, ai, 0, Vector3.zero);  // <--- Should try wait code here too 
+
             }
             else
             {
-                ai.SetState(ai.panic_); 
+                if (ai.level >= 3  && ai.superCoolDown <= 0 && ai.ballGrabbed)
+                {
+                    ai.SuperInput(1f);
+                }
+                else
+                {
+                    ai.SetState(ai.panic_);
+                }
+
             }
             }
     }

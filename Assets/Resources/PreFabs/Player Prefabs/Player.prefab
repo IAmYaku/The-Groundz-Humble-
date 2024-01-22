@@ -98,6 +98,7 @@ MonoBehaviour:
   number: 1
   playerConfigObject: {fileID: 1976377755315166}
   playerAura: {fileID: 0}
+  hitObject: {fileID: 0}
   shadow: {fileID: 1022992926574558}
   controller3DObject: {fileID: 3800021833339991587}
   aiObject: {fileID: 3743625330749320879}
@@ -709,39 +710,6 @@ MonoBehaviour:
   playerConfigObject: {fileID: 0}
   spriteRenderer: {fileID: 212815806061031320}
   playerAura: {fileID: 0}
-  moveCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0.46312177
-      outSlope: 0.46312177
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.7739091
-    - serializedVersion: 3
-      time: 0.5663488
-      value: 0.40329212
-      inSlope: 1.439037
-      outSlope: 1.439037
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.20707889
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   maxSpeed: 75
   xSpeed: 70
   zSpeed: 90
@@ -938,7 +906,19 @@ MonoBehaviour:
     m_ActionId: 07ea39db-52b0-4056-8479-7d75af95dd82
     m_ActionName: Menu Controls (Gamepad)/Select[/DualSenseGamepadHID/buttonSouth]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1314948608716842}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: eb54b6e7-948b-4c38-a281-9450974daf57
     m_ActionName: Menu Controls (Gamepad)/Cancel[/DualSenseGamepadHID/buttonEast]
   - m_PersistentCalls:

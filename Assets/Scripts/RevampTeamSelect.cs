@@ -188,13 +188,13 @@ public class RevampTeamSelect : MonoBehaviour
 
     public void SetAITeam1Level(float level)
     {
-        ai1Level = (int) level;
+        ai1Level = (int) (level-1);
 
     }
 
     public void SetAITeam2Level(float level)
     {
-        ai2Level = (int) level;
+        ai2Level = (int) (level-1);
 
     }
 
@@ -568,7 +568,7 @@ public class RevampTeamSelect : MonoBehaviour
 
         if (starts ==0 )
         {
-            starts = 1;
+            readys = 0;
         }
         if (starts == readys)   // multiplayer event system issues
         {

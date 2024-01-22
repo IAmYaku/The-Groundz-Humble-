@@ -12,7 +12,6 @@ public class GlobalConfiguration : MonoBehaviour
 
     public GameManager gameManager;
 
-    public AudioSource audioSourceGM;
     public AudioSource audioSourceMenu;
 
 
@@ -960,7 +959,7 @@ internal void AddSelectedPlayer(string name, int team, int playerIndex)         
                 AddPlayerToTeamManager(ai1_, 1, false);
                 pScript.SetColor(GetPlayerColor(i, pScript));
                 pScript.aiObject.GetComponent<AI>().level = aiLevel;
-                pScript.aiObject.GetComponent<AI>().SetThrowScale(1000f * aiLevel);
+                pScript.aiObject.GetComponent<AI>().SetThrowScale(400f * aiLevel);
                 pScript.aiObject.GetComponent<AI>().LevelIncrease(LevelManager.difficultyScalar);
             }
         }
@@ -1181,7 +1180,7 @@ internal void AddSelectedPlayer(string name, int team, int playerIndex)         
     internal void TurnThemeMusic(bool v)
     {
 
-        LobbyMusicScript lms = gameManager.audioManager.GetComponent<LobbyMusicScript>();
+        LobbyMusicScript lms = gameManager.audioManager.GetComponent<MyAudioManager>().lobbyMusicScript;
 
         if (v)
         {
@@ -1196,7 +1195,7 @@ internal void AddSelectedPlayer(string name, int team, int playerIndex)         
 
     internal bool GetIsThemeOff()
     {
-        return gameManager.audioManager.GetComponent<LobbyMusicScript>().GetIsThemeOff();
+        return gameManager.audioManager.GetComponent<MyAudioManager>().lobbyMusicScript.GetIsThemeOff();
     }
 
 

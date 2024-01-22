@@ -747,13 +747,12 @@ public class Controller3D : MonoBehaviour
         {
 
             float sprintBoost = Mathf.Clamp((sprintMult - 1.3f), 0f, 1f);
-            sprintBoost = 0;
             float timeBias = 10f;
            // timeBias = 1f;
 
             if (!isDodging)
             {
-                moveCurveTime = Mathf.Clamp(moveCurveTime + (Time.deltaTime * sprintMult * timeBias) + sprintBoost, 0f, 1f);
+                moveCurveTime = Mathf.Clamp(moveCurveTime + (Time.deltaTime * sprintMult * timeBias), 0f, 1f);
             }
             else
             {
@@ -878,7 +877,7 @@ public class Controller3D : MonoBehaviour
     private void AnimateMovement()
     {
 
-        if (Mathf.Abs(move.x) > moveThresh || Mathf.Abs(move.z) > moveThresh)          // *arb num  ... moveThesh
+        if (Mathf.Abs(move.x) > moveThresh || Mathf.Abs(move.z) > moveThresh)         
         {
             // print("moving");
 
@@ -1080,7 +1079,7 @@ public class Controller3D : MonoBehaviour
                     animator.SetTrigger("Ready");
                     if (staminaCool < stamina)  // Might not be neccessary since we do this within the first few lines
                     {
-                        //  staminaCool += staminaReadyCost;  // *arbitray num
+                        //  staminaCool += staminaReadyCost;  // 
                     }
                 }
             }
