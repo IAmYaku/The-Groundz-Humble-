@@ -852,17 +852,19 @@ public class AI : MonoBehaviour {
 
                             if (nearestOpp)
                             {
-                                seekVec = nearestOpp.transform.position - ball.transform.position;
+                                seekVec = (nearestOpp.transform.position - ball.transform.position);
                             }
 
                             Vector3 randThrowVec = GetRandThrowVec(randomThrowFactor);
                             seekVec += randThrowVec;
 
+                            Vector3 dirVec = ((seekVec.normalized + rigidbody.velocity.normalized) / 2);
+
 
                             Transform targetedOpp = GetTargetedOpp();
                             float renderLength = GetRenderLength();
 
-                            throww = ((seekVec + rigidbody.velocity) / 2) * (throwPower + throwCharge)/50f;
+                            throww = dirVec * (throwPower + throwCharge);
 
                             throww = new Vector3(throww.x, 2.5f, throww.z);
 

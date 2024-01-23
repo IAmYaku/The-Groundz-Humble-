@@ -236,12 +236,9 @@ public class Panic : AIState {
                 }
                 else
                 {
-                    if (ai.level >= 3 && ai.ballGrabbed)
+                    if (ai.level >= 3 && ai.ballGrabbed && !ai.isBlocking)
                     {
-                        if (!ai.isBlocking)
-                        {
                             ai.BlockInput(1f);
-                        }
                     }
                     else
                     {
@@ -259,12 +256,9 @@ public class Panic : AIState {
                 }
                 else
                 {
-                    if (ai.level >= 3 && ai.ballGrabbed)
+                    if (ai.level >= 3 && ai.ballGrabbed && !ai.isBlocking)
                     {
-                        if (!ai.isBlocking)
-                        {
                             ai.BlockInput(2f);
-                        }
                     }
 
                     else
@@ -290,12 +284,9 @@ public class Panic : AIState {
 
                 else
                 {
-                    if (ai.level >= 3 && ai.ballGrabbed)
+                    if (ai.level >= 3 && ai.ballGrabbed && !ai.isBlocking)
                     {
-                        if (!ai.isBlocking)
-                        {
                             ai.BlockInput(3f);
-                        }
                     }
 
                     else

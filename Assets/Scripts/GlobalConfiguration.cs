@@ -978,7 +978,7 @@ internal void AddSelectedPlayer(string name, int team, int playerIndex)         
                     AddPlayerToTeamManager(ai2_, 2, false);
                     pScript.SetColor(GetPlayerColor(j, pScript));
                 pScript.aiObject.GetComponent<AI>().level = aiLevel;
-                pScript.aiObject.GetComponent<AI>().SetThrowScale(1000f * aiLevel);
+                pScript.aiObject.GetComponent<AI>().SetThrowScale(500f * aiLevel);
                 pScript.aiObject.GetComponent<AI>().LevelIncrease(LevelManager.difficultyScalar);
             }
             }
