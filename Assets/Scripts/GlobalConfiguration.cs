@@ -960,6 +960,7 @@ internal void AddSelectedPlayer(string name, int team, int playerIndex)         
                 pScript.SetColor(GetPlayerColor(i, pScript));
                 pScript.aiObject.GetComponent<AI>().level = aiLevel;
                 pScript.aiObject.GetComponent<AI>().SetThrowScale(400f * aiLevel);
+                pScript.aiObject.GetComponent<AI>().SetSpeedScale( 4f * aiLevel);
                 pScript.aiObject.GetComponent<AI>().LevelIncrease(LevelManager.difficultyScalar);
             }
         }

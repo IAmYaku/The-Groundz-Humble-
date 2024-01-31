@@ -1063,6 +1063,8 @@ public class AI : MonoBehaviour {
         return false;
     }
 
+
+
     private bool ObjectIsInGrabDistance(GameObject nearest)
     {
         if (playerConfigObject.transform.position.x + grabRadius > nearest.transform.GetChild(0).position.x &&
@@ -1088,6 +1090,11 @@ public class AI : MonoBehaviour {
     internal void SetThrowScale(float x)
     {
         throwScale = x;
+    }
+
+    internal void SetSpeedScale(float v)
+    {
+        speedScale = v;
     }
 
     public GameObject GetNearestBall()               //reg ball

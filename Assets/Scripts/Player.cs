@@ -368,6 +368,7 @@ public class Player : MonoBehaviour
         aiScript.EndAgentNavigation();
 
         playerAura.SetActive(false);
+        playerAura.GetComponent<ParticleSystemRenderer>().enabled = false;
 
         playerConfigObject.GetComponent<Rigidbody>().isKinematic = true;
 
@@ -581,7 +582,7 @@ public class Player : MonoBehaviour
         navMeshAgent.enabled = false;
 
         playerAura.SetActive(false);
-        playerAura.GetComponent<ParticleSystemRenderer>().enabled = false;
+
     }
 
     private void SetAuraColor(Color color)
