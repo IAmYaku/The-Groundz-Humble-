@@ -894,10 +894,10 @@ AnimatorStateMachine:
     m_Position: {x: -80, y: -240, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1887100858376265267}
-    m_Position: {x: 570, y: -80, z: 0}
+    m_Position: {x: 620, y: -50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8026977006119955625}
-    m_Position: {x: -420, y: -220, z: 0}
+    m_Position: {x: -450, y: -210, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7281594312728244898}
     m_Position: {x: 130, y: -910, z: 0}
@@ -2779,7 +2779,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Head Hit
+    m_ConditionEvent: Hit
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: hasBall

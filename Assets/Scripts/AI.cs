@@ -881,8 +881,6 @@ public class AI : MonoBehaviour {
                                 float throwAnimSpeed = Mathf.Clamp(throwMag / throwSpeedThresh, 2f, 3f);
 
                                 animator.SetFloat("ThrowSpeed", throwAnimSpeed);
-
-                                animator.SetFloat("ThrowSpeed", throwAnimSpeed);
                                 animator.SetTrigger("Release");
                             }
 
@@ -1245,7 +1243,7 @@ public class AI : MonoBehaviour {
         return inBounds;
 	}
 
-    public void SuperInput(float chargeTme)
+    public void SuperInput(float releaseTime)
     {
         print("AI Super!");
 
@@ -1266,9 +1264,11 @@ public class AI : MonoBehaviour {
             if (superButton == SuperButton.started && ballGrabbed && isSupering)                   // super charge   ... iffy when conisdering if isSupering finishes before SuperAutoRelease
             {
                 SuperCharge(superType);
+
             }
 
-            Invoke("SuperRelease", chargeTime);
+            Invoke("SuperRelease", releaseTime);
+
         }
     }
 
@@ -1303,10 +1303,11 @@ public class AI : MonoBehaviour {
                 {
                     superPackage.transform.rotation = new Quaternion(0f, -180f, 0f, 0f);
                 }
-
             }
+            
 
             animator.SetTrigger("Charge");
+
 
         }
 
@@ -1342,7 +1343,6 @@ public class AI : MonoBehaviour {
         // if ((throwCharge) < maxStandingThrowPower)     // 
         {
             print("Super Charge");
-            print("Charge @ " + throwCharge);
             float chargeRate = 50;
             throwCharge += chargeRate * Time.deltaTime * 100.0f;
             //  throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower + 1);
@@ -1356,13 +1356,8 @@ public class AI : MonoBehaviour {
 
             DepleteStamina(chargeCost);
 
-            //  animator.SetTrigger("Charge");
+              animator.SetTrigger("Charge");
 
-        }
-
-        //  else
-        {
-            //      SuperRelease(chargeVel.magnitude, superType);
         }
 
 
@@ -1893,7 +1888,7 @@ public void SetState(AIState nuState) {
                         if (opp.GetComponentInChildren<AI>().ballGrabbed)
                         {
                             returnMe--;
-                            returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));       //*arbitrary nums
+                            returnMe -= (int)(350 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));       //*arbitrary nums gr
                         }
                         else
                         {
@@ -1927,11 +1922,11 @@ public void SetState(AIState nuState) {
                         if (opp.GetComponentInChildren<AI>().ballGrabbed)
                         {
                             returnMe--;
-                            returnMe -= (int)(250 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                            returnMe -= (int)(350 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
                         }
                         else
                         {
-                            returnMe += (int)(50 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                            returnMe += (int)(200 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
                         }
 
                     }
@@ -1944,7 +1939,7 @@ public void SetState(AIState nuState) {
                         }
                         else
                         {
-                            returnMe += (int)(50 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
+                            returnMe += (int)(200 / Vector3.Distance(pos, opp.transform.GetChild(0).transform.position));
                         }
                     }
                 }

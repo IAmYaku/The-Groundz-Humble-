@@ -45,13 +45,13 @@ public class JSON_Handler : MonoBehaviour
     //AI values
     public class AISetting
     {
-
+        // intensity sensitivity
     }
 
     //ArcadeMode Values
     public class ArcadeModeSetting
     {
-
+        // difficulty multiplier
     }
 
     public class OtherGamePlaySetting

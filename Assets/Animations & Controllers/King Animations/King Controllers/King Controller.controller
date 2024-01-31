@@ -92,11 +92,10 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mack Out
+  m_Name: king Out
   m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: -4923993392595173717}
+  m_Transitions: []
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -106,7 +105,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: b5e7284e4e0704744b9cfb432d3ce5b0, type: 2}
+  m_Motion: {fileID: 7400000, guid: 424476094cfb97a4f90c152539119dd6, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -435,31 +434,6 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.028039753
   m_TransitionOffset: 0
   m_ExitTime: 0.88961923
-  m_HasExitTime: 1
-  m_HasFixedDuration: 1
-  m_InterruptionSource: 0
-  m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
---- !u!1101 &-4923993392595173717
-AnimatorStateTransition:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_Conditions:
-  - m_ConditionMode: 2
-    m_ConditionEvent: isOut
-    m_EventTreshold: 0
-  m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: 3606757594934291076}
-  m_Solo: 0
-  m_Mute: 0
-  m_IsExit: 0
-  serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.75
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -893,10 +867,10 @@ AnimatorStateMachine:
     m_Position: {x: 140, y: -320, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1887100858376265267}
-    m_Position: {x: 570, y: -80, z: 0}
+    m_Position: {x: 590, y: -170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8026977006119955625}
-    m_Position: {x: -420, y: -220, z: 0}
+    m_Position: {x: -520, y: -180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7281594312728244898}
     m_Position: {x: 130, y: -910, z: 0}
@@ -958,9 +932,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
-  m_ExitTime: 0.029912159
+  m_ExitTime: 0.029912084
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0

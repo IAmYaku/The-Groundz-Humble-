@@ -1303,7 +1303,6 @@ public class LevelManager : MonoBehaviour
         
         if (team1Scored)
         {
-         
             if (tm2.GetPlayerCount() < GlobalConfiguration.Instance.maxTeamCount)
             {
                 AddAI(2,arcadeScript.GetCurrentOppName());
@@ -1334,19 +1333,15 @@ public class LevelManager : MonoBehaviour
                             Controller3D.hasSeekVec = false;
                             Controller3D.hasThrowMag = false;
                         }
-
                     }
                 }
             }
-
-
         }
 /*
         else
         {
 
             AddAI(1);
-
             foreach (GameObject player in tm1.players)
             {
                 if (player.GetComponent<Player>().hasAI)
@@ -1506,7 +1501,8 @@ public class LevelManager : MonoBehaviour
            // tm2.StandByPlayers(false);
         }
 
-
+        GameRule gr = GetGameRule();
+        gr.ballCount = Mathf.Clamp(3 + round, 3, 6);
 
         List<Vector3> ballSpwanLocations = stage.GetBallSpawnLocations(gameRule.ballCount);
         int i = 0;
