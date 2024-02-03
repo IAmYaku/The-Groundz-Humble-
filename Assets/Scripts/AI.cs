@@ -11,6 +11,7 @@ public class AI : MonoBehaviour {
 
     private LevelManager levelManager;
     GameManager gameManager;
+    AIManager aIManager;
 
     public GameObject playerConfigObject;
 
@@ -308,49 +309,55 @@ public class AI : MonoBehaviour {
     void Update () {
 
         if (levelManager.isPlaying) {
-            if (navMeshAgent.isOnNavMesh )
+            if (navMeshAgent.isOnNavMesh)
             {
                 //     print(" IsOnNAvMesh" );
 
-                if (!isKnockedOut && !isPausing)
-                {
-
-                    if (!navMeshAgent.updatePosition && !isSynching)
+                    if (!isKnockedOut && !isPausing)
                     {
-                        StartCoroutine("ReEnableNavMeshAgent");
-                    }
+
+                        if (!navMeshAgent.updatePosition && !isSynching)
+                        {
+                            StartCoroutine("ReEnableNavMeshAgent");
+                        }
 
 
-                    if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)
+                        if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)
+                        {
+                            aiState = getBall_;
+                            aiState.Update(gameManager, this);
+
+                        }
+
+                    if (!aIManager.isRunning)
                     {
-                        aiState = getBall_;
-
+                        aiState.Update(gameManager, this);
+                        aiStateDisplayString = aiState.GetName();
                     }
-
-                   // print(" ");
-                   // print("aiState = " + aiState.GetName());
-                    aiState.Update(gameManager, this);
+                    else
+                    {
+                        aiStateDisplayString = "AI Orchestrating...";
+                    }
              
-                    aiStateDisplayString = aiState.GetName();
 
 
-                    MoveInput();
-                    GrabInput();
-                    CheckSuperCool();
-                    BlockInput();
+                        MoveInput();
+                        GrabInput();
+                        CheckSuperCool();
+                        BlockInput();
 
+                    }
+                    else
+                    {
+                        navMeshAgent.velocity = Vector3.zero;
+                        navMeshAgent.ResetPath();
+                        horzInput = 0f;
+                        vertInput = 0f;
+                        HandleContact();
+                        animator.SetBool("Running", false);
+
+                    }
                 }
-                else
-                {
-                    navMeshAgent.velocity = Vector3.zero;
-                    navMeshAgent.ResetPath();
-                    horzInput = 0f;
-                    vertInput = 0f;
-                    HandleContact();
-                    animator.SetBool("Running", false);
-  
-                }
-            }
 
             else
             {
@@ -366,6 +373,11 @@ public class AI : MonoBehaviour {
 
         playerConfigObject.transform.LookAt(Camera.main.transform.position, Vector3.up);
         playerConfigObject.transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 0f, transform.localEulerAngles.z);     // Stay 2D for me please lol
+    }
+
+    public void SetAIManager(AIManager x)
+    {
+        aIManager = x;
     }
 
     IEnumerator ReEnableNavMeshAgent()

@@ -423,7 +423,7 @@ public class GetBall : AIState {
         if (team == 1) {
             foreach (GameObject ball in lm.balls) {
                 Ball ballScript = ball.GetComponent<Ball>();
-                if (ballScript.grounded && !ballScript.grabbed && ball.transform.position.x <= halfCourt /* && !ballScript.isBeingPursued */) {                 // gameRule config
+                if (ballScript.grounded && !ballScript.grabbed && ball.transform.position.x <= halfCourt  && !ballScript.isBeingPursued ) {                 // gameRule config
                     if (Vector3.Distance(pos, ball.transform.position) < min) {
                             if (!ballScript.isSupering)
                             {
@@ -441,7 +441,7 @@ public class GetBall : AIState {
             {
                 Ball ballScript = ball.GetComponent<Ball>();
 
-                    if (ballScript.grounded && !ballScript.grabbed   && ball.transform.position.x >= halfCourt /* &&  !ballScript.isBeingPursued */)               // gameRule config
+                    if (ballScript.grounded && !ballScript.grabbed   && ball.transform.position.x >= halfCourt  &&  !ballScript.isBeingPursued )               // gameRule config
                 {
                         if (Vector3.Distance(pos, ball.transform.position) < min)
                         {

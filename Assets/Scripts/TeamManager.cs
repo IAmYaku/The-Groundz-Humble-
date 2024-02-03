@@ -28,6 +28,8 @@ public class TeamManager : MonoBehaviour
     int kingCount;
     int ninaCount;
 
+    public AIManager aiManager;
+
     void Start()
     {
 
@@ -74,8 +76,14 @@ public class TeamManager : MonoBehaviour
             {
                 aiCount++;
                 ais.Add(pObject);
+
+                print(pObject);
+
+                aiManager.AddAITeam(pObject);
             }
         }
+
+
 
         playerCount = players.Count;
 
@@ -116,6 +124,8 @@ public class TeamManager : MonoBehaviour
             returnMe.Add(pObject);
         }
 
+        aiManager.SetAITeam(ais);
+
         return returnMe;
     }
 
@@ -142,6 +152,8 @@ public class TeamManager : MonoBehaviour
 
             returnMe.Add(pObject);
         }
+
+        aiManager.SetAITeam(ais);
 
         return returnMe;
     }
@@ -173,6 +185,9 @@ public class TeamManager : MonoBehaviour
 
             returnMe.Add(pObject);
         }
+
+        aiManager.SetAITeam(ais);
+
 
         return returnMe;
     }
@@ -503,6 +518,7 @@ public class TeamManager : MonoBehaviour
         initPlayerCount = 1;
         playerCount = 1;
         players.Clear();
+        aiManager.Clear();
     }
 
     public int GetAICount()
