@@ -83,11 +83,8 @@ public class Panic : AIState {
     }
 
     public void Action(GameManager manager, AI ai, float dur, Vector3 target) 
-    {     //TBC
-        Update(manager,ai);
-        
-        // ai.horzInput = Random.Range(-2.0f, 2.0f);
-      //  ai.vertInput = Random.Range(-2.0f, 2.0f);
+    {
+        Action(dur, ai);
     }
 
     public void Action(float intensity, AI ai)

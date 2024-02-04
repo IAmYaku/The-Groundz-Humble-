@@ -212,6 +212,9 @@ public class AI : MonoBehaviour {
     bool isSynching;
     Vector3 spawnPos;
 
+    [HideInInspector]
+    public bool isOrchestrating;
+
     private void Awake()
     {
 
@@ -322,14 +325,14 @@ public class AI : MonoBehaviour {
                         }
 
 
-                        if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)
+                        if (playerConfigObject.GetComponent<PlayerConfiguration>().ballContact && !ballGrabbed)  // dropBall and get contacted ball!
                         {
                             aiState = getBall_;
                             aiState.Update(gameManager, this);
 
                         }
 
-                    if (!aIManager.isRunning)
+                    if (!isOrchestrating)
                     {
                         aiState.Update(gameManager, this);
                         aiStateDisplayString = aiState.GetName();
@@ -338,8 +341,6 @@ public class AI : MonoBehaviour {
                     {
                         aiStateDisplayString = "AI Orchestrating...";
                     }
-             
-
 
                         MoveInput();
                         GrabInput();

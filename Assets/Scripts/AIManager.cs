@@ -17,9 +17,21 @@ public class AIManager : MonoBehaviour
     float orchestraCoolTime = 0f;
     float orchestraCoolTimeMultiplier = 10f;
 
+    Orchestra currentOrchestra;
 
-    class Orchestra
-    { 
+    List<Orchestra> orchestraList;
+
+    interface Orchestra 
+    {
+
+        bool isInit { get; set; }
+        bool isComplete { get; set; }
+        int stepIndex { get; set; }
+
+        public void Init(List<GameObject> aiList);
+
+        public void Run();
+
         public interface OrchestraAction
         {
              bool isComplete { get; set; }
@@ -28,38 +40,131 @@ public class AIManager : MonoBehaviour
 
            void Action();
         }
+        List <List< OrchestraAction>> orchestraActionSteps { get; set; }
 
-        Dictionary<OrchestraAction, GameObject> orchestraActions;
+    }
 
-        public class RetrieveBallandReturnToSpawnPoint : OrchestraAction
+    class MightyDuck : Orchestra
+    {
+        public bool isInit { get; set; }
+       
+        public bool isComplete { get; set; }
+        public List<List<Orchestra.OrchestraAction>> orchestraActionSteps { get; set ; }
+        public int stepIndex { get; set; }
+
+        public void Init(List<GameObject> aiList)     // what if theres a mismatch in player count and actions?
         {
-            public bool isComplete { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-            public GameObject aiObject { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-            RetrieveBallandReturnToSpawnPoint(GameObject aiIn)
+            print("Migty Duck Init");
+            isInit = true;
+
+            orchestraActionSteps = new List<List<Orchestra.OrchestraAction>>();
+
+            List<Orchestra.OrchestraAction> step1 = new List<Orchestra.OrchestraAction>();
+
+            /*
+             * 
+             * 
+             */
+
+            orchestraActionSteps.Add(step1);
+
+            foreach (List<Orchestra.OrchestraAction> orchestraStep in orchestraActionSteps)   // also diversity vs uniform in steps can be applied here
+            {
+                foreach (GameObject aiObject in aiList)
+                {
+                    Orchestra.OrchestraAction orchestraAction = new RetrieveBallandReturnToSpawnPoint(aiObject);
+                    orchestraStep.Add(orchestraAction);
+                }
+            }
+
+
+        }
+
+
+        public void Run()
+        {
+            if (stepIndex < orchestraActionSteps.Count)
+            {
+                isComplete = false;
+                List<Orchestra.OrchestraAction> currentStep = orchestraActionSteps[stepIndex];
+
+                foreach (Orchestra.OrchestraAction orchestraAction in currentStep)
+                {
+                    orchestraAction.Action();
+                }
+            }
+
+            else
+            {
+                isComplete = true;
+                print("~AI Orchestra completed~!");
+            }
+        }
+
+        public class RetrieveBallandReturnToSpawnPoint : Orchestra.OrchestraAction
+        {
+            public bool isComplete { get ; set ; }
+            public GameObject aiObject { get ; set ; }
+
+            public RetrieveBallandReturnToSpawnPoint(GameObject aiIn)
             {
                 aiObject = aiIn;
+
+                AI ai = aiObject.GetComponent<Player>().aiObject.GetComponent<AI>();
+                ai.isOrchestrating = true;
             }
 
             public void Action()
             {
-                if (!isComplete) {
-                  //  if (ai)     // Getting into sketchy territory when not cycling through states based off of intensity
+                AI ai = aiObject.GetComponent<Player>().aiObject.GetComponent<AI>();
+                GameManager gameManager = GlobalConfiguration.Instance.gameManager;
+                if (!isComplete)
+                {
+                    ai.EvaluateGameState();
+                    if (ai.gameState == AI.GameState.dangerous)
+                    {
+                        ai.SetState(ai.panic_);
+                        ai.aiState.Action(gameManager, ai, ai.intensity, Vector3.zero);
+                    }
+
+                    else
+                    {
+                        if (!ai.ballGrabbed)
+                        {
+                            ai.SetState(ai.getBall_);
+                            ai.aiState.Action(gameManager, ai, ai.intensity, Vector3.zero);
+                        }
+
+                        else
+                        {
+                            ai.SetState(ai.retreat_);
+                            ai.aiState.Action(gameManager, ai, ai.intensity, Vector3.zero);
+                        }
+
+                    }
 
                 }
             }
         }
-
-
-
-
     }
-
 
 
     void Start()
     {
-        Orchestra mightyDuck = new Orchestra();
+        orchestraList = new List<Orchestra>();
+        Orchestra mightyDuck = new MightyDuck();
+
+
+        /*
+         * 
+         * 
+         */
+
+        orchestraList.Add(mightyDuck);
+
+        currentOrchestra = mightyDuck;
+
 
     }
 
@@ -68,7 +173,7 @@ public class AIManager : MonoBehaviour
     {
         if (set && GlobalConfiguration.Instance.gameManager.levelManager.isPlaying)
         {
-            if (!isRunning && false)
+            if (!isRunning)
             {
                 if (orchestraCoolTime > 0 )
                 {
@@ -108,7 +213,15 @@ public class AIManager : MonoBehaviour
 
     private void RunOrchestra()
     {
-        throw new NotImplementedException();
+
+        if (!currentOrchestra.isInit)
+        {
+            currentOrchestra.Init(aiList);
+        }
+        else
+        {
+            currentOrchestra.Run();
+        }
     }
 
     private bool GetCanOrchestrate(int runningAILevel, int aiMaxlevelCount)
