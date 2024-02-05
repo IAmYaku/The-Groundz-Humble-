@@ -89,9 +89,21 @@ public class AIManager : MonoBehaviour
                 isComplete = false;
                 List<Orchestra.OrchestraAction> currentStep = orchestraActionSteps[stepIndex];
 
+
+                int actionsCompleted = 0;
                 foreach (Orchestra.OrchestraAction orchestraAction in currentStep)
                 {
                     orchestraAction.Action();
+
+                    if (orchestraAction.isComplete)
+                    {
+                        actionsCompleted++;
+                    }
+
+                    if (actionsCompleted == currentStep.Count)
+                    {
+                        stepIndex++;
+                    }
                 }
             }
 
@@ -140,6 +152,11 @@ public class AIManager : MonoBehaviour
                         {
                             ai.SetState(ai.retreat_);
                             ai.aiState.Action(gameManager, ai, ai.intensity, Vector3.zero);
+                            
+                            if (ai.IsAtRetreatPoint())
+                            {
+                                isComplete = true;
+                            }
                         }
 
                     }

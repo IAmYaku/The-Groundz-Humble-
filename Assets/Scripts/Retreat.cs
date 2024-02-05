@@ -186,6 +186,8 @@ public class Retreat : AIState {
 
                 retreatObject.transform.position = retreatPointPos;
 
+                ai.retreatPoint = retreatObject.transform;
+
                 ai.SetAgentDestination(retreatObject.transform);
             }
 
@@ -220,7 +222,7 @@ public class Retreat : AIState {
         inAction = x;
     }
 
-    internal bool IsAtRetreatPoint()
+    public bool IsAtRetreatPoint()
     {
         float prox = 10.0f;
         if (retreatObject)
