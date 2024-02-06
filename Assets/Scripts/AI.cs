@@ -144,10 +144,13 @@ public class AI : MonoBehaviour {
         canceled
     }
 
-    [SerializeField]
+    [HideInInspector]
+    public bool superTrigger;
+
+    [HideInInspector]
     public BlockButton blockButton;
 
-    [SerializeField]
+    [HideInInspector]
     public SuperButton superButton;
 
     private float t_c0;
@@ -1403,6 +1406,8 @@ public class AI : MonoBehaviour {
 
         superButton = SuperButton.canceled;
         Throw(throww, "Super", throwMag);
+
+        superTrigger = false;
 
     }
 

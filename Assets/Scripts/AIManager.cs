@@ -61,6 +61,7 @@ public class AIManager : MonoBehaviour
             orchestraActionSteps = new List<List<Orchestra.OrchestraAction>>();
 
             List<Orchestra.OrchestraAction> step1 = new List<Orchestra.OrchestraAction>();
+            List<Orchestra.OrchestraAction> step2 = new List<Orchestra.OrchestraAction>();
 
             /*
              * 
@@ -68,14 +69,32 @@ public class AIManager : MonoBehaviour
              */
 
             orchestraActionSteps.Add(step1);
+            orchestraActionSteps.Add(step2);
+
+
+            int stepIndex = 0;
 
             foreach (List<Orchestra.OrchestraAction> orchestraStep in orchestraActionSteps)   // also diversity vs uniform in steps can be applied here
             {
-                foreach (GameObject aiObject in aiList)
+                if (stepIndex == 0)
                 {
-                    Orchestra.OrchestraAction orchestraAction = new RetrieveBallandReturnToSpawnPoint(aiObject);
-                    orchestraStep.Add(orchestraAction);
+                    foreach (GameObject aiObject in aiList)
+                    {
+                        Orchestra.OrchestraAction orchestraAction = new RetrieveBallandReturnToSpawnPoint(aiObject);
+                        orchestraStep.Add(orchestraAction);
+                    }        
                 }
+
+                if (stepIndex == 1)
+                {
+                    foreach (GameObject aiObject in aiList)
+                    {
+                        Orchestra.OrchestraAction orchestraAction = new ChargeAndThrow(aiObject);
+                        orchestraStep.Add(orchestraAction);
+                    }
+                }
+
+                stepIndex++;
             }
 
 
@@ -164,6 +183,56 @@ public class AIManager : MonoBehaviour
                 }
             }
         }
+
+
+
+        public class ChargeAndThrow : Orchestra.OrchestraAction
+        {
+            public bool isComplete { get; set; }
+            public GameObject aiObject { get; set; }
+
+            public ChargeAndThrow(GameObject aiIn)
+            {
+                aiObject = aiIn;
+
+                AI ai = aiObject.GetComponent<Player>().aiObject.GetComponent<AI>();
+                ai.isOrchestrating = true;
+            }
+
+            public void Action()
+            {
+                AI ai = aiObject.GetComponent<Player>().aiObject.GetComponent<AI>();
+                GameManager gameManager = GlobalConfiguration.Instance.gameManager;
+                if (!isComplete)
+                {
+                    ai.EvaluateGameState();
+                    if (ai.gameState == AI.GameState.dangerous)
+                    {
+                        ai.SetState(ai.panic_);
+                        ai.aiState.Action(gameManager, ai, ai.intensity, Vector3.zero);
+                    }
+
+                    else
+                    {
+                        if (!ai.ballGrabbed) // assuming thrown
+                        {
+                            isComplete = true;
+                        }
+
+                        else
+                        {
+                            ai.SetState(ai.throwBall_);
+                            ai.superTrigger = true;
+                            ai.aiState.Action(gameManager, ai, ai.intensity, Vector3.zero);
+
+                        }
+
+                    }
+
+                }
+            }
+        }
+        
     }
 
 

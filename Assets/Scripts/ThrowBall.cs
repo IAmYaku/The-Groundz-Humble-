@@ -111,14 +111,7 @@ public class ThrowBall : AIState
             }
             else
             {
-                if (ai.level >= 3 && ai.superCoolDown <= 0 && ai.ballGrabbed)
-                {
-                    ai.SuperInput(2f);
-                }
-                else
-                {
-                    ai.SetState(ai.panic_);
-                }
+             ai.SetState(ai.panic_);
 
             }
 
@@ -132,15 +125,9 @@ public class ThrowBall : AIState
 
             }
             else
-            {
-                if (ai.level >= 3  && ai.superCoolDown <= 0 && ai.ballGrabbed)
-                {
-                    ai.SuperInput(1f);
-                }
-                else
-                {
-                    ai.SetState(ai.panic_);
-                }
+            {  
+
+             ai.SetState(ai.panic_);
 
             }
             }
@@ -194,19 +181,28 @@ public class ThrowBall : AIState
 
     public void Action(GameManager manager, AI _ai, float urgency, Vector3 target)
     {
-            ai = _ai;
-            Vector3 pos = ai.navMeshAgent.gameObject.transform.position;
+          ai = _ai;
+         Vector3 pos = ai.navMeshAgent.gameObject.transform.position;
 
-            inAction = true;
-            float proximity = 50 - 10*urgency;
+        inAction = true;
+       float proximity = 50 - 10*urgency;
         float distanceFromNearestOpp = Vector3.Distance(pos, GetNearestOpp(manager, ai));
 
         completionPercentage = proximity / distanceFromNearestOpp;
 
-            if (distanceFromNearestOpp < proximity || IsNearHalfCourt(pos))
+        FaceOpp();
+
+        if (distanceFromNearestOpp < proximity || IsNearHalfCourt(pos))
             {
-                FaceOpp();
-                ai.rTriggerInput = true;
+              if((ai.level >= 3 && ai.superCoolDown <= 0 && ai.ballGrabbed) && (ai.gameState == AI.GameState.dangerous || ai.superTrigger) )
+               {
+               ai.SuperInput(2f);
+              }
+             else
+            {
+             ai.rTriggerInput = true;
+            }
+               
             completionPercentage = 0;
            // Debug.Log("AI Throwing");
 
