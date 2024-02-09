@@ -200,7 +200,11 @@ public class ThrowBall : AIState
               }
              else
             {
-             ai.rTriggerInput = true;
+                if (!ai.isCharging)
+                {
+                    ai.rTriggerInput = true;
+                }
+             
             }
                
             completionPercentage = 0;

@@ -51,13 +51,14 @@ public class AI : MonoBehaviour {
     private Vector3 throww;
 
     float throwCharge = 0;
-    bool isCharging = false;
+    [HideInInspector]
+    public bool isCharging = false;
     float chargeTime;
     Vector3 chargeVel;
     float maxCharge = 10f;
     public float ChargePowerAlpha => Mathf.Clamp01(throwCharge / gameObject.GetComponentInParent<Player>().maxThrowPower);
 
-    private float randomThrowFactor = 30f;
+    private float randomThrowFactor = 30f; 
     public float randomThrowFactor0 = 30f;
     public int level = 1;
     float throwScale = 1000f;                   
