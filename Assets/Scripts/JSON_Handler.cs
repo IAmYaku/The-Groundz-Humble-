@@ -27,6 +27,9 @@ public class JSON_Handler : MonoBehaviour
         public float grabHelpMultiplier;
         public float catchHelpMultiplier;
         public float moveCurveTimeMultiplier;
+
+       // public float chargeRate = 1000;  // character dependent??
+       // public float chargeCost = .25f;
         //slowDownForBallMultiplier
         //grabStallMultiplier
         //standingThrowThresh

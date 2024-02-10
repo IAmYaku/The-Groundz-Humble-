@@ -79,6 +79,9 @@ public class Controller3D : MonoBehaviour
     bool isCharging;
     float chargeTime = 0.0f;
 
+    public static float chargeRate = 2000;  // character dependent?? gr
+    public static float chargeCost = .25f; //gr
+
     public Vector3 handSize = new Vector3(3f, 3f, 3f);
     public float grabRadius = 5f;
     public static float grabHelpMultiplier = 1f; // gr or diff
@@ -1640,8 +1643,7 @@ public class Controller3D : MonoBehaviour
 
     private void CheckCharge()
     {
-        float chargeRate = 1000;  // character dependent??
-        float chargeCost = .25f;
+
 
         if (ballGrabbed && isCharging)
         {
@@ -2671,10 +2673,12 @@ public class Controller3D : MonoBehaviour
             if (collider.bounds.max.x > levelManager.stage.halfCourtLine - padding)
             {
                 rigidbody.velocity = new Vector3(0f, rigidbody.velocity.y, rigidbody.velocity.z);
-                playerConfigObject.transform.position = new Vector3(
-                    playerConfigObject.transform.position.x - .05f, 
+               Vector3 correctionVec = new Vector3(
+                    playerConfigObject.transform.position.x - .5f, 
                     playerConfigObject.transform.position.y, 
                     playerConfigObject.transform.position.z);
+
+                playerConfigObject.transform.position = Vector3.Lerp(playerConfigObject.transform.position, correctionVec, .25f);
 
                 if (move.x >0)
                 {
