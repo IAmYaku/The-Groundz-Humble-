@@ -31,7 +31,7 @@ public class CamController : MonoBehaviour {
     private float zoomDamp;
 	private float cameraSmoothe = 1.5f;
 
-    public float playerWeight = 5f;
+    public float playerWeight = 100f;
     public float ballWeight = 1f;
      public float aiWeight = 1f;
 
@@ -195,10 +195,10 @@ public class CamController : MonoBehaviour {
 				min = player.transform.GetChild (0).position.x;
                  if (!playerComp.hasAI)
             {
-                min *= playerWeight;
+                min *= -playerWeight;
             }
             else {
-                min *= aiWeight;
+                min *= -aiWeight;
             }
 
 			}
@@ -255,7 +255,7 @@ public class CamController : MonoBehaviour {
 
 
         float maxDistance = (max - min);
-       // print("maxDistance = " + maxDistance);
+        print("maxDistance = " + maxDistance);
 
         return (maxDistance);
 	}

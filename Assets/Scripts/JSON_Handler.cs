@@ -62,6 +62,10 @@ public class JSON_Handler : MonoBehaviour
         float hitPauseMultiplier;
     }
 
+    public class CameraSetting
+    {
+        
+    }
 
 
 

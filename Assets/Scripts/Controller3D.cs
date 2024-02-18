@@ -79,7 +79,7 @@ public class Controller3D : MonoBehaviour
     bool isCharging;
     float chargeTime = 0.0f;
 
-    public static float chargeRate = 2000;  // character dependent?? gr
+    public static float chargeRate = 3000;  // character dependent?? gr
     public static float chargeCost = .25f; //gr
 
     public Vector3 handSize = new Vector3(3f, 3f, 3f);

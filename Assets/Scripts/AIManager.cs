@@ -15,7 +15,7 @@ public class AIManager : MonoBehaviour
 
     bool isOrchestrating;
     float orchestraCoolTime = 0f;
-    float orchestraCoolTimeMultiplier = 10f;
+    float orchestraCoolTimeMultiplier = 15f;
 
     Orchestra currentOrchestra;
 
@@ -274,7 +274,7 @@ public class AIManager : MonoBehaviour
                         runningAILevel += aiList[i].GetComponent<Player>().aiObject.GetComponent<AI>().level;
                     }
 
-                    if (runningAILevel == aiMaxLevelCount) // max level for ais
+                    if (runningAILevel >= aiMaxLevelCount) // max level for ais
                     {
                         isRunning = true;
                         print("Maxed level AI's");
@@ -289,6 +289,7 @@ public class AIManager : MonoBehaviour
             }
             if (isRunning)
             {
+                print("~isOrchestrating...~");
                 RunOrchestra();
             }
            
