@@ -886,9 +886,9 @@ public class Controller3D : MonoBehaviour
 
             if (!isDodging || !isJumping)
             {
-                float mack3MoveSpeedScale = .042f;
-                float moveAnimSpeed = Mathf.Clamp((rigidbody.velocity.magnitude - (Mathf.Clamp(Mathf.Abs(rigidbody.velocity.z), 1f, Mathf.Abs(rigidbody.velocity.z))) * .25f) * mack3MoveSpeedScale, .50f, 2f);
-                //  print("moveAnimSpeed = " + moveAnimSpeed);
+                float moveSpeedScale = .042f; // TODO ~ make character dependent
+                float moveAnimSpeed = Mathf.Clamp((rigidbody.velocity.magnitude) * moveSpeedScale, .50f, 2f);
+                moveAnimSpeed = (Mathf.Log10(moveAnimSpeed) + 10) * .18f;
                 animator.SetFloat("Speed", moveAnimSpeed); // *arbitrary num, should be animation dependent
 
                 if (animator)

@@ -20,7 +20,7 @@ public class CamController : MonoBehaviour {
     private float offsetX;
 
 	public float zoomPadding= -12f;
-    public float zoomWeight = 5f;
+    static float zoomWeight = 5f;
     float maxZoomSize = 100.0f;
     float smallestZoomSize = 0f;
 
@@ -93,6 +93,8 @@ public class CamController : MonoBehaviour {
         {
             levelManager.SetMainCamera(this);
              size0Persp = this.GetComponent<Camera>().fieldOfView;
+
+
         }
         else
         {
@@ -132,17 +134,17 @@ public class CamController : MonoBehaviour {
                     gameObject.transform.position = new Vector3(nuX, position0.y, position0.z);
                 }
 
-                float nuSize = Mathf.Clamp((Mathf.Abs((MaxDistance() / (zoomWeight * fxZoom ))) + zoomPadding), smallestZoomSize, maxZoomSize);
+                float nuSize = Mathf.Clamp((Mathf.Abs((MaxDistance() / zoomWeight )) + zoomPadding), smallestZoomSize, maxZoomSize);
                 if (type == CameraType.Perspective)
                 {
                     float sizePrev = this.GetComponent<Camera>().fieldOfView;
-                    this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(sizePrev, (nuSize + size0Persp) / 2f, ref zoomDamp, cameraSmoothe / Mathf.Pow(fxZoom,fxZoom));
+                    this.GetComponent<Camera>().fieldOfView = Mathf.SmoothDamp(sizePrev, (nuSize + size0Persp) / 2f, ref zoomDamp, cameraSmoothe);
                 }
                 else
                 {
                     float sizePrev = this.GetComponent<Camera>().orthographicSize;
                     //print("size = " +  (nuSize + size0Main)/2f);
-                    this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(sizePrev, (nuSize + size0Main) / 2f, ref zoomDamp, cameraSmoothe / Mathf.Pow(fxZoom, fxZoom));
+                    this.GetComponent<Camera>().orthographicSize = Mathf.SmoothDamp(sizePrev, (nuSize + size0Main) / 2f, ref zoomDamp, cameraSmoothe);
                 }
 
             }
@@ -189,46 +191,16 @@ public class CamController : MonoBehaviour {
         foreach (GameObject player in levelManager.GetPlayers()) {
             
             Player playerComp = player.GetComponent<Player>();
+            float positionX = player.transform.GetChild(0).position.x;
 
-
-			if (player.transform.GetChild (0).position.x < min) {
-				min = player.transform.GetChild (0).position.x;
-                 if (!playerComp.hasAI)
+            if (positionX < min)
             {
-                min *= -playerWeight;
-            }
-            else {
-                min *= -aiWeight;
+                min = positionX;
             }
 
-			}
-
-			if (player.transform.GetChild (0).position.x > max) {
-				max = player.transform.GetChild (0).position.x;
-                if (!playerComp.hasAI)
+            if (positionX > max)
             {
-                max *= playerWeight;
-            }
-            else {
-                max *= aiWeight;
-            }
-			}
-
-            
-            if (!playerComp.hasAI)
-            {
-                if (playerComp.controller3DObject.GetComponent<Controller3D>().ballCaught)
-                {
-                    fxCount += 2;
-                   // print("fxMultiplier = " + fxMultiplier);
-                }
-            }
-            else
-                {
-                    if (playerComp.aiObject.GetComponent<AI>().ballCaught)
-                    {
-                        fxCount += 2;
-                    }
+                max = positionX;
             }
         }
 
@@ -240,22 +212,10 @@ public class CamController : MonoBehaviour {
 				max = ball.transform.position.x;
 			}
 
-            Ball ballComp = ball.GetComponent<Ball>();
-            if (ballComp.contact || ballComp.isSupering)
-            {
-                //fxCount += 1;   
-                // print("fxMultiplier = " + fxMultiplier);
-            }
-
         }
 
-        fxZoom = (fxCount * fxMultiplier) + 1;
-
-        //print("fxZoom = " + fxZoom);
-
-
+        
         float maxDistance = (max - min);
-        print("maxDistance = " + maxDistance);
 
         return (maxDistance);
 	}

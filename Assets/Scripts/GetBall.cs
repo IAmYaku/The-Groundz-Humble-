@@ -32,7 +32,7 @@ public class GetBall : AIState {
 
     float completionPercentage;
     float ballTargetDistance;
-    GameObject ballTarget;
+
 
     GameManager gameManager;
 
@@ -71,11 +71,11 @@ public class GetBall : AIState {
         else
         {
             
-            ballTarget = GetNearestBallContacted(ai.navMeshAgent.gameObject.transform.position, manager);
-            if (ballTarget)
+            ai.ballTarget = GetNearestBallContacted(ai.navMeshAgent.gameObject.transform.position, manager);
+            if (ai.ballTarget)
             {
 
-                float currentBallTargetDistance = Vector3.Distance(ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
+                float currentBallTargetDistance = Vector3.Distance(ai.ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
 
                 if (currentBallTargetDistance <= ai.grabRadius)
                 {
@@ -85,16 +85,16 @@ public class GetBall : AIState {
 
                     if (ai.ballGrabbed)
                     {
-                        ballTarget.GetComponent<Ball>().isBeingPursued = false;
-                        ballTarget = null;
+                        ai.ballTarget.GetComponent<Ball>().isBeingPursued = false;
+                        ai.ballTarget = null;
                         ballTargetDistance = 0f;
                     }
                 }
 
                 else
                 {
-                    ballTarget.GetComponent<Ball>().isBeingPursued = true;
-                    MoveTowardsTarget(ballTarget.transform.position);
+                    ai.ballTarget.GetComponent<Ball>().isBeingPursued = true;
+                    MoveTowardsTarget(ai.ballTarget.transform.position);
                 }
 
             }
@@ -118,93 +118,82 @@ public class GetBall : AIState {
 
         //  Debug.Log("urgency");
 
-        if (!ballTarget)
+        if (!ai.ballTarget)
         {
-            ballTarget = GetNearestBall(pos, manager);
+            ai.ballTarget = GetNearestBall(pos, manager);
            
-            if (ballTarget)
+            if (ai.ballTarget)
             {
-                ai.SetAgentDestination(ballTarget.transform);
-                ballTargetDistance = Vector3.Distance(ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
-                ballTarget.GetComponent<Ball>().isBeingPursued = true;
+                ai.SetAgentDestination(ai.ballTarget.transform);
+                ballTargetDistance = Vector3.Distance(ai.ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
+                ai.ballTarget.GetComponent<Ball>().isBeingPursued = true;
             }
         }
 
         else
         {
-           if ( !IsBallIsStillLegal(ballTarget)) {
-              //  Debug.Log("Ball not legal anymore");
+           if ( !IsBallIsStillLegal(ai.ballTarget)) {
+                Debug.Log("Ball not legal anymore");
                 ai.EndAgentNavigation();
-                ballTarget.GetComponent<Ball>().isBeingPursued = false;
-                ballTarget = GetNearestBall(pos, manager);
+                ai.ballTarget.GetComponent<Ball>().isBeingPursued = false;
+                ai.ballTarget = GetNearestBall(pos, manager);
+                ballTargetDistance = Vector3.Distance(ai.ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
+                ai.ballTarget.GetComponent<Ball>().isBeingPursued = true;
 
-                if (ballTarget)
+                if (ai.ballTarget)
                 {
-                    if (ai.navMeshAgent.destination != ballTarget.transform.position)
+                    if (ai.navMeshAgent.destination != ai.ballTarget.transform.position)
                     {
                         ai.navMeshAgent.isStopped = false;
-                        ai.SetAgentDestination(ballTarget.transform);
-                        ballTarget.GetComponent<Ball>().isBeingPursued = true;
+                        ai.SetAgentDestination(ai.ballTarget.transform);
+                        ai.ballTarget.GetComponent<Ball>().isBeingPursued = true;
                     }
                 }
             }
         }
 
 
-        if (ballTarget != null)
+        if (ai.ballTarget != null)
             {
 
                // Debug.Log("nearestballPos = " + ballTarget.transform.position);
             // Debug.Log("Found Ball");
 
-            float currentBallTargetDistance = Vector3.Distance(ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
+            float currentBallTargetDistance = Vector3.Distance(ai.ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
 
                 if (currentBallTargetDistance <= ai.grabRadius) 
                 {
-                   //  Debug.Log("ActionInput");
+                     Debug.Log("ActionInput");
                     ai.action1Input = true;
                    
 
                     if (ai.ballGrabbed)
                     {
-                    ballTarget.GetComponent<Ball>().isBeingPursued = false;
-                        inAction = false;
-                        ballTarget = null;
-                        ballTargetDistance = 0f;
+                    ai.ballTarget.GetComponent<Ball>().isBeingPursued = false;
+                    inAction = false;
+                    ai.ballTarget = null;
+                    ballTargetDistance = 0f;
                     ai.EndAgentNavigation();
-                }
+                    }
                 }
                 else
                 {
                     if (ai.navMeshAgent.isStopped)
                     {
                         ai.navMeshAgent.isStopped = false;
-                   ;
-         
-                }
+                    }
 
-                ai.SetAgentDestination(ballTarget.transform);
-                //Debug.Log("completionPercentage = " + completionPercentage);
+                ai.SetAgentDestination(ai.ballTarget.transform);
+        
                 completionPercentage = (ballTargetDistance - currentBallTargetDistance) / ballTargetDistance;
-
-
-
-                // Vector3 move = GetMoveTowards(pos, nearestBall);    // deprecated
-                //    ai.horzInput = move.x;
-                //    ai.vertInput = move.z;
-
-                //  Debug.Log("Moving towards ball");
-                // Debug.Log("GrabRadius = "+ ai.grabRadius);
-                // Debug.Log("Distance = " + Vector3.Distance(nearestBall.transform.position, ai.navMeshAgent.gameObject.transform.position));
-
-                // ai.navSpeed
+                Debug.Log("completionPercentage = " + completionPercentage);
 
             }
-            }
+        }
 
             else
             {
-               //Debug.Log("Ball not found");
+               Debug.Log("Ball not found");
                 inAction = false;
             ai.navMeshAgent.velocity = Vector3.zero;
             ai.EndAgentNavigation();

@@ -64,7 +64,7 @@ public class JSON_Handler : MonoBehaviour
 
     public class CameraSetting
     {
-        
+         float zoomWeight = 5f;
     }
 
 

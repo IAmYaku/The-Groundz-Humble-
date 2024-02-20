@@ -208,7 +208,7 @@ public class ThrowBall : AIState
             }
                
             completionPercentage = 0;
-           // Debug.Log("AI Throwing");
+            Debug.Log("AI Throwing");
 
             if (ai.ballGrabbed == false)
             {
@@ -220,7 +220,7 @@ public class ThrowBall : AIState
             else
             {
                 MoveTowardsOpp(manager, ai);
-             //   Debug.Log("Moving to Player");
+                Debug.Log("Moving to Player");
             }
         }
 

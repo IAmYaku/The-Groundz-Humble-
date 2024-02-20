@@ -36,6 +36,7 @@ public class AI : MonoBehaviour {
 
     public GameObject ball;
     public GameObject ballHit;
+    public GameObject ballTarget;
 
     private Animator animator;
     public SpriteRenderer spriteRenderer;
@@ -479,45 +480,47 @@ public class AI : MonoBehaviour {
 
                 if (onGround && !isDodging)
                 {
-
                     CustomMoveInput();      
                 }
 
-                float moveThresh = 2f;
+            if (rigidbody.velocity.magnitude > 1.0f)
+            {
 
-                if ( navMeshAgent.velocity.magnitude > moveThresh)          //* arbitrary nums
-                {
-                    if (!isDodging)
-                    {
-
-                        if (animator)
-                        {
-                            animator.SetFloat("Speed", Mathf.Clamp(navMeshAgent.velocity.magnitude / 20f, 1f, 2f)); // *arbitrary nums
-
-                            if (animator.GetBool("Running") == false)
-                            {
-                                animator.SetBool("Running", true);
-                            }
-                        }
-                    }
-                }
-
-                else
+                if (!isDodging)
                 {
 
                     if (animator)
                     {
 
-                        if (animator.GetBool("Running") == true)
+                        float moveSpeedScale = .042f; // TODO ~ make character dependent
+                        float moveAnimSpeed = Mathf.Clamp((rigidbody.velocity.magnitude) * moveSpeedScale, .150f, 2f);
+                        moveAnimSpeed = (Mathf.Log10(moveAnimSpeed) + 10) * .18f;
+                        animator.SetFloat("Speed", moveAnimSpeed, 1f, 2f); // *arbitrary nums
+
+                        if (animator.GetBool("Running") == false)
                         {
-                            animator.SetBool("Running", false);
-                        }
-                        if (staminaCool > 0.0f)
-                        {
-                            staminaCool -= 1f; // deprecated
+                            animator.SetBool("Running", true);
                         }
                     }
                 }
+            }
+
+            else
+            {
+
+                if (animator)
+                {
+
+                    if (animator.GetBool("Running") == true)
+                    {
+                        animator.SetBool("Running", false);
+                    }
+                    if (staminaCool > 0.0f)
+                    {
+                        staminaCool -= 1f; // deprecated
+                    }
+                }
+            }
         }
 
 

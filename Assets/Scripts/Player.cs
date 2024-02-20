@@ -106,6 +106,8 @@ public class Player : MonoBehaviour
     private float drC_t0;
     private float drC_tF;
 
+    //public float moveAnimationSpeedScale;
+
     public static event Action<InputUser, InputUserChange, InputDevice> onChange;
 
 
@@ -724,6 +726,11 @@ public class Player : MonoBehaviour
                 aiScript.EndAgentNavigation();
                 aiScript.enabled = false;
                 hitObject.SetActive(false);
+
+                if (aiScript.ballTarget) {
+                    aiScript.ballTarget.GetComponent<Ball>().isBeingPursued = false;
+                }
+               
 
                 NavMeshAgent navMeshAgent = playerConfigObject.GetComponent<NavMeshAgent>();
                 navMeshAgent.enabled = false;

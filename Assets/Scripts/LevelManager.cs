@@ -1514,6 +1514,7 @@ public class LevelManager : MonoBehaviour
             ball.GetComponent<Ball>().DeactivateThrow();
             ball.transform.GetChild(2).gameObject.SetActive(false);
             ball.transform.position = ballSpwanLocations[i];
+            ball.GetComponent<Ball>().isBeingPursued = false;
 
             float xBallDropForce = 1000 * UnityEngine.Random.Range(-1.0f, 1.0f);
             float zBallDropForce = 1000 * UnityEngine.Random.Range(-1.0f, 1.0f);
