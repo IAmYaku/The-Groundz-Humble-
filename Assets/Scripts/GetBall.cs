@@ -137,8 +137,7 @@ public class GetBall : AIState {
                 ai.EndAgentNavigation();
                 ai.ballTarget.GetComponent<Ball>().isBeingPursued = false;
                 ai.ballTarget = GetNearestBall(pos, manager);
-                ballTargetDistance = Vector3.Distance(ai.ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
-                ai.ballTarget.GetComponent<Ball>().isBeingPursued = true;
+                
 
                 if (ai.ballTarget)
                 {
@@ -146,7 +145,9 @@ public class GetBall : AIState {
                     {
                         ai.navMeshAgent.isStopped = false;
                         ai.SetAgentDestination(ai.ballTarget.transform);
+                        ballTargetDistance = Vector3.Distance(ai.ballTarget.transform.position, ai.navMeshAgent.gameObject.transform.position);
                         ai.ballTarget.GetComponent<Ball>().isBeingPursued = true;
+
                     }
                 }
             }
@@ -186,7 +187,7 @@ public class GetBall : AIState {
                 ai.SetAgentDestination(ai.ballTarget.transform);
         
                 completionPercentage = (ballTargetDistance - currentBallTargetDistance) / ballTargetDistance;
-                Debug.Log("completionPercentage = " + completionPercentage);
+               // Debug.Log("completionPercentage = " + completionPercentage);
 
             }
         }

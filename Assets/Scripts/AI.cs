@@ -62,8 +62,8 @@ public class AI : MonoBehaviour {
     private float randomThrowFactor = 30f; 
     public float randomThrowFactor0 = 30f;
     public int level = 1;
-    float throwScale = 1000f;                   
-    float speedScale = 2.5f;
+    float throwScale = 500f;                   
+    float speedScale = 0.5f;
     float catchProb = .2f;
 
     bool catchReady = true;
@@ -483,7 +483,7 @@ public class AI : MonoBehaviour {
                     CustomMoveInput();      
                 }
 
-            if (rigidbody.velocity.magnitude > 1.0f)
+            if (navMeshAgent.velocity.magnitude > 1.0f)
             {
 
                 if (!isDodging)
@@ -492,10 +492,14 @@ public class AI : MonoBehaviour {
                     if (animator)
                     {
 
-                        float moveSpeedScale = .042f; // TODO ~ make character dependent
-                        float moveAnimSpeed = Mathf.Clamp((rigidbody.velocity.magnitude) * moveSpeedScale, .150f, 2f);
-                        moveAnimSpeed = (Mathf.Log10(moveAnimSpeed) + 10) * .18f;
-                        animator.SetFloat("Speed", moveAnimSpeed, 1f, 2f); // *arbitrary nums
+                        float moveSpeedScale = .036f; // TODO ~ make character dependent
+                        float moveAnimSpeed = Mathf.Clamp((navMeshAgent.velocity.magnitude) * moveSpeedScale, .10f, 2f);
+                        moveAnimSpeed = (Mathf.Log10(moveAnimSpeed) + 2) * .7f;
+
+                        print("moveAnimSpeed = " + moveAnimSpeed);
+
+                        animator.SetFloat("Speed", moveAnimSpeed); // *arbitrary nums
+
 
                         if (animator.GetBool("Running") == false)
                         {

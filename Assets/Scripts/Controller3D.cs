@@ -79,8 +79,9 @@ public class Controller3D : MonoBehaviour
     bool isCharging;
     float chargeTime = 0.0f;
 
-    public static float chargeRate = 3000;  // character dependent?? gr
-    public static float chargeCost = .25f; //gr
+    [HideInInspector]
+    public  float chargeRate = 5000;  // character dependent?? gr
+    public  float chargeCost = .25f; //gr
 
     public Vector3 handSize = new Vector3(3f, 3f, 3f);
     public float grabRadius = 5f;
@@ -181,22 +182,6 @@ public class Controller3D : MonoBehaviour
 
     bool IsKeyPickUp;
 
-    private Touch touch0;
-    private Touch touch1;
-    private Touch touchGrab;
-    private Touch touchThrow;
-
-    private Vector3 touch0_0;
-    private Vector3 touch0_F;
-    private Vector3 touch1_0;
-    private Vector3 touch1_F;
-    private bool playerIsTouched;
-    public static float playerTouchThresh = 3f;
-    private bool isTapThrowReady;
-    private UnityEngine.TouchPhase touch1Phase_prev;
-    private float touch0Reset = 1f;
-
-    private TouchFX touchFX;
 
     public static Joystick vJoystick;
     public static ThrowButton throwButton;
