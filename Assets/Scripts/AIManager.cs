@@ -74,23 +74,36 @@ public class AIManager : MonoBehaviour
 
             int stepIndex = 0;
 
+            int ballCount = GlobalConfiguration.Instance.gameManager.levelManager.balls.Count;
+
             foreach (List<Orchestra.OrchestraAction> orchestraStep in orchestraActionSteps)   // also diversity vs uniform in steps can be applied here
             {
                 if (stepIndex == 0)
                 {
                     foreach (GameObject aiObject in aiList)
                     {
-                        Orchestra.OrchestraAction orchestraAction = new RetrieveBallandReturnToSpawnPoint(aiObject);
-                        orchestraStep.Add(orchestraAction);
+                        if (ballCount > 0)
+                        {
+                            Orchestra.OrchestraAction orchestraAction = new RetrieveBallandReturnToSpawnPoint(aiObject);
+                            orchestraStep.Add(orchestraAction);
+                            ballCount--;
+                        }
+ 
                     }        
                 }
+
+                 ballCount = GlobalConfiguration.Instance.gameManager.levelManager.balls.Count;
 
                 if (stepIndex == 1)
                 {
                     foreach (GameObject aiObject in aiList)
                     {
-                        Orchestra.OrchestraAction orchestraAction = new ChargeAndThrow(aiObject);
+                        if (ballCount > 0)
+                        {
+                            Orchestra.OrchestraAction orchestraAction = new ChargeAndThrow(aiObject);
                         orchestraStep.Add(orchestraAction);
+                            ballCount--;
+                        }
                     }
                 }
 
@@ -283,10 +296,9 @@ public class AIManager : MonoBehaviour
                     {
                         isRunning = GetCanOrchestrate(runningAILevel, aiMaxLevelCount);
                     }
-                }
-
-                
+                }            
             }
+
             if (isRunning)
             {
                 print("~isOrchestrating...~");
@@ -342,10 +354,24 @@ public class AIManager : MonoBehaviour
     public void AddAITeam(GameObject aiToAdd)
     {
         aiList.Add(aiToAdd);
+        Reset();
     }
 
     internal void Clear()
     {
         aiList.Clear();
+    }
+
+    internal void RemoveAI(GameObject gameObject)
+    {
+        aiList.Remove(gameObject);
+       
+    }
+
+    public void Reset()
+    {
+        isRunning = false;
+        currentOrchestra.isInit = false;
+        currentOrchestra.isComplete = false;
     }
 }

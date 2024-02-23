@@ -555,6 +555,7 @@ public class TeamManager : MonoBehaviour
             ais.Remove(toRemove[i]);
             aiCount--;
             playerCount--;
+            aiManager.RemoveAI(toRemove[i]);
             players.Remove(toRemove[i]);
         }
     }

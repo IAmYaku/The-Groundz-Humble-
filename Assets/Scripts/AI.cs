@@ -492,11 +492,11 @@ public class AI : MonoBehaviour {
                     if (animator)
                     {
 
-                        float moveSpeedScale = .036f; // TODO ~ make character dependent
+                        float moveSpeedScale = .03f; // TODO ~ make character dependent
                         float moveAnimSpeed = Mathf.Clamp((navMeshAgent.velocity.magnitude) * moveSpeedScale, .10f, 2f);
                         moveAnimSpeed = (Mathf.Log10(moveAnimSpeed) + 2) * .7f;
 
-                        print("moveAnimSpeed = " + moveAnimSpeed);
+                      //  print("moveAnimSpeed = " + moveAnimSpeed);
 
                         animator.SetFloat("Speed", moveAnimSpeed); // *arbitrary nums
 

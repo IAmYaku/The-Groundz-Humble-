@@ -1245,8 +1245,7 @@ public class LevelManager : MonoBehaviour
             DeactivatePlayerUI();
             tm2.ResetCharCounts();
             SetPlayerUI(2, tm2.GetPlayerCount());
-            
-            
+            tm2.aiManager.Reset();
 
         }
 
