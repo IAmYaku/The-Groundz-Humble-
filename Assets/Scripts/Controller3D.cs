@@ -572,7 +572,7 @@ public class Controller3D : MonoBehaviour
 
     void MoveInput()
     {
-        if (rigidbody.velocity.magnitude != 0 && move.magnitude != 0)
+       // if (rigidbody.velocity.magnitude != 0 && move.magnitude != 0)
         {
             ApplyMovePadding();
 
