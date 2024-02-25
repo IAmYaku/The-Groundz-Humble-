@@ -572,18 +572,20 @@ public class Controller3D : MonoBehaviour
 
     void MoveInput()
     {
+        if (rigidbody.velocity.magnitude != 0 && move.magnitude != 0)
+        {
             ApplyMovePadding();
 
             if (!inBallPause)
             {
-                if (move.magnitude > moveThresh && onGround && InBounds())
+                if (onGround && InBounds())
                 {
                     ApplyVelocity(move);
                     // UpdateAcceleration(move);
                 }
-        }
+            }
 
-        AnimateMovement();
+            AnimateMovement();
 
             if (rigidbody.velocity.magnitude > 10f)        // *arb
             {
@@ -591,7 +593,7 @@ public class Controller3D : MonoBehaviour
                 float action1Cost = .0125f;
                 DepleteStamina(action1Cost);
             }
-
+        }
     }
 
     bool CheckVelocity()
