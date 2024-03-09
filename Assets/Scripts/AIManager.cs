@@ -42,6 +42,8 @@ public class AIManager : MonoBehaviour
         }
         List <List< OrchestraAction>> orchestraActionSteps { get; set; }
 
+        public void ResetOrchestra();
+
     }
 
     class MightyDuck : Orchestra
@@ -143,6 +145,7 @@ public class AIManager : MonoBehaviour
             {
                 isComplete = true;
                 print("~AI Orchestra completed~!");
+
             }
         }
 
@@ -245,6 +248,22 @@ public class AIManager : MonoBehaviour
                 }
             }
         }
+
+        public void ResetOrchestra()
+        {
+            isComplete = false;
+            stepIndex = 0;
+
+            foreach (List<Orchestra.OrchestraAction> orchestraStep in orchestraActionSteps)
+            {
+
+                foreach (Orchestra.OrchestraAction orchestraAction in orchestraStep)
+                {
+                    orchestraAction.isComplete = false;
+                }
+            }
+
+        }
         
     }
 
@@ -303,6 +322,13 @@ public class AIManager : MonoBehaviour
             {
                 print("~isOrchestrating...~");
                 RunOrchestra();
+
+                if (currentOrchestra.isComplete)
+                {
+                    currentOrchestra.ResetOrchestra();
+                    isRunning = false;
+                    // Get new orchestra from orchestraList
+                }
             }
            
 
