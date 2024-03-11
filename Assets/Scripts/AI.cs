@@ -336,16 +336,20 @@ public class AI : MonoBehaviour {
                             aiState.Update(gameManager, this);
 
                         }
+                        else
+                    {
+                        if (!isOrchestrating)
+                        {
+                            aiState.Update(gameManager, this);
+                            aiStateDisplayString = aiState.GetName();
+                        }
+                        else
+                        {
+                            aiStateDisplayString = "AI Orchestrating...";
+                        }
+                    }
 
-                    if (!isOrchestrating)
-                    {
-                        aiState.Update(gameManager, this);
-                        aiStateDisplayString = aiState.GetName();
-                    }
-                    else
-                    {
-                        aiStateDisplayString = "AI Orchestrating...";
-                    }
+               
 
                         MoveInput();
                         GrabInput();

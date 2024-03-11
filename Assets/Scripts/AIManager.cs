@@ -164,33 +164,42 @@ public class AIManager : MonoBehaviour
 
             public void Action()
             {
+              
                 AI ai = aiObject.GetComponent<Player>().aiObject.GetComponent<AI>();
                 GameManager gameManager = GlobalConfiguration.Instance.gameManager;
                 if (!isComplete)
                 {
+                    print("AI = " + ai.playerScript.number);
+                    print("RetrieveBallandReturnToSpawnPoint Action");
                     ai.EvaluateGameState();
                     if (ai.gameState == AI.GameState.dangerous)
                     {
                         ai.SetState(ai.panic_);
                         ai.aiState.Action(gameManager, ai, ai.intensity, Vector3.zero);
+                        print("RetrieveBallandReturnToSpawnPoint Panic");
                     }
 
                     else
                     {
+                        ai.vertInput = 0; // normal if just panicked
+
                         if (!ai.ballGrabbed)
                         {
                             ai.SetState(ai.getBall_);
                             ai.aiState.Action(gameManager, ai, ai.intensity, Vector3.zero);
+                            print("RetrieveBallandReturnToSpawnPoint GetBall");
                         }
 
                         else
                         {
                             ai.SetState(ai.retreat_);
                             ai.aiState.Action(gameManager, ai, ai.intensity, Vector3.zero);
-                            
+                            print("RetrieveBallandReturnToSpawnPoint Retreat");
+
                             if (ai.IsAtRetreatPoint())
                             {
                                 isComplete = true;
+                                print("RetrieveBallandReturnToSpawnPoint Complete");
                             }
                         }
 
@@ -230,6 +239,8 @@ public class AIManager : MonoBehaviour
 
                     else
                     {
+                        ai.vertInput = 0; // normal if just panicked
+
                         if (!ai.ballGrabbed) // assuming thrown
                         {
                             isComplete = true;
@@ -310,17 +321,23 @@ public class AIManager : MonoBehaviour
                     {
                         isRunning = true;
                         print("Maxed level AI's");
+                        print("~isOrchestrating...~");
                     }
                     else
                     {
                         isRunning = GetCanOrchestrate(runningAILevel, aiMaxLevelCount);
+                        if (isRunning)
+                        {
+                            print("~isOrchestrating...~");
+                        }
+
                     }
                 }            
             }
 
             if (isRunning)
             {
-                print("~isOrchestrating...~");
+               
                 RunOrchestra();
 
                 if (currentOrchestra.isComplete)
