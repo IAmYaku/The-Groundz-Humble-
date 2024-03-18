@@ -190,7 +190,7 @@ public class AI : MonoBehaviour {
     public AIState getBall_ = new GetBall();           //1
     public AIState throwBall_ = new ThrowBall();      //2
     public AIState ready_ = new Ready();             //3
-    public AIState panic_ = new Panic();            //4
+    public Panic panic_ = new Panic();            //4
     public AIState retreat_ = new Retreat();       //5
     public AIState shake_ = new Shake();          //6
 
@@ -1039,11 +1039,17 @@ public class AI : MonoBehaviour {
     {
         float chargeRate = 1;  // character dependent??
         float chargeCost = .25f;
-
+        float superMultiplier = 1f;
+      
         if (ballGrabbed && isCharging)
         {
 
-            throwCharge += (chargeRate * Time.deltaTime);
+            if (isSupering)
+            {
+                superMultiplier = 10000f;
+            }
+
+            throwCharge += (chargeRate * Time.deltaTime * superMultiplier);
             chargeTime += Time.deltaTime;
             // throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower - standingThrowPower);
 
@@ -1372,15 +1378,9 @@ public class AI : MonoBehaviour {
         }
 
 
-
         float chargeThrowSlowDownfactor = 1f;
 
-        // if ((throwCharge) < maxStandingThrowPower)     // 
-        {
             print("Super Charge");
-            float chargeRate = 50;
-            throwCharge += chargeRate * Time.deltaTime * 100.0f;
-            //  throwCharge = Mathf.Clamp(throwCharge, 0f, maxStandingThrowPower + 1);
 
             chargeThrowSlowDownfactor = .025f * Time.deltaTime * 100.0f;
             float stallTime = .1f;
@@ -1391,9 +1391,7 @@ public class AI : MonoBehaviour {
 
             DepleteStamina(chargeCost);
 
-              animator.SetTrigger("Charge");
-
-        }
+             animator.SetTrigger("Charge");
 
 
     }

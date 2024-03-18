@@ -837,6 +837,19 @@ public class LevelManager : MonoBehaviour
         player.GetComponent<Player>().PlayerOut();
         player.GetComponent<Player>().PlayOutSound();
 
+        if (player.GetComponent<Player>().team ==1)
+        {
+            tm1.aiManager.RemoveAI(player);
+            tm1.aiManager.Reset();
+
+        }
+        else
+        {
+            tm2.aiManager.RemoveAI(player);
+            tm2.aiManager.Reset();
+        }
+
+
 
 
     }

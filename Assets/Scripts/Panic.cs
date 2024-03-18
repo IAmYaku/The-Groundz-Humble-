@@ -123,7 +123,7 @@ public class Panic : AIState {
             inAction = true;
 
             ai.vertInput = Mathf.Lerp(ranVelVec, ai.vertInput, .0125f);
-            Debug.Log("ai.vertInput = " + ai.vertInput);
+           // Debug.Log("ai.vertInput = " + ai.vertInput);
 
             if (!ai.ballGrabbed && intensity < -15 )
                 {

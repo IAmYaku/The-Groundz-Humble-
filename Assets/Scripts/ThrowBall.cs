@@ -196,7 +196,7 @@ public class ThrowBall : AIState
             {
               if((ai.level >= 3 && ai.superCoolDown <= 0 && ai.ballGrabbed) && (ai.gameState == AI.GameState.dangerous || ai.superTrigger) )
                {
-               ai.SuperInput(2f);
+               ai.SuperInput(.5f);
               }
              else
             {

@@ -17,11 +17,11 @@ public class AIManager : MonoBehaviour
     float orchestraCoolTime = 0f;
     float orchestraCoolTimeMultiplier = 15f;
 
-    Orchestra currentOrchestra;
+    public Orchestra currentOrchestra;
 
     List<Orchestra> orchestraList;
 
-    interface Orchestra 
+    public interface Orchestra 
     {
 
         bool isInit { get; set; }
@@ -172,7 +172,7 @@ public class AIManager : MonoBehaviour
                     print("AI = " + ai.playerScript.number);
                     print("RetrieveBallandReturnToSpawnPoint Action");
                     ai.EvaluateGameState();
-                    if (ai.gameState == AI.GameState.dangerous)
+                    if (ai.gameState == AI.GameState.dangerous && !ai.panic_.panicked)
                     {
                         ai.SetState(ai.panic_);
                         ai.aiState.Action(gameManager, ai, ai.intensity, Vector3.zero);
@@ -416,5 +416,6 @@ public class AIManager : MonoBehaviour
         isRunning = false;
         currentOrchestra.isInit = false;
         currentOrchestra.isComplete = false;
+        Clear();
     }
 }
