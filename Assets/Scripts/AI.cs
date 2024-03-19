@@ -1046,7 +1046,7 @@ public class AI : MonoBehaviour {
 
             if (isSupering)
             {
-                superMultiplier = 10000f;
+                superMultiplier = 5000f;
             }
 
             throwCharge += (chargeRate * Time.deltaTime * superMultiplier);

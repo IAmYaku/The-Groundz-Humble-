@@ -118,16 +118,22 @@ public class AIManager : MonoBehaviour
 
         public void Run()
         {
+          //  print("~ Running Mighty Duck...");
             if (stepIndex < orchestraActionSteps.Count)
             {
+             //   print("~ stepIndex = " + stepIndex);
+           //     print("~ orchestraActionSteps.Count = " + orchestraActionSteps.Count);
                 isComplete = false;
                 List<Orchestra.OrchestraAction> currentStep = orchestraActionSteps[stepIndex];
+
+            //    print("~ currentStep = " + currentStep);
 
 
                 int actionsCompleted = 0;
                 foreach (Orchestra.OrchestraAction orchestraAction in currentStep)
                 {
                     orchestraAction.Action();
+                 //   print("~ orchestraAction = " + orchestraAction);
 
                     if (orchestraAction.isComplete)
                     {
@@ -416,6 +422,6 @@ public class AIManager : MonoBehaviour
         isRunning = false;
         currentOrchestra.isInit = false;
         currentOrchestra.isComplete = false;
-        Clear();
+        //Clear();
     }
 }
