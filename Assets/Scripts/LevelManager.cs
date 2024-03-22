@@ -379,7 +379,7 @@ public class LevelManager : MonoBehaviour
     }
     private void CheckHits()
     {
-
+        
 
         if (hits.Count > 0)
         {
@@ -840,13 +840,13 @@ public class LevelManager : MonoBehaviour
         if (player.GetComponent<Player>().team ==1)
         {
             tm1.aiManager.RemoveAI(player);
-            tm1.aiManager.Reset();
+            tm1.aiManager.ResetOrchestra();
 
         }
         else
         {
             tm2.aiManager.RemoveAI(player);
-            tm2.aiManager.Reset();
+            tm2.aiManager.ResetOrchestra();
         }
 
 
@@ -1181,7 +1181,15 @@ public class LevelManager : MonoBehaviour
         //  players.AddRange(tm1.players);
         //   players.AddRange(tm2.players);
 
+        if (tm1.aiManager.currentOrchestra != null)
+        {
+            tm1.aiManager.currentOrchestra.ResetOrchestra();
+        }
 
+        if (tm2.aiManager.currentOrchestra != null)
+        {
+            tm2.aiManager.currentOrchestra.ResetOrchestra();
+        }
 
 
         foreach (GameObject player in GetPlayers())
@@ -1258,7 +1266,7 @@ public class LevelManager : MonoBehaviour
             DeactivatePlayerUI();
             tm2.ResetCharCounts();
             SetPlayerUI(2, tm2.GetPlayerCount());
-            tm2.aiManager.Reset();
+            tm2.aiManager.ResetOrchestra();
 
         }
 
@@ -1452,6 +1460,16 @@ public class LevelManager : MonoBehaviour
 
         team1Scored = false;
         team2Scored = false;
+
+        if (tm1.aiManager.currentOrchestra != null)
+        {
+            tm1.aiManager.currentOrchestra.ResetOrchestra();
+        }
+
+        if (tm2.aiManager.currentOrchestra != null)
+        {
+            tm2.aiManager.currentOrchestra.ResetOrchestra();
+        }
 
         foreach (GameObject player in GetPlayers())                                       //   methodize
         {

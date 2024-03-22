@@ -79,7 +79,6 @@ public class TeamManager : MonoBehaviour
 
                 print(pObject);
 
-                aiManager.AddAITeam(pObject);
             }
         }
 
@@ -485,6 +484,11 @@ public class TeamManager : MonoBehaviour
 
             }
         }
+    }
+
+    internal List<GameObject> GetAIList()
+    {
+        return ais;
     }
 
     internal void EnableDropShadows(GameObject playingLevel)

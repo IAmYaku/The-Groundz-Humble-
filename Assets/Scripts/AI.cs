@@ -941,6 +941,7 @@ public class AI : MonoBehaviour {
                             chargeTime = 0;
                             isCharging = false;
                             ball.GetComponent<Ball>().isCharging = false;
+                            rTriggerInput = false;
                         }
                     }
                  

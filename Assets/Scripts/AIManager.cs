@@ -225,7 +225,7 @@ public class AIManager : MonoBehaviour
             public ChargeAndThrow(GameObject aiIn)
             {
                 aiObject = aiIn;
-
+                
                 AI ai = aiObject.GetComponent<Player>().aiObject.GetComponent<AI>();
                 ai.isOrchestrating = true;
             }
@@ -236,6 +236,8 @@ public class AIManager : MonoBehaviour
                 GameManager gameManager = GlobalConfiguration.Instance.gameManager;
                 if (!isComplete)
                 {
+                    print("AI = " + ai.playerScript.number);
+                    print("ChargeAndThrow Action");
                     ai.EvaluateGameState();
                     if (ai.gameState == AI.GameState.dangerous)
                     {
@@ -403,7 +405,7 @@ public class AIManager : MonoBehaviour
     public void AddAITeam(GameObject aiToAdd)
     {
         aiList.Add(aiToAdd);
-        Reset();
+        ResetOrchestra();
     }
 
     internal void Clear()
@@ -417,11 +419,12 @@ public class AIManager : MonoBehaviour
        
     }
 
-    public void Reset()
+    public void ResetOrchestra()
     {
         isRunning = false;
         currentOrchestra.isInit = false;
-        currentOrchestra.isComplete = false;
-        //Clear();
+        currentOrchestra.ResetOrchestra();
+        Clear();
+        aiList = teamManager.GetAIList();
     }
 }

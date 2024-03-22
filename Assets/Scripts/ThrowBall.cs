@@ -73,7 +73,6 @@ public class ThrowBall : AIState
 
                 else
                 {
-                    ai.rTriggerInput = false;
                     ai.SetState(ai.getBall_);
                 }
             }
@@ -85,7 +84,7 @@ public class ThrowBall : AIState
                 }
                 else
                 {
-                    ai.rTriggerInput = false;
+                   
                     ai.SetState(ai.getBall_);
                 }
             }
@@ -98,7 +97,7 @@ public class ThrowBall : AIState
                 }
                 else
                 {
-                    ai.rTriggerInput = false;
+                    
                     ai.SetState(ai.getBall_);
                 }
             }
@@ -141,7 +140,7 @@ public class ThrowBall : AIState
         }
         else
         {
-            ai.rTriggerInput = false;
+           
             ai.SetState(ai.getBall_);
 
         }
