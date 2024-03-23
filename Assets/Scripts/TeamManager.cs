@@ -486,9 +486,28 @@ public class TeamManager : MonoBehaviour
         }
     }
 
-    internal List<GameObject> GetAIList()
+    internal List<GameObject> GetAIList(bool isIn)
     {
-        return ais;
+        if (isIn)
+        {
+            List<GameObject> aisIn = new List<GameObject>();
+
+            foreach (GameObject aiObject in ais)
+            {
+                Player aiPlayerComp = aiObject.GetComponent<Player>();
+                if (!aiPlayerComp.isOut)
+                {
+                    aisIn.Add(aiObject);
+                }
+            }
+
+            return aisIn;
+        }
+        else
+        {
+            return ais;
+        }
+
     }
 
     internal void EnableDropShadows(GameObject playingLevel)

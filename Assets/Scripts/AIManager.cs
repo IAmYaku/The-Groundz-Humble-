@@ -300,9 +300,6 @@ public class AIManager : MonoBehaviour
 
         orchestraList.Add(mightyDuck);
 
-        currentOrchestra = mightyDuck;
-
-
     }
 
     // Update is called once per frame
@@ -363,9 +360,14 @@ public class AIManager : MonoBehaviour
 
     private void RunOrchestra()
     {
+        if (currentOrchestra == null)
+        {
+            currentOrchestra = orchestraList[0]; // or at random
+        }
 
         if (!currentOrchestra.isInit)
         {
+            aiList = teamManager.GetAIList(true);
             currentOrchestra.Init(aiList);
         }
         else
@@ -405,7 +407,7 @@ public class AIManager : MonoBehaviour
     public void AddAITeam(GameObject aiToAdd)
     {
         aiList.Add(aiToAdd);
-        ResetOrchestra();
+        ResetManager();
     }
 
     internal void Clear()
@@ -419,12 +421,18 @@ public class AIManager : MonoBehaviour
        
     }
 
-    public void ResetOrchestra()
+    public void ResetManager()
     {
+       
         isRunning = false;
-        currentOrchestra.isInit = false;
-        currentOrchestra.ResetOrchestra();
         Clear();
-        aiList = teamManager.GetAIList();
+        aiList = teamManager.GetAIList(true);
+      
+        if (currentOrchestra != null)
+        {
+            currentOrchestra.isInit = false;
+            currentOrchestra.ResetOrchestra();
+        }
+        
     }
 }
