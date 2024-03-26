@@ -18,6 +18,8 @@ public class ArcadeMode : MonoBehaviour
 
     public static float throwMag = 6f;
     public static float seekVec = 100f;
+    public static float maxBallCount = 5;
+
 
     void Start()
     {

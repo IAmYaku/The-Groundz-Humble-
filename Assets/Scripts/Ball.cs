@@ -79,8 +79,12 @@ public class Ball : MonoBehaviour {
 
     bool didWindFX;
 
+    
+    [HideInInspector]
+    public bool addedAtStage;
 
-    void Start () {
+
+    void Awake () {
 
         type = "Normal";
 

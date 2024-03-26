@@ -31,8 +31,6 @@ public class AI : MonoBehaviour {
 
 	public bool action1Input;
 	public bool rTriggerInput;
-	public bool superInput;
-	public bool blockInput;
 
     public GameObject ball;
     public GameObject ballHit;

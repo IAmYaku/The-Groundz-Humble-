@@ -176,7 +176,9 @@ public class Stage : MonoBehaviour
 
     internal List<Vector3> GetBallSpawnLocations(int ballCount)
     {
-       if (ballSpawnPoints.Count ==0 && ballCount >0 )
+        ballSpawnPoints.Clear();
+
+       if (ballCount >0 )
         {
             for (int i=0; i<ballCount; i++)
             {
@@ -193,6 +195,11 @@ public class Stage : MonoBehaviour
         return ballSpawnPoints;
     }
 
+
+    internal List<Vector3> GetBallSpawnLocations()
+    {
+        return ballSpawnPoints;
+    }
 
     private void InitBounds()
     {

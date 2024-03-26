@@ -20,7 +20,8 @@ public class LevelManager : MonoBehaviour
     GameManager gameManager;
     FXManager fXManager;
 
-    string gameMode;
+ 
+    private static string gameMode;
 
     GameRule gameRule;
 
@@ -311,6 +312,9 @@ public class LevelManager : MonoBehaviour
         }       
            
     }
+
+   
+
     void PostGameWinScreen()
     {
         postGameScript.arcadeWin(tm1.players[0].GetComponent<Player>().type);
@@ -606,6 +610,22 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void AddBalls(int count)
+    {
+        List<Vector3> ballSpwanLocations = stage.GetBallSpawnLocations(gameRule.ballCount + count);
+
+        for (int i = 0; i < count; i++)
+        {
+            //   print("location = " + ballSpwanLocations[i]);
+            GameObject ball = GlobalConfiguration.Instance.InstantiateBallPrefab(ballSpwanLocations[i]);
+            ball.GetComponent<DropShadow>().SetGroundObject(stage.playingLevelPlane);
+            ball.GetComponent<Ball>().floorMarker.GetComponent<FloorMarker>().SetGroundObject(stage.playingLevelPlane);
+            ball.GetComponent<Ball>().addedAtStage = true;
+           balls.Add(ball);
+
+        }
+    }
+
     public void SetStage(Stage x)
     {
         stage = x;
@@ -719,6 +739,11 @@ public class LevelManager : MonoBehaviour
             CreateGameRule("basic");
             print("multiplayer");
         }
+    }
+
+    internal string GetGameMode()
+    {
+        return gameMode;
     }
 
     internal void SetGameRule(string v)
@@ -1269,6 +1294,15 @@ public class LevelManager : MonoBehaviour
             SetPlayerUI(2, tm2.GetPlayerCount());
             tm2.aiManager.ResetManager();
 
+            foreach (GameObject ballObject in balls)
+            {
+               if (ballObject.GetComponent<Ball>().addedAtStage)
+                {
+                    balls.Remove(ballObject);
+                    Destroy(ballObject);
+                }
+            }
+
         }
 
         SetTeamSpawnLocations(1, stage.GetSpawnLocations(1, tm1.GetPlayerCount()));
@@ -1320,7 +1354,12 @@ public class LevelManager : MonoBehaviour
 
         // GR check 
 
-     //   stage.IncreaseSize(difficultyScaler);
+        //   stage.IncreaseSize(difficultyScaler);
+
+        if (balls.Count < ArcadeMode.maxBallCount)
+        {
+            AddBalls(1);
+        }
         
         if (team1Scored)
         {
@@ -1464,12 +1503,12 @@ public class LevelManager : MonoBehaviour
 
         if (tm1.aiManager.currentOrchestra != null )
         {
-            tm1.aiManager.currentOrchestra.ResetOrchestra();
+            tm1.aiManager.ResetManager();
         }
 
         if (tm2.aiManager.currentOrchestra != null)
         {
-            tm2.aiManager.currentOrchestra.ResetOrchestra();
+            tm2.aiManager.ResetManager();
         }
 
         foreach (GameObject player in GetPlayers())                                       //   methodize
@@ -1528,14 +1567,14 @@ public class LevelManager : MonoBehaviour
         {
             SetPlayerUI(2, tm2.GetPlayerCount());
 
-            tm2.EnableDropShadows(stage.playingLevelPlane);
+            tm2.EnableDropShadows(stage.playingLevelPlane); //?
            // tm2.StandByPlayers(false);
         }
 
         GameRule gr = GetGameRule();
         gr.ballCount = Mathf.Clamp(3 + round, 3, 6);
 
-        List<Vector3> ballSpwanLocations = stage.GetBallSpawnLocations(gameRule.ballCount);
+        List<Vector3> ballSpwanLocations = stage.GetBallSpawnLocations();
         int i = 0;
 
         foreach (GameObject ball in balls)
@@ -1545,6 +1584,9 @@ public class LevelManager : MonoBehaviour
             ball.GetComponent<Ball>().DeactivateThrow();
             ball.transform.GetChild(2).gameObject.SetActive(false);
             ball.transform.position = ballSpwanLocations[i];
+
+            print("ballSpwanLocations[i] = " + ballSpwanLocations[i]);
+
             ball.GetComponent<Ball>().isBeingPursued = false;
 
             float xBallDropForce = 1000 * UnityEngine.Random.Range(-1.0f, 1.0f);
