@@ -109,6 +109,9 @@ public class AIManager : MonoBehaviour
         float timeDelay;
         private bool hasDelayed;
 
+        float intervalTime = 1f;
+        List<int> delayedList = new List<int>();
+
         public MightyDuck(int type)
         {
             this.type = type;
@@ -240,32 +243,32 @@ public class AIManager : MonoBehaviour
 
                             if (!hasDelayed)
                             {
-                                int actionIndex = Mathf.Clamp((int)(UpdateTimeDelay() / 3.0f), 0, currentStep.Count - 1);
+
+                                int actionIndex = Mathf.Clamp((int)(UpdateTimeDelay() / intervalTime), 0, currentStep.Count - 1);
                                 orchestraAction = currentStep[actionIndex];
-                                if (timeDelay >= 3.0f * currentStep.Count)
+                                delayedList.Add(actionIndex);
+                                if (timeDelay >= intervalTime * currentStep.Count)
                                 {
                                     hasDelayed = true;
-                                    timeDelay = 0f;
+
                                 }
                             }
-                            else
-                            {
-                                for (int i = 0; i < currentStep.Count; i++)
+                            
+                            
+                                for (int i = 0; i < delayedList.Count; i++)
                                 {
-                                    orchestraAction = currentStep[i];
+                                    orchestraAction = currentStep[delayedList[i]];
                                     orchestraAction.Action();
 
                                 }
-                            }
 
-
-
-                            orchestraAction.Action();
+             
 
                             int actionsCompleted = GetActionsCompleted(currentStep);
 
                             if (actionsCompleted == currentStep.Count)
                             {
+                                hasDelayed = false;
                                 stepIndex++;
                             }
 
@@ -471,6 +474,10 @@ public class AIManager : MonoBehaviour
         {
             isComplete = false;
             stepIndex = 0;
+            timeDelay = 0;
+            hasDelayed = false;
+            delayedList.Clear();
+
 
             foreach (List<Orchestra.OrchestraAction> orchestraStep in orchestraActionSteps)
             {
@@ -582,7 +589,7 @@ public class AIManager : MonoBehaviour
 
             if (currentOrchestra == null)
             {
-                currentOrchestra = orchestraList[0]; // random
+                currentOrchestra = orchestraList[1]; // random
             }
 
             RunOrchestra();
